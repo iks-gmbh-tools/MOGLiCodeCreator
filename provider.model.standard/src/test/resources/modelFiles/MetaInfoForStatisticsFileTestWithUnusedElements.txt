@@ -1,0 +1,78 @@
+model StatisticsTestModelWithUnusedMetaInfos
+metainfo unusedMetaInfoOnModelLevel String # this is nonsense
+
+class com.iksgmbh.moglicc.demo.Person
+metainfo unusedMetaInfoOnClassLevel String # this is nonsense
+
+  attribute Firstname
+    metainfo JavaType String 
+
+  attribute lastname
+    metainfo JavaType String 
+
+  attribute address
+    metainfo JavaType Address 
+
+  attribute age
+    metainfo JavaType int 
+
+
+class com.iksgmbh.moglicc.demo.Member
+  metainfo extends com.iksgmbh.moglicc.demo.Person 
+  metainfo implements java.io.Serializable 
+  
+    attribute membershipNumber
+    metainfo JavaType int 
+  
+  
+class com.iksgmbh.moglicc.demo.Address
+  metainfo implements java.io.Serializable 
+  metainfo implements java.lang.Cloneable 
+ 
+  attribute country
+    metainfo JavaType String 
+
+  attribute Postcode
+    metainfo JavaType int 
+
+  attribute city
+    metainfo JavaType String 
+
+  attribute Street
+    metainfo JavaType String 
+
+  attribute streetNumber
+    metainfo JavaType int 
+  
+  
+class com.iksgmbh.moglicc.demo.Misc
+  metainfo extends com.iksgmbh.moglicc.demo.Person 
+  
+  attribute ready
+    metainfo JavaType boolean 
+    
+  attribute numberInt
+    metainfo JavaType int 
+    
+  attribute numberLong
+    metainfo JavaType long 
+    
+  attribute numberFloat
+    metainfo JavaType float 
+  
+  attribute numberDouble
+    metainfo JavaType double 
+    
+  attribute numberByte
+    metainfo JavaType byte 
+    
+  attribute id
+    metainfo JavaType char 
+	metainfo unusedMetaInfoOnAttributeLevel abc # this is nonsense
+	    
+  attribute stringArray
+    metainfo JavaType String[][] 
+    
+  attribute hashSet
+    metainfo JavaType java.util.HashSet<String> 
+    

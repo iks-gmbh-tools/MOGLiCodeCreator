@@ -1,0 +1,26 @@
+// Inserter Test
+package com.iksgmbh.test;
+// InsertAbove
+public class BeanFactoryTemplate {
+// startReplace
+	public static Person getPerson() {;
+		return new Person();
+	}
+
+	public static Member getMember() {;
+		return new Member();
+	}
+
+	public static Address getAddress() {;
+		return new Address();
+	}
+
+	public static Misc getMisc() {;
+		return new Misc();
+	}
+
+// endReplace
+}
+// InsertBelow
+// end
+// Inserter Test Ende

@@ -1,0 +1,15 @@
+model SimpelTestModel
+metainfo test model
+
+class test.TestklasseA
+metainfo test class
+
+	attribute A1
+	metainfo test attribute
+
+class test.TestklasseB
+metainfo test class
+	
+	attribute B1
+	metainfo test attribute
+

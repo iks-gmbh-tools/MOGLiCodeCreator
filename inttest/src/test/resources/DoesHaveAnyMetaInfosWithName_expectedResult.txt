@@ -1,0 +1,6 @@
+No MetaInfo 'foo' in model 'TestModel'
+model 'TestModel' has MetaInfo 'ModelMetaInfo'
+class 'Class1' has MetaInfo 'ClassMetaInfo'
+attribute 'Attribute1' has MetaInfo 'AttributeMetaInfo'
+No MetaInfo 'ClassMetaInfo' in class 'Class2'
+No MetaInfo 'AttributeMetaInfo' in attribute 'Attribute2'

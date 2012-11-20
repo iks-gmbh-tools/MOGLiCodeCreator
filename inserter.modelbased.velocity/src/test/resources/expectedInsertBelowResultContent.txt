@@ -1,0 +1,11 @@
+Line1
+-ReplaceStart
+TO BE replaced
+-ReplaceEnd
+Line2
+-InsertAbove
+Line3
+-InsertBelow
+ContentToInsert
+Line4
+End

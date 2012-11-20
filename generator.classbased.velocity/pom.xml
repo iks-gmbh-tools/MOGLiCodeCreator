@@ -1,0 +1,13 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<modelVersion>4.0.0</modelVersion>
+<artifactId>generator.classbased.velocity</artifactId>
+<name>Velocity Class Based Generator</name>
+<description>Generator that uses the Velocity Engine Provider and makes only the classes accessible in the templates.  This generator creates whole artefact files and is unable to do insert tasks.</description>
+
+<parent>
+<artifactId>parent.plugin</artifactId>
+<groupId>com.iksgmbh.moglicc</groupId>
+<version>0.1.1-SNAPSHOT</version>
+</parent>
+
+</project>

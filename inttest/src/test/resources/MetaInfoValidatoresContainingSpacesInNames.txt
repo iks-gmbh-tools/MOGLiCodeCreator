@@ -1,0 +1,3 @@
+Validator Mandatory "Java Type" Attribute 
+Validator Optional "comment note" Class
+Validator Optional "comment note" Class

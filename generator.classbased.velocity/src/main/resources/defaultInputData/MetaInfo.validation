@@ -1,0 +1,9 @@
+#This file is used to define MetaInfoValidators.
+#Syntax: Validator <validator type> <MetaInfo Name> <MetaInfo HierarchyLevel>
+#For Mandatory validators, the MetaInfo must occur at least for each elements in the validator's hierarchy level.
+#For Optional validators, the validation result is always true. They are used for statistical purpose 
+#(see output/StandardModelProvider/ModelStatistics.txt).
+
+Validator Mandatory JavaType Attribute 
+Validator Optional extends Class
+Validator Optional implements Class

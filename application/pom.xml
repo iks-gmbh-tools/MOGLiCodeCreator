@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<modelVersion>4.0.0</modelVersion>
+<artifactId>application</artifactId>
+<name>MOGLI Application Module</name>
+
+<parent>
+<artifactId>parent.plugin</artifactId>
+<groupId>com.iksgmbh.moglicc</groupId>
+<version>0.1.1-SNAPSHOT</version>
+</parent>
+
+<description>project for starting the application from IDE,
+for building Release candidates and
+for starting the different types of tests</description>
+
+<dependencies>
+
+</dependencies>
+
+</project>

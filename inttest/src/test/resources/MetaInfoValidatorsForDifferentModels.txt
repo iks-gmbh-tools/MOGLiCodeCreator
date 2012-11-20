@@ -1,0 +1,3 @@
+Validator Mandatory JavaType Attribute ModelA
+Validator Optional commentNote Class DefaultModel
+Validator Optional commentNote Class

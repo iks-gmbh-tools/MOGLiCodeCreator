@@ -1,0 +1,15 @@
+model MetaInfoValidatorTestModel
+metainfo modelMetaInfoOptional mom
+
+class test.TestklasseA
+
+	attribute A1
+	metainfo attributeMetaInfoOptional maoA1
+
+	attribute A2
+	
+class test.TestklasseB
+metainfo classMetaInfoOptional mcoB
+	
+	attribute B1
+	

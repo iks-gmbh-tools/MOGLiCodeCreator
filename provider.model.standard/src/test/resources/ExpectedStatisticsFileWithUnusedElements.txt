@@ -1,0 +1,22 @@
+Model Name: StatisticsTestModelWithUnusedMetaInfos
+Number of class descriptions in model file: 4
+Number of known MetaInfoValidator vendor plugins: 2
+
+Plugin 'DummyGenerator1' uses the following MetaInfo elements:
+'extends' in Class level
+'implements' in Class level
+
+Plugin 'DummyGenerator2' uses the following MetaInfo elements:
+'JavaType' in Attribute level
+
+WARNING:
+Following MetaInfos defined in 'model.txt' are unused:
+'unusedMetaInfoOnClassLevel' in ClassLevel
+'unusedMetaInfoOnAttributeLevel' in AttributeLevel
+'unusedMetaInfoOnModelLevel' in ModelLevel
+
+WARNING:
+Following MetaInfoValidator are unused:
+Optional Validator for MetaInfo 'xyz' in Model Level defined in DummyGenerator3
+Optional Validator for MetaInfo 'xyz' in Class Level defined in DummyGenerator3
+Optional Validator for MetaInfo 'xyz' in Attribute Level defined in DummyGenerator3
