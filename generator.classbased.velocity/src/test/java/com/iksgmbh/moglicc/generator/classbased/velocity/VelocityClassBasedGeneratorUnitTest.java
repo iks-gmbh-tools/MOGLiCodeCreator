@@ -14,22 +14,29 @@ import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MogliPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
 import com.iksgmbh.moglicc.generator.classbased.velocity.test.VelocityClassBasedGeneratorTestParent;
+import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
+import com.iksgmbh.moglicc.utils.MogliFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGeneratorTestParent {
 	
 	private static final String MAIN_TEMPLATE = "A_MainTemplate.tpl";
+	
+	private File generatorPropertiesFile;
 
 	@Override
 	@Before
 	public void setup() {
 		super.setup();
 		applicationTempDir.mkdirs();
+		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), 
+		            VelocityClassBasedGeneratorStarter.PLUGIN_PROPERTIES_FILE);
+		MogliFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
 	}
 	
 	@Test
-	public void findsArtefactList() {
+	public void findsArtefactList() throws MogliPluginException {
 		// call functionality under test
 		final List<String> artefactList = velocityClassBasedGenerator.getArtefactList();
 
@@ -327,5 +334,30 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 			return;
 		}
 		fail("Expected exception not thrown!");
+	}
+	
+	@Test
+	public void ignoresSubdirAsArtefactIfDefinedInPluginPropertiesFile() throws MogliPluginException {
+		// prepare test
+		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
+		subdir.mkdirs();
+		assertFileExists(subdir);
+		MogliFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
+		final String targetFileName = "targetFile.txt";
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example", 
+				"package com.iksgmbh.test", true);
+		prepareResultData(resultData);
+		
+		// call functionality under test
+		velocityClassBasedGenerator.doYourJob();
+		
+		// cleanup
+		subdir.delete();
+		assertFileDoesNotExist(subdir);
+
+		
+		// verify test result
+		final File outputDir = new File(infrastructure.getPluginOutputDir(), ".svn");
+		assertFileDoesNotExist(outputDir);
 	}
 }

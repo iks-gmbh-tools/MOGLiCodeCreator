@@ -51,7 +51,7 @@ public class MogliInfrastructureUnitTest extends CoreTestParent {
 		final MogliInfrastructure infrastructure = new MogliInfrastructure(infrastructureInitData);
 		
 		// call functionality under test
-		final String property = infrastructure.getMogliProperty(PLUGIN_TEST_ID);
+		final String property = infrastructure.getWorkspaceProperty(PLUGIN_TEST_ID);
 
 		// verify test result
 		assertNotNull(property);

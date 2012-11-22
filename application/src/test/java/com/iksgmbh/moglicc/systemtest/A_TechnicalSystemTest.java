@@ -124,7 +124,7 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 	public void createsNewWorkspaceDirWithRelativePathToSubdir() {
 		// prepare test
 		initPropertiesWith("workspace=workspaces/demo");
-		final File workspaceDir = new File(applicationTestDir, "workspaces/demo");
+		final File workspaceDir = new File(applicationRootDir, "workspaces/demo");
 		assertFileDoesNotExist(workspaceDir.getParentFile());
 		
 		// call functionality under test
@@ -151,8 +151,8 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 	@Test
 	public void createsEmergencyLogFileIfDefinedWorkspaceDirCannotBeCreated() {
 		// prepare test
-		initPropertiesWith("workspace=C:/temp/Mogli/workspace");
-		final File emergencyLogFile = new File(applicationTestDir, FILENAME_LOG_FILE);
+		initPropertiesWith("workspace=");
+		final File emergencyLogFile = new File(applicationRootDir, FILENAME_LOG_FILE);
 		assertFileDoesNotExist(emergencyLogFile);
 		
 		// call functionality under test
@@ -164,8 +164,7 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 		
 		// verify test result
 		assertFileExists(emergencyLogFile);
-		assertFileContainsEntry(emergencyLogFile, "C:\\temp\\Mogli\\workspace\\log");
-		assertFileContainsEntry(emergencyLogFile, "Could not create ");
+		assertFileContainsEntry(emergencyLogFile, "ERROR: Error creating workspaceDir");
 	}
 	
 	@Test

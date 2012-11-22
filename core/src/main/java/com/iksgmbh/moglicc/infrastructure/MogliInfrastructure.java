@@ -213,7 +213,7 @@ public class MogliInfrastructure implements InfrastructureService {
 	}
 
 	@Override
-	public String getMogliProperty(final String key) {
+	public String getWorkspaceProperty(final String key) {
 		return applicationProperties.getProperty(key);
 	}
 

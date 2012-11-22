@@ -10,17 +10,18 @@ import java.util.List;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
-import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
+import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.type.Inserter;
 import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
@@ -30,6 +31,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 	public static final String ENGINE_PROVIDER_ID = "VelocityEngineProvider";
 	public static final String MAIN_TEMPLATE_IDENTIFIER = "Main";	
+	public static final String PLUGIN_PROPERTIES_FILE = "generator.properties";
 	
 	private InfrastructureService infrastructure;
 
@@ -240,8 +242,9 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		return sb.toString();
 	}
 
-	List<String> getArtefactList() {
-		return FileUtil.getNamesOfSubdirs(infrastructure.getPluginInputDir());
+	List<String> getArtefactList() throws MogliPluginException {
+		final File generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
+		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
 	}
 	
 	VelocityInserterResultData insert(final BuildUpVelocityEngineData engineData) throws MogliPluginException {
@@ -280,6 +283,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		defaultData.addDirectory("BeanFactoryInsertAboveTemplate", beanFactoryInsertAboveTemplate);
 		final String[] beanFactoryInsertBelowTemplate = {"BeanFactoryInsertBelowTemplate.tpl"};
 		defaultData.addDirectory("BeanFactoryInsertBelowTemplate", beanFactoryInsertBelowTemplate);
+		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
 		
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;

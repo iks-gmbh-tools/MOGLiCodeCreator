@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
@@ -25,12 +26,12 @@ import com.iksgmbh.utils.ImmutableUtil;
 
 public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoValidatorVendor {
 	
-	public static final String IGNORE_SUBDIR_AS_ARTIFACT_PREFIX = "_";
 	public static final String PLUGIN_ID = "VelocityClassBasedGenerator";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 	public static final String ENGINE_PROVIDER_ID = "VelocityEngineProvider";
 	public static final String ARTEFACT_JAVABEAN = "JavaBean";
 	public static final String MAIN_TEMPLATE_IDENTIFIER = "Main";
+	public static final String PLUGIN_PROPERTIES_FILE = "generator.properties";
 
 	final static String[] javabeanTemplates = {"A_MainTemplate.tpl", "E_Variables.tpl", "G_GetterMethods.tpl", 
 			"F_SetterMethods.tpl", "C_ClassDefinitionLine.tpl", "B_ImportStatements.tpl",
@@ -100,15 +101,9 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		}
 	}
 
-	List<String> getArtefactList() {
-		final List<String> toReturn = new ArrayList<String>();
-		final List<String> namesOfSubdirs = FileUtil.getNamesOfSubdirs(infrastructure.getPluginInputDir());
-		for (final String name : namesOfSubdirs) {
-			if (! name.startsWith(IGNORE_SUBDIR_AS_ARTIFACT_PREFIX)) {
-				toReturn.add(name);
-			}
-		}
-		return toReturn;
+	List<String> getArtefactList() throws MogliPluginException {
+		final File generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
+		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
 	}
 
 	private void writeFilesIntoTemplateTargetDir(final List<VelocityGeneratorResultData> resultList) throws MogliPluginException {
@@ -182,6 +177,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
 		defaultData.addDirectory(ARTEFACT_JAVABEAN, javabeanTemplates);
 		defaultData.addFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
+		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
 	}

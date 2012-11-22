@@ -38,7 +38,7 @@ public class E_VelocityClassBasedInserterAcceptanceSystemTest extends _AbstractS
 	@Test
 	public void insertsInTargetFile() {
 		// prepare test
-		final File targetfile = new File(applicationTestDir, "example/BeanFactory.java");
+		final File targetfile = new File(applicationRootDir, "example/BeanFactory.java");
 		targetfile.delete();
 		assertFileDoesNotExist(targetfile);
 

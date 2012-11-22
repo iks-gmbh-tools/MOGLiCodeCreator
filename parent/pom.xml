@@ -2,7 +2,7 @@
 <modelVersion>4.0.0</modelVersion>
 <groupId>com.iksgmbh.moglicc</groupId>
 <artifactId>parent</artifactId>
-<version>0.1.1-SNAPSHOT</version>
+<version>0.1.2-SNAPSHOT</version>
 <name>MOGLI Parent</name>
 <description>Provides a multi module build to create all MOGLI artefacts</description>
 <packaging>pom</packaging>

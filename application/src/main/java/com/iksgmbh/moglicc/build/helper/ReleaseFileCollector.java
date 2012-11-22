@@ -45,6 +45,9 @@ public class ReleaseFileCollector {
 	}
 
 	void copyFileIntoRootDir() {
+		if (fileData.fileListForRootDir == null) {
+			return;
+		}
 		for (String filename : fileData.fileListForRootDir) {
 			final File file = new File(fileData.sourceDir + "/" + filename);
 			if (file.exists()) {

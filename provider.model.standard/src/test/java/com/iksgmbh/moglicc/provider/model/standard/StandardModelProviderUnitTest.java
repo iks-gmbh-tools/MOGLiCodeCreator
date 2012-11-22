@@ -113,7 +113,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	@Test
 	public void unpacksInputDefaultData() throws MogliPluginException {
 		// prepare test
-		final File pluginInputDir = new File(applicationTestDir + "/" + DIR_INPUT_FILES + "/" + StandardModelProviderStarter.PLUGIN_ID);
+		final File pluginInputDir = new File(applicationRootDir + "/" + DIR_INPUT_FILES + "/" + StandardModelProviderStarter.PLUGIN_ID);
 		FileUtil.deleteDirWithContent(pluginInputDir);
 		assertFileDoesNotExist(pluginInputDir);
 

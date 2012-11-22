@@ -25,7 +25,7 @@ public class StandardModelProviderTestParent extends AbstractMogliTest {
 	@Override
 	public void setup() {
 		super.setup();
-		final File pluginInputDir = new File(applicationTestDir + "/" + DIR_INPUT_FILES + "/" 
+		final File pluginInputDir = new File(applicationRootDir + "/" + DIR_INPUT_FILES + "/" 
 				+ StandardModelProviderStarter.PLUGIN_ID); 
 		if (isFirstTest) {
 			isFirstTest = false;

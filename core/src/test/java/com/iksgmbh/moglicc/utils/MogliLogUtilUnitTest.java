@@ -28,25 +28,25 @@ public class MogliLogUtilUnitTest extends CoreTestParent {
 	public void createsNewLogfile() {
 		// prepare test
 		applicationLogfile.delete();
-		assertFalse(applicationLogfile.exists());
+		assertFileDoesNotExist(applicationLogfile);
 		
 		// call functionality under test
-		MogliLogUtil.createNewLogfile(LOGFILE);
+		MogliLogUtil.createNewLogfile(applicationLogfile);
 		
 		// verify test result
-		assertTrue(applicationLogfile.exists());
+		assertFileExists(applicationLogfile);
 	}
 
 	@Test
 	public void testLog() {
-		MogliLogUtil.createNewLogfile(LOGFILE);
+		MogliLogUtil.createNewLogfile(applicationLogfile);
 		MogliLogUtil.logInfo("Test");
 		assertLogfileIsEntry("Test" + FileUtil.getSystemLineSeparator());
 	}
 	
 	@Test
 	public void testLogError() {
-		MogliLogUtil.createNewLogfile(LOGFILE);
+		MogliLogUtil.createNewLogfile(applicationLogfile);
 		MogliLogUtil.logError("Test");
 		assertLogfileIsEntry("ERROR: Test" + FileUtil.getSystemLineSeparator());
 	}

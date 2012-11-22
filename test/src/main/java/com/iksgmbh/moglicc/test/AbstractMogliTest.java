@@ -43,7 +43,7 @@ public abstract class AbstractMogliTest {
 	
 	protected File projectResourcesDir;
 	protected File projectTestResourcesDir;
-	protected File applicationTestDir;
+	protected File applicationRootDir;
 	protected File applicationPropertiesFile;
 	protected Properties applicationProperties;
 	protected String applicationTestDirAsString;
@@ -64,15 +64,15 @@ public abstract class AbstractMogliTest {
 	
 	protected void setup() {
 		applicationTestDirAsString = initTestApplicationRootDir();
-		applicationTestDir = new File(applicationTestDirAsString);
+		applicationRootDir = new File(applicationTestDirAsString);
 		projectTestResourcesDir = new File(getProjectTestResourcesDir());
 		projectResourcesDir = new File(getProjectResourcesDir());
-		applicationLogDir = new File(applicationTestDir, DIR_LOGS_FILES);
+		applicationLogDir = new File(applicationRootDir, DIR_LOGS_FILES);
 		applicationLogfile = new File(applicationLogDir, FILENAME_LOG_FILE);
-		applicationInputDir = new File(applicationTestDir, DIR_INPUT_FILES);
-		applicationOutputDir = new File(applicationTestDir, DIR_OUTPUT_FILES);
-		applicationTempDir = new File(applicationTestDir, DIR_TEMP_FILES);
-		applicationHelpDir = new File(applicationTestDir, DIR_HELP_FILES);
+		applicationInputDir = new File(applicationRootDir, DIR_INPUT_FILES);
+		applicationOutputDir = new File(applicationRootDir, DIR_OUTPUT_FILES);
+		applicationTempDir = new File(applicationRootDir, DIR_TEMP_FILES);
+		applicationHelpDir = new File(applicationRootDir, DIR_HELP_FILES);
 	}
 	
 	protected void initForFirstUnitTest() {
@@ -87,7 +87,7 @@ public abstract class AbstractMogliTest {
 	}
 
 	protected void initPropertiesWith(final String propertiesFileContent) {
-		applicationPropertiesFile = new File(applicationTestDir, FILENAME_APPLICATION_PROPERTIES);
+		applicationPropertiesFile = new File(applicationRootDir, FILENAME_APPLICATION_PROPERTIES);
 		try {
 			if (applicationPropertiesFile.exists()) {
 				applicationPropertiesFile.delete();
@@ -116,12 +116,12 @@ public abstract class AbstractMogliTest {
 	}
 
 	protected void initApplicationTestDir() {
-		FileUtil.deleteDirWithContent(applicationTestDir);
-		applicationTestDir.mkdirs();
+		FileUtil.deleteDirWithContent(applicationRootDir);
+		applicationRootDir.mkdirs();
 	}
 
 	protected void initPluginSubdir() {
-		final File plugindir = new File(applicationTestDir, DIR_LIB_PLUGIN);
+		final File plugindir = new File(applicationRootDir, DIR_LIB_PLUGIN);
 		FileUtil.deleteDirWithContent(plugindir);
 		if (! plugindir.exists()) {
 			plugindir.mkdirs();
@@ -155,7 +155,7 @@ public abstract class AbstractMogliTest {
 			                                                      final List<PluginExecutable> pluginList, 
                                                                   final String pluginId) {
 		final InfrastructureInitData infrastructureInitData = new InfrastructureInitData(
-					applicationTestDir,	applicationLogDir, applicationOutputDir, applicationTempDir, 
+					applicationRootDir,	applicationLogDir, applicationOutputDir, applicationTempDir, 
 					applicationInputDir, applicationHelpDir, properties);
 		infrastructureInitData.pluginList = pluginList;
 		infrastructureInitData.idOfThePluginToThisInfrastructure = pluginId;
@@ -175,8 +175,8 @@ public abstract class AbstractMogliTest {
 	public void assertStringContains(final String s, final String substring) {
 		final boolean expectedSubstringFound = s.contains(substring);
 		assertTrue("Expected substring not found in String." 
-				+ "\nSubstring: " + substring 
-				+ "\nString: " + s, expectedSubstringFound);
+				+ "\nSubstring <" + substring + ">" 
+				+ "\nString <" + s + ">", expectedSubstringFound);
 	}
 	
 	public void assertFileContainsEntry(final File file, final String expectedEntry) {

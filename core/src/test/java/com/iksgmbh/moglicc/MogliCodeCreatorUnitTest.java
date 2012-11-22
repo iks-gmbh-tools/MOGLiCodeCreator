@@ -199,7 +199,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 		assertTrue("Could not delete " + applicationPropertiesFile.getAbsolutePath(), delete);
 		
 		// call functionality under test
-		mogliCodeCreator.checkPluginsPropertiesFile();
+		mogliCodeCreator.checkApplicationPropertiesFile();
 
 		// verify test result
 		final String fileContent = MogliFileUtil.getFileContent(applicationPropertiesFile).trim();
@@ -215,9 +215,9 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 		mogliCodeCreator = new MogliCodeCreator();
 		
 		// call functionality under test
-		final String workspace = mogliCodeCreator.readWorkspaceFromProperties();
+		final String workspace = mogliCodeCreator.readWorkspaceDirFromApplicationProperties();
 		
 		// verify test result
-		assertStringEquals("workspace", "workspaces/demo/", workspace);
+		assertStringEquals("workspace", "workspaces/demo", workspace);
 	}
 }

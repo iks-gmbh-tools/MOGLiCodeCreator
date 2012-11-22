@@ -1,5 +1,5 @@
 @TargetFileName ${classDescriptor.simpleName}.java # Name of output file with extension but without path 
-@TargetDir D:/Reik/dev/eclipse/workspaces/helios worspace/_Demo/src/<package>
+@TargetDir C:/Temp/MogliCodeCreator/_Demo/src/<package>
 @CreateNew true # creates target dir if not existing and overwrites target file if existing
 
 package ${classDescriptor.package};

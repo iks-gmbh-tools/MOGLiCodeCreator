@@ -193,6 +193,6 @@ public class VersionReplacer {
 	public static void main(String[] args) {
 		//setVersionInPomsBackToOldValue();
 		final MogliReleaseBuilder releaseBuilder = new MogliReleaseBuilder();
-		VersionReplacer.doYourJob(null, "0.1.0-SNAPSHOT", releaseBuilder.getPomFiles());
+		VersionReplacer.doYourJob(null, "0.1.1-SNAPSHOT", releaseBuilder.getPomFiles());
 	}
 }

@@ -2,6 +2,7 @@ package com.iksgmbh.moglicc.generator.classbased.velocity;
 
 import java.io.File;
 
+import com.iksgmbh.moglicc.MogliSystemConstants;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MogliPluginException;
 
@@ -14,7 +15,7 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	
 	static final String PACKAGE = "package";
 	static final String PACKAGE_IDENTIFIER = "<" + PACKAGE + ">";
-	static final String ROOT_IDENTIFIER = "<applicationRootDir>";
+	static final String ROOT_IDENTIFIER = MogliSystemConstants.APPLICATION_ROOT_IDENTIFIER;
 	
 	static final String NO_TARGET_FILE_NAME = "TargetFileName not defined.";
 	static final String NO_TARGET_DIR = "TargetDir not defined.";

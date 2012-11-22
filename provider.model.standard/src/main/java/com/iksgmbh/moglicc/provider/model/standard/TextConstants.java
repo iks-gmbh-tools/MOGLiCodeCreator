@@ -18,6 +18,8 @@ public class TextConstants {
 	public static final String TEXT_PROPERTIES_FILE_NOT_LOADED = StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE + " not loaded: ";
 	public static final String TEXT_NO_MODELFILE_DEFINED_IN_PROPERTIES_FILE = StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE 
 	                                                                          + " does not contain a '" + MODELFILE_PROPERTY + "' entry.";
+	public static final String TEXT_NO_PROPERTIESFILE_FOUND = "File '" + StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE 
+                                                              + "' not found.";
 	public static final String TEXT_NO_MODELFILE_FOUND = "No modelfile found";
 	public static final String TEXT_NO_MODEL_FILE_LOADED = "No model file loaded!";
 	public static final String TEXT_PARSE_ERROR_FOUND = "Error parsing model file:\n";

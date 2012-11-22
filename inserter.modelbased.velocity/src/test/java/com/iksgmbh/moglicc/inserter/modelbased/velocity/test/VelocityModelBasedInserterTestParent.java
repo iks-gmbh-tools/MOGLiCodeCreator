@@ -106,7 +106,7 @@ public class VelocityModelBasedInserterTestParent extends AbstractMogliTest {
 	}
 	
 	protected InfrastructureService createInfrastructure(final File inputDir) {
-		final InfrastructureInitData infrastructureInitData = new InfrastructureInitData(applicationTestDir, 
+		final InfrastructureInitData infrastructureInitData = new InfrastructureInitData(applicationRootDir, 
 				applicationLogDir, applicationOutputDir, applicationTempDir, inputDir, applicationHelpDir, 
 				applicationProperties);
 		final List<PluginExecutable> list = new ArrayList<PluginExecutable>();

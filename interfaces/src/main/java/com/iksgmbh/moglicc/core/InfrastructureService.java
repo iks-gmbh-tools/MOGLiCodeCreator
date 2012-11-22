@@ -49,11 +49,11 @@ public interface InfrastructureService {
 	Logger getPluginLogger();
 	
 	/**
-	 * Reads properties from Mogli.properties
+	 * Reads properties from workspace.properties
 	 * @param key
 	 * @return property for key
 	 */
-	String getMogliProperty(String key);
+	String getWorkspaceProperty(String key);
 
 	/**
 	 * @return workspace directory for logFiles

@@ -6,6 +6,7 @@ import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_MOD
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_NO_MODELFILE_DEFINED_IN_PROPERTIES_FILE;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_NO_MODELFILE_FOUND;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_NO_MODEL_FILE_LOADED;
+import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_NO_PROPERTIESFILE_FOUND;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_PARSE_ERROR_FOUND;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_PROPERTIES_FILE_NOT_LOADED;
 
@@ -294,6 +295,8 @@ public class StandardModelProviderStarter implements ModelProvider, PluginExecut
 					}
 				}
 			}
+		} else {
+			infrastructure.getPluginLogger().logWarning(TEXT_NO_PROPERTIESFILE_FOUND);
 		}
 		return toReturn;
 	}

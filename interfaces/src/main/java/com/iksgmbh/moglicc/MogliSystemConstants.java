@@ -2,8 +2,14 @@ package com.iksgmbh.moglicc;
 
 public class MogliSystemConstants {
 	
-	public static final String FILENAME_LOG_FILE = "Mogli.log";
-	public static final String FILENAME_APPLICATION_PROPERTIES = "Mogli.properties";
+	public static final String FILENAME_LOG_FILE = "_Mogli.log";
+	public static final String FILENAME_APPLICATION_PROPERTIES = "application.properties";
+	public static final String FILENAME_WORKSPACE_PROPERTIES = "workspace.properties";
+	
+	public static final String WORKSPACE_PROPERTY = "workspace";
+	
+	public static final String APPLICATION_ROOT_IDENTIFIER = "<applicationRootDir>";
+	
 	public static final String DIR_PLUGIN = "plugins";
 	public static final String DIR_LIB = "lib";
 	public static final String DIR_LIB_PLUGIN = "/" + DIR_LIB + "/" + DIR_PLUGIN;

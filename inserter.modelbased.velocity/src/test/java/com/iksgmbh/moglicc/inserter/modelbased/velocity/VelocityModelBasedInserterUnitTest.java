@@ -14,9 +14,11 @@ import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MogliPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
+import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData.KnownInserterPropertyNames;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.test.VelocityModelBasedInserterTestParent;
+import com.iksgmbh.moglicc.utils.MogliFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInserterTestParent {
@@ -26,6 +28,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	private static final String ARTEFACT_BEAN_FACTORY = "BeanFactoryClass";
 	
 	private File targetFile;
+	private File generatorPropertiesFile;
 
 	@Override
 	@Before
@@ -36,10 +39,14 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		final File sourcefile = new File(getProjectTestResourcesDir(), TARGET_FILE_TXT);
 		targetFile = new File(applicationTempDir, TARGET_FILE_TXT);
 		FileUtil.copyTextFile(sourcefile, targetFile);
+		
+		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), 
+	            VelocityModelBasedInserterStarter.PLUGIN_PROPERTIES_FILE);
+		MogliFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
 	}
 	
 	@Test
-	public void findsArtefactList() {
+	public void findsArtefactList() throws MogliPluginException {
 		// call functionality under test
 		final List<String> artefactList = velocityModelBasedInserter.getArtefactList();
 
@@ -487,6 +494,66 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		
 		// verify test result
 		assertFileContainsEntry(targetFile, "Test");
+	}
+	
+	@Test
+	public void throwsExceptionIfSubdirContainsNoMainTemplate() {
+		// prepare test
+		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
+		subdir.mkdirs();
+		assertFileExists(subdir);
+		
+		// call functionality under test
+		try {
+			velocityModelBasedInserter.doYourJob();
+		} catch (MogliPluginException e) {
+			assertStringContains(e.getMessage(), "No main template found");
+			return;
+		}
+		fail("Expected exception not thrown!");
+	}
+
+	
+	@Test
+	public void throwsExceptionIfSubdirContainsNoMainTemplateAndIgnorePropertyIsWrong() {
+		// prepare test
+		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
+		subdir.mkdirs();
+		assertFileExists(subdir);
+		MogliFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=doNOT" + ArtefactListUtil.IGNORE);
+		
+		// call functionality under test
+		try {
+			velocityModelBasedInserter.doYourJob();
+		} catch (MogliPluginException e) {
+			assertStringContains(e.getMessage(), "No main template found");
+			return;
+		}
+		fail("Expected exception not thrown!");
+	}
+
+	@Test
+	public void ignoresSubdirAsArtefactIfDefinedInPluginPropertiesFile() throws MogliPluginException {
+		// prepare test
+		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
+		subdir.mkdirs();
+		assertFileExists(subdir);
+		MogliFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);
+		
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+		
+		// cleanup
+		subdir.delete();
+		assertFileDoesNotExist(subdir);
+		
+		// verify test result
+		final File outputDir = new File(infrastructure.getPluginOutputDir(), ".svn");
+		assertFileDoesNotExist(outputDir);
 	}
 
 }

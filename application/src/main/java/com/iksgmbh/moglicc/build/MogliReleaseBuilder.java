@@ -171,7 +171,7 @@ public class MogliReleaseBuilder {
 	}
 
 	
-	File[] getJarFiles(final List<String> mavenModuleList) {
+	public File[] getJarFiles(final List<String> mavenModuleList) {
 		final File[] jarFiles = new File[mavenModuleList.size()];
 		for (int i = 0; i < jarFiles.length; i++) {
 			String artefactGroup = ARTEFACT_GROUP_ID;
@@ -212,11 +212,11 @@ public class MogliReleaseBuilder {
 		return pomFiles;
 	}
 
-	List<String> getListOfCoreModules() {
+	public List<String> getListOfCoreModules() {
 		return CORE_MODULES;
 	}
 	
-	List<String> getListOfPluginModules() {
+	public List<String> getListOfPluginModules() {
 		return PLUGIN_MODULES;
 	}
 	
