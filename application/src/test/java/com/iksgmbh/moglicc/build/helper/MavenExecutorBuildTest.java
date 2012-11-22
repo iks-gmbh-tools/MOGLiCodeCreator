@@ -19,7 +19,7 @@ public class MavenExecutorBuildTest extends ApplicationTestParent {
 	public void setup() {
 		super.setup();
 		MavenData mavenData = new MavenData("compile", getMavenRootDir(), 
-				new File("D:/Reik/dev/git/automobile/automobile repo2/global"));
+				new File("D:/Reik/dev/git/mogli/global"));
 		mavenExecutor = new MavenExecutor(mavenData);
 	}
 	

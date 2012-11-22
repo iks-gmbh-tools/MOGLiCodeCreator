@@ -35,7 +35,7 @@ import com.iksgmbh.utils.FileUtil;
  */
 public class NameSpaceReplacer {
 
-	private static final String defaultWorkspaceDir = "D:\\Reik\\dev\\git\\automobile\\automobile repo2";
+	private static final String defaultWorkspaceDir = "D:\\Reik\\dev\\git\\mogli";
 	private static final String sourceNamespace = "de.iks_gmbh.automobile";
 	private static final String targetNamespace = "com.iksgmbh.moglicc";
 	private static final String[] directoriesToIgnore = { "target", ".git" };
