@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.plugin.type.basic;
 
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
 
 /**
  * Marker interface for generator plugins.
@@ -8,6 +8,6 @@ import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
  * 
  * @author Reik Oberrath
  */
-public interface Generator extends MOGLiPlugin {
+public interface Generator extends MOGLiPlugin2 {
 
 }

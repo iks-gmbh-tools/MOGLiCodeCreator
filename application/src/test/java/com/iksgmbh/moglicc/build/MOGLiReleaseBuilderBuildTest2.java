@@ -13,27 +13,27 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder.VERSION_TYPE;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder2.VERSION_TYPE;
 import com.iksgmbh.moglicc.build.test.ApplicationTestParent;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ZipUtil;
 
-public class MOGLiReleaseBuilderBuildTest extends ApplicationTestParent {
+public class MOGLiReleaseBuilderBuildTest2 extends ApplicationTestParent {
 	
 	private static final String FILENAME_TEST_ZIP = "MogliTest.zip";
 	
-	private MOGLiReleaseBuilder releaseBuilder;
+	private MOGLiReleaseBuilder2 releaseBuilder;
 	
 	@Before
 	public void setup() {
 		super.setup();
-		releaseBuilder = new MOGLiReleaseBuilder();
-		final File propertiesFile = new File(MOGLiReleaseBuilder.USER_DIR 
-				+ "/src/main/resources/" + MOGLiReleaseBuilder.FILENAME_BUILD_PROPERTIES);
-		FileUtil.copyTextFile(propertiesFile, MOGLiReleaseBuilder.getApplicationRootDir());
-		final String zipFile = MOGLiReleaseBuilder.USER_DIR 
+		releaseBuilder = new MOGLiReleaseBuilder2();
+		final File propertiesFile = new File(MOGLiReleaseBuilder2.USER_DIR 
+				+ "/src/main/resources/" + MOGLiReleaseBuilder2.FILENAME_BUILD_PROPERTIES);
+		FileUtil.copyTextFile(propertiesFile, MOGLiReleaseBuilder2.getApplicationRootDir());
+		final String zipFile = MOGLiReleaseBuilder2.USER_DIR 
 				+ "/src/test/resources/" + FILENAME_TEST_ZIP;
-		FileUtil.copyBinaryFile(zipFile, MOGLiReleaseBuilder.getApplicationRootDir());
+		FileUtil.copyBinaryFile(zipFile, MOGLiReleaseBuilder2.getApplicationRootDir());
 	}
 
 	// *****************************  test methods  ************************************
@@ -122,7 +122,7 @@ public class MOGLiReleaseBuilderBuildTest extends ApplicationTestParent {
 		FileUtil.deleteDirWithContent(releaseDir);
 		assertFalse("ReleaseDir not deleted!", releaseDir.exists());
 		releaseDir.mkdirs();
-		ZipUtil.unzip(MOGLiReleaseBuilder.getApplicationRootDir() + "/MogliTest.zip", releaseDir.getAbsolutePath());
+		ZipUtil.unzip(MOGLiReleaseBuilder2.getApplicationRootDir() + "/MogliTest.zip", releaseDir.getAbsolutePath());
 		assertEquals("Unexpected file number!", 2, releaseDir.listFiles().length);
 		
 		// call functionality under test

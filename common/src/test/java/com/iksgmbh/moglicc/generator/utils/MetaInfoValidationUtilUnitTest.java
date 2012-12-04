@@ -7,14 +7,14 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 
 public class MetaInfoValidationUtilUnitTest {
 
 	@Test
-	public void returnsMetaInfoValidatorFromLineOfInputFile() throws MOGLiPluginException {
+	public void returnsMetaInfoValidatorFromLineOfInputFile() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "Validator mandatory MetaInfoTestName model";
 
@@ -29,14 +29,14 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 	
 	@Test
-	public void throwsExceptionIfAnnotationTagNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfAnnotationTagNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "validato mandatory MetaInfoTestName Model";
 		
 		// call functionality under test
 		try {
 			MetaInfoValidationUtil.parseLine(inputLine);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertEquals("Error message", "Line not parsable as MetaInfoValidator: " + inputLine, e.getMessage());
 			return;
 		}
@@ -44,14 +44,14 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 
 	@Test
-	public void throwsExceptionIfValidatorTypeNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfValidatorTypeNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "validator mandatoryX MetaInfoTestName Model";
 		
 		// call functionality under test
 		try {
 			MetaInfoValidationUtil.parseLine(inputLine);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertEquals("Error message", "Unknown ValidationType <mandatoryX>.", e.getMessage());
 			return;
 		}
@@ -59,14 +59,14 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 
 	@Test
-	public void throwsExceptionIfHierarchyLevelNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfHierarchyLevelNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "validator mandatory MetaInfoTestName ModelX";
 		
 		// call functionality under test
 		try {
 			MetaInfoValidationUtil.parseLine(inputLine);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertEquals("Error message", "Unknown MetaInfoHierarchyLevel <ModelX>.", e.getMessage());
 			return;
 		}
@@ -74,14 +74,14 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 	
 	@Test
-	public void throwsExceptionIfMetaInfoNameNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfMetaInfoNameNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "validator mandatory Model";
 		
 		// call functionality under test
 		try {
 			MetaInfoValidationUtil.parseLine(inputLine);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertEquals("Error message", "MetaInfoName or MetaInfoHierarchyLevel is missing.\n" +
 					                      "Error parsing Annotation [name=mandatory, additionalInfo=Model]", e.getMessage());
 			return;
@@ -90,14 +90,14 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 	
 	@Test
-	public void throwsExceptionIfMetaInfoNameAndHierarchyLevelNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfMetaInfoNameAndHierarchyLevelNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "validator mandatory ";
 		
 		// call functionality under test
 		try {
 			MetaInfoValidationUtil.parseLine(inputLine);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertEquals("Error message", "Missing information parsing Annotation [name=mandatory, additionalInfo=null]", e.getMessage());
 			return;
 		}
@@ -105,14 +105,14 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 	
 	@Test
-	public void throwsExceptionIfValidatorTypeAndMetaInfoNameAndHierarchyLevelNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfValidatorTypeAndMetaInfoNameAndHierarchyLevelNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "validator ";
 		
 		// call functionality under test
 		try {
 			MetaInfoValidationUtil.parseLine(inputLine);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertEquals("Error message", "Unknown ValidationType <>.", e.getMessage());
 			return;
 		}
@@ -120,7 +120,7 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 	
 	@Test
-	public void returnsNullForCommentLine() throws MOGLiPluginException {
+	public void returnsNullForCommentLine() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "#validator ";
 
@@ -132,7 +132,7 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 
 	@Test
-	public void returnsMetaInfoValidatorsForMetaInfoWithNamesContainingSpaces() throws MOGLiPluginException {
+	public void returnsMetaInfoValidatorsForMetaInfoWithNamesContainingSpaces() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "validator optional \"Java Type\" Attribute";
 
@@ -147,7 +147,7 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 	
 	@Test
-	public void returnsMetaInfoValidatorFromLineOfInputFileWithModelName() throws MOGLiPluginException {
+	public void returnsMetaInfoValidatorFromLineOfInputFileWithModelName() throws MOGLiPluginException2 {
 		// prepare test
 		final String inputLine = "Validator mandatory MetaInfoTestName model ModelName";
 

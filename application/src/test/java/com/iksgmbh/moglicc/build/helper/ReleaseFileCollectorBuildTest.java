@@ -1,7 +1,7 @@
 package com.iksgmbh.moglicc.build.helper;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_PLUGIN;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_LIB;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_PLUGIN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -12,10 +12,10 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder2;
 import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.build.test.ApplicationTestParent;
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
@@ -32,19 +32,19 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		if (firstTime) {
 			firstTime = false;
 			
-			final MOGLiReleaseBuilder mogliReleaseBuilder = new MOGLiReleaseBuilder();
-			rootDir = new File(MOGLiReleaseBuilder.getApplicationRootDir());
+			final MOGLiReleaseBuilder2 mogliReleaseBuilder = new MOGLiReleaseBuilder2();
+			rootDir = new File(MOGLiReleaseBuilder2.getApplicationRootDir());
 			releaseDir = new File(rootDir + "/releasetest");
-			final File[] testCoreFiles = {new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_BUILD_PROPERTIES), 
-					new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_STARTBAT)};
-			final File[] testPluginFiles = {new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_STARTBAT)};
+			final File[] testCoreFiles = {new File(rootDir + "/" + MOGLiReleaseBuilder2.FILENAME_BUILD_PROPERTIES), 
+					new File(rootDir + "/" + MOGLiReleaseBuilder2.FILENAME_STARTBAT)};
+			final File[] testPluginFiles = {new File(rootDir + "/" + MOGLiReleaseBuilder2.FILENAME_STARTBAT)};
 			final File[] thirdPartyLibraries = mogliReleaseBuilder.getThirdPartyJars();
 			fileData = new FileCollectionData();
 			fileData.libSubdir = DIR_LIB;
 			fileData.pluginsSubdir = DIR_PLUGIN;
 			fileData.sourceDir = rootDir;
 			fileData.releaseDir = releaseDir;
-			fileData.fileListForRootDir = ImmutableUtil.getImmutableListOf(MOGLiReleaseBuilder.FILENAME_STARTBAT);
+			fileData.fileListForRootDir = ImmutableUtil.getImmutableListOf(MOGLiReleaseBuilder2.FILENAME_STARTBAT);
 			fileData.jarsOfCoreComponents = testCoreFiles;
 			fileData.jarsOfPlugins = testPluginFiles;
 			fileData.thirdPartyJars = thirdPartyLibraries;
@@ -59,9 +59,9 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		releaseFileCollector = new ReleaseFileCollector(fileData);
 		releaseFileCollector.initReleaseDir();
 		
-		final File batfile = new File(getProjectResourcesDir() + MOGLiReleaseBuilder.RELEASE_DATA_SOURCE_SUBDIR
-				+ "/" + MOGLiReleaseBuilder.FILENAME_STARTBAT);
-		FileUtil.copyTextFile(batfile, MOGLiReleaseBuilder.getApplicationRootDir());
+		final File batfile = new File(getProjectResourcesDir() + MOGLiReleaseBuilder2.RELEASE_DATA_SOURCE_SUBDIR
+				+ "/" + MOGLiReleaseBuilder2.FILENAME_STARTBAT);
+		FileUtil.copyTextFile(batfile, MOGLiReleaseBuilder2.getApplicationRootDir());
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		releaseFileCollector.copyFileIntoRootDir();
 		final File[] filelist = fileData.releaseDir.listFiles();
 		assertEquals("Unexpected number of files:", 1, filelist.length);
-		assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[0].getName());
+		assertEquals("Unexpected filename.", MOGLiReleaseBuilder2.FILENAME_STARTBAT, filelist[0].getName());
 	}
 	
 	@Test
@@ -88,7 +88,7 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		releaseFileCollector.initReleaseDir();
 		try {
 			releaseFileCollector.copyFileIntoRootDir();
-		} catch (MOGLiCoreException e) {
+		} catch (MOGLiCoreException2 e) {
 			assertTrue("Wrong Error message.", e.getMessage().startsWith("File does not exist: "));
 			return;
 		}

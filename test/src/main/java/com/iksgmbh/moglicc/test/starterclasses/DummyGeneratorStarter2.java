@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
@@ -22,7 +22,7 @@ public class DummyGeneratorStarter2 implements Generator, MetaInfoValidatorVendo
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin.PluginType.GENERATOR;
+		return MOGLiPlugin2.PluginType.GENERATOR;
 	}
 
 	@Override
@@ -45,12 +45,12 @@ public class DummyGeneratorStarter2 implements Generator, MetaInfoValidatorVendo
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
 		return false;
 	}
 
 	@Override
-	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
+	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException2 {
 		return metaInfoValidatorList;
 	}
 	
@@ -64,7 +64,7 @@ public class DummyGeneratorStarter2 implements Generator, MetaInfoValidatorVendo
 	}	
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
 		return false;
 	}
 

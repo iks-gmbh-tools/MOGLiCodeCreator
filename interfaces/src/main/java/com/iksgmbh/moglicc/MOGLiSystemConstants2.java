@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc;
 
-public class MOGLiSystemConstants {
+public class MOGLiSystemConstants2 {
 	
 	public static final String FILENAME_LOG_FILE = "_MOGLi.log";
 	public static final String FILENAME_APPLICATION_PROPERTIES = "application.properties";

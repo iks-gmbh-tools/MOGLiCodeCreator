@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
 
-public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPlugin {
+public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPlugin2 {
 
 	private static final String PLUGIN_ID = "StandardModelProvider";
 	private InfrastructureService infrastructure;
@@ -21,7 +21,7 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin.PluginType.MODEL_PROVIDER;
+		return MOGLiPlugin2.PluginType.MODEL_PROVIDER;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
 		return false;
 	}
 
@@ -56,7 +56,7 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 	}
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
 		return false;
 	}
 

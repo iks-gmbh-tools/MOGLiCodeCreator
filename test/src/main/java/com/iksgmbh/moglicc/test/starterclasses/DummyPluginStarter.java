@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 
-public class DummyPluginStarter implements Generator, MOGLiPlugin {
+public class DummyPluginStarter implements Generator, MOGLiPlugin2 {
 
 	private static final String PLUGIN_ID = "DummyPlugin";
 	private InfrastructureService infrastructure;
@@ -19,12 +19,12 @@ public class DummyPluginStarter implements Generator, MOGLiPlugin {
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin.PluginType.GENERATOR;
+		return MOGLiPlugin2.PluginType.GENERATOR;
 	}
 
 	@Override
-	public void doYourJob() throws MOGLiPluginException {
-		throw new MOGLiPluginException("Testfehler");
+	public void doYourJob() throws MOGLiPluginException2 {
+		throw new MOGLiPluginException2("Testfehler");
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class DummyPluginStarter implements Generator, MOGLiPlugin {
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
 		return false;
 	}
 
@@ -50,7 +50,7 @@ public class DummyPluginStarter implements Generator, MOGLiPlugin {
 	}
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
 		return false;
 	}
 

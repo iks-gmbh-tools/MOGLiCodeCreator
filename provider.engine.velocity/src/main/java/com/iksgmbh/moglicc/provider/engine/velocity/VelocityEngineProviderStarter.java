@@ -16,7 +16,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
@@ -59,18 +59,18 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	}
 	
 	@Override
-	public Object startEngine() throws MOGLiPluginException {
+	public Object startEngine() throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("startEngine called");
 		return startEngineWithClassList();
 	}
 
 	@Override
-	public void doYourJob() throws MOGLiPluginException {
+	public void doYourJob() throws MOGLiPluginException2 {
 		// engine providers have nothing to do here – see startEngine
 	}
 
 	@Override
-	public GeneratorResultData startEngineWithModel() throws MOGLiPluginException {
+	public GeneratorResultData startEngineWithModel() throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("startEngineAllClassesIntoSingleTargetFile called");
 		prepareStart();
 		
@@ -85,7 +85,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	}
 
 	@Override
-	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException {
+	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("startEngineEachClassIntoSeparateTargetFiles called");
 		prepareStart();
 		
@@ -104,9 +104,9 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		return toReturn;
 	}
 
-	private void prepareStart() throws MOGLiPluginException {
+	private void prepareStart() throws MOGLiPluginException2 {
 		if (velocityEngineData == null) {
-			throw new MOGLiPluginException(ENGINE_STARTED_WITHOUT_DATA);
+			throw new MOGLiPluginException2(ENGINE_STARTED_WITHOUT_DATA);
 		}
 		
 		infrastructure.getPluginLogger().logInfo("-");
@@ -133,7 +133,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		return context;
 	}
 	
-	String mergeTemplateWith(final VelocityContext context) throws MOGLiPluginException {
+	String mergeTemplateWith(final VelocityContext context) throws MOGLiPluginException2 {
         final VelocityEngine engine = getVelocityEngine();
         final StringWriter writer = new StringWriter();
         final Template template = createVelocityTemplate(engine);	        	
@@ -142,13 +142,13 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
         return writer.toString();
 	}
 
-	private Template createVelocityTemplate(final VelocityEngine engine) throws MOGLiPluginException {
+	private Template createVelocityTemplate(final VelocityEngine engine) throws MOGLiPluginException2 {
 		final Template template;
 		try {
         	 template = engine.getTemplate(velocityEngineData.getMainTemplateSimpleFileName());
 		} catch (ResourceNotFoundException e) {
 			final String templateDirAsString = velocityEngineData.getTemplateDir().getAbsolutePath();
-			throw new MOGLiPluginException("Error finding template file:\n" 
+			throw new MOGLiPluginException2("Error finding template file:\n" 
 					+ velocityEngineData.getMainTemplateSimpleFileName() 
 					+ "\nRootDir: " + templateDirAsString, e);
 		}
@@ -173,59 +173,59 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("Nothing to do in initDefaultInputData!");
 		return false;
 	}
 
 	@Override
-	public void setEngineData(final Object engineData) throws MOGLiPluginException {
+	public void setEngineData(final Object engineData) throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("-----");
 		if (engineData == null) {
-			throw new MOGLiPluginException("Parameter 'engineData' must not be null!");
+			throw new MOGLiPluginException2("Parameter 'engineData' must not be null!");
 		}
 		final VelocityEngineData velocityEngineData;
 		
 		if (engineData instanceof VelocityEngineData) {
 			velocityEngineData = (VelocityEngineData) engineData;
 		} else {
-			throw new MOGLiPluginException("VelocityEngineData expected! Wrong engine data set: " + engineData.getClass().getName());
+			throw new MOGLiPluginException2("VelocityEngineData expected! Wrong engine data set: " + engineData.getClass().getName());
 		}
 		
 		if (velocityEngineData.getModel() == null) {
-			throw new MOGLiPluginException("Model not set!");
+			throw new MOGLiPluginException2("Model not set!");
 		}
 		
 		if (velocityEngineData.getGeneratorPluginId() == null) {
-			throw new MOGLiPluginException("GeneratorPluginId not set!");
+			throw new MOGLiPluginException2("GeneratorPluginId not set!");
 		}
 		
 		if (infrastructure.getGenerator(velocityEngineData.getGeneratorPluginId()) == null) {
-			throw new MOGLiPluginException("Unknown GeneratorPlugin!");
+			throw new MOGLiPluginException2("Unknown GeneratorPlugin!");
 		}
 		
 		if (StringUtils.isEmpty(velocityEngineData.getArtefactType())) {
-			throw new MOGLiPluginException("ArtefactType not set!");
+			throw new MOGLiPluginException2("ArtefactType not set!");
 		}
 		
 		if (velocityEngineData.getMainTemplateSimpleFileName() == null) {
-			throw new MOGLiPluginException("MainTemplateName not set!");
+			throw new MOGLiPluginException2("MainTemplateName not set!");
 		}
 		
 		if (velocityEngineData.getTemplateDir() == null) {
-			throw new MOGLiPluginException("TemplateDir not set!");
+			throw new MOGLiPluginException2("TemplateDir not set!");
 		}
 		
 		final File templateDir = velocityEngineData.getTemplateDir();
 		if (! templateDir.exists()) {
-			throw new MOGLiPluginException("TemplateDir does not exist:\n" 
+			throw new MOGLiPluginException2("TemplateDir does not exist:\n" 
 					                            + templateDir.getAbsolutePath());
 		}
 		
 		final File mainTemplateFile = new File(templateDir, 
 				                               velocityEngineData.getMainTemplateSimpleFileName());
 		if (! mainTemplateFile.exists()) {
-			throw new MOGLiPluginException("Main Template File does not exist:\n" 
+			throw new MOGLiPluginException2("Main Template File does not exist:\n" 
 					   + mainTemplateFile.getAbsolutePath());
 		}
 		
@@ -241,7 +241,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	}
 
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR);
 		helpData.addFile("TemplateUtilities.htm");

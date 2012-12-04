@@ -3,7 +3,7 @@ package com.iksgmbh.moglicc.build.helper;
 import java.io.File;
 import java.util.List;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
 import com.iksgmbh.utils.FileUtil;
 
 public class ReleaseFileCollector {
@@ -53,7 +53,7 @@ public class ReleaseFileCollector {
 			if (file.exists()) {
 				FileUtil.copyTextFile(file, fileData.releaseDir.getAbsolutePath());
 			} else {
-				throw new MOGLiCoreException("File does not exist: " + file.getAbsolutePath());
+				throw new MOGLiCoreException2("File does not exist: " + file.getAbsolutePath());
 			}
 		}
 	}
@@ -62,7 +62,7 @@ public class ReleaseFileCollector {
 		libDir = new File(fileData.releaseDir + "/" + fileData.libSubdir);
 		boolean ok = libDir.mkdirs();
 		if (! ok) {
-			throw new MOGLiCoreException("Directory not created: " + libDir.getAbsolutePath());
+			throw new MOGLiCoreException2("Directory not created: " + libDir.getAbsolutePath());
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class ReleaseFileCollector {
 				                                 + "/" + fileData.pluginsSubdir);
 		boolean ok = pluginDir.mkdirs();
 		if (! ok) {
-			throw new MOGLiCoreException("Directory not created: " + fileData.pluginsSubdir);
+			throw new MOGLiCoreException2("Directory not created: " + fileData.pluginsSubdir);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class ReleaseFileCollector {
 			if (file.exists()) {
 				FileUtil.copyBinaryFile(file.getAbsolutePath(), libDir.getAbsolutePath());
 			} else {
-				throw new MOGLiCoreException("File does not exist: " + file.getAbsolutePath());
+				throw new MOGLiCoreException2("File does not exist: " + file.getAbsolutePath());
 			}
 		}
 	}
@@ -93,7 +93,7 @@ public class ReleaseFileCollector {
 			if (file.exists()) {
 				FileUtil.copyBinaryFile(file.getAbsolutePath(), pluginDir.getAbsolutePath());
 			} else {
-				throw new MOGLiCoreException("File does not exist: " + file.getAbsolutePath());
+				throw new MOGLiCoreException2("File does not exist: " + file.getAbsolutePath());
 			}
 		}
 	}
@@ -104,7 +104,7 @@ public class ReleaseFileCollector {
 			if (file.exists()) {
 				FileUtil.copyBinaryFile(file.getAbsolutePath(), libDir.getAbsolutePath());
 			} else {
-				throw new MOGLiCoreException("File does not exist: " + file.getAbsolutePath());
+				throw new MOGLiCoreException2("File does not exist: " + file.getAbsolutePath());
 			}
 		}
 	}

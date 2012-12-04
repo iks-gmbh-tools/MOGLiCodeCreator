@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
@@ -16,7 +16,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 public class StandardModelProviderIntTest extends IntTestParent {
 
 	@Test
-	public void createsStatisticsFile() throws MOGLiPluginException {
+	public void createsStatisticsFile() throws MOGLiPluginException2 {
 		// call functionality under test
 		standardModelProviderStarter.doYourJob();
 
@@ -29,7 +29,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	}
 	
 	@Test
-	public void createsStatisticsFileWithMetaInfoNamesThatContainSpaces() throws MOGLiPluginException {
+	public void createsStatisticsFileWithMetaInfoNamesThatContainSpaces() throws MOGLiPluginException2 {
 		// prepare test
 		setModelFile("ModelFileWithMetaInfosContainingSpacesInNames.txt");
 		setMetaInfoValidationFile(velocityClassBasedGeneratorStarter, "MetaInfoValidatoresContainingSpacesInNames.txt");
@@ -47,7 +47,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	}
 
 	@Test
-	public void filtersMetaInfoValidatorVendorsByNameOfModel() throws MOGLiPluginException {
+	public void filtersMetaInfoValidatorVendorsByNameOfModel() throws MOGLiPluginException2 {
 		// prepare test
 		setMetaInfoValidationFile(velocityClassBasedGeneratorStarter, "MetaInfoValidatorsForDifferentModels.txt");
 		standardModelProviderStarter.doYourJob();

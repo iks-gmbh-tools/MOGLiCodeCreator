@@ -1,13 +1,13 @@
 package com.iksgmbh.moglicc.systemtest;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_INPUT_FILES;
 
 import java.io.File;
 
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
-import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil2;
 import com.iksgmbh.utils.FileUtil;
 
 public class B_StandardModelProviderAcceptanceSystemTest extends _AbstractSystemTest {
@@ -30,7 +30,7 @@ public class B_StandardModelProviderAcceptanceSystemTest extends _AbstractSystem
 		// verify test result
 		final File modelFile = new File(modelDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE); 
 		assertFileExists(modelFile);
-		String fileContent = MOGLiFileUtil.getFileContent(modelFile);
+		String fileContent = MOGLiFileUtil2.getFileContent(modelFile);
 		assertFileContainsEntry(modelFile, fileContent);
 	}
 	

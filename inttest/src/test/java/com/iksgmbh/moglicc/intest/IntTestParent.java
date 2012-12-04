@@ -6,14 +6,14 @@ import java.util.List;
 
 import org.junit.Before;
 
-import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.MOGLiCodeCreator2;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityClassBasedGeneratorStarter;
 import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
-import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
+import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure2;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityModelBasedInserterStarter;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineProviderStarter;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
@@ -41,7 +41,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 	protected String initTestApplicationRootDir() {
 		applicationRootDir = PROJECT_ROOT_DIR + TEST_SUBDIR;
 		FileUtil.deleteDirWithContent(applicationRootDir);
-		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator2.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
 
@@ -50,7 +50,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 		super.setup();
 		applicationLogDir.mkdirs();
 		
-		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> plugins = new ArrayList<MOGLiPlugin2>();
 		infrastructureInitData = createInfrastructureInitData(applicationProperties, plugins, null);
 		
 		standardModelProviderStarter = new StandardModelProviderStarter();
@@ -67,7 +67,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 			initPlugin(velocityEngineProviderStarter);
 			initPlugin(velocityClassBasedGeneratorStarter);
 			initPlugin(velocityModelBasedInserterStarter);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			throw new RuntimeException(e);
 		}
 		
@@ -75,9 +75,9 @@ public class IntTestParent extends AbstractMOGLiTest {
 		modelTextfile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
 	}
 	
-	protected MOGLiInfrastructure initPlugin(final MOGLiPlugin plugin) throws MOGLiPluginException {
+	protected MOGLiInfrastructure2 initPlugin(final MOGLiPlugin2 plugin) throws MOGLiPluginException2 {
 		infrastructureInitData.idOfThePluginToThisInfrastructure = plugin.getId();
-		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
+		final MOGLiInfrastructure2 infrastructure = new MOGLiInfrastructure2(infrastructureInitData);
 		plugin.setMOGLiInfrastructure(infrastructure);
 		plugin.unpackDefaultInputData();
 		return infrastructure;
@@ -88,7 +88,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 		FileUtil.copyTextFile(source, modelTextfile);
 	}	
 
-	protected void setMetaInfoValidationFile(final MOGLiPlugin plugin,
+	protected void setMetaInfoValidationFile(final MOGLiPlugin2 plugin,
 			                                 final String filename) {
 		final File source = new File(getProjectTestResourcesDir(), filename);
 		final File target = new File(plugin.getMOGLiInfrastructure().getPluginInputDir(), 

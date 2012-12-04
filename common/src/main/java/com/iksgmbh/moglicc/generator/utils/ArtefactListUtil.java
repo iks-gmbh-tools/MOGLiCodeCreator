@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.utils.FileUtil;
 
 public class ArtefactListUtil {
@@ -16,13 +16,13 @@ public class ArtefactListUtil {
 	 * @param dir to read artefacts as subdirs
 	 * @param propertiesFile contains subdirs to ignore 
 	 * @return returns artefact list consisting of subdir that are not ignored
-	 * @throws MOGLiPluginException 
+	 * @throws MOGLiPluginException2 
 	 */
 	public static List<String> getArtefactListFrom(final File dir, final File propertiesFile) {
 		Properties properties;
 		try {
 			properties = PropertiesUtil.readProperties(propertiesFile);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			properties = new Properties();
 		}
 		final List<String> namesOfSubdirs = FileUtil.getNamesOfSubdirs(dir);

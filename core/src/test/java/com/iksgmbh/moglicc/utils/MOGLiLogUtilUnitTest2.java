@@ -7,19 +7,19 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.MOGLiCodeCreator;
-import com.iksgmbh.moglicc.MOGLiSystemConstants;
+import com.iksgmbh.moglicc.MOGLiCodeCreator2;
+import com.iksgmbh.moglicc.MOGLiSystemConstants2;
 import com.iksgmbh.moglicc.test.CoreTestParent;
 import com.iksgmbh.utils.FileUtil;
 
-public class MOGLiLogUtilUnitTest extends CoreTestParent {
+public class MOGLiLogUtilUnitTest2 extends CoreTestParent {
 	
-	public static final String LOGFILE = MOGLiSystemConstants.DIR_LOGS_FILES + "/" + MOGLiSystemConstants.FILENAME_LOG_FILE;
+	public static final String LOGFILE = MOGLiSystemConstants2.DIR_LOGS_FILES + "/" + MOGLiSystemConstants2.FILENAME_LOG_FILE;
 	
 	@Before
 	public void setup() {
 		super.setup();
-		MOGLiCodeCreator.setApplicationRootDir(applicationTestDirAsString);
+		MOGLiCodeCreator2.setApplicationRootDir(applicationTestDirAsString);
 	}
 	
 	// **************************  Test Methods  *********************************
@@ -31,7 +31,7 @@ public class MOGLiLogUtilUnitTest extends CoreTestParent {
 		assertFileDoesNotExist(applicationLogfile);
 		
 		// call functionality under test
-		MOGLiLogUtil.createNewLogfile(applicationLogfile);
+		MOGLiLogUtil2.createNewLogfile(applicationLogfile);
 		
 		// verify test result
 		assertFileExists(applicationLogfile);
@@ -39,22 +39,22 @@ public class MOGLiLogUtilUnitTest extends CoreTestParent {
 
 	@Test
 	public void testLog() {
-		MOGLiLogUtil.createNewLogfile(applicationLogfile);
-		MOGLiLogUtil.logInfo("Test");
+		MOGLiLogUtil2.createNewLogfile(applicationLogfile);
+		MOGLiLogUtil2.logInfo("Test");
 		assertLogfileIsEntry("Test" + FileUtil.getSystemLineSeparator());
 	}
 	
 	@Test
 	public void testLogError() {
-		MOGLiLogUtil.createNewLogfile(applicationLogfile);
-		MOGLiLogUtil.logError("Test");
+		MOGLiLogUtil2.createNewLogfile(applicationLogfile);
+		MOGLiLogUtil2.logError("Test");
 		assertLogfileIsEntry("ERROR: Test" + FileUtil.getSystemLineSeparator());
 	}
 
 	
 	private void assertLogfileIsEntry(String expectedLogEntry) {
-		File logfile = MOGLiFileUtil.getNewFileInstance(LOGFILE);
-		final String actualFileContent = MOGLiFileUtil.getFileContent(logfile);
+		File logfile = MOGLiFileUtil2.getNewFileInstance(LOGFILE);
+		final String actualFileContent = MOGLiFileUtil2.getFileContent(logfile);
 		assertEquals("Expected Log Entry not found in logfile", expectedLogEntry, actualFileContent);
 	}
 

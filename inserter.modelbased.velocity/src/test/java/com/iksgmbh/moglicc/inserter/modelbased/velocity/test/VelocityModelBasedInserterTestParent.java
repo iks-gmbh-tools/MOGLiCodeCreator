@@ -4,13 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.MOGLiCodeCreator2;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure2;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityModelBasedInserterStarter;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
 import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
 import com.iksgmbh.moglicc.test.starterclasses.DummyVelocityEngineProviderStarter;
@@ -35,7 +35,7 @@ public class VelocityModelBasedInserterTestParent extends AbstractMOGLiTest {
 	@Override
 	protected String initTestApplicationRootDir() {
 		final String applicationRootDir = PROJECT_ROOT_DIR + TEST_SUBDIR;
-		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator2.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
 	
@@ -81,7 +81,7 @@ public class VelocityModelBasedInserterTestParent extends AbstractMOGLiTest {
 
 	private List<File> getArtefactList() {
 		final List<File> toReturn = new ArrayList<File>();
-		final File defaultDataDir = new File(getProjectResourcesDir(), MOGLiPlugin.DEFAULT_DATA_DIR);
+		final File defaultDataDir = new File(getProjectResourcesDir(), MOGLiPlugin2.DEFAULT_DATA_DIR);
 		final File[] files = defaultDataDir.listFiles();
 		for (final File dir : files) {
 			if (dir.isDirectory()) {
@@ -92,34 +92,34 @@ public class VelocityModelBasedInserterTestParent extends AbstractMOGLiTest {
 	}
 	
 	protected InfrastructureService createInfrastructure() {
-		final List<MOGLiPlugin> list = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> list = new ArrayList<MOGLiPlugin2>();
 		try {
-			list.add((MOGLiPlugin) MockDataBuilder.getStandardModelProvider());
+			list.add((MOGLiPlugin2) MockDataBuilder.getStandardModelProvider());
 			velocityEngineProvider = (DummyVelocityEngineProviderStarter) MockDataBuilder.getVelocityEngineProvider();
-			list.add((MOGLiPlugin) velocityEngineProvider);
-		} catch (MOGLiPluginException e) {
+			list.add((MOGLiPlugin2) velocityEngineProvider);
+		} catch (MOGLiPluginException2 e) {
 			fail(e.getMessage());
 		}
 		final InfrastructureInitData infrastructureInitData = 
 			   createInfrastructureInitData(applicationProperties, list, VelocityModelBasedInserterStarter.PLUGIN_ID);
-		return new MOGLiInfrastructure(infrastructureInitData);
+		return new MOGLiInfrastructure2(infrastructureInitData);
 	}
 	
 	protected InfrastructureService createInfrastructure(final File inputDir) {
 		final InfrastructureInitData infrastructureInitData = new InfrastructureInitData(applicationRootDir, 
 				applicationLogDir, applicationOutputDir, applicationTempDir, inputDir, applicationHelpDir, 
 				applicationProperties);
-		final List<MOGLiPlugin> list = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> list = new ArrayList<MOGLiPlugin2>();
 		try {
-			list.add((MOGLiPlugin) MockDataBuilder.getStandardModelProvider());
+			list.add((MOGLiPlugin2) MockDataBuilder.getStandardModelProvider());
 			velocityEngineProvider = (DummyVelocityEngineProviderStarter) MockDataBuilder.getVelocityEngineProvider();
-			list.add((MOGLiPlugin) velocityEngineProvider);
-		} catch (MOGLiPluginException e) {
+			list.add((MOGLiPlugin2) velocityEngineProvider);
+		} catch (MOGLiPluginException2 e) {
 			fail(e.getMessage());
 		}
 		infrastructureInitData.pluginList = list;
 		infrastructureInitData.idOfThePluginToThisInfrastructure = VelocityModelBasedInserterStarter.PLUGIN_ID;
-		return new MOGLiInfrastructure(infrastructureInitData);
+		return new MOGLiInfrastructure2(infrastructureInitData);
 	}
 
 }

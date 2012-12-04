@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
 
 public class BuildUpVelocityGeneratorResultDataUnitTest {
@@ -98,7 +98,7 @@ public class BuildUpVelocityGeneratorResultDataUnitTest {
 	
 	
 	@Test
-	public void returnsTargetDirAsFileWithPackageReadFromGeneratedContent() throws MOGLiPluginException {
+	public void returnsTargetDirAsFileWithPackageReadFromGeneratedContent() throws MOGLiPluginException2 {
 		// prepare test
 		buildResultData(" foo\npackage de.test;\n bar", "temp/" + VelocityGeneratorResultData.PACKAGE_IDENTIFIER, "filename", true);
 		
@@ -118,7 +118,7 @@ public class BuildUpVelocityGeneratorResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityGeneratorResultData.getTargetDirAsFile(null, "").getAbsolutePath();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertEquals(e.getMessage(), VelocityGeneratorResultData.TEXT_PACKAGE_NOT_FOUND);
 			return;
 		}
@@ -128,7 +128,7 @@ public class BuildUpVelocityGeneratorResultDataUnitTest {
 
 	
 	@Test
-	public void returnsTargetDirWithApplicationRootButWithNullValue() throws MOGLiPluginException  {
+	public void returnsTargetDirWithApplicationRootButWithNullValue() throws MOGLiPluginException2  {
 		// prepare test
 		buildResultData("Content", VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp", "filename", false);
 		
@@ -140,7 +140,7 @@ public class BuildUpVelocityGeneratorResultDataUnitTest {
 	}
 	
 	@Test
-	public void returnsTargetDirWithoutApplicationRootButNotNullValue() throws MOGLiPluginException  {
+	public void returnsTargetDirWithoutApplicationRootButNotNullValue() throws MOGLiPluginException2  {
 		// prepare test
 		buildResultData("Content", "temp", "filename", false);
 		
@@ -152,7 +152,7 @@ public class BuildUpVelocityGeneratorResultDataUnitTest {
 	}
 	
 	@Test
-	public void returnsTargetDirWithApplicationRoot() throws MOGLiPluginException {
+	public void returnsTargetDirWithApplicationRoot() throws MOGLiPluginException2 {
 		// prepare test
 		final String applicationRootDir = "root";
 		buildResultData("Content", VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp", "filename", true);

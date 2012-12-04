@@ -10,9 +10,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder2;
 import com.iksgmbh.moglicc.build.test.ApplicationTestParent;
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
 import com.iksgmbh.utils.FileUtil;
 
 public class PomVersionReplacerBuildTest extends ApplicationTestParent {
@@ -25,9 +25,9 @@ public class PomVersionReplacerBuildTest extends ApplicationTestParent {
 	public void setup() {
 		super.setup();
 		final File testfile1 = new File(getProjectTestResourcesDir() + TESTPOMFILE1);
-		FileUtil.copyTextFile(testfile1, MOGLiReleaseBuilder.getApplicationRootDir());
+		FileUtil.copyTextFile(testfile1, MOGLiReleaseBuilder2.getApplicationRootDir());
 		final File testfile2 = new File(getProjectTestResourcesDir() + TESTPOMFILE2);
-		FileUtil.copyTextFile(testfile2, MOGLiReleaseBuilder.getApplicationRootDir());
+		FileUtil.copyTextFile(testfile2, MOGLiReleaseBuilder2.getApplicationRootDir());
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class PomVersionReplacerBuildTest extends ApplicationTestParent {
 		final String oldVersion = "0.0.1-SNAPSHOT";
 		final String newVersion = "1.2.3";
 		final VersionReplacer versionReplacer = new VersionReplacer(oldVersion, newVersion);
-		final String filename1 = MOGLiReleaseBuilder.getApplicationRootDir() + "/" + TESTPOMFILE1;
+		final String filename1 = MOGLiReleaseBuilder2.getApplicationRootDir() + "/" + TESTPOMFILE1;
 		versionReplacer.replaceVersionInPom(filename1);
 		
 		final File file1 = new File(filename1);
@@ -48,10 +48,10 @@ public class PomVersionReplacerBuildTest extends ApplicationTestParent {
 		final String oldVersion = "a.b.c";
 		final String newVersion = "1.2.3";
 		final VersionReplacer versionReplacer = new VersionReplacer(oldVersion, newVersion);
-		final String filename1 = MOGLiReleaseBuilder.getApplicationRootDir() + "/" + TESTPOMFILE1;
+		final String filename1 = MOGLiReleaseBuilder2.getApplicationRootDir() + "/" + TESTPOMFILE1;
 		try {			
 			versionReplacer.replaceVersionInPom(filename1);
-		} catch (MOGLiCoreException e) {
+		} catch (MOGLiCoreException2 e) {
 			String message = e.getMessage().trim();
 			assertStringStartsWith(message, "Unexpected number of version matches:");
 			assertStringContains(message, "Expected matches of <a.b.c>: 1");
@@ -76,7 +76,7 @@ public class PomVersionReplacerBuildTest extends ApplicationTestParent {
 
 		try {
 			versionReplacer.replaceInLines(list);
-		} catch (MOGLiCoreException e) {
+		} catch (MOGLiCoreException2 e) {
 			String message = e.getMessage().trim();
 			assertStringStartsWith(message, "Unexpected number of version matches:");
 			assertStringContains(message, "Expected matches of <1.2>: 1");
@@ -103,7 +103,7 @@ public class PomVersionReplacerBuildTest extends ApplicationTestParent {
 
 		try {
 			versionReplacer.replaceInLines(list);
-		} catch (MOGLiCoreException e) {
+		} catch (MOGLiCoreException2 e) {
 			String message = e.getMessage().trim();
 			assertStringStartsWith(message, "Unexpected number of version matches:");
 			assertStringContains(message, "Expected matches of <1.2>: 1");
@@ -135,8 +135,8 @@ public class PomVersionReplacerBuildTest extends ApplicationTestParent {
 	public void testDoYourJob() throws IOException {
 		final String oldVersion = "0.0.1-SNAPSHOT";
 		final String newVersion = "1.2.3";
-		final String filename1 = MOGLiReleaseBuilder.getApplicationRootDir() + "/" + TESTPOMFILE1;
-		final String filename2 = MOGLiReleaseBuilder.getApplicationRootDir() + "/" + TESTPOMFILE2;
+		final String filename1 = MOGLiReleaseBuilder2.getApplicationRootDir() + "/" + TESTPOMFILE1;
+		final String filename2 = MOGLiReleaseBuilder2.getApplicationRootDir() + "/" + TESTPOMFILE2;
 		VersionReplacer.doYourJob(oldVersion, newVersion, filename1, filename2); 
 		
 		final File file1 = new File(filename1);

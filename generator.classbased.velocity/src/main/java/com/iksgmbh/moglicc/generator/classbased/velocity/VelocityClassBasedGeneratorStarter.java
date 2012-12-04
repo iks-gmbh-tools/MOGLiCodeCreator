@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
@@ -82,7 +82,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	}
 
 	@Override
-	public void doYourJob() throws MOGLiPluginException {
+	public void doYourJob() throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
 		
 		final Model model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel();
@@ -96,7 +96,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		infrastructure.getPluginLogger().logInfo("Done!");
 	}
 
-	private void applyModelToArtefactTemplates(final Model model, final String artefact) throws MOGLiPluginException {
+	private void applyModelToArtefactTemplates(final Model model, final String artefact) throws MOGLiPluginException2 {
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, model, PLUGIN_ID);
 		final List<VelocityGeneratorResultData> resultList = generate(engineData);
 		if (! ModelValidationGeneratorUtil.validateModel(resultList.get(0).getNameOfValidModel(), model.getName())) {
@@ -112,18 +112,18 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		infrastructure.getPluginLogger().logInfo(resultList.size() + " files for artefact '" + artefact + "' created!");
 	}
 	
-	private void validate(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException {
+	private void validate(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException2 {
 		for (final VelocityGeneratorResultData resultData : resultList) {
 			resultData.validate();
 		}
 	}
 
-	List<String> getArtefactList() throws MOGLiPluginException {
+	List<String> getArtefactList() throws MOGLiPluginException2 {
 		final File generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
 		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
 	}
 
-	private void writeFilesIntoTemplateTargetDir(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException {
+	private void writeFilesIntoTemplateTargetDir(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException2 {
 		for (final VelocityGeneratorResultData resultData : resultList) {
 			final File outputFile = resultData.getTargetFile(infrastructure.getApplicationRootDir().getAbsolutePath(), 
 					                                             getTestPathPrefix(true));
@@ -135,7 +135,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 				try {
 					FileUtil.createFileWithContent(outputFile, resultData.getGeneratedContent());
 				} catch (Exception e) {
-					throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
+					throw new MOGLiPluginException2("Error creating file\n" + outputFile.getAbsolutePath(), e);
 				}
 			} else {
 				infrastructure.getPluginLogger().logWarning("Target file " + outputFile.getAbsolutePath() + " exists and will not overwritten!");
@@ -145,7 +145,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	}
 
 	private void writeFilesIntoPluginOutputDir(final List<VelocityGeneratorResultData> resultList, final String subDir) 
-	                                           throws MOGLiPluginException {
+	                                           throws MOGLiPluginException2 {
 		final File targetdir = new File(infrastructure.getPluginOutputDir(), subDir);
 		targetdir.mkdirs();
 		for (final VelocityGeneratorResultData resultData : resultList) {
@@ -153,12 +153,12 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 			try {
 				FileUtil.createFileWithContent(outputFile, resultData.getGeneratedContent());
 			} catch (Exception e) {
-				throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
+				throw new MOGLiPluginException2("Error creating file\n" + outputFile.getAbsolutePath(), e);
 			}
 		}
 	}
 
-	List<VelocityGeneratorResultData> generate(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException {
+	List<VelocityGeneratorResultData> generate(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException2 {
 		final File templateDir = new File(infrastructure.getPluginInputDir(), engineData.getArtefactType());
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(findMainTemplate(templateDir));
@@ -184,12 +184,12 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		return velocityGeneratorResultData;
 	}
 
-	String findMainTemplate(final File templateDir) throws MOGLiPluginException {
+	String findMainTemplate(final File templateDir) throws MOGLiPluginException2 {
 		return TemplateUtil.findMainTemplate(templateDir, MAIN_TEMPLATE_IDENTIFIER);
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("initDefaultInputData");
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
 		defaultData.addDirectory(ARTEFACT_COMMON, javabeanCommonSubtempates);
@@ -212,7 +212,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	}
 	
 	@Override
-	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
+	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException2 {
 		final File validationInputFile = new File(infrastructure.getPluginInputDir(), 
 				                                  MetaInfoValidationUtil.FILENAME_VALIDATION);
 		final List<MetaInfoValidator> metaInfoValidatorList = 
@@ -227,7 +227,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	}
 		
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR);
 		helpData.addFile("TemplateFileHeaderAttributes.htm");

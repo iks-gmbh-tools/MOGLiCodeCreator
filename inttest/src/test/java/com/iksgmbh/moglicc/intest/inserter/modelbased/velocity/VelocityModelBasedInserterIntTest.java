@@ -8,15 +8,15 @@ import java.util.List;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.intest.IntTestParent;
-import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil2;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityModelBasedInserterIntTest extends IntTestParent {
 
 	@Test
-	public void createsBeanFactory() throws MOGLiPluginException {
+	public void createsBeanFactory() throws MOGLiPluginException2 {
 		// prepare test
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
@@ -37,7 +37,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 				
 		// verify test result in target directory read from template file
 		file = new File(applicationRootDir + "/example", "BeanFactory.java");
-		List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
+		List<String> fileContentAsList = MOGLiFileUtil2.getFileContentAsList(file);
 		System.err.println(file.getAbsolutePath());
 		assertEquals("Line number", 29, fileContentAsList.size());
 	}

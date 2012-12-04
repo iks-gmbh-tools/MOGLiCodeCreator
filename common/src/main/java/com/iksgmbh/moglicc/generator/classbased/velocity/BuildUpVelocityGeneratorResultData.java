@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 
 /**
  * Object to build a data structure with information needed to create a result file
@@ -54,7 +54,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 	
 	@Override
-	public void validate() throws MOGLiPluginException {
+	public void validate() throws MOGLiPluginException2 {
 		if (getTargetFileName() == null) {
 			validationErrors.add(NO_TARGET_FILE_NAME);
 		}
@@ -63,7 +63,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 
 	@Override
 	public File getTargetDirAsFile(final String applicationRootDir, final String pathAdaption) 
-	            throws MOGLiPluginException {
+	            throws MOGLiPluginException2 {
 		String targetDir = getTargetDir();
 		if (targetDir == null) {
 			return null;
@@ -75,21 +75,21 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		return targetDirAsFile;
 	}
 	
-	private void checkTargetDir(final File targetDirAsFile) throws MOGLiPluginException {
+	private void checkTargetDir(final File targetDirAsFile) throws MOGLiPluginException2 {
 		if (isTargetToBeCreatedNewly()) {
 			targetDirAsFile.mkdirs();
 			return;
 		}
 		if (! targetDirAsFile.exists()) {
-			throw new MOGLiPluginException(TEXT_TARGET_DIR_NOT_FOUND + "\n" + targetDirAsFile.getAbsolutePath());
+			throw new MOGLiPluginException2(TEXT_TARGET_DIR_NOT_FOUND + "\n" + targetDirAsFile.getAbsolutePath());
 		}
 		if (! targetDirAsFile.isDirectory()) {
-			throw new MOGLiPluginException(TEXT_TARGET_DIR_IS_A_FILE + "\n" + targetDirAsFile.getAbsolutePath());
+			throw new MOGLiPluginException2(TEXT_TARGET_DIR_IS_A_FILE + "\n" + targetDirAsFile.getAbsolutePath());
 		}		
 	}
 	
 	@Override
-	public File getTargetFile(final String applicationRootDir, final String pathAdaptation) throws MOGLiPluginException {
+	public File getTargetFile(final String applicationRootDir, final String pathAdaptation) throws MOGLiPluginException2 {
 		final File targetDirAsFile = getTargetDirAsFile(applicationRootDir, pathAdaptation);
 		if (targetDirAsFile == null) {
 			return null;
@@ -99,22 +99,22 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		return toReturn;
 	}	
 
-	protected void checkTargetFile(final File targetFile) throws MOGLiPluginException {
+	protected void checkTargetFile(final File targetFile) throws MOGLiPluginException2 {
 		if (isTargetToBeCreatedNewly()) {
 			return;
 		}
 		if (targetFile.exists() && ! targetFile.isFile()) {
-			throw new MOGLiPluginException(TEXT_TARGET_FILE_IS_A_DIRECTORY + "\n" + targetFile.getAbsolutePath());
+			throw new MOGLiPluginException2(TEXT_TARGET_FILE_IS_A_DIRECTORY + "\n" + targetFile.getAbsolutePath());
 		}		
 	}
 
 
-	private String replacePackageString(final String dir) throws MOGLiPluginException {
+	private String replacePackageString(final String dir) throws MOGLiPluginException2 {
 		String packageString = "";
 		if (dir.endsWith(PACKAGE_IDENTIFIER)) {
 			packageString = searchPackageInGeneratedContent().replace('.', '/');
 			if (StringUtils.isBlank(packageString)) {
-				throw new MOGLiPluginException(TEXT_PACKAGE_NOT_FOUND);
+				throw new MOGLiPluginException2(TEXT_PACKAGE_NOT_FOUND);
 			}
 		}
 		String targetDir = getTargetDir().replace(PACKAGE_IDENTIFIER, packageString);

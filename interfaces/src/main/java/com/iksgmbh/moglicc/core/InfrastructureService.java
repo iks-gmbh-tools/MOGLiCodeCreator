@@ -3,7 +3,7 @@ package com.iksgmbh.moglicc.core;
 import java.io.File;
 import java.util.List;
 
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
 import com.iksgmbh.moglicc.plugin.type.basic.DataProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
@@ -11,7 +11,7 @@ import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 
 /**
  * Provides the Mogli core functionality to the plugins.
- * Interface for Transfer Object in {@link MOGLiPlugin.setMogliInfrastructure}.
+ * Interface for Transfer Object in {@link MOGLiPlugin2.setMogliInfrastructure}.
  * 
  * @author Reik Oberrath
  */

@@ -8,7 +8,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.provider.engine.velocity.test.VelocityEngineProviderTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
@@ -29,7 +29,7 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	public void throwsExceptionForNullData() {
 		try {
 			velocityEngineProvider.setEngineData(null);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringEquals("Error message", "Parameter 'engineData' must not be null!", e.getMessage());
 			return;
 		}
@@ -37,10 +37,10 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 
 	@Test
-	public void throwsExceptionForWrongDataType() throws MOGLiPluginException {
+	public void throwsExceptionForWrongDataType() throws MOGLiPluginException2 {
 		try {
 			velocityEngineProvider.setEngineData("");
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringEquals("Error message", "VelocityEngineData expected! Wrong engine data set: java.lang.String", e.getMessage());
 			return;
 		}
@@ -48,11 +48,11 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 	
 	@Test
-	public void throwsExceptionForMissingModell() throws MOGLiPluginException {
+	public void throwsExceptionForMissingModell() throws MOGLiPluginException2 {
 		try {
 			velocityEngineProvider.setEngineData(MockDataBuilder.buildVelocityEngineDataMock(
 					                  null, MockDataBuilder.GENERATOR_PLUGIN_ID, "Javabean", "template.tpl", applicationInputDir));
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringEquals("Error message", "Model not set!", e.getMessage());
 			return;
 		}
@@ -60,11 +60,11 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 	
 	@Test
-	public void throwsExceptionForMissingGeneratorPluginId() throws MOGLiPluginException {
+	public void throwsExceptionForMissingGeneratorPluginId() throws MOGLiPluginException2 {
 		try {
 			velocityEngineProvider.setEngineData(MockDataBuilder.buildVelocityEngineDataMock(
 					                             buildStandardModel, null, "Javabean", "template.tpl", applicationInputDir));
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringEquals("Error message", "GeneratorPluginId not set!", e.getMessage());
 			return;
 		}
@@ -72,11 +72,11 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 
 	@Test
-	public void throwsExceptionForNotExistingGeneratorPlugin() throws MOGLiPluginException {
+	public void throwsExceptionForNotExistingGeneratorPlugin() throws MOGLiPluginException2 {
 		try {			
 			velocityEngineProvider.setEngineData(MockDataBuilder.buildVelocityEngineDataMock(
 					                             buildStandardModel, "a", "Javabean", "template.tpl", applicationInputDir));
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringEquals("Error message", "Unknown GeneratorPlugin!", e.getMessage());
 			return;
 		}
@@ -84,11 +84,11 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 
 	@Test
-	public void throwsExceptionForMissingArtefactType() throws MOGLiPluginException {
+	public void throwsExceptionForMissingArtefactType() throws MOGLiPluginException2 {
 		try {
 			velocityEngineProvider.setEngineData(MockDataBuilder.buildVelocityEngineDataMock(
                                                  buildStandardModel, MockDataBuilder.GENERATOR_PLUGIN_ID, "", "template.tpl", applicationInputDir));
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringEquals("Error message", "ArtefactType not set!", e.getMessage());
 			return;
 		}
@@ -96,11 +96,11 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 	
 	@Test
-	public void throwsExceptionForMissingMainTemplateName() throws MOGLiPluginException {
+	public void throwsExceptionForMissingMainTemplateName() throws MOGLiPluginException2 {
 		try {
 			velocityEngineProvider.setEngineData(MockDataBuilder.buildVelocityEngineDataMock(
 					buildStandardModel, MockDataBuilder.GENERATOR_PLUGIN_ID, "Javabean", null, applicationInputDir));
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringEquals("Error message", "MainTemplateName not set!", e.getMessage());
 			return;
 		}
@@ -108,11 +108,11 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 
 	@Test
-	public void throwsExceptionForMissingMainTemplateFile() throws MOGLiPluginException {
+	public void throwsExceptionForMissingMainTemplateFile() throws MOGLiPluginException2 {
 		try {
 			velocityEngineProvider.setEngineData(MockDataBuilder.buildVelocityEngineDataMock(
 					               buildStandardModel, MockDataBuilder.GENERATOR_PLUGIN_ID, "Javabean", "template.tpl", applicationInputDir));
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), "Main Template File does not exist");
 			return;
 		}
@@ -120,10 +120,10 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 	
 	@Test
-	public void throwsExceptionForMissingTemplateDir() throws MOGLiPluginException {		
+	public void throwsExceptionForMissingTemplateDir() throws MOGLiPluginException2 {		
 		try {
 			velocityEngineProvider.setEngineData(MockDataBuilder.buildVelocityEngineDataMockWithStandardData(TEMPLATE_WITH_SUBTEMPLATE, null));
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringEquals("Error message", "TemplateDir not set!", e.getMessage());
 			return;
 		}
@@ -131,11 +131,11 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 	
 	@Test
-	public void throwsExceptionForNotExistingTemplateDir() throws MOGLiPluginException {
+	public void throwsExceptionForNotExistingTemplateDir() throws MOGLiPluginException2 {
 		final File templateDir = new File("aaa");
 		try {
 			velocityEngineProvider.setEngineData(MockDataBuilder.buildVelocityEngineDataMockWithStandardData(TEMPLATE_WITH_SUBTEMPLATE, templateDir));
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), "TemplateDir does not exist");
 			return;
 		}
@@ -143,10 +143,10 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 	
 	@Test
-	public void throwsExceptionForMissingVelocityEngineData() throws MOGLiPluginException {
+	public void throwsExceptionForMissingVelocityEngineData() throws MOGLiPluginException2 {
 		try {
 			velocityEngineProvider.startEngine();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), VelocityEngineProviderStarter.ENGINE_STARTED_WITHOUT_DATA);
 			return;
 		}
@@ -154,7 +154,7 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 	
 	@Test
-	public void acceptsVelocityEngineDataWithTemplateInPluginInputDir() throws MOGLiPluginException {
+	public void acceptsVelocityEngineDataWithTemplateInPluginInputDir() throws MOGLiPluginException2 {
 		// prepare test
 		final File templateDir = new File(applicationInputDir, MockDataBuilder.GENERATOR_PLUGIN_ID);
 		final VelocityEngineData engineData = MockDataBuilder.buildVelocityEngineDataMockWithStandardData(TEMPLATE_WITH_SUBTEMPLATE, templateDir);
@@ -167,7 +167,7 @@ public class VelocityEngineProviderSetDataUnitTest extends VelocityEngineProvide
 	}
 	
 	@Test
-	public void acceptsVelocityEngineDataWithTemplateInSubdir() throws MOGLiPluginException {
+	public void acceptsVelocityEngineDataWithTemplateInSubdir() throws MOGLiPluginException2 {
 		// prepare test
 		final File templateDir = new File(applicationInputDir,  
 											MockDataBuilder.GENERATOR_PLUGIN_ID

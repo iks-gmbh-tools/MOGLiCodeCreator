@@ -7,12 +7,12 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 
 public class TemplateUtilUnitTest {
 
 	@Test
-	public void returnsMainTemplateFromTemplateTestDir() throws MOGLiPluginException {
+	public void returnsMainTemplateFromTemplateTestDir() throws MOGLiPluginException2 {
 		// prepare test
 		final File dir = new File("../common/src/test/resources/templateTestDir");
 

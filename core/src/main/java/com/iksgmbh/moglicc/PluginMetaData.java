@@ -1,13 +1,13 @@
 package com.iksgmbh.moglicc;
 
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_INFOMESSAGE_OK;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_MANIFEST_FOUND;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_INFOMESSAGE_OK;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_NO_MANIFEST_FOUND;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE;
 
 import java.util.List;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin.PluginType;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2.PluginType;
 
 /**
  * Holds all necessary information about the Mogli plugins
@@ -31,7 +31,7 @@ public class PluginMetaData {
 	public PluginMetaData(String jarName, String starterClass) {
 		super();
 		if (jarName == null) {
-			throw new MOGLiCoreException("JarName Missing");
+			throw new MOGLiCoreException2("JarName Missing");
 		}
 		this.jarName = jarName;
 		this.starterClass = starterClass;

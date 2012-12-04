@@ -1,10 +1,10 @@
 package com.iksgmbh.moglicc.helper;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB_PLUGIN;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_INFO;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_INFOMESSAGE_OK;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_MANIFEST_FOUND;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_LIB_PLUGIN;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_DEACTIVATED_PLUGIN_INFO;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_INFOMESSAGE_OK;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_NO_MANIFEST_FOUND;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -17,14 +17,14 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.MOGLiCodeCreator2;
 import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
 import com.iksgmbh.moglicc.exceptions.MissingManifestException;
 import com.iksgmbh.moglicc.exceptions.MissingStarterclassException;
 import com.iksgmbh.moglicc.test.CoreTestParent;
-import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
-import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil2;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil2;
 
 public class MetaDataLoaderUnitTest extends CoreTestParent {
 
@@ -37,7 +37,7 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 	
 	@Before
 	public void setup() {
-		MOGLiLogUtil.setCoreLogfile(null);
+		MOGLiLogUtil2.setCoreLogfile(null);
 		super.setup();
 		metaDataLoader = new MetaDataLoader(applicationProperties);
 	}
@@ -87,15 +87,15 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 	
 	@Test
 	public void testReadStarterClassFromJar() throws MissingManifestException, MissingStarterclassException {
-		File jar = MOGLiFileUtil.getNewFileInstance(DIR_LIB_PLUGIN + "/DummyPluginStarter.jar");
+		File jar = MOGLiFileUtil2.getNewFileInstance(DIR_LIB_PLUGIN + "/DummyPluginStarter.jar");
 		String starterClassFromJar = metaDataLoader.readStarterClassFromJar(jar);
 		assertStringEquals ("Wrong starterClass read from jar", "com.iksgmbh.moglicc.test.starterclasses.DummyPluginStarter", starterClassFromJar);
 		
-		jar = MOGLiFileUtil.getNewFileInstance(DIR_LIB_PLUGIN + "/pluginWithoutExistingStarterClass.jar");
+		jar = MOGLiFileUtil2.getNewFileInstance(DIR_LIB_PLUGIN + "/pluginWithoutExistingStarterClass.jar");
 		starterClassFromJar = metaDataLoader.readStarterClassFromJar(jar);
 		assertStringEquals ("Wrong starterClass read from jar", "notExistingStarterClass", starterClassFromJar);
 
-		jar = MOGLiFileUtil.getNewFileInstance(DIR_LIB_PLUGIN + "/pluginWithoutStarterClassEntry.jar");
+		jar = MOGLiFileUtil2.getNewFileInstance(DIR_LIB_PLUGIN + "/pluginWithoutStarterClassEntry.jar");
 		boolean expectedExceptionThrown = false;
 		try {
 			starterClassFromJar = metaDataLoader.readStarterClassFromJar(jar);
@@ -104,7 +104,7 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 		}
 		assertTrue("Expected exception not thrown", expectedExceptionThrown);
 
-		jar = MOGLiFileUtil.getNewFileInstance(DIR_LIB_PLUGIN + "/pluginWithNoManifest.jar");
+		jar = MOGLiFileUtil2.getNewFileInstance(DIR_LIB_PLUGIN + "/pluginWithNoManifest.jar");
 		expectedExceptionThrown = false;
 		try {
 			metaDataLoader.readStarterClassFromJar(jar);
@@ -132,10 +132,10 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 	
 	@Test
 	public void testSearchPluginsJarsNoJarsFound() {
-		String applicationRootDir = MOGLiCodeCreator.getApplicationRootDir();
-		MOGLiCodeCreator.setApplicationRootDir("");
+		String applicationRootDir = MOGLiCodeCreator2.getApplicationRootDir();
+		MOGLiCodeCreator2.setApplicationRootDir("");
 		File[] plugins = metaDataLoader.searchPluginJars();
-		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator2.setApplicationRootDir(applicationRootDir);
 
 		assertNotNull(plugins);
 		assertEquals("Unexpected number of plugins found.", 0, plugins.length);

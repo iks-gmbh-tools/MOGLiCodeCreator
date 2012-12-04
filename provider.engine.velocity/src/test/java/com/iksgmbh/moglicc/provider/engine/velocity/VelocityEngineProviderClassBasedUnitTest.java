@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.provider.engine.velocity.test.VelocityEngineProviderTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.AttributeDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
@@ -27,7 +27,7 @@ public class VelocityEngineProviderClassBasedUnitTest extends VelocityEngineProv
 	}
 	
 	@Test
-	public void replacesClassNameInTemplate() throws MOGLiPluginException {
+	public void replacesClassNameInTemplate() throws MOGLiPluginException2 {
 		// prepare test
 		final File templateDir = new File(applicationInputDir, MockDataBuilder.GENERATOR_PLUGIN_ID
                                    + "/" + MockDataBuilder.ARTEFACT_TYPE);
@@ -51,7 +51,7 @@ public class VelocityEngineProviderClassBasedUnitTest extends VelocityEngineProv
 	}
 
 	@Test
-	public void replacesJavaTypeInSubTemplate() throws MOGLiPluginException {
+	public void replacesJavaTypeInSubTemplate() throws MOGLiPluginException2 {
 		// prepare test
 		final File templateDir = new File(applicationInputDir, MockDataBuilder.GENERATOR_PLUGIN_ID);
 		final VelocityEngineData engineData = MockDataBuilder.buildVelocityEngineDataMockWithStandardData( 
@@ -70,7 +70,7 @@ public class VelocityEngineProviderClassBasedUnitTest extends VelocityEngineProv
 	}
 
 	@Test
-	public void generatesVelocityGeneratorResultData_Without_SubTemplateWithArtefactSubDir() throws MOGLiPluginException {
+	public void generatesVelocityGeneratorResultData_Without_SubTemplateWithArtefactSubDir() throws MOGLiPluginException2 {
 		// prepare test
 		final File templateDir = new File(applicationInputDir, MockDataBuilder.GENERATOR_PLUGIN_ID
                                    + "/" + MockDataBuilder.ARTEFACT_TYPE);
@@ -85,7 +85,7 @@ public class VelocityEngineProviderClassBasedUnitTest extends VelocityEngineProv
 	}
 
 	@Test
-	public void createsOutputFileWithSubTemplate_Without_ArtefactSubDir() throws MOGLiPluginException {
+	public void createsOutputFileWithSubTemplate_Without_ArtefactSubDir() throws MOGLiPluginException2 {
 		// prepare test
 		final File templateDir = new File(applicationInputDir, MockDataBuilder.GENERATOR_PLUGIN_ID);
 		final VelocityEngineData engineData = MockDataBuilder.buildVelocityEngineDataMockWithStandardData( 

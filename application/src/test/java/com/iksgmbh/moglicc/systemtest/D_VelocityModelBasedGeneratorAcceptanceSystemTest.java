@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.systemtest;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_INPUT_FILES;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityClassBasedGeneratorStarter;
 import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
@@ -70,7 +70,7 @@ public class D_VelocityModelBasedGeneratorAcceptanceSystemTest extends _Abstract
 			if (line.startsWith(MetaModelConstants.CLASS_IDENTIFIER)) {
 				String[] splitResult = line.split(" ");
 				if (splitResult.length < 2) {
-					throw new MOGLiCoreException("Error reading model file");
+					throw new MOGLiCoreException2("Error reading model file");
 				}
 				final ClassNameData classNameData = new ClassNameData(splitResult[1]);
 				list.add(classNameData.getSimpleClassName());

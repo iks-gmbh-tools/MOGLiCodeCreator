@@ -1,9 +1,9 @@
 package com.iksgmbh.moglicc;
 
-public class MOGLiStarter {
+public class MOGLiStarter2 {
 
 	public static void main(String[] args) {
-		MOGLiCodeCreator.main(args);
+		MOGLiCodeCreator2.main(args);
 	}
 
 }

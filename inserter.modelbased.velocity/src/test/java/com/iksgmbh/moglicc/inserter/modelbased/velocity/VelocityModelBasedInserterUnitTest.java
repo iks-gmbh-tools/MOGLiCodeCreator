@@ -11,14 +11,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData.KnownInserterPropertyNames;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.test.VelocityModelBasedInserterTestParent;
-import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil2;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInserterTestParent {
@@ -42,11 +42,11 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		
 		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), 
 	            VelocityModelBasedInserterStarter.PLUGIN_PROPERTIES_FILE);
-		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
+		MOGLiFileUtil2.createNewFileWithContent(generatorPropertiesFile, "");
 	}
 	
 	@Test
-	public void findsArtefactList() throws MOGLiPluginException {
+	public void findsArtefactList() throws MOGLiPluginException2 {
 		// call functionality under test
 		final List<String> artefactList = velocityModelBasedInserter.getArtefactList();
 
@@ -64,7 +64,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.findMainTemplate(artefactDir);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), TemplateUtil.NO_MAIN_TEMPLATE_FOUND);
 
 			// cleanup
@@ -86,7 +86,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		 String mainTemplate = null;
 		try {
 			mainTemplate = velocityModelBasedInserter.findMainTemplate(artefactDir);
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			fail(e.getMessage());
 		}
 		
@@ -95,7 +95,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void unpacksInputDefaultData() throws MOGLiPluginException {
+	public void unpacksInputDefaultData() throws MOGLiPluginException2 {
 		// prepare test
 		FileUtil.deleteDirWithContent(applicationInputDir);
 
@@ -107,7 +107,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void savesGeneratedContentInPluginOutputDir() throws MOGLiPluginException {
+	public void savesGeneratedContentInPluginOutputDir() throws MOGLiPluginException2 {
 		// prepare test
 		VelocityInserterResultData resultData = buildVelocityInserterResultData("Content", 
 				"temp", TARGET_FILE_TXT, KnownGeneratorPropertyNames.CreateNew.name(), "true");
@@ -149,7 +149,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 
 	@Test
-	public void savesGeneratedContentInNewFileInTemplateTargetDir() throws MOGLiPluginException {
+	public void savesGeneratedContentInNewFileInTemplateTargetDir() throws MOGLiPluginException2 {
 		// prepare test
 		VelocityInserterResultData resultData = buildVelocityInserterResultData("Content", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
@@ -173,7 +173,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void throwsExceptionIfTargetDirFromTemplateFileIsNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfTargetDirFromTemplateFileIsNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/FOO", 
@@ -185,7 +185,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), VelocityGeneratorResultData.TEXT_TARGET_DIR_NOT_FOUND);
 
 			// cleanup
@@ -198,7 +198,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void throwsExceptionIfTargetFileFromTemplateFileIsNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfTargetFileFromTemplateFileIsNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
@@ -210,7 +210,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), VelocityGeneratorResultData.TEXT_TARGET_FILE_NOT_FOUND);
 
 			// cleanup
@@ -223,7 +223,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void insertsGeneratedContentAboveMarkerInTemplateTargetDir() throws MOGLiPluginException {
+	public void insertsGeneratedContentAboveMarkerInTemplateTargetDir() throws MOGLiPluginException2 {
 		// prepare test
 		velocityModelBasedInserter = new VelocityModelBasedInserterStarter();
 		velocityModelBasedInserter.setMOGLiInfrastructure(createInfrastructure(new File(getProjectTestResourcesDir(), 
@@ -243,7 +243,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void insertsGeneratedContentBelowMarkerInTemplateTargetDir() throws MOGLiPluginException {
+	public void insertsGeneratedContentBelowMarkerInTemplateTargetDir() throws MOGLiPluginException2 {
 		// prepare test
 		velocityModelBasedInserter = new VelocityModelBasedInserterStarter();
 		velocityModelBasedInserter.setMOGLiInfrastructure(createInfrastructure(new File(getProjectTestResourcesDir(), "applicationTestInputDir")));
@@ -262,7 +262,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 
 	@Test
-	public void replacesGeneratedContentInTemplateTargetFile() throws MOGLiPluginException {
+	public void replacesGeneratedContentInTemplateTargetFile() throws MOGLiPluginException2 {
 		// prepare test
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
@@ -280,7 +280,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void throwsExceptionIfReplaceStartIndicatorNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfReplaceStartIndicatorNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
@@ -292,7 +292,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), TextConstants.TEXT_START_REPLACE_INDICATOR_NOT_FOUND);
 			return;
 		}
@@ -300,7 +300,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void throwsExceptionIfReplaceEndIndicatorNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfReplaceEndIndicatorNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
@@ -312,7 +312,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), TextConstants.TEXT_END_REPLACE_INDICATOR_NOT_FOUND);
 			return;
 		}
@@ -320,7 +320,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 
 	@Test
-	public void throwsExceptionIfInsertBelowIndicatorNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfInsertBelowIndicatorNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
@@ -331,7 +331,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), TextConstants.TEXT_INSERT_BELOW_INDICATOR_NOT_FOUND);
 			return;
 		}
@@ -340,7 +340,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 
 	@Test
-	public void throwsExceptionIfInsertAboveIndicatorNotFound() throws MOGLiPluginException {
+	public void throwsExceptionIfInsertAboveIndicatorNotFound() throws MOGLiPluginException2 {
 		// prepare test
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
@@ -351,7 +351,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), TextConstants.TEXT_INSERT_ABOVE_INDICATOR_NOT_FOUND);
 			return;
 		}
@@ -360,7 +360,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 
 	@Test
-	public void throwsExceptionIfOutputFileNameIsMissingInTemplateFile() throws MOGLiPluginException {
+	public void throwsExceptionIfOutputFileNameIsMissingInTemplateFile() throws MOGLiPluginException2 {
 		// prepare test
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
@@ -371,7 +371,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), VelocityGeneratorResultData.NO_TARGET_FILE_NAME);
 			return;
 		}
@@ -379,7 +379,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 	
 	@Test
-	public void throwsExceptionIfOutputDirIsMissingInTemplateFile() throws MOGLiPluginException {
+	public void throwsExceptionIfOutputDirIsMissingInTemplateFile() throws MOGLiPluginException2 {
 		// prepare test
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				null, TARGET_FILE_TXT, null, null);
@@ -389,7 +389,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), VelocityGeneratorResultData.NO_TARGET_DIR);
 			return;
 		}
@@ -397,7 +397,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 
 	@Test
-	public void createsNotExistingTargetDirWithCreateNewInstructions() throws MOGLiPluginException {
+	public void createsNotExistingTargetDirWithCreateNewInstructions() throws MOGLiPluginException2 {
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
@@ -417,7 +417,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 
 	@Test
-	public void createsNotExistingTargetFileDirWithoutCreateNewInstruction() throws MOGLiPluginException {
+	public void createsNotExistingTargetFileDirWithoutCreateNewInstruction() throws MOGLiPluginException2 {
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
@@ -458,7 +458,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 
 	@Test
-	public void createsTargetFileWithRootDirDefinedInTemplateFile() throws MOGLiPluginException {
+	public void createsTargetFileWithRootDirDefinedInTemplateFile() throws MOGLiPluginException2 {
 		// prepare test
 		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
 		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
@@ -506,7 +506,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), "No main template found");
 			return;
 		}
@@ -520,12 +520,12 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
 		subdir.mkdirs();
 		assertFileExists(subdir);
-		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=doNOT" + ArtefactListUtil.IGNORE);
+		MOGLiFileUtil2.createNewFileWithContent(generatorPropertiesFile, ".svn=doNOT" + ArtefactListUtil.IGNORE);
 		
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
-		} catch (MOGLiPluginException e) {
+		} catch (MOGLiPluginException2 e) {
 			assertStringContains(e.getMessage(), "No main template found");
 			return;
 		}
@@ -533,12 +533,12 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	}
 
 	@Test
-	public void ignoresSubdirAsArtefactIfDefinedInPluginPropertiesFile() throws MOGLiPluginException {
+	public void ignoresSubdirAsArtefactIfDefinedInPluginPropertiesFile() throws MOGLiPluginException2 {
 		// prepare test
 		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
 		subdir.mkdirs();
 		assertFileExists(subdir);
-		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
+		MOGLiFileUtil2.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
 		final VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");

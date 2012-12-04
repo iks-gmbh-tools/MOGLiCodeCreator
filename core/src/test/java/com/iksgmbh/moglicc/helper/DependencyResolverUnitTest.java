@@ -1,7 +1,7 @@
 package com.iksgmbh.moglicc.helper;
 
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_INFOMESSAGE_OK;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_UNRESOLVABLE_DEPENDENCIES;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_INFOMESSAGE_OK;
+import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_UNRESOLVABLE_DEPENDENCIES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -14,14 +14,14 @@ import org.junit.Test;
 
 import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.exceptions.UnresolvableDependenciesException;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
 import com.iksgmbh.moglicc.test.CoreTestParent;
 import com.iksgmbh.moglicc.test.starterclasses.DummyDataProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyVelocityEngineProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyStandardModelProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyPluginStarter;
-import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil2;
 
 public class DependencyResolverUnitTest extends CoreTestParent {
 	// **************************  Instance fields  *********************************	
@@ -33,7 +33,7 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 	
 	@Before
 	public void setup() {
-		MOGLiLogUtil.setCoreLogfile(null);
+		MOGLiLogUtil2.setCoreLogfile(null);
 		dependencyResolver = new DependencyResolver(null);
 		super.setup();
 	}
@@ -48,13 +48,13 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();
 		final DummyVelocityEngineProviderStarter engineProvider = new DummyVelocityEngineProviderStarter();
 		
-		final List<MOGLiPlugin> pluginListToSort = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> pluginListToSort = new ArrayList<MOGLiPlugin2>();
 		pluginListToSort.add(generator);
 		pluginListToSort.add(engineProvider);
 		pluginListToSort.add(dataProvider);
 		pluginListToSort.add(modelProvider);
 
-		final List<MOGLiPlugin> sortedPluginList = dependencyResolver.resolveDependencies(pluginListToSort);
+		final List<MOGLiPlugin2> sortedPluginList = dependencyResolver.resolveDependencies(pluginListToSort);
 		
 		assertNotNull("Plugin List is null", pluginListToSort);
 		assertStringEquals("Unexpected Plugin!", pluginListToSort.get(3).getId(), sortedPluginList.get(0).getId());
@@ -75,7 +75,7 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 		final DummyVelocityEngineProviderStarter engineProvider = new DummyVelocityEngineProviderStarter();
 		final DummyPluginStarter dummyPluginStarter = new DummyPluginStarter();
 		
-		final List<MOGLiPlugin> pluginListToSort = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> pluginListToSort = new ArrayList<MOGLiPlugin2>();
 		pluginListToSort.add(generator);
 		pluginListToSort.add(engineProvider);
 		pluginListToSort.add(dataProvider);
@@ -95,11 +95,11 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 	@Test
 	public void testSolveDependenciesIfPossible_1PluginUnresolvable() {
 		final DummyVelocityEngineProviderStarter engineProvider = new DummyVelocityEngineProviderStarter();
-		final List<MOGLiPlugin> pluginListToSort = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> pluginListToSort = new ArrayList<MOGLiPlugin2>();
 		pluginListToSort.add(engineProvider);
-		List<MOGLiPlugin> sortedPluginList = new ArrayList<MOGLiPlugin>();
+		List<MOGLiPlugin2> sortedPluginList = new ArrayList<MOGLiPlugin2>();
 		
-		final List<MOGLiPlugin> updatedPluginListToSort = 
+		final List<MOGLiPlugin2> updatedPluginListToSort = 
 			dependencyResolver.solveDependenciesIfPossible(pluginListToSort, sortedPluginList);
 		
 		assertEquals("Unexpected size of pluginListToSort.", 1, pluginListToSort.size());
@@ -110,11 +110,11 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 	@Test
 	public void testSolveDependenciesIfPossible_1PluginResolved() {
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
-		final List<MOGLiPlugin> pluginListToSort = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> pluginListToSort = new ArrayList<MOGLiPlugin2>();
 		pluginListToSort.add(modelProvider);
-		List<MOGLiPlugin> sortedPluginList = new ArrayList<MOGLiPlugin>();
+		List<MOGLiPlugin2> sortedPluginList = new ArrayList<MOGLiPlugin2>();
 		
-		final List<MOGLiPlugin> updatedPluginListToSort = 
+		final List<MOGLiPlugin2> updatedPluginListToSort = 
 			dependencyResolver.solveDependenciesIfPossible(pluginListToSort, sortedPluginList);
 		
 		assertEquals("Unexpected size of pluginListToSort.", 1, pluginListToSort.size());
@@ -126,12 +126,12 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 	public void testSolveDependenciesIfPossible_2Plugins1Resolved() {
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyVelocityEngineProviderStarter engineProvider = new DummyVelocityEngineProviderStarter();
-		final List<MOGLiPlugin> pluginListToSort = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> pluginListToSort = new ArrayList<MOGLiPlugin2>();
 		pluginListToSort.add(modelProvider);
 		pluginListToSort.add(engineProvider);
-		List<MOGLiPlugin> sortedPluginList = new ArrayList<MOGLiPlugin>();
+		List<MOGLiPlugin2> sortedPluginList = new ArrayList<MOGLiPlugin2>();
 		
-		final List<MOGLiPlugin> updatedPluginListToSort = 
+		final List<MOGLiPlugin2> updatedPluginListToSort = 
 			dependencyResolver.solveDependenciesIfPossible(pluginListToSort, sortedPluginList);
 		
 		assertEquals("Unexpected size of pluginListToSort.", 2, pluginListToSort.size());
@@ -143,12 +143,12 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 	public void testSolveDependenciesIfPossible_2PluginsBothResolvedDueToCorrectOrder() {
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();
-		final List<MOGLiPlugin> pluginListToSort = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> pluginListToSort = new ArrayList<MOGLiPlugin2>();
 		pluginListToSort.add(modelProvider);
 		pluginListToSort.add(dataProvider);
-		List<MOGLiPlugin> sortedPluginList = new ArrayList<MOGLiPlugin>();
+		List<MOGLiPlugin2> sortedPluginList = new ArrayList<MOGLiPlugin2>();
 		
-		final List<MOGLiPlugin> updatedPluginListToSort = 
+		final List<MOGLiPlugin2> updatedPluginListToSort = 
 			dependencyResolver.solveDependenciesIfPossible(pluginListToSort, sortedPluginList);
 		
 		assertEquals("Unexpected size of pluginListToSort.", 2, pluginListToSort.size());
@@ -160,12 +160,12 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 	public void testSolveDependenciesIfPossible_2Plugins1ResolvedDueToInappropriateOrder() {
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();
-		final List<MOGLiPlugin> pluginListToSort = new ArrayList<MOGLiPlugin>();
+		final List<MOGLiPlugin2> pluginListToSort = new ArrayList<MOGLiPlugin2>();
 		pluginListToSort.add(dataProvider);
 		pluginListToSort.add(modelProvider);
-		List<MOGLiPlugin> sortedPluginList = new ArrayList<MOGLiPlugin>();
+		List<MOGLiPlugin2> sortedPluginList = new ArrayList<MOGLiPlugin2>();
 		
-		final List<MOGLiPlugin> updatedPluginListToSort = 
+		final List<MOGLiPlugin2> updatedPluginListToSort = 
 			dependencyResolver.solveDependenciesIfPossible(pluginListToSort, sortedPluginList);
 		
 		assertEquals("Unexpected size of pluginListToSort.", 2, pluginListToSort.size());
@@ -184,7 +184,7 @@ public class DependencyResolverUnitTest extends CoreTestParent {
 		pluginMetaDataList.add(pluginMetaData);
 		dependencyResolver = new DependencyResolver(pluginMetaDataList);
 		
-		List<MOGLiPlugin> listOfPluginsWithUnresolvableDependencies = new ArrayList<MOGLiPlugin>();
+		List<MOGLiPlugin2> listOfPluginsWithUnresolvableDependencies = new ArrayList<MOGLiPlugin2>();
 		final DummyPluginStarter dummyPluginStarter = new DummyPluginStarter();
 		listOfPluginsWithUnresolvableDependencies.add(dummyPluginStarter);
 		dependencyResolver.setListOfPluginsWithUnresolvableDependencies(listOfPluginsWithUnresolvableDependencies);
