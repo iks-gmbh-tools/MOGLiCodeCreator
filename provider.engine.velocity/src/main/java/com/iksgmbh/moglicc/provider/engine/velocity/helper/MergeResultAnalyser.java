@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.data.Annotation;
 import com.iksgmbh.helper.AnnotationParser;
 import com.iksgmbh.utils.FileUtil;
@@ -22,12 +22,12 @@ public class MergeResultAnalyser {
 	
 	
 
-	public static BuildUpGeneratorResultData doYourJob(final String mergeResult) throws MogliPluginException {
+	public static BuildUpGeneratorResultData doYourJob(final String mergeResult) throws MOGLiPluginException {
 		final MergeResultAnalyser analyser = new MergeResultAnalyser();
 		try {
 			return analyser.analyseGeneratorResult(mergeResult);
 		} catch (IOException e) {
-			throw new MogliPluginException(e);
+			throw new MOGLiPluginException(e);
 		}
 	}
 	

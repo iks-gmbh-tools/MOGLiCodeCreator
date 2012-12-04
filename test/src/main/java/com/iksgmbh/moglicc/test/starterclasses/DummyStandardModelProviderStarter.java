@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
-import com.iksgmbh.moglicc.plugin.MogliPlugin;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
 
-public class DummyStandardModelProviderStarter implements ModelProvider, PluginExecutable {
+public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPlugin {
 
 	private static final String PLUGIN_ID = "StandardModelProvider";
 	private InfrastructureService infrastructure;
@@ -22,7 +21,7 @@ public class DummyStandardModelProviderStarter implements ModelProvider, PluginE
 
 	@Override
 	public PluginType getPluginType() {
-		return MogliPlugin.PluginType.MODEL_PROVIDER;
+		return MOGLiPlugin.PluginType.MODEL_PROVIDER;
 	}
 
 	@Override
@@ -31,7 +30,7 @@ public class DummyStandardModelProviderStarter implements ModelProvider, PluginE
 	}
 
 	@Override
-	public void setMogliInfrastructure(InfrastructureService infrastructure) {
+	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -47,17 +46,17 @@ public class DummyStandardModelProviderStarter implements ModelProvider, PluginE
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MogliPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		return false;
 	}
 
 	@Override
-	public InfrastructureService getMogliInfrastructure() {
+	public InfrastructureService getMOGLiInfrastructure() {
 		return infrastructure;
 	}
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MogliPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
 	}
 

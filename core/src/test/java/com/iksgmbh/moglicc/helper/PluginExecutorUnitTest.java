@@ -1,8 +1,8 @@
 package com.iksgmbh.moglicc.helper;
 
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_LOGS_FILES;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_PLUGIN_EXECUTED;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_UNEXPECTED_PROBLEM;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LOGS_FILES;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_PLUGIN_EXECUTED;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_UNEXPECTED_PROBLEM;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -18,8 +18,8 @@ import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.helper.PluginExecutor.PluginExecutionData;
-import com.iksgmbh.moglicc.infrastructure.MogliLogger;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.infrastructure.MOGLiLogger;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.test.CoreTestParent;
 import com.iksgmbh.moglicc.test.starterclasses.DummyDataProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
@@ -27,7 +27,7 @@ import com.iksgmbh.moglicc.test.starterclasses.DummyPluginStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyPluginThrowsRuntimeExceptionStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyStandardModelProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyVelocityEngineProviderStarter;
-import com.iksgmbh.moglicc.utils.MogliFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class PluginExecutorUnitTest extends CoreTestParent {
@@ -72,10 +72,10 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 	@Test
 	public void testExecutePlugins_1PluginExecutedSuccessfully() {
 		// prepare test
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		plugins.add(modelProvider);
-		File pluginLogfile = MogliFileUtil.getNewFileInstance(DIR_LOGS_FILES 
+		File pluginLogfile = MOGLiFileUtil.getNewFileInstance(DIR_LOGS_FILES 
                 + "/StandardModelProvider.log");
 		pluginLogfile.delete();
 		assertFalse("Logfile not deleted", pluginLogfile.exists());
@@ -86,7 +86,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 		// verify test result
 		assertStringEquals("Unexpected Info Message", PluginStatus.EXECUTED.name(), 
 				            pluginExecutor.getMetaData(modelProvider).getStatus().name());
-		MogliLogger logger = (MogliLogger) 
+		MOGLiLogger logger = (MOGLiLogger) 
 		                 pluginExecutor.getInfrastructureFor(modelProvider.getId()).getPluginLogger();
 
 		assertEquals("Unexpected Logfile", pluginLogfile.getAbsolutePath(), logger.getLogfile().getAbsolutePath()); 
@@ -98,10 +98,10 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 	@Test
 	public void testExecutePlugins_1PluginExecutedException() {
 		// prepare test
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		final DummyPluginStarter dummyPlugin = new DummyPluginStarter();
 		plugins.add(dummyPlugin);
-		File pluginLogfile = MogliFileUtil.getNewFileInstance(DIR_LOGS_FILES + "/DummyPlugin.log");
+		File pluginLogfile = MOGLiFileUtil.getNewFileInstance(DIR_LOGS_FILES + "/DummyPlugin.log");
 		pluginLogfile.delete();
 		assertFalse("Logfile not deleted", pluginLogfile.exists());
 		
@@ -111,7 +111,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 		// verify test result
 		assertStringEquals("Unexpected Info Message", "Testfehler", 
 				                                      pluginMetaDataList.get(1).getInfoMessage());
-		MogliLogger logger = (MogliLogger) pluginExecutor.getInfrastructureFor(dummyPlugin.getId()).getPluginLogger();
+		MOGLiLogger logger = (MOGLiLogger) pluginExecutor.getInfrastructureFor(dummyPlugin.getId()).getPluginLogger();
 
 		assertTrue("Unexpected Logfile", FileUtil.areFilePathsIdentical(logger.getLogfile(), 
 				pluginLogfile));
@@ -121,10 +121,10 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 	@Test
 	public void testExecutePlugins_1PluginExecutedRuntimeException() {
 		// prepare test
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		final DummyPluginThrowsRuntimeExceptionStarter errorPlugin = new DummyPluginThrowsRuntimeExceptionStarter();
 		plugins.add(errorPlugin);
-		File pluginLogfile = MogliFileUtil.getNewFileInstance(DIR_LOGS_FILES + "/DummyPlugin.log");
+		File pluginLogfile = MOGLiFileUtil.getNewFileInstance(DIR_LOGS_FILES + "/DummyPlugin.log");
 		pluginLogfile.delete();
 		assertFalse("Logfile not deleted", pluginLogfile.exists());
 		
@@ -133,7 +133,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 		
 		// verify test result
 		assertStringContains(pluginMetaDataList.get(1).getInfoMessage(), TEXT_UNEXPECTED_PROBLEM + "RuntimeException: fatal");
-		MogliLogger logger = (MogliLogger) pluginExecutor.getInfrastructureFor(
+		MOGLiLogger logger = (MOGLiLogger) pluginExecutor.getInfrastructureFor(
 				                                        errorPlugin.getId()).getPluginLogger();
 
 		assertTrue("Unexpected Logfile", FileUtil.areFilePathsIdentical(logger.getLogfile(), 
@@ -144,7 +144,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 	@Test
 	public void testExecutePlugins_2PluginExecutedSuccessfully() {
 		// verify test result
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyGeneratorStarter generator = new DummyGeneratorStarter();
 		plugins.add(modelProvider);
@@ -155,7 +155,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 		
 		// verify test result
 		assertAllPluginsExecutedSuccessfullyExcept(-1);
-		final MogliLogger logger = (MogliLogger) pluginExecutor.getInfrastructureFor(
+		final MOGLiLogger logger = (MOGLiLogger) pluginExecutor.getInfrastructureFor(
 				generator.getId()).getPluginLogger();
 		assertStringEquals("Unexpected Logfile Name", "DummyGenerator.log", logger.getLogfile().getName());
 		assertTrue("Logfile not created", logger.getLogfile().exists());
@@ -165,7 +165,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 	@Test
 	public void testExecutePlugins_3PluginExecutedSuccessfully() {
 		// prepare test
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyGeneratorStarter generator = new DummyGeneratorStarter();
 		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();
@@ -178,7 +178,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 		
 		// verify test result
 		assertAllPluginsExecutedSuccessfullyExcept(-1);
-		MogliLogger logger = (MogliLogger) pluginExecutor.getInfrastructureFor(dataProvider.getId()).getPluginLogger();
+		MOGLiLogger logger = (MOGLiLogger) pluginExecutor.getInfrastructureFor(dataProvider.getId()).getPluginLogger();
 		assertStringEquals("Unexpected Logfile Name", "DummyDataProvider.log", logger.getLogfile().getName());
 		assertTrue("Logfile not created", logger.getLogfile().exists());
 		assertFileContainsEntry(logger.getLogfile(), dataProvider.getId());
@@ -187,7 +187,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 	@Test
 	public void testExecutePlugins_4PluginExecutedSuccessfully() {
 		// prepare test
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyGeneratorStarter generator = new DummyGeneratorStarter();
 		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();
@@ -202,7 +202,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 		
 		// verify test result
 		assertAllPluginsExecutedSuccessfullyExcept(-1);
-		MogliLogger logger = (MogliLogger) pluginExecutor.getInfrastructureFor(engineProvider.getId()).getPluginLogger();
+		MOGLiLogger logger = (MOGLiLogger) pluginExecutor.getInfrastructureFor(engineProvider.getId()).getPluginLogger();
 		assertStringEquals("Unexpected Logfile Name", "VelocityEngineProvider.log", logger.getLogfile().getName());
 		assertTrue("Logfile not created", logger.getLogfile().exists());
 		assertFileContainsEntry(logger.getLogfile(), engineProvider.getId());
@@ -211,7 +211,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 	@Test
 	public void testExecutePlugins_5PluginExecuted1Exception() {
 		// prepare test
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyPluginStarter dummyPlugin = new DummyPluginStarter();
 		final DummyGeneratorStarter generator = new DummyGeneratorStarter();
@@ -244,7 +244,7 @@ public class PluginExecutorUnitTest extends CoreTestParent {
 		assertStringEquals("Unexpected list order!", "DummyPluginThrowsRuntimeException", pluginMetaDataList.get(5).getId());
 
 		// prepare test
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyGeneratorStarter generator = new DummyGeneratorStarter();
 		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();

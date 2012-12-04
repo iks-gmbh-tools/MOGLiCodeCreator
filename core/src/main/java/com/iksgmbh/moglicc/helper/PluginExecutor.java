@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.helper;
 
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_UNEXPECTED_PROBLEM;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_UNEXPECTED_PROBLEM;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,17 +13,17 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.exceptions.MogliCoreException;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
-import com.iksgmbh.moglicc.infrastructure.MogliInfrastructure;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
-import com.iksgmbh.moglicc.utils.MogliLogUtil;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.ExceptionUtil;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
 /**
- * Helps Mogli class to do its job
+ * Helps MOGLi class to do its job
  * @author Reik Oberrath
  */
 public class PluginExecutor {
@@ -33,11 +33,11 @@ public class PluginExecutor {
 	private List<PluginMetaData> pluginMetaDataListForNotExecutedPlugins;
 	
 	public static class PluginExecutionData {
-		List<PluginExecutable> pluginsToExecute;
+		List<MOGLiPlugin> pluginsToExecute;
 		List<PluginMetaData> pluginMetaDataList;
 		InfrastructureInitData infrastructureInitData;
 		
-		public PluginExecutionData( final List<PluginExecutable> pluginsToExecute,
+		public PluginExecutionData( final List<MOGLiPlugin> pluginsToExecute,
 									final List<PluginMetaData> pluginMetaDataList, 
 									final InfrastructureInitData infrastructureInitData) {
 			this.pluginsToExecute = pluginsToExecute;
@@ -52,7 +52,7 @@ public class PluginExecutor {
 	 */
 	public static List<PluginMetaData> doYourJob(PluginExecutionData pluginExecutionData) {
 		PluginExecutor pluginExecutor = new PluginExecutor(pluginExecutionData);
-		List<PluginExecutable> sortedPluginsToExecute = 
+		List<MOGLiPlugin> sortedPluginsToExecute = 
 						DependencyResolver.doYourJob(pluginExecutionData.pluginsToExecute,
 													 pluginExecutionData.pluginMetaDataList);
 		pluginExecutor.executePlugins(sortedPluginsToExecute);
@@ -60,11 +60,11 @@ public class PluginExecutor {
 	}
 
 	@SuppressWarnings("unchecked")
-	List<PluginMetaData> sortPluginMetaDataListByExecutionOrder(final List<PluginExecutable> sortedPluginsToExecute) {
+	List<PluginMetaData> sortPluginMetaDataListByExecutionOrder(final List<MOGLiPlugin> sortedPluginsToExecute) {
 		final List<PluginMetaData> list = new ArrayList<PluginMetaData>();
 		
 		// add pluginMetaData in execution order to list
-		for (PluginExecutable plugin : sortedPluginsToExecute) {
+		for (MOGLiPlugin plugin : sortedPluginsToExecute) {
 			list.add(pluginMetaDataHashMap.get(plugin.getId()));
 			pluginMetaDataHashMap.remove(plugin.getId());
 		}
@@ -99,37 +99,37 @@ public class PluginExecutor {
 		}
 	}
 	
-	private void setInfrastructureToPlugins(final List<PluginExecutable> sortedPluginsToExecute) {
-		for (final PluginExecutable plugin : sortedPluginsToExecute) {
-			plugin.setMogliInfrastructure(getInfrastructureFor(plugin.getId()));
+	private void setInfrastructureToPlugins(final List<MOGLiPlugin> sortedPluginsToExecute) {
+		for (final MOGLiPlugin plugin : sortedPluginsToExecute) {
+			plugin.setMOGLiInfrastructure(getInfrastructureFor(plugin.getId()));
 		}
 	}
 	
-	MogliInfrastructure getInfrastructureFor(final String pluginID) {
+	MOGLiInfrastructure getInfrastructureFor(final String pluginID) {
 		infrastructureInitData.idOfThePluginToThisInfrastructure = pluginID;
-		return new MogliInfrastructure(infrastructureInitData);
+		return new MOGLiInfrastructure(infrastructureInitData);
 	}
 	
-	private void unpackPluginData(final List<PluginExecutable> sortedPluginsToExecute) {
-		MogliLogUtil.logInfo("---");
-		MogliLogUtil.logInfo("Unpacking Plugin Data...");
+	private void unpackPluginData(final List<MOGLiPlugin> sortedPluginsToExecute) {
+		MOGLiLogUtil.logInfo("---");
+		MOGLiLogUtil.logInfo("Unpacking Plugin Data...");
 		int counter = 0;
-		for (final PluginExecutable plugin : sortedPluginsToExecute) {
+		for (final MOGLiPlugin plugin : sortedPluginsToExecute) {
 			counter++;
-			MogliLogUtil.logInfo("\n");
-			MogliLogUtil.logInfo(counter + ". Checking for unpacking plugin data from plugin '" 
+			MOGLiLogUtil.logInfo("\n");
+			MOGLiLogUtil.logInfo(counter + ". Checking for unpacking plugin data from plugin '" 
 					+ plugin.getId() + "'...");
 			try {
 				unpackDefaultInputDataIfNecessary(plugin);
 				unpackHelpDataIfNecessary(plugin);
-			} catch (MogliPluginException e) {
+			} catch (MOGLiPluginException e) {
 				final PluginMetaData pluginMetaData = getMetaData(plugin);
 				pluginMetaData.setInfoMessage(e.getPluginErrorMessage());
 			}
 		}
 	}
 
-	void executePlugins(final List<PluginExecutable> sortedPluginsToExecute) {
+	void executePlugins(final List<MOGLiPlugin> sortedPluginsToExecute) {
 		infrastructureInitData.pluginList = sortedPluginsToExecute;
 		
 		// step 1: set individual infrastructure to each plugin
@@ -143,21 +143,21 @@ public class PluginExecutor {
 	}
 
 	protected void letPluginsDoTheirJob(
-		final List<PluginExecutable> sortedPluginsToExecute) {
-		MogliLogUtil.logInfo("---");
-		MogliLogUtil.logInfo("Executing Plugins...");
+		final List<MOGLiPlugin> sortedPluginsToExecute) {
+		MOGLiLogUtil.logInfo("---");
+		MOGLiLogUtil.logInfo("Executing Plugins...");
 		int counter = 0;
-		for (PluginExecutable plugin : sortedPluginsToExecute) {
+		for (MOGLiPlugin plugin : sortedPluginsToExecute) {
 			counter++;
-			MogliLogUtil.logInfo("\n");
-			MogliLogUtil.logInfo(counter + ". Executing " + plugin.getId() + "...");
+			MOGLiLogUtil.logInfo("\n");
+			MOGLiLogUtil.logInfo(counter + ". Executing " + plugin.getId() + "...");
 			PluginMetaData pluginMetaData = getMetaData(plugin);
 			String infoMessage = pluginMetaData.getInfoMessage();
 			try {
 				plugin.doYourJob();
 				pluginMetaData.setPluginStatus(PluginStatus.EXECUTED);
-				MogliLogUtil.logInfo(plugin.getId() + " Done!");
-			} catch (MogliPluginException e) {
+				MOGLiLogUtil.logInfo(plugin.getId() + " Done!");
+			} catch (MOGLiPluginException e) {
 				infoMessage = e.getPluginErrorMessage();
 			} catch (Throwable t) {
 				final Throwable rootCause = ExceptionUtils.getRootCause(t);
@@ -172,47 +172,47 @@ public class PluginExecutor {
 		}
 	}
 
-	private void unpackDefaultInputDataIfNecessary(final PluginExecutable plugin) throws MogliPluginException {
-		final MogliInfrastructure infrastructure = (MogliInfrastructure) plugin.getMogliInfrastructure();
+	private void unpackDefaultInputDataIfNecessary(final MOGLiPlugin plugin) throws MOGLiPluginException {
+		final MOGLiInfrastructure infrastructure = (MOGLiInfrastructure) plugin.getMOGLiInfrastructure();
 		if (! infrastructure.getPluginInputDir().exists()) {
 			boolean created = plugin.unpackDefaultInputData();
 			if (created) {
 				try {
-					MogliLogUtil.logInfo("For " + plugin.getId() + " pluginInputDir "  
+					MOGLiLogUtil.logInfo("For " + plugin.getId() + " pluginInputDir "  
 							+ infrastructure.getPluginInputDir().getCanonicalPath() + " has been created!");
 				} catch (IOException e) {
-					throw new MogliCoreException("Error building CanonicalPath for " + 
+					throw new MOGLiCoreException("Error building CanonicalPath for " + 
 							infrastructure.getPluginInputDir().getAbsolutePath(), e);
 				} 
 			} else {
-				MogliLogUtil.logInfo("For " + plugin.getId() + " no default input data to unpack.");
+				MOGLiLogUtil.logInfo("For " + plugin.getId() + " no default input data to unpack.");
 			}
 		} else {
-			MogliLogUtil.logInfo("For " + plugin.getId() + " the pluginInputDir exists.");  
+			MOGLiLogUtil.logInfo("For " + plugin.getId() + " the pluginInputDir exists.");  
 		}
 	}
 
-	private void unpackHelpDataIfNecessary(final PluginExecutable plugin) throws MogliPluginException {
-		final MogliInfrastructure infrastructure = (MogliInfrastructure) plugin.getMogliInfrastructure();
+	private void unpackHelpDataIfNecessary(final MOGLiPlugin plugin) throws MOGLiPluginException {
+		final MOGLiInfrastructure infrastructure = (MOGLiInfrastructure) plugin.getMOGLiInfrastructure();
 		if (! infrastructure.getPluginHelpDir().exists()) {
 			boolean created = plugin.unpackPluginHelpFiles();
 			if (created) {
 				try {
-					MogliLogUtil.logInfo("For " + plugin.getId() + " pluginHelpDir "  
+					MOGLiLogUtil.logInfo("For " + plugin.getId() + " pluginHelpDir "  
 							+ infrastructure.getPluginInputDir().getCanonicalPath() + " has been created!");
 				} catch (IOException e) {
-					throw new MogliCoreException("Error building CanonicalPath for " + 
+					throw new MOGLiCoreException("Error building CanonicalPath for " + 
 							infrastructure.getPluginInputDir().getAbsolutePath(), e);
 				}
 			} else {
-				MogliLogUtil.logInfo("For " + plugin.getId() + " no help data to unpack.");
+				MOGLiLogUtil.logInfo("For " + plugin.getId() + " no help data to unpack.");
 			}
 		} else {
-			MogliLogUtil.logInfo("For " + plugin.getId() + " the pluginHelpDir exists.");  
+			MOGLiLogUtil.logInfo("For " + plugin.getId() + " the pluginHelpDir exists.");  
 		}
 	}
 
-	PluginMetaData getMetaData(final PluginExecutable plugin) {
+	PluginMetaData getMetaData(final MOGLiPlugin plugin) {
 		return pluginMetaDataHashMap.get(plugin.getId());
 	}
 	

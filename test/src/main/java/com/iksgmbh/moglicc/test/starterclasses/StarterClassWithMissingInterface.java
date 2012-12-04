@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.plugin.MogliPlugin;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 
 public class StarterClassWithMissingInterface {
 
@@ -14,14 +14,14 @@ public class StarterClassWithMissingInterface {
 		return PLUGIN_ID;
 	}
 
-	public MogliPlugin.PluginType getPluginType() {
-		return MogliPlugin.PluginType.DATA_PROVIDER;
+	public MOGLiPlugin.PluginType getPluginType() {
+		return MOGLiPlugin.PluginType.DATA_PROVIDER;
 	}
 
 	public void doYourJob() {
 	}
 
-	public void setMogliInfrastructure(InfrastructureService infrastructure) {
+	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
 	}
 
 	public List<String> getDependencies() {

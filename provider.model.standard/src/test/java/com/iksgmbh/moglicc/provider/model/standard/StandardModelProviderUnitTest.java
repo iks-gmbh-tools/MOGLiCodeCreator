@@ -1,7 +1,7 @@
 package com.iksgmbh.moglicc.provider.model.standard;
 
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_INPUT_FILES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_OUTPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_OUTPUT_FILES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -14,10 +14,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.MogliCodeCreator;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
-import com.iksgmbh.moglicc.infrastructure.MogliInfrastructure;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MandatoryMetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
@@ -34,7 +34,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	@Before
 	public void setup() {
 		super.setup();
-		modelProvider.setMogliInfrastructure(infrastructure);
+		modelProvider.setMOGLiInfrastructure(infrastructure);
 		infrastructure.getPluginLogFile().delete();
 		FileUtil.deleteDirWithContent(infrastructure.getPluginInputDir());
 		infrastructure.getPluginInputDir().mkdirs();
@@ -44,28 +44,28 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		final String source = getProjectTestResourcesDir() + "modelFiles/" + filename;
 		FileUtil.copyBinaryFile(source, modelTextfile.getAbsolutePath());
 		
-		infrastructure = new MogliInfrastructure(
+		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, getPluginListForValidatorTest(), StandardModelProviderStarter.PLUGIN_ID));
-		modelProvider.setMogliInfrastructure(infrastructure);
+		modelProvider.setMOGLiInfrastructure(infrastructure);
 	}
 	
 	// **************************  Test Methods  *********************************
 	
 	@Test
-	public void handlesMissingModelFile() throws MogliPluginException{
+	public void handlesMissingModelFile() throws MOGLiPluginException{
 
 		try {
 			// call functionality under test
 			modelProvider.buildModel();
 			fail("Expected exception not thrown!");
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			// verify test result
 			assertStringContains(e.getMessage(), TextConstants.TEXT_NO_MODELFILE_FOUND);
 		}		
 	}
 	
 	@Test
-	public void handlesEmptyModelFile() throws MogliPluginException{
+	public void handlesEmptyModelFile() throws MOGLiPluginException{
 		// prepare test
 		setModelFile("emptyModelFile.txt");
 		
@@ -73,14 +73,14 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 			// call functionality under test
 			modelProvider.buildModel();
 			fail("Expected exception not thrown!");
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			// verify test result
 			assertStringContains(e.getMessage(), "Unexpected empty file");
 		}		
 	}
 	
 	@Test
-	public void buildsModel() throws MogliPluginException{
+	public void buildsModel() throws MOGLiPluginException{
 		// prepare test
 		setModelFile("simpelModelFile.txt");
 		
@@ -111,7 +111,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	}
 	
 	@Test
-	public void unpacksInputDefaultData() throws MogliPluginException {
+	public void unpacksInputDefaultData() throws MOGLiPluginException {
 		// prepare test
 		final File pluginInputDir = new File(applicationRootDir + "/" + DIR_INPUT_FILES + "/" + StandardModelProviderStarter.PLUGIN_ID);
 		FileUtil.deleteDirWithContent(pluginInputDir);
@@ -124,20 +124,20 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		assertFileExists(pluginInputDir);
 		final File modelFile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
 		assertFileExists(modelFile);
-		assertFileContainsEntry(modelFile, "model DefaultModel");
+		assertFileContainsEntry(modelFile, "model DemoModel");
 	}
 	
 	@Test
-	public void createsStatisticsFileWithoutUnusedElements() throws MogliPluginException, IOException {
+	public void createsStatisticsFileWithoutUnusedElements() throws MOGLiPluginException, IOException {
 		// prepare test
-		final File outputDir = new File(MogliCodeCreator.getApplicationRootDir() + "/" 
+		final File outputDir = new File(MOGLiCodeCreator.getApplicationRootDir() + "/" 
 				                       + DIR_OUTPUT_FILES + "/" + StandardModelProviderStarter.PLUGIN_ID);
 		FileUtil.deleteDirWithContent(outputDir);
 		assertFileDoesNotExist(outputDir);
-		modelProvider.unpackDefaultInputData();
-		infrastructure = new MogliInfrastructure(
+		setModelFile("MetaInfoForStatisticsFileTestWithoutUnusedElements.txt");
+		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, getPluginListForStatisticsFileTest(), StandardModelProviderStarter.PLUGIN_ID));
-		modelProvider.setMogliInfrastructure(infrastructure);
+		modelProvider.setMOGLiInfrastructure(infrastructure);
 		
 		// call functionality under test
 		modelProvider.doYourJob();
@@ -150,19 +150,19 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	}
 
 	@Test
-	public void createsStatisticsFileWithUnusedMetaInfoAndValidatorElements() throws MogliPluginException, IOException {
+	public void createsStatisticsFileWithUnusedMetaInfoAndValidatorElements() throws MOGLiPluginException, IOException {
 		// prepare test
-		final File outputDir = new File(MogliCodeCreator.getApplicationRootDir() + "/" 
+		final File outputDir = new File(MOGLiCodeCreator.getApplicationRootDir() + "/" 
 				                       + DIR_OUTPUT_FILES + "/" + StandardModelProviderStarter.PLUGIN_ID);
 		FileUtil.deleteDirWithContent(outputDir);
 		assertFileDoesNotExist(outputDir);
 		modelProvider.unpackDefaultInputData();
 		setModelFile("MetaInfoForStatisticsFileTestWithUnusedElements.txt");
-		final List<PluginExecutable> pluginList = getPluginListForStatisticsFileTest();
+		final List<MOGLiPlugin> pluginList = getPluginListForStatisticsFileTest();
 		pluginList.add(createGeneratorWithUnusedMetaInfoValidators());
-		infrastructure = new MogliInfrastructure(
+		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, pluginList, StandardModelProviderStarter.PLUGIN_ID));
-		modelProvider.setMogliInfrastructure(infrastructure);
+		modelProvider.setMOGLiInfrastructure(infrastructure);
 		
 		// call functionality under test
 		modelProvider.doYourJob();
@@ -175,7 +175,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	}
 
 	
-	private PluginExecutable createGeneratorWithUnusedMetaInfoValidators() {
+	private MOGLiPlugin createGeneratorWithUnusedMetaInfoValidators() {
 		final DummyGeneratorStarter2 dummyGeneratorStarter2 = new DummyGeneratorStarter2();
 		final List<MetaInfoValidator> metaInfoValidatorList = new ArrayList<MetaInfoValidator>();
 		dummyGeneratorStarter2.setMetaInfoValidatorList(metaInfoValidatorList);
@@ -202,7 +202,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		// call functionality under test
 		try {
 			modelProvider.doYourJob();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
@@ -221,7 +221,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		// call functionality under test
 		try {
 			modelProvider.doYourJob();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
@@ -240,7 +240,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		// call functionality under test
 		try {
 			modelProvider.doYourJob();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
@@ -259,7 +259,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		// call functionality under test
 		try {
 			modelProvider.doYourJob();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 6);
@@ -269,7 +269,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	}
 
 	@Test
-	public void validatesMetaInfosSuccessfully() throws MogliPluginException {
+	public void validatesMetaInfosSuccessfully() throws MOGLiPluginException {
 		// prepare test
 		setModelFile("MetaInfoValidatorTest_Success.txt");
 		
@@ -277,8 +277,8 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		modelProvider.doYourJob();
 	}
 
-	private List<PluginExecutable> getPluginListForValidatorTest() {
-		final List<PluginExecutable> toReturn = new ArrayList<PluginExecutable>();
+	private List<MOGLiPlugin> getPluginListForValidatorTest() {
+		final List<MOGLiPlugin> toReturn = new ArrayList<MOGLiPlugin>();
 		final DummyGeneratorStarter dummyGeneratorStarter = new DummyGeneratorStarter();
 		final List<MetaInfoValidator> metaInfoValidatorList = new ArrayList<MetaInfoValidator>();
 		dummyGeneratorStarter.setMetaInfoValidatorList(metaInfoValidatorList);
@@ -297,8 +297,8 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		return toReturn;
 	}
 
-	private List<PluginExecutable> getPluginListForStatisticsFileTest() {
-		final List<PluginExecutable> toReturn = new ArrayList<PluginExecutable>();
+	private List<MOGLiPlugin> getPluginListForStatisticsFileTest() {
+		final List<MOGLiPlugin> toReturn = new ArrayList<MOGLiPlugin>();
 		final DummyGeneratorStarter dummyGeneratorStarter = new DummyGeneratorStarter();
 		final List<MetaInfoValidator> metaInfoValidatorList = new ArrayList<MetaInfoValidator>();
 		dummyGeneratorStarter.setMetaInfoValidatorList(metaInfoValidatorList);
@@ -351,7 +351,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		// call functionality under test
 		try {
 			modelProvider.doYourJob();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), TextConstants.TEXT_MODEL_NOT_EXISTS);
 			return;
 		}

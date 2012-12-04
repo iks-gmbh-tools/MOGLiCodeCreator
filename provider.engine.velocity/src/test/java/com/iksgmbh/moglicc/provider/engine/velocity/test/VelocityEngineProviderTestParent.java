@@ -4,18 +4,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iksgmbh.moglicc.MogliCodeCreator;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.infrastructure.MogliInfrastructure;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineProviderStarter;
-import com.iksgmbh.moglicc.test.AbstractMogliTest;
+import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.utils.FileUtil;
 
-public class VelocityEngineProviderTestParent extends AbstractMogliTest {
+public class VelocityEngineProviderTestParent extends AbstractMOGLiTest {
 	
 	public static final String PROJECT_ROOT_DIR = "../provider.engine.velocity/";
 	public static final String TEMPLATE_WITH_SUBTEMPLATE = "testMainTemplateWithSub.tpl";
@@ -32,7 +32,7 @@ public class VelocityEngineProviderTestParent extends AbstractMogliTest {
 		super.setup();
 		
 		velocityEngineProvider = new VelocityEngineProviderStarter();
-		velocityEngineProvider.setMogliInfrastructure(createInfrastructure());
+		velocityEngineProvider.setMOGLiInfrastructure(createInfrastructure());
 		
 		generatorPluginInputDir = new File(applicationInputDir, MockDataBuilder.GENERATOR_PLUGIN_ID);
 		generatorPluginInputDirWithArtefactSubDir = new File(generatorPluginInputDir, MockDataBuilder.ARTEFACT_TYPE);
@@ -65,16 +65,16 @@ public class VelocityEngineProviderTestParent extends AbstractMogliTest {
 	@Override
 	protected String initTestApplicationRootDir() {
 		final String applicationRootDir = PROJECT_ROOT_DIR + TEST_SUBDIR;
-		MogliCodeCreator.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
 
 	protected InfrastructureService createInfrastructure() {
-		final List<PluginExecutable> list = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> list = new ArrayList<MOGLiPlugin>();
 		list.add(new DummyGeneratorStarter());
 
 		final InfrastructureInitData infrastructureInitData =
 			       createInfrastructureInitData(applicationProperties, list, VelocityEngineProviderStarter.PLUGIN_ID);
-		return new MogliInfrastructure(infrastructureInitData);
+		return new MOGLiInfrastructure(infrastructureInitData);
 	}
 }

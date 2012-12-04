@@ -8,7 +8,7 @@ import java.io.File;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.provider.engine.velocity.test.VelocityEngineProviderTestParent;
 import com.iksgmbh.utils.FileUtil;
@@ -32,7 +32,7 @@ public class MergeResultAnalyserUnitTest extends VelocityEngineProviderTestParen
 	}
 	
 	@Test
-	public void removesCommentLines() throws MogliPluginException {
+	public void removesCommentLines() throws MOGLiPluginException {
 		// prepare test
 		final String textToParse = "@TargetFileName ${classDescriptor.simpleName}.java # Name of file with extension without path"
 									 + FileUtil.getSystemLineSeparator()
@@ -50,7 +50,7 @@ public class MergeResultAnalyserUnitTest extends VelocityEngineProviderTestParen
 	}
 	
 	@Test
-	public void parsesPropertiesCaseInsensitive() throws MogliPluginException {
+	public void parsesPropertiesCaseInsensitive() throws MOGLiPluginException {
 		// prepare test
 		final String textToParse = "@targetFileName TestName.java # Name of file with extension without path"
 									 + FileUtil.getSystemLineSeparator()

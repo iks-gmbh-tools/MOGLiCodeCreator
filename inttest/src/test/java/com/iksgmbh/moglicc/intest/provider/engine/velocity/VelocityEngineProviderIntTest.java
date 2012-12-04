@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
@@ -23,7 +23,7 @@ import com.iksgmbh.utils.FileUtil;
 public class VelocityEngineProviderIntTest extends IntTestParent {
 
 	@Test
-	public void usesMetaInfoSupportMethod_DoesHaveAnyMetaInfosWithName() throws MogliPluginException, IOException {
+	public void usesMetaInfoSupportMethod_DoesHaveAnyMetaInfosWithName() throws MOGLiPluginException, IOException {
 		// prepare test
 		final VelocityEngineData engineData = MockDataBuilder.buildVelocityEngineDataMock(buildModel(), 
 				velocityClassBasedGeneratorStarter.getId(), "artefact",

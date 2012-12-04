@@ -9,11 +9,11 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.exceptions.MogliCoreException;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.test.CoreTestParent;
 import com.iksgmbh.utils.FileUtil;
 
-public class MogliFileUtilUnitTest extends CoreTestParent {
+public class MOGLiFileUtilUnitTest extends CoreTestParent {
 
 	private static final String TEST_FILE_CONTENT = "TEST FILE CONTENT";
 	
@@ -23,7 +23,7 @@ public class MogliFileUtilUnitTest extends CoreTestParent {
 		try {
 			FileUtil.appendToFile(applicationLogfile, TEST_FILE_CONTENT);
 		} catch (IOException e) {
-			throw new MogliCoreException("Error writing file " + applicationLogfile.getAbsolutePath());
+			throw new MOGLiCoreException("Error writing file " + applicationLogfile.getAbsolutePath());
 		}
 	}
 	
@@ -32,7 +32,7 @@ public class MogliFileUtilUnitTest extends CoreTestParent {
 	@Test
 	public void testGetFileContent() {
 		try {
-			String actualFileContent = MogliFileUtil.getFileContent(applicationLogfile);
+			String actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
 			assertNotNull(actualFileContent);
 			String expectedFileContent = TEST_FILE_CONTENT + FileUtil.getSystemLineSeparator();
 			assertTrue("Unerwarteter filecontent: <" + actualFileContent + ">", expectedFileContent.equals(actualFileContent));
@@ -45,13 +45,13 @@ public class MogliFileUtilUnitTest extends CoreTestParent {
 	@Test
 	public void testAppendToFile() {
 		try {
-			String actualFileContent = MogliFileUtil.getFileContent(applicationLogfile);
+			String actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
 			assertNotNull(actualFileContent);
 			String expectedFileContent = TEST_FILE_CONTENT + FileUtil.getSystemLineSeparator();
 			assertTrue("Unerwarteter filecontent: <" + actualFileContent + ">", expectedFileContent.equals(actualFileContent));
 			
 			FileUtil.appendToFile(applicationLogfile, TEST_FILE_CONTENT);
-			actualFileContent = MogliFileUtil.getFileContent(applicationLogfile);
+			actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
 			expectedFileContent += expectedFileContent;
 			assertTrue("Unerwarteter filecontent: <" + actualFileContent + ">", expectedFileContent.equals(actualFileContent));			
 		} catch (Exception e) {

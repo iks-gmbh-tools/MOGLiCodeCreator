@@ -3,7 +3,7 @@
   <groupId>com.iksgmbh.moglicc</groupId>
   <artifactId>application</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Mogli Application Module</name>
+  <name>MOGLi Application Module</name>
   <description>project for starting the application from IDE and for building realese candidates</description>
   
     <dependencies>

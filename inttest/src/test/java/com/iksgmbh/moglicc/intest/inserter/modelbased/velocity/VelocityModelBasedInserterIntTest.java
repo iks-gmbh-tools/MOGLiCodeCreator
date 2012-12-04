@@ -8,15 +8,15 @@ import java.util.List;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.intest.IntTestParent;
-import com.iksgmbh.moglicc.utils.MogliFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityModelBasedInserterIntTest extends IntTestParent {
 
 	@Test
-	public void createsBeanFactory() throws MogliPluginException {
+	public void createsBeanFactory() throws MOGLiPluginException {
 		// prepare test
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
@@ -25,7 +25,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 		velocityModelBasedInserterStarter.doYourJob();
 
 		// verify test result in plugin directory
-		final InfrastructureService infrastructure = velocityModelBasedInserterStarter.getMogliInfrastructure();
+		final InfrastructureService infrastructure = velocityModelBasedInserterStarter.getMOGLiInfrastructure();
 		File file = new File(infrastructure.getPluginOutputDir(), "BeanFactoryClass/BeanFactory.java");
 		assertFileExists(file);
 		file = new File(infrastructure.getPluginOutputDir(), "BeanFactoryInsertAboveTemplate/BeanFactory.java");
@@ -37,7 +37,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 				
 		// verify test result in target directory read from template file
 		file = new File(applicationRootDir + "/example", "BeanFactory.java");
-		List<String> fileContentAsList = MogliFileUtil.getFileContentAsList(file);
+		List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
 		System.err.println(file.getAbsolutePath());
 		assertEquals("Line number", 29, fileContentAsList.size());
 	}
@@ -48,7 +48,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 		final String artefactName = "TestArtefact";
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
-		final File artefactTemplateDir = new File(velocityModelBasedInserterStarter.getMogliInfrastructure().getPluginInputDir(), 
+		final File artefactTemplateDir = new File(velocityModelBasedInserterStarter.getMOGLiInfrastructure().getPluginInputDir(), 
 				artefactName);
 		artefactTemplateDir.mkdirs();
 		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
@@ -62,7 +62,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 		velocityModelBasedInserterStarter.doYourJob();
 
 		// verify test result
-		final File artefactTargetDir = new File(velocityModelBasedInserterStarter.getMogliInfrastructure().getPluginOutputDir(), 
+		final File artefactTargetDir = new File(velocityModelBasedInserterStarter.getMOGLiInfrastructure().getPluginOutputDir(), 
 				artefactName);	
 		assertFileDoesNotExist(artefactTargetDir);
 		
@@ -72,7 +72,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 				FileUtil.getSystemLineSeparator() +
 				"@TargetDir <applicationRootDir>/example" +
 				FileUtil.getSystemLineSeparator() +
-                "@NameOfValidModel DefaultModel" + FileUtil.getSystemLineSeparator() + 
+                "@NameOfValidModel DemoModel" + FileUtil.getSystemLineSeparator() + 
                 "${classDescriptor.simpleName}");
 
 		// call functionality under test

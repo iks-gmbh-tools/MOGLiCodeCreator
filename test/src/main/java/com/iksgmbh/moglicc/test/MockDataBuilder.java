@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.easymock.EasyMock;
 
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.AttributeDescriptor;
@@ -115,11 +115,11 @@ public class MockDataBuilder {
 		return buildClassDescriptorMock;
 	}
 
-	public static ModelProvider getStandardModelProvider() throws MogliPluginException {
+	public static ModelProvider getStandardModelProvider() throws MOGLiPluginException {
 		return new DummyStandardModelProviderStarter();
 	}
 
-	public static PluginExecutable getVelocityEngineProvider() {
+	public static MOGLiPlugin getVelocityEngineProvider() {
 		return new DummyVelocityEngineProviderStarter();
 	}
 }

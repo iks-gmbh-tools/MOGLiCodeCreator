@@ -1,7 +1,7 @@
 package com.iksgmbh.moglicc.build;
 
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_LIB;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_PLUGIN;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_PLUGIN;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,15 +15,15 @@ import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.build.helper.MavenExecutor;
 import com.iksgmbh.moglicc.build.helper.MavenExecutor.MavenData;
 import com.iksgmbh.moglicc.build.helper.VersionReplacer;
-import com.iksgmbh.moglicc.exceptions.MogliCoreException;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 import com.iksgmbh.utils.ZipUtil;
 
-public class MogliReleaseBuilder {
+public class MOGLiReleaseBuilder {
 	
 	public static final String FILENAME_BUILD_PROPERTIES = "build.properties";
-	public static final String FILENAME_STARTBAT = "startMogliCodeCreator.bat";
+	public static final String FILENAME_STARTBAT = "startMOGLiCodeCreator.bat";
 	public static final String RELEASE_DATA_SOURCE_SUBDIR = "release";
 	
 	public static final String PROPERTY_CURRENT_VERSION = "CurrentVersion";
@@ -71,7 +71,7 @@ public class MogliReleaseBuilder {
 
 	public static void main(String[] args) {
 		try {
-			final MogliReleaseBuilder releaseBuilder = new MogliReleaseBuilder();
+			final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
 			releaseBuilder.doYourJob();
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -81,7 +81,7 @@ public class MogliReleaseBuilder {
 	/*
 	 * must be callable from PomVersionReplacer.main
 	 */
-	public MogliReleaseBuilder() {
+	public MOGLiReleaseBuilder() {
 		try {
 			buildProperties = readBuildPropertiesFile();
 		} catch (Exception e) {
@@ -131,7 +131,7 @@ public class MogliReleaseBuilder {
 		try {
 			ZipUtil.zipDir(releaseDir.getAbsolutePath(), getReleaseZipFile().getAbsolutePath());
 		} catch (Exception e) {
-			throw new MogliCoreException("Unknown error creating releaseZipFile!", e);
+			throw new MOGLiCoreException("Unknown error creating releaseZipFile!", e);
 		}
 		FileUtil.deleteFiles(cleanUpFiles);
 	}
@@ -236,7 +236,7 @@ public class MogliReleaseBuilder {
 	String getMavenRootDir() {
 		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_INSTALL_DIR);
 		if (mavenPath == null) {
-			throw new MogliCoreException("Unknown Maven install dir.");
+			throw new MOGLiCoreException("Unknown Maven install dir.");
 		}
 		return mavenPath;
 	}
@@ -245,7 +245,7 @@ public class MogliReleaseBuilder {
 	String getMavenRepositoryDir() {
 		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_REPOSITORY_DIR);
 		if (mavenPath == null) {
-			throw new MogliCoreException("Unknown Maven rrepository dir.");
+			throw new MOGLiCoreException("Unknown Maven rrepository dir.");
 		}
 		return mavenPath.replace(MAVEN_INSTALL_DIR_PREFIX, getMavenRootDir());
 	}
@@ -261,7 +261,7 @@ public class MogliReleaseBuilder {
 				 break;
 		}
 		if (version == null) {
-			throw new MogliCoreException("Unknown " + type.name() + " Version!");
+			throw new MOGLiCoreException("Unknown " + type.name() + " Version!");
 		}
 		return version;
 	}
@@ -284,8 +284,8 @@ public class MogliReleaseBuilder {
 	 * FOR TEST PURPOSE ONLY
 	 */
 	public static void setApplicationRootDir(String applicationRootDir) {
-		MogliReleaseBuilder.applicationRootDir = applicationRootDir;
-		MogliReleaseBuilder.sourceDirForFilesToInstallInRoot = 
+		MOGLiReleaseBuilder.applicationRootDir = applicationRootDir;
+		MOGLiReleaseBuilder.sourceDirForFilesToInstallInRoot = 
 			applicationRootDir + RELEASE_DATA_SOURCE_SUBDIR;
 	}
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
-import com.iksgmbh.moglicc.plugin.MogliPlugin;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
@@ -22,7 +22,7 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 
 	@Override
 	public PluginType getPluginType() {
-		return MogliPlugin.PluginType.GENERATOR;
+		return MOGLiPlugin.PluginType.GENERATOR;
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 	}
 
 	@Override
-	public void setMogliInfrastructure(InfrastructureService infrastructure) {
+	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -45,12 +45,12 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MogliPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		return false;
 	}
 
 	@Override
-	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MogliPluginException {
+	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
 		return metaInfoValidatorList;
 	}
 	
@@ -59,12 +59,12 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 	}
 
 	@Override
-	public InfrastructureService getMogliInfrastructure() {
+	public InfrastructureService getMOGLiInfrastructure() {
 		return infrastructure;
 	}	
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MogliPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
 	}
 

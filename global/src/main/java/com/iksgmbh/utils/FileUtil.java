@@ -338,5 +338,19 @@ public class FileUtil {
 		}
 		return toReturn;
 	}
+	
+	public static List<File> getOnlyFileChildren(final File dir) {
+		if (dir.isFile() || ! dir.exists()) {
+			return null;
+		}
+		final List<File> toReturn = new ArrayList<File>();
+		final File[] files = dir.listFiles();
+		for (File file : files) {
+			if (file.isFile()) {
+				toReturn.add(file);
+			}
+		}
+		return toReturn;
+	}
 
 }

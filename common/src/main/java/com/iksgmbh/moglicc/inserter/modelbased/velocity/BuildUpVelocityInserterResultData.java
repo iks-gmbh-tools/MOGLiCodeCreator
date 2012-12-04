@@ -3,7 +3,7 @@ package com.iksgmbh.moglicc.inserter.modelbased.velocity;
 import java.io.File;
 
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGeneratorResultData;
 
 /**
@@ -59,15 +59,15 @@ public class BuildUpVelocityInserterResultData extends BuildUpVelocityGeneratorR
 	}
 
 	@Override
-	protected void checkTargetFile(final File targetFile) throws MogliPluginException {
+	protected void checkTargetFile(final File targetFile) throws MOGLiPluginException {
 		if (isTargetToBeCreatedNewly()) {
 			return;
 		}
 		if (mustGeneratedContentBeMergedWithExistingTargetFile() && ! targetFile.exists()) {
-			throw new MogliPluginException(TEXT_TARGET_FILE_NOT_FOUND + "\n" + targetFile.getAbsolutePath());
+			throw new MOGLiPluginException(TEXT_TARGET_FILE_NOT_FOUND + "\n" + targetFile.getAbsolutePath());
 		}
 		if (targetFile.exists() && ! targetFile.isFile()) {
-			throw new MogliPluginException(TEXT_TARGET_FILE_IS_A_DIRECTORY + "\n" + targetFile.getAbsolutePath());
+			throw new MOGLiPluginException(TEXT_TARGET_FILE_IS_A_DIRECTORY + "\n" + targetFile.getAbsolutePath());
 		}		
 	}
 	
@@ -86,7 +86,7 @@ public class BuildUpVelocityInserterResultData extends BuildUpVelocityGeneratorR
 	}
 
 	@Override
-	public void validate() throws MogliPluginException {
+	public void validate() throws MOGLiPluginException {
 		if (getReplaceEndIndicator() == null && getReplaceStartIndicator() != null) {
 			validationErrors.add(MISSING_REPLACE_CONFIGURATION);
 		}

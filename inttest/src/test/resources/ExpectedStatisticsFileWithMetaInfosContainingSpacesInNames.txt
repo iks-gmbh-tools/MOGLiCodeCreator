@@ -7,5 +7,5 @@ Plugin 'VelocityClassBasedGenerator' uses the following MetaInfo elements:
 'comment note' in Class level
 
 WARNING:
-Following MetaInfos defined in 'model.txt' are unused:
+Following MetaInfos defined in 'DemoModel.txt' are unused:
 'comment note' in ModelLevel

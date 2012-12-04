@@ -6,7 +6,7 @@
 <parent>
 <artifactId>parent.plugin</artifactId>
 <groupId>com.iksgmbh.moglicc</groupId>
-<version>0.1.2-SNAPSHOT</version>
+<version>0.1.3-SNAPSHOT</version>
 </parent>
 
 <dependencies>
@@ -15,9 +15,9 @@
 
 <profiles>
 <profile>
-<id>MOGLI</id>
+<id>MOGLiCC</id>
 <build>
-<finalName>MOGLI</finalName>
+<finalName>MOGLiCC</finalName>
 <resources>
 <resource>
 <directory>src/main/resources</directory>

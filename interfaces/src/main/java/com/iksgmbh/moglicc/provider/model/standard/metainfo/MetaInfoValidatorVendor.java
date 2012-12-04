@@ -2,7 +2,7 @@ package com.iksgmbh.moglicc.provider.model.standard.metainfo;
 
 import java.util.List;
 
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 
 /**
  * Functionality for generator plugins to provide information how to validate 
@@ -12,6 +12,6 @@ import com.iksgmbh.moglicc.exceptions.MogliPluginException;
  */
 public interface MetaInfoValidatorVendor {
 	
-	List<MetaInfoValidator> getMetaInfoValidatorList() throws MogliPluginException;
+	List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException;
 
 }

@@ -3,14 +3,14 @@ package com.iksgmbh.moglicc.infrastructure;
 import java.io.File;
 
 import com.iksgmbh.moglicc.core.Logger;
-import com.iksgmbh.moglicc.exceptions.MogliCoreException;
-import com.iksgmbh.moglicc.utils.MogliLogUtil;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 
-public class MogliLogger implements Logger {
+public class MOGLiLogger implements Logger {
 	
 	private File logfile;
 
-	public MogliLogger(File logfile) {
+	public MOGLiLogger(File logfile) {
 		this.logfile = logfile;
 	}
 
@@ -20,18 +20,18 @@ public class MogliLogger implements Logger {
 
 	@Override
 	public void logInfo(String message) {
-		MogliLogUtil.logInfo(logfile, message);
+		MOGLiLogUtil.logInfo(logfile, message);
 	}
 	
 
 	@Override
 	public void logWarning(String message) {
-		MogliLogUtil.logWarning(logfile, message);
+		MOGLiLogUtil.logWarning(logfile, message);
 	}
 
 	@Override
 	public void logError(String message) {
-		MogliLogUtil.logError(logfile, message);
+		MOGLiLogUtil.logError(logfile, message);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class MogliLogger implements Logger {
 		} else if (LOG_LEVEL.ERROR == level) {
 			logError(message);
 		} else {
-			throw new MogliCoreException("Unknown log level");
+			throw new MOGLiCoreException("Unknown log level");
 		}
 
 	}

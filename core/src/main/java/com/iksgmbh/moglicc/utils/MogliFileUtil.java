@@ -4,19 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import com.iksgmbh.moglicc.MogliCodeCreator;
-import com.iksgmbh.moglicc.exceptions.MogliCoreException;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.utils.FileUtil;
 
-public class MogliFileUtil {
+public class MOGLiFileUtil {
 	
 	static final char COMMENT_INDICATOR = '#';
 
 	public static String getFileContent(final String filename) {
 		try {
-			return FileUtil.getFileContent(MogliFileUtil.getNewFileInstance(filename));
+			return FileUtil.getFileContent(MOGLiFileUtil.getNewFileInstance(filename));
 		} catch (IOException e) {
-			throw new MogliCoreException("Error reading file " + filename, e);
+			throw new MOGLiCoreException("Error reading file " + filename, e);
 		}
 	}
 	
@@ -24,7 +24,7 @@ public class MogliFileUtil {
 		try {
 			return FileUtil.getFileContent(file);
 		} catch (IOException e) {
-			throw new MogliCoreException("Error reading file " + file.getAbsolutePath(), e);
+			throw new MOGLiCoreException("Error reading file " + file.getAbsolutePath(), e);
 		}
 	}
 	
@@ -32,7 +32,7 @@ public class MogliFileUtil {
 		try {
 			return FileUtil.getFileContentAsList(file);
 		} catch (IOException e) {
-			throw new MogliCoreException("Error reading file " + file.getAbsolutePath(), e);
+			throw new MOGLiCoreException("Error reading file " + file.getAbsolutePath(), e);
 		}
 	}
 	
@@ -40,7 +40,7 @@ public class MogliFileUtil {
 		try {
 			FileUtil.appendToFile(file, text);
 		} catch (IOException e) {
-			throw new MogliCoreException("Error appending to file " + file.getAbsolutePath(), e);
+			throw new MOGLiCoreException("Error appending to file " + file.getAbsolutePath(), e);
 		}
 	}
 
@@ -51,14 +51,14 @@ public class MogliFileUtil {
 	 * @return file
 	 */
 	public static File getNewFileInstance(final String filename) {
-		return new File(MogliCodeCreator.getApplicationRootDir() + "/" + filename);
+		return new File(MOGLiCodeCreator.getApplicationRootDir() + "/" + filename);
 	}
 	
 	public static void createFileWithContent(final File file, final String content) {
 		try {
 			FileUtil.createFileWithContent(file, content);
 		} catch (Exception e) {
-			throw new MogliCoreException("Error creating file " + file.getAbsolutePath(), e);
+			throw new MOGLiCoreException("Error creating file " + file.getAbsolutePath(), e);
 		}
 	}
 
@@ -66,7 +66,7 @@ public class MogliFileUtil {
 		try {
 			FileUtil.createNewFileWithContent(file, content);
 		} catch (Exception e) {
-			throw new MogliCoreException("Error creating file " + file.getAbsolutePath(), e);
+			throw new MOGLiCoreException("Error creating file " + file.getAbsolutePath(), e);
 		}
 	}	
 }

@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
-import com.iksgmbh.moglicc.plugin.MogliPlugin;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 
-public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, PluginExecutable {
+public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGLiPlugin {
 
 	private static final String PLUGIN_ID = "DummyPlugin";
 	private InfrastructureService infrastructure;
@@ -20,16 +19,16 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, Plug
 
 	@Override
 	public PluginType getPluginType() {
-		return MogliPlugin.PluginType.GENERATOR;
+		return MOGLiPlugin.PluginType.GENERATOR;
 	}
 
 	@Override
-	public void doYourJob() throws MogliPluginException {
+	public void doYourJob() throws MOGLiPluginException {
 		throw new RuntimeException("fatal");
 	}
 
 	@Override
-	public void setMogliInfrastructure(final InfrastructureService infrastructure) {
+	public void setMOGLiInfrastructure(final InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -40,17 +39,17 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, Plug
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MogliPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		return false;
 	}
 
 	@Override
-	public InfrastructureService getMogliInfrastructure() {
+	public InfrastructureService getMOGLiInfrastructure() {
 		return infrastructure;
 	}
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MogliPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
 	}
 

@@ -1,10 +1,11 @@
 package com.iksgmbh.moglicc;
 
-public class MogliSystemConstants {
+public class MOGLiSystemConstants {
 	
-	public static final String FILENAME_LOG_FILE = "_Mogli.log";
+	public static final String FILENAME_LOG_FILE = "_MOGLi.log";
 	public static final String FILENAME_APPLICATION_PROPERTIES = "application.properties";
 	public static final String FILENAME_WORKSPACE_PROPERTIES = "workspace.properties";
+	public static final String FILENAME_INTRODUCTION_HELPFILE = "MOGLi Code Creator.htm";
 	
 	public static final String WORKSPACE_PROPERTY = "workspace";
 	

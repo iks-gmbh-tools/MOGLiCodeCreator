@@ -5,6 +5,11 @@
 #A validator is applied for any model if no valid model name is defined. Otherwise a validator is applied only to the defined valid model.
 #(see output/StandardModelProvider/ModelStatistics.txt).
 
-Validator Mandatory JavaType Attribute DefaultModel
-Validator Optional extends Class DefaultModel
-Validator Optional implements Class DefaultModel
+Validator Mandatory JavaType Attribute DemoModel
+Validator Optional extends Class DemoModel
+Validator Optional implements Class DemoModel
+
+Validator Mandatory ExampleData Attribute DemoModel
+Validator Optional Mandatory Attribute DemoModel
+Validator Optional MinLength Attribute DemoModel
+Validator Optional MaxLength Attribute DemoModel

@@ -1,7 +1,7 @@
 package com.iksgmbh.moglicc.systemtest;
 
-import static com.iksgmbh.moglicc.MogliSystemConstants.FILENAME_APPLICATION_PROPERTIES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.FILENAME_LOG_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -13,8 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.MogliSystemConstants;
-import com.iksgmbh.moglicc.build.MogliReleaseBuilder;
+import com.iksgmbh.moglicc.MOGLiSystemConstants;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
 import com.iksgmbh.utils.FileUtil;
 
 public class A_TechnicalSystemTest extends _AbstractSystemTest {
@@ -27,7 +27,7 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 		super.setup();
 		prepareTestDir();
 		try {
-			buildProperties = MogliReleaseBuilder.readBuildPropertiesFile();
+			buildProperties = MOGLiReleaseBuilder.readBuildPropertiesFile();
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -54,12 +54,12 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 	}
 
 	private int getNumberOfJarFilesToExpectPluginsDir() {
-		return MogliReleaseBuilder.PLUGIN_MODULES.size();
+		return MOGLiReleaseBuilder.PLUGIN_MODULES.size();
 	}
 
 	protected int getNumberOfJarFilesToExpectInLibDir() {
-		return MogliReleaseBuilder.THIRD_PARTY_LIBRARIES.size() + 
-		       MogliReleaseBuilder.CORE_MODULES.size();
+		return MOGLiReleaseBuilder.THIRD_PARTY_LIBRARIES.size() + 
+		       MOGLiReleaseBuilder.CORE_MODULES.size();
 	}	
 
 	@Test
@@ -101,7 +101,7 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 		
 		// verify test result
 		assertFileExists(applicationLogfile);
-		assertEquals("Number Plugins", MogliReleaseBuilder.PLUGIN_MODULES.size(), countMatchesInContainedFile(applicationLogfile, "PluginMetaData"));
+		assertEquals("Number Plugins", MOGLiReleaseBuilder.PLUGIN_MODULES.size(), countMatchesInContainedFile(applicationLogfile, "PluginMetaData"));
 	}
 	
 
@@ -116,7 +116,7 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 		
 		// verify test result
 		assertFileExists(applicationLogfile);
-		final String expectedVersionString = buildProperties.getProperty(MogliReleaseBuilder.PROPERTY_RELEASE_VERSION);
+		final String expectedVersionString = buildProperties.getProperty(MOGLiReleaseBuilder.PROPERTY_RELEASE_VERSION);
 		assertFileContainsEntry(applicationLogfile, expectedVersionString);
 	}
 
@@ -136,11 +136,11 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 
 		// verify test result
 		assertFileExists(workspaceDir);
-		final File workspaceLogDir = new File(workspaceDir, MogliSystemConstants.DIR_LOGS_FILES);
+		final File workspaceLogDir = new File(workspaceDir, MOGLiSystemConstants.DIR_LOGS_FILES);
 		assertChildrenNumberInDirectory(workspaceLogDir, 5);
-		final File workspaceInputDir = new File(workspaceDir, MogliSystemConstants.DIR_INPUT_FILES);
+		final File workspaceInputDir = new File(workspaceDir, MOGLiSystemConstants.DIR_INPUT_FILES);
 		assertChildrenNumberInDirectory(workspaceInputDir, 3);
-		final File workspaceOutputDir = new File(workspaceDir, MogliSystemConstants.DIR_OUTPUT_FILES);
+		final File workspaceOutputDir = new File(workspaceDir, MOGLiSystemConstants.DIR_OUTPUT_FILES);
 		assertChildrenNumberInDirectory(workspaceOutputDir, 3);
 			// TEMP dir ?	
 
@@ -166,7 +166,17 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 		assertFileExists(emergencyLogFile);
 		assertFileContainsEntry(emergencyLogFile, "ERROR: Error creating workspaceDir");
 	}
-	
+
+	@Test
+	public void createsMOGLiCCMainHelpFile() {
+		// call functionality under test
+		executeMogliApplication();
+		
+		// cleanup critical stuff before possible test failures
+		final File mainHelpFile = new File(applicationHelpDir, MOGLiSystemConstants.FILENAME_INTRODUCTION_HELPFILE);
+		assertFileExists(mainHelpFile);
+	}
+
 	@Test
 	public void executesAllPluginsSuccessfully() {
 		// call functionality under test

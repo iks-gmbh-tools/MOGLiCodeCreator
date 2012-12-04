@@ -1,13 +1,13 @@
 package com.iksgmbh.moglicc.test;
 
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_HELP_FILES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_INPUT_FILES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_LIB_PLUGIN;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_LOGS_FILES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_OUTPUT_FILES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_TEMP_FILES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.FILENAME_APPLICATION_PROPERTIES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.FILENAME_LOG_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_HELP_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB_PLUGIN;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LOGS_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_OUTPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_TEMP_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -23,10 +23,10 @@ import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.utils.FileUtil;
 
-public abstract class AbstractMogliTest {
+public abstract class AbstractMOGLiTest {
 	
 	// *****************************  Constants  ************************************
 	
@@ -152,7 +152,7 @@ public abstract class AbstractMogliTest {
 	// **************************  Test Helper Methods  *********************************
 	
 	protected InfrastructureInitData createInfrastructureInitData(final Properties properties,
-			                                                      final List<PluginExecutable> pluginList, 
+			                                                      final List<MOGLiPlugin> pluginList, 
                                                                   final String pluginId) {
 		final InfrastructureInitData infrastructureInitData = new InfrastructureInitData(
 					applicationRootDir,	applicationLogDir, applicationOutputDir, applicationTempDir, 

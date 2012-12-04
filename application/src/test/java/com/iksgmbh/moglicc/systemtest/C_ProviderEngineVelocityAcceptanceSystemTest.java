@@ -40,6 +40,6 @@ public class C_ProviderEngineVelocityAcceptanceSystemTest  extends _AbstractSyst
 		
 		// verify test result
 		assertFileExists(pluginHelpDir);
-		assertChildrenNumberInDirectory(pluginHelpDir, 1);
+		assertChildrenNumberInDirectory(pluginHelpDir, 3);
 	}
 }

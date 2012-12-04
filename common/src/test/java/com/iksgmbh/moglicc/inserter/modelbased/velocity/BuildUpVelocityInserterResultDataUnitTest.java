@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData.KnownInserterPropertyNames;
 
@@ -98,7 +98,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertEquals("Error message", BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION, e.getMessage());
 			return;
 		}
@@ -115,7 +115,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertEquals("Error message", BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION, e.getMessage());
 			return;
 		}
@@ -133,7 +133,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertEquals("Error message", BuildUpVelocityInserterResultData.INVALID_INSERT_CONFIGURATION, e.getMessage());
 			return;
 		}
@@ -152,7 +152,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertEquals("Error message", BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION, e.getMessage());
 			return;
 		}
@@ -172,7 +172,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertEquals("Error message", BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION, e.getMessage());
 			return;
 		}
@@ -191,7 +191,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertEquals("Error message", BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION, e.getMessage());
 			return;
 		}
@@ -209,7 +209,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertEquals("Error message", BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION, e.getMessage());
 			return;
 		}
@@ -228,7 +228,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			assertEquals("Error message", BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION, e.getMessage());
 			return;
 		}

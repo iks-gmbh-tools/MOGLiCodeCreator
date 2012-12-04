@@ -1,7 +1,7 @@
 package com.iksgmbh.moglicc.plugin.type.basic;
 
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 
 /**
@@ -9,8 +9,8 @@ import com.iksgmbh.moglicc.provider.model.standard.Model;
  * 
  * @author Reik Oberrath
  */
-public interface ModelProvider extends PluginExecutable {
+public interface ModelProvider extends MOGLiPlugin {
 
-	Model getModel() throws MogliPluginException;
+	Model getModel() throws MOGLiPluginException;
 
 }

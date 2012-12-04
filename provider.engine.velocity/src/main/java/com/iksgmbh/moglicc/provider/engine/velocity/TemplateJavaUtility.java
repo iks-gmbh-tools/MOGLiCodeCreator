@@ -115,11 +115,9 @@ public class TemplateJavaUtility {
 	private Set<String> cachedImportStatements = new HashSet<String>(); // vermeidet doppelte Import-Zeilen
 
 	/**
-	 * Generiert eine Import-Statement zur Klasse <code>clazz</code>. Dabei wird für Typen wie "Boolean" kein Import-Statement generiert, sondern ""
-	 * zurückgeliefert. Für Klassen wie "Date" wird das Package "java.util" automatisch hinzgefügt. Genauso für alle Fachwert-Klassen.
-	 * 
 	 * @param clazz
-	 * @return
+	 * @return Import statement for clazz. For types like "Boolean" no import statement is generated and 
+	 *         an empty String returned. For types like "Date", the package "java.util" is added automatically.
 	 */
 	public String importStatement(String clazz) {
 		Validate.notNull(clazz, "Argument 'clazz' is null.");

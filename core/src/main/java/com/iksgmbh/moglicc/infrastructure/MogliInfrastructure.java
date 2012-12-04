@@ -11,26 +11,24 @@ import java.util.Properties;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.core.Logger;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.exceptions.MogliCoreException;
-import com.iksgmbh.moglicc.plugin.MogliPlugin;
-import com.iksgmbh.moglicc.plugin.MogliPlugin.PluginType;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.DataProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 
 /**
- * Implementation to provide the MogliCodeCreator core functionality to the plugins.
+ * Implementation to provide the MOGLiCodeCreator core functionality to the plugins.
  * For each plugin a logger with an individual logfile and an individual resultDir is provided.
  * 
  * @author Reik Oberrath
  */
-public class MogliInfrastructure implements InfrastructureService {
+public class MOGLiInfrastructure implements InfrastructureService {
 	
 	private InfrastructureInitData initData;
 
-	private HashMap<String, MogliPlugin> pluginMap;
+	private HashMap<String, MOGLiPlugin> pluginMap;
 	
 	private Properties applicationProperties;
 	
@@ -54,7 +52,7 @@ public class MogliInfrastructure implements InfrastructureService {
 
 	
 	
-	public MogliInfrastructure(InfrastructureInitData initData) {
+	public MOGLiInfrastructure(InfrastructureInitData initData) {
 		this.initData = initData;
 		
 		idOfCurrentlyExecutedPlugin = initData.idOfThePluginToThisInfrastructure;
@@ -70,19 +68,19 @@ public class MogliInfrastructure implements InfrastructureService {
 		applicationProperties = initData.applicationProperties;
 	}
 
-	private HashMap<String, MogliPlugin> createPluginMap() {
-		final HashMap<String, MogliPlugin> map = new HashMap<String, MogliPlugin>();
-		for (PluginExecutable plugin : initData.pluginList) {
-			map.put(plugin.getId(), (MogliPlugin)plugin);
+	private HashMap<String, MOGLiPlugin> createPluginMap() {
+		final HashMap<String, MOGLiPlugin> map = new HashMap<String, MOGLiPlugin>();
+		for (MOGLiPlugin plugin : initData.pluginList) {
+			map.put(plugin.getId(), (MOGLiPlugin)plugin);
 		}
 		return map;
 	}
 
 	@Override
 	public ModelProvider getModelProvider(String id) {
-		 MogliPlugin plugin = pluginMap.get(id);
+		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null && 
-			 PluginType.MODEL_PROVIDER == plugin.getPluginType()) {
+			 MOGLiPlugin.PluginType.MODEL_PROVIDER == plugin.getPluginType()) {
 			 return (ModelProvider) plugin;
 		 }
 		 return null;
@@ -90,9 +88,9 @@ public class MogliInfrastructure implements InfrastructureService {
 
 	@Override
 	public DataProvider getDataProvider(String id) {
-		 MogliPlugin plugin = pluginMap.get(id);
+		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null && 
-			 PluginType.DATA_PROVIDER == plugin.getPluginType()) {
+			 MOGLiPlugin.PluginType.DATA_PROVIDER == plugin.getPluginType()) {
 			 return (DataProvider) plugin;
 		 }
 		 return null;
@@ -100,9 +98,9 @@ public class MogliInfrastructure implements InfrastructureService {
 
 	@Override
 	public EngineProvider getEngineProvider(String id) {
-		 MogliPlugin plugin = pluginMap.get(id);
+		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null && 
-			 PluginType.ENGINE_PROVIDER == plugin.getPluginType()) {
+			 MOGLiPlugin.PluginType.ENGINE_PROVIDER == plugin.getPluginType()) {
 			 return (EngineProvider) plugin;
 		 }
 		 return null;
@@ -110,9 +108,9 @@ public class MogliInfrastructure implements InfrastructureService {
 
 	@Override
 	public Generator getGenerator(String id) {
-		 MogliPlugin plugin = pluginMap.get(id);
+		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null && 
-			 PluginType.GENERATOR == plugin.getPluginType()) {
+			 MOGLiPlugin.PluginType.GENERATOR == plugin.getPluginType()) {
 			 return (Generator) plugin;
 		 }
 		 return null;
@@ -192,7 +190,7 @@ public class MogliInfrastructure implements InfrastructureService {
 			try {
 				pluginLogFile.createNewFile();
 			} catch (IOException e) {
-				throw new MogliCoreException("Could not create file " + pluginLogFile.getAbsolutePath(), e);
+				throw new MOGLiCoreException("Could not create file " + pluginLogFile.getAbsolutePath(), e);
 			}
 		}
 		return pluginLogFile;
@@ -201,7 +199,7 @@ public class MogliInfrastructure implements InfrastructureService {
 	@Override
 	public Logger getPluginLogger() {
 		if (pluginLogger == null) {
-			pluginLogger = new MogliLogger(getPluginLogFile());
+			pluginLogger = new MOGLiLogger(getPluginLogFile());
 		}
 		return pluginLogger;
 	}
@@ -221,8 +219,8 @@ public class MogliInfrastructure implements InfrastructureService {
 	@Override
 	public <T> List<T> getPluginsOfType(final Class<T> wantedType) {
 		final List<T> toReturn = new ArrayList<T>();
-		final Collection<MogliPlugin> plugins = pluginMap.values();
-		for (final MogliPlugin plugin : plugins) {
+		final Collection<MOGLiPlugin> plugins = pluginMap.values();
+		for (final MOGLiPlugin plugin : plugins) {
 			final Class<?>[] interfaces = plugin.getClass().getInterfaces();
 			for (final Class<?> type : interfaces) {
 				if (type.getName().equals(wantedType.getName())) {

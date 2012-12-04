@@ -1,8 +1,0 @@
-Model Name: DefaultModel
-Number of class descriptions in model file: 4
-Number of known MetaInfoValidator vendor plugins: 1
-
-Plugin 'VelocityClassBasedGenerator' uses the following MetaInfo elements:
-'JavaType' in Attribute level
-'extends' in Class level
-'implements' in Class level

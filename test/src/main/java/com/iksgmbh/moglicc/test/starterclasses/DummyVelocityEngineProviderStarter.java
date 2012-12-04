@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData;
-import com.iksgmbh.moglicc.plugin.MogliPlugin;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
 
@@ -35,7 +35,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 
 	@Override
 	public PluginType getPluginType() {
-		return MogliPlugin.PluginType.ENGINE_PROVIDER;
+		return MOGLiPlugin.PluginType.ENGINE_PROVIDER;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 	}
 
 	@Override
-	public void setMogliInfrastructure(InfrastructureService infrastructure) {
+	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -57,7 +57,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 	}
 	
 	@Override
-	public boolean unpackDefaultInputData() throws MogliPluginException {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		return false;
 	}
 
@@ -66,17 +66,17 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 	}
 
 	@Override
-	public Object startEngine() throws MogliPluginException {
+	public Object startEngine() throws MOGLiPluginException {
 		return null;
 	}
 
 	@Override
-	public GeneratorResultData startEngineWithModel() throws MogliPluginException {
+	public GeneratorResultData startEngineWithModel() throws MOGLiPluginException {
 		return velocityInserterResultData;
 	}
 
 	@Override
-	public List<GeneratorResultData> startEngineWithClassList() throws MogliPluginException {
+	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException {
 		final List<GeneratorResultData> toReturn = new ArrayList<GeneratorResultData>();
 		for (final GeneratorResultData resultData : velocityGeneratorResultDataList) {
 			toReturn.add(resultData); 
@@ -85,12 +85,12 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 	}
 
 	@Override
-	public InfrastructureService getMogliInfrastructure() {
+	public InfrastructureService getMOGLiInfrastructure() {
 		return infrastructure;
 	}
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MogliPluginException {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
 	}
 

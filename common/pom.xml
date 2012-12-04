@@ -2,12 +2,12 @@
 <modelVersion>4.0.0</modelVersion>
 <artifactId>common</artifactId>
 <name>Common </name>
-<description>Contains implementations that is common for all MOGLI projects</description>
+<description>Contains implementations that is common for all MOGLiCC projects</description>
 
 <parent>
 <groupId>com.iksgmbh.moglicc</groupId>
 <artifactId>parent</artifactId>
-<version>0.1.2-SNAPSHOT</version>
+<version>0.1.3-SNAPSHOT</version>
 </parent>
 
 <dependencies>

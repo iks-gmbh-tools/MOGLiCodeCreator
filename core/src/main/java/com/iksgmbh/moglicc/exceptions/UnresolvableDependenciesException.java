@@ -1,13 +1,13 @@
 package com.iksgmbh.moglicc.exceptions;
 
-import com.iksgmbh.moglicc.MogliTextConstants;
+import com.iksgmbh.moglicc.MOGLiTextConstants;
 
 
-public class UnresolvableDependenciesException extends MogliCoreException {
+public class UnresolvableDependenciesException extends MOGLiCoreException {
 
 	private static final long serialVersionUID = 1L;
 
 	public UnresolvableDependenciesException() {
-		super(MogliTextConstants.TEXT_UNRESOLVABLE_DEPENDENCIES);
+		super(MOGLiTextConstants.TEXT_UNRESOLVABLE_DEPENDENCIES);
 	}
 }

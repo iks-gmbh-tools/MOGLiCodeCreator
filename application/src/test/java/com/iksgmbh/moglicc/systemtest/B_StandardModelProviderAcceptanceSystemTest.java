@@ -1,20 +1,18 @@
 package com.iksgmbh.moglicc.systemtest;
 
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_INPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
 
 import java.io.File;
 
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
-import com.iksgmbh.moglicc.utils.MogliFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class B_StandardModelProviderAcceptanceSystemTest extends _AbstractSystemTest {
 	
 	private static final String PROVIDER_PLUGIN_ID = StandardModelProviderStarter.PLUGIN_ID;
-	private static final String EXPECTED_STATISTICS_FILE = "ExpectedModelStatistics.txt";
-
 
 	// *****************************  test methods  ************************************
 	
@@ -32,7 +30,7 @@ public class B_StandardModelProviderAcceptanceSystemTest extends _AbstractSystem
 		// verify test result
 		final File modelFile = new File(modelDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE); 
 		assertFileExists(modelFile);
-		String fileContent = MogliFileUtil.getFileContent(modelFile);
+		String fileContent = MOGLiFileUtil.getFileContent(modelFile);
 		assertFileContainsEntry(modelFile, fileContent);
 	}
 	
@@ -48,7 +46,7 @@ public class B_StandardModelProviderAcceptanceSystemTest extends _AbstractSystem
 		
 		// verify test result
 		assertFileExists(pluginHelpDir);
-		assertChildrenNumberInDirectory(pluginHelpDir, 1);
+		assertChildrenNumberInDirectory(pluginHelpDir, 4);
 	}
 	
 	@Test
@@ -64,7 +62,7 @@ public class B_StandardModelProviderAcceptanceSystemTest extends _AbstractSystem
 		final File statisticsFile = new File(applicationOutputDir, PROVIDER_PLUGIN_ID 
 				                                        + "/" + StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		assertFileExists(statisticsFile);
-		final File expectedFile = new File(projectTestResourcesDir, EXPECTED_STATISTICS_FILE);
+		final File expectedFile = getTestFile("ExpectedModelStatistics.txt");
 		assertFileEquals(expectedFile, statisticsFile);
 	}
 	

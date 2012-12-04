@@ -3,12 +3,12 @@
 <groupId>com.iksgmbh</groupId>
 <artifactId>global</artifactId>
 <name>Global</name>
-<description>This project is designed for sources that are completely independent from the other MOGLI sources so that they could reused for other applications as they are.</description>
+<description>This project is designed for sources that are completely independent from the other MOGLiCC sources so that they could reused for other applications as they are.</description>
 
 <parent>
 <groupId>com.iksgmbh.moglicc</groupId>
 <artifactId>parent</artifactId>
-<version>0.1.2-SNAPSHOT</version>
+<version>0.1.3-SNAPSHOT</version>
 </parent>
 
 <dependencies>

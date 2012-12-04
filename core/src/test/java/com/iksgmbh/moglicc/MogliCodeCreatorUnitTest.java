@@ -1,17 +1,17 @@
 package com.iksgmbh.moglicc;
 
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_LOGS_FILES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_OUTPUT_FILES;
-import static com.iksgmbh.moglicc.MogliSystemConstants.FILENAME_APPLICATION_PROPERTIES;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_APPLICATION_TERMINATED;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_DEACTIVATED_PLUGIN_INFO;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_DUPLICATE_PLUGINIDS;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_INFOMESSAGE_OK;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_NOTHING_TO_DO;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_NO_MANIFEST_FOUND;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_STARTERCLASS_UNKNOWN;
-import static com.iksgmbh.moglicc.MogliTextConstants.TEXT_STARTERCLASS_WRONG_TYPE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LOGS_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_OUTPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_APPLICATION_TERMINATED;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_INFO;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DUPLICATE_PLUGINIDS;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_INFOMESSAGE_OK;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NOTHING_TO_DO;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_MANIFEST_FOUND;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_STARTERCLASS_UNKNOWN;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_STARTERCLASS_WRONG_TYPE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -25,19 +25,19 @@ import org.junit.Test;
 
 import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
 import com.iksgmbh.moglicc.test.CoreTestParent;
-import com.iksgmbh.moglicc.utils.MogliFileUtil;
-import com.iksgmbh.moglicc.utils.MogliLogUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
 
-public class MogliCodeCreatorUnitTest extends CoreTestParent {
+public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 
-	private MogliCodeCreator mogliCodeCreator;
+	private MOGLiCodeCreator mogliCodeCreator;
 
 	@Before
 	public void setup() {
-		MogliLogUtil.setCoreLogfile(null);
+		MOGLiLogUtil.setCoreLogfile(null);
 		super.setup();  // this recreates the same logfile and stores a reference to it in the parent class
-		mogliCodeCreator = new MogliCodeCreator();  // this creates new logfile
+		mogliCodeCreator = new MOGLiCodeCreator();  // this creates new logfile
 		initProperties();
 	}
 
@@ -46,15 +46,15 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 	@Test
 	public void cleanupOnInstantiation() throws IOException {
 		// prepare test
-		final File logsDir = MogliFileUtil.getNewFileInstance(DIR_LOGS_FILES);
+		final File logsDir = MOGLiFileUtil.getNewFileInstance(DIR_LOGS_FILES);
 		createFileIn(logsDir);
 		assertChildrenNumberInDirectory(logsDir, 2);
-		final File resultDir = MogliFileUtil.getNewFileInstance(DIR_OUTPUT_FILES);
+		final File resultDir = MOGLiFileUtil.getNewFileInstance(DIR_OUTPUT_FILES);
 		createFileIn(resultDir);
 		assertChildrenNumberInDirectory(resultDir, 1);
 				
 		// call functionality under test
-		mogliCodeCreator = new MogliCodeCreator();  
+		mogliCodeCreator = new MOGLiCodeCreator();  
 		
 		// verify test result
 		assertChildrenNumberInDirectory(logsDir, 1);
@@ -71,7 +71,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 	@Test
 	public void canCreateMogliLogFile() {
 		// prepare test
-		String applicationRootDir = MogliCodeCreator.getApplicationRootDir();
+		String applicationRootDir = MOGLiCodeCreator.getApplicationRootDir();
 		initMogliWithNotExistingLogfile();
 		assertFileDoesNotExist(applicationLogfile);
 		
@@ -83,16 +83,16 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 		assertFileContainsEntry(applicationLogfile, TEXT_NOTHING_TO_DO);
 		
 		// cleanup
-		MogliCodeCreator.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 	}
 
 	private void initMogliWithNotExistingLogfile() {
 		final String dirname = getProjectRootDir() + TARGET_DIR + "xyz";
-		MogliCodeCreator.setApplicationRootDir(dirname);
+		MOGLiCodeCreator.setApplicationRootDir(dirname);
 		final File dir = new File(dirname);
 		dir.mkdirs();
-		mogliCodeCreator = new MogliCodeCreator();
-		applicationLogfile = MogliCodeCreator.getLogFile();
+		mogliCodeCreator = new MOGLiCodeCreator();
+		applicationLogfile = MOGLiCodeCreator.getLogFile();
 		applicationLogfile.delete();
 	}
 
@@ -100,7 +100,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 	public void terminatesTwoPluginWithSameId() throws FileNotFoundException, IOException {
 		// prepare test
 		setEmptyProperties();
-		mogliCodeCreator = new MogliCodeCreator();  // read properties again
+		mogliCodeCreator = new MOGLiCodeCreator();  // read properties again
 		
 		// call functionality under test
 		mogliCodeCreator.doYourJob();
@@ -110,7 +110,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 		
 		final String expectedLogFileEnding = TEXT_APPLICATION_TERMINATED + expectedLogEntry
 		                                      + FileUtil.getSystemLineSeparator();
-		final String actualFileContent = MogliFileUtil.getFileContent(applicationLogfile);
+		final String actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
 		assertTrue("Unexpected logfile ending!" + actualFileContent, actualFileContent.endsWith(expectedLogFileEnding));
 	}
 	
@@ -129,7 +129,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 	public void executesPluginSuccessfully() {
 		// prepare test
 		deactivatePluginsForTest("DummyPluginStarter", "DummyPluginStarter2");
-		mogliCodeCreator = new MogliCodeCreator();  // read properties again
+		mogliCodeCreator = new MOGLiCodeCreator();  // read properties again
 		
 		// call functionality under test
 		mogliCodeCreator.doYourJob();
@@ -144,7 +144,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 	public void handlePluginExecutedWithError() {
 		// prepare test
 		deactivatePluginsForTest("DummyPluginStarter", "DummyPluginStarter2");
-		mogliCodeCreator = new MogliCodeCreator();
+		mogliCodeCreator = new MOGLiCodeCreator();
 		
 		// call functionality under test^
 		mogliCodeCreator.doYourJob();
@@ -160,7 +160,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 	public void logsPluginMetaData() {
 		// prepare test
 		deactivatePluginsForTest("DummyPluginStarter", "DummyPluginStarter2");
-		mogliCodeCreator = new MogliCodeCreator(); 
+		mogliCodeCreator = new MOGLiCodeCreator(); 
 		
 		// call functionality under test
 		mogliCodeCreator.doYourJob();
@@ -202,7 +202,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 		mogliCodeCreator.checkApplicationPropertiesFile();
 
 		// verify test result
-		final String fileContent = MogliFileUtil.getFileContent(applicationPropertiesFile).trim();
+		final String fileContent = MOGLiFileUtil.getFileContent(applicationPropertiesFile).trim();
 		final File defaultPropertiesFile = new File(getProjectResourcesDir(), FILENAME_APPLICATION_PROPERTIES);
 		final String expected = FileUtil.getFileContent(defaultPropertiesFile).trim();
 		assertEquals("Content of '" + FILENAME_APPLICATION_PROPERTIES + "'", expected , fileContent);
@@ -212,7 +212,7 @@ public class MogliCodeCreatorUnitTest extends CoreTestParent {
 	public void readsWorkspaceFromProperties() {
 		// prepare test
 		initPropertiesWith("workspace=workspaces/demo");
-		mogliCodeCreator = new MogliCodeCreator();
+		mogliCodeCreator = new MOGLiCodeCreator();
 		
 		// call functionality under test
 		final String workspace = mogliCodeCreator.readWorkspaceDirFromApplicationProperties();

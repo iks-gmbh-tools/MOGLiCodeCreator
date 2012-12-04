@@ -5,22 +5,22 @@ package com.iksgmbh.moglicc.exceptions;
  * 
  * @author Reik Oberrath
  */
-public class MogliPluginException extends Exception {
+public class MOGLiPluginException extends Exception {
 
 	private static final long serialVersionUID = -1;
 	
 	protected String pluginErrorMessage;
 
-	public MogliPluginException(Exception e) {
+	public MOGLiPluginException(Exception e) {
 		super(e);
 	}
 
-	public MogliPluginException(String message) {
+	public MOGLiPluginException(String message) {
 		super(message);
 		pluginErrorMessage = message;
 	}
 
-	public MogliPluginException(String message, Exception e) {
+	public MOGLiPluginException(String message, Exception e) {
 		super(message, e);
 		pluginErrorMessage = message;
 	}

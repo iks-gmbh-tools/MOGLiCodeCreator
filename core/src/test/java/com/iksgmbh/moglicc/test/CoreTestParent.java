@@ -5,20 +5,20 @@ import static org.junit.Assert.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iksgmbh.moglicc.MogliCodeCreator;
-import com.iksgmbh.moglicc.MogliTextConstants;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.MOGLiTextConstants;
 import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
-import com.iksgmbh.moglicc.exceptions.MogliCoreException;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.test.starterclasses.DummyDataProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyVelocityEngineProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyStandardModelProviderStarter;
-import com.iksgmbh.moglicc.utils.MogliLogUtil;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
 
-public class CoreTestParent extends AbstractMogliTest {
+public class CoreTestParent extends AbstractMOGLiTest {
 	
 	private static final String PROJECT_ROOT_DIR = "../core/";
 	private static boolean isFirstTest = true;
@@ -32,7 +32,7 @@ public class CoreTestParent extends AbstractMogliTest {
 		}
 		initPluginSubdir();
 		createMogliLogFile();
-		MogliLogUtil.setCoreLogfile(applicationLogfile);
+		MOGLiLogUtil.setCoreLogfile(applicationLogfile);
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class CoreTestParent extends AbstractMogliTest {
 	@Override
 	protected String initTestApplicationRootDir() {
 		final String applicationRootDir = PROJECT_ROOT_DIR + TEST_SUBDIR;
-		MogliCodeCreator.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
 
@@ -72,23 +72,23 @@ public class CoreTestParent extends AbstractMogliTest {
 		final StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < pluginNames.length; i++) {
 			sb.append(pluginNames[i] + "=" 
-				+ MogliTextConstants.TEXT_DEACTIVATED_PLUGIN_PROPERTY
+				+ MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_PROPERTY
 				+ FileUtil.getSystemLineSeparator());
 		}
 		try {
 			initPropertiesWith(sb.toString());
 		} catch (Exception e) {
-			throw new MogliCoreException(e);
+			throw new MOGLiCoreException(e);
 		}
 	}
 
-	protected List<PluginExecutable> getPluginListForTest() {
+	protected List<MOGLiPlugin> getPluginListForTest() {
 		final DummyGeneratorStarter generator = new DummyGeneratorStarter();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();
 		final DummyVelocityEngineProviderStarter engineProvider = new DummyVelocityEngineProviderStarter();
 		
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		plugins.add(generator);
 		plugins.add(modelProvider);
 		plugins.add(dataProvider);

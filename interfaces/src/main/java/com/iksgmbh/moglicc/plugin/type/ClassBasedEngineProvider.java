@@ -3,7 +3,7 @@ package com.iksgmbh.moglicc.plugin.type;
 import java.util.List;
 
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
 
 /**
@@ -19,7 +19,7 @@ public interface ClassBasedEngineProvider extends EngineProvider {
 	 * Typically, this is used to generate an artefact for each class in the model
 	 * 
 	 * @return GeneratorResultData for each class in the model
-	 * @throws MogliPluginException
+	 * @throws MOGLiPluginException
 	 */
-	List<GeneratorResultData> startEngineWithClassList() throws MogliPluginException;
+	List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException;
 }

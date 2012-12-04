@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import com.iksgmbh.moglicc.core.Logger;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.utils.FileUtil;
 
 public class PluginDataUnpacker {
@@ -16,7 +16,7 @@ public class PluginDataUnpacker {
 	
 	public static void doYourJob(final PluginPackedData defaultData, 
 			                     final File targetDir, 
-			                     final Logger pluginLogger) throws MogliPluginException {
+			                     final Logger pluginLogger) throws MOGLiPluginException {
 		final PluginDataUnpacker defaultDataUnpacker = new PluginDataUnpacker(defaultData, targetDir, pluginLogger);
 		defaultDataUnpacker.unpack();
 	}
@@ -31,7 +31,7 @@ public class PluginDataUnpacker {
 	 * Currently the default data is supposed to be a list of directories 
 	 * containing a list of files (no subdirs!)
 	 */
-	private void unpack() throws MogliPluginException {
+	private void unpack() throws MOGLiPluginException {
 		final Set<String> artefacts = defaultData.getArtefactList();
 		for (final String artefact : artefacts) {
 			final String[] filenames = defaultData.getFileNamesForArtefact(artefact);
@@ -39,7 +39,12 @@ public class PluginDataUnpacker {
 				createTemplateFiles(artefact, filenames);
 				pluginLogger.logInfo(filenames.length + " template files created for " + artefact);
 			} else { // handle file
-				final String fileContent = readContentFromFile(defaultData.getTargetSubDir() + "/" + artefact);
+				final String pathToResource = defaultData.getTargetSubDir() + "/" + artefact;
+				final String fileContent = readContentFromFile(pathToResource);
+				if (fileContent == null) {
+					throw new MOGLiPluginException("Error unpacking embedded resource file from jar. " +
+							                       "Cannot find: " + pathToResource);
+				}
 				targetDir.mkdirs();
 				createFile(targetDir, artefact, fileContent);
 				pluginLogger.logInfo(artefact + " created.");
@@ -47,7 +52,7 @@ public class PluginDataUnpacker {
 		}
 	}
 	
-	private void createTemplateFiles(final String subdirName, final String[] filenames) throws MogliPluginException {
+	private void createTemplateFiles(final String subdirName, final String[] filenames) throws MOGLiPluginException {
 		final File subInputDir = new File(targetDir, subdirName);
 		subInputDir.mkdirs();
 		for (String filename : filenames) {
@@ -56,20 +61,20 @@ public class PluginDataUnpacker {
 		}
 	}
 
-	private void createFile(final File dir, final String filename, final String fileContent) throws MogliPluginException {
+	private void createFile(final File dir, final String filename, final String fileContent) throws MOGLiPluginException {
 		final File file = new File(dir, filename);
 		try {
 			FileUtil.createFileWithContent(file, fileContent);
 		} catch (Exception e) {
-			throw new MogliPluginException("Error creating file\n" + file.getAbsolutePath(), e);
+			throw new MOGLiPluginException("Error creating file\n" + file.getAbsolutePath(), e);
 		}
 	}
 
-	private String readContentFromFile(final String pathToResource) throws MogliPluginException {
+	private String readContentFromFile(final String pathToResource) throws MOGLiPluginException {
 		try {
 			return FileUtil.readTextResourceContentFromClassPath(defaultData.getClazz(), pathToResource);
 		} catch (IOException e) {
-			throw new MogliPluginException("Error reading file: " + pathToResource, e);
+			throw new MOGLiPluginException("Error reading file: " + pathToResource, e);
 		}
 	}
 

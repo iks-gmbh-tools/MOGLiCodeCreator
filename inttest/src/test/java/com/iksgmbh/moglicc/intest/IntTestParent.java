@@ -6,20 +6,20 @@ import java.util.List;
 
 import org.junit.Before;
 
-import com.iksgmbh.moglicc.MogliCodeCreator;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.exceptions.MogliPluginException;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityClassBasedGeneratorStarter;
 import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
-import com.iksgmbh.moglicc.infrastructure.MogliInfrastructure;
+import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityModelBasedInserterStarter;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineProviderStarter;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
-import com.iksgmbh.moglicc.test.AbstractMogliTest;
+import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 import com.iksgmbh.utils.FileUtil;
 
-public class IntTestParent extends AbstractMogliTest {
+public class IntTestParent extends AbstractMOGLiTest {
 
 	public static final String PROJECT_ROOT_DIR = "../inttest/";
 	
@@ -41,7 +41,7 @@ public class IntTestParent extends AbstractMogliTest {
 	protected String initTestApplicationRootDir() {
 		applicationRootDir = PROJECT_ROOT_DIR + TEST_SUBDIR;
 		FileUtil.deleteDirWithContent(applicationRootDir);
-		MogliCodeCreator.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
 
@@ -50,7 +50,7 @@ public class IntTestParent extends AbstractMogliTest {
 		super.setup();
 		applicationLogDir.mkdirs();
 		
-		final List<PluginExecutable> plugins = new ArrayList<PluginExecutable>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		infrastructureInitData = createInfrastructureInitData(applicationProperties, plugins, null);
 		
 		standardModelProviderStarter = new StandardModelProviderStarter();
@@ -67,18 +67,18 @@ public class IntTestParent extends AbstractMogliTest {
 			initPlugin(velocityEngineProviderStarter);
 			initPlugin(velocityClassBasedGeneratorStarter);
 			initPlugin(velocityModelBasedInserterStarter);
-		} catch (MogliPluginException e) {
+		} catch (MOGLiPluginException e) {
 			throw new RuntimeException(e);
 		}
 		
-		final File pluginInputDir = standardModelProviderStarter.getMogliInfrastructure().getPluginInputDir();
+		final File pluginInputDir = standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir();
 		modelTextfile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
 	}
 	
-	protected MogliInfrastructure initPlugin(final PluginExecutable plugin) throws MogliPluginException {
+	protected MOGLiInfrastructure initPlugin(final MOGLiPlugin plugin) throws MOGLiPluginException {
 		infrastructureInitData.idOfThePluginToThisInfrastructure = plugin.getId();
-		final MogliInfrastructure infrastructure = new MogliInfrastructure(infrastructureInitData);
-		plugin.setMogliInfrastructure(infrastructure);
+		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
+		plugin.setMOGLiInfrastructure(infrastructure);
 		plugin.unpackDefaultInputData();
 		return infrastructure;
 	}
@@ -88,10 +88,10 @@ public class IntTestParent extends AbstractMogliTest {
 		FileUtil.copyTextFile(source, modelTextfile);
 	}	
 
-	protected void setMetaInfoValidationFile(final PluginExecutable plugin,
+	protected void setMetaInfoValidationFile(final MOGLiPlugin plugin,
 			                                 final String filename) {
 		final File source = new File(getProjectTestResourcesDir(), filename);
-		final File target = new File(plugin.getMogliInfrastructure().getPluginInputDir(), 
+		final File target = new File(plugin.getMOGLiInfrastructure().getPluginInputDir(), 
 				                     MetaInfoValidationUtil.FILENAME_VALIDATION);
 		FileUtil.copyTextFile(source, target);
 	}

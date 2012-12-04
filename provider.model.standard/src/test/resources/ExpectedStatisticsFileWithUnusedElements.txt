@@ -10,7 +10,7 @@ Plugin 'DummyGenerator2' uses the following MetaInfo elements:
 'JavaType' in Attribute level
 
 WARNING:
-Following MetaInfos defined in 'model.txt' are unused:
+Following MetaInfos defined in 'DemoModel.txt' are unused:
 'unusedMetaInfoOnClassLevel' in ClassLevel
 'unusedMetaInfoOnAttributeLevel' in AttributeLevel
 'unusedMetaInfoOnModelLevel' in ModelLevel

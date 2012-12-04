@@ -1,8 +1,8 @@
 package com.iksgmbh.moglicc.intest.core;
 
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_LIB;
-import static com.iksgmbh.moglicc.MogliSystemConstants.DIR_PLUGIN;
-import static com.iksgmbh.moglicc.MogliSystemConstants.FILENAME_LOG_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_PLUGIN;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
 
 import java.io.File;
 import java.util.List;
@@ -10,13 +10,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.MogliCodeCreator;
-import com.iksgmbh.moglicc.MogliSystemConstants;
-import com.iksgmbh.moglicc.build.MogliReleaseBuilder;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.MOGLiSystemConstants;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
 import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector;
 import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.intest.IntTestParent;
-import com.iksgmbh.moglicc.utils.MogliFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class CoreIntTest extends IntTestParent {
@@ -43,24 +43,24 @@ public class CoreIntTest extends IntTestParent {
 	
 	private void initBuildPropertiesFile() {
 		final File sourceFile = new File(getProjectRootDir(), "../application/" 
-				                         + RESOURCES_DIR + MogliReleaseBuilder.FILENAME_BUILD_PROPERTIES);
-		final List<String> fileContentAsList = MogliFileUtil.getFileContentAsList(sourceFile);
+				                         + RESOURCES_DIR + MOGLiReleaseBuilder.FILENAME_BUILD_PROPERTIES);
+		final List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(sourceFile);
 		String newContent = "";
 		for (final String line : fileContentAsList) {
-			if (line.startsWith(MogliReleaseBuilder.PROPERTY_RELEASE_VERSION)) {
-				System.out.println(MogliCodeCreator.VERSION);
-				newContent += MogliReleaseBuilder.PROPERTY_RELEASE_VERSION + "="
-                              + MogliCodeCreator.VERSION + FileUtil.getSystemLineSeparator();
+			if (line.startsWith(MOGLiReleaseBuilder.PROPERTY_RELEASE_VERSION)) {
+				System.out.println(MOGLiCodeCreator.VERSION);
+				newContent += MOGLiReleaseBuilder.PROPERTY_RELEASE_VERSION + "="
+                              + MOGLiCodeCreator.VERSION + FileUtil.getSystemLineSeparator();
 			} else {
 				newContent += line + FileUtil.getSystemLineSeparator();
 			}
 		}
-		final File targetFile = new File(getProjectRootDir(), "target/classes/" + MogliReleaseBuilder.FILENAME_BUILD_PROPERTIES);
-		MogliFileUtil.appendToFile(targetFile, newContent);
+		final File targetFile = new File(getProjectRootDir(), "target/classes/" + MOGLiReleaseBuilder.FILENAME_BUILD_PROPERTIES);
+		MOGLiFileUtil.appendToFile(targetFile, newContent);
 	}
 
 	private FileCollectionData createFileCollectionData() {
-		final MogliReleaseBuilder mogliReleaseBuilder = new MogliReleaseBuilder();
+		final MOGLiReleaseBuilder mogliReleaseBuilder = new MOGLiReleaseBuilder();
 		final FileCollectionData fileCollectionData = new FileCollectionData();
 		fileCollectionData.libSubdir = DIR_LIB;
 		fileCollectionData.pluginsSubdir = DIR_PLUGIN;
@@ -82,7 +82,7 @@ public class CoreIntTest extends IntTestParent {
 		assertFileDoesNotExist(emergencyLogFile);
 		
 		// call functionality under test
-		MogliCodeCreator.main(args);
+		MOGLiCodeCreator.main(args);
 		
 		// cleanup critical stuff before possible test failures
 		applicationPropertiesFile.delete();
@@ -95,27 +95,27 @@ public class CoreIntTest extends IntTestParent {
 	
 	private void assertWorkspace(final File workspaceDir) {
 		assertFileExists(workspaceDir);
-		final File inputDir = new File(workspaceDir, MogliSystemConstants.DIR_INPUT_FILES);
+		final File inputDir = new File(workspaceDir, MOGLiSystemConstants.DIR_INPUT_FILES);
 		assertFileExists(inputDir);
-		final File outputDir = new File(workspaceDir, MogliSystemConstants.DIR_OUTPUT_FILES);
+		final File outputDir = new File(workspaceDir, MOGLiSystemConstants.DIR_OUTPUT_FILES);
 		assertFileExists(outputDir);
-		final File logsDir = new File(workspaceDir, MogliSystemConstants.DIR_LOGS_FILES);
+		final File logsDir = new File(workspaceDir, MOGLiSystemConstants.DIR_LOGS_FILES);
 		assertFileExists(logsDir);
 		
 		assertWorkspacePropertiesFile(workspaceDir);
 	}
 
 	private void assertWorkspacePropertiesFile(File workspaceDir) {
-		final File workspacePropertiesFile = new File(workspaceDir, MogliSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
+		final File workspacePropertiesFile = new File(workspaceDir, MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
 		assertFileExists(workspacePropertiesFile);
 		final File expectedFile = new File(PROJECT_ROOT_DIR + "../core/src/main/resources/" 
-				                           + MogliSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
+				                           + MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
 		assertFileEquals(expectedFile, workspacePropertiesFile);
 	}
 
 	protected File initApplicationPropertiesFile(final String workspaceDirName) throws Exception {
-		final File applicationPropertiesFile = new File(applicationRootDir, MogliSystemConstants.FILENAME_APPLICATION_PROPERTIES);
-		FileUtil.createNewFileWithContent(applicationPropertiesFile, MogliSystemConstants.WORKSPACE_PROPERTY + "=" + workspaceDirName);
+		final File applicationPropertiesFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES);
+		FileUtil.createNewFileWithContent(applicationPropertiesFile, MOGLiSystemConstants.WORKSPACE_PROPERTY + "=" + workspaceDirName);
 		return applicationPropertiesFile;
 	}
 
@@ -130,13 +130,13 @@ public class CoreIntTest extends IntTestParent {
 		// prepare test
 		final String workspaceDirName =  "workspaces/test";
 		final File applicationPropertiesFile = initApplicationPropertiesFile(
-				MogliSystemConstants.APPLICATION_ROOT_IDENTIFIER
+				MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
 				 + "/" + workspaceDirName);
 		assertFileExists(applicationPropertiesFile);
 		final File workspaceDir = initWorkspaceDir(workspaceDirName);
 
 		// call functionality under test
-		MogliCodeCreator.main(args);
+		MOGLiCodeCreator.main(args);
 		
 		// verify test result
 		assertWorkspace(workspaceDir);
@@ -145,7 +145,7 @@ public class CoreIntTest extends IntTestParent {
 	@Test
 	public void createsDefaultWorkspace() throws Exception {
 		// call functionality under test
-		MogliCodeCreator.main(args);
+		MOGLiCodeCreator.main(args);
 		
 		// verify test result
 		final File workspaceDir = new File(applicationRootDir);

@@ -1,9 +1,9 @@
 package com.iksgmbh.moglicc.build.test;
 
-import com.iksgmbh.moglicc.MogliCodeCreator;
-import com.iksgmbh.moglicc.test.AbstractMogliTest;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 
-public class ApplicationTestParent extends AbstractMogliTest {
+public class ApplicationTestParent extends AbstractMOGLiTest {
 
 	private static final String PROJECT_ROOT_DIR = "../application/";
 
@@ -20,7 +20,7 @@ public class ApplicationTestParent extends AbstractMogliTest {
 	@Override
 	protected String initTestApplicationRootDir() {
 		final String applicationRootDir = PROJECT_ROOT_DIR + TEST_SUBDIR;
-		MogliCodeCreator.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
 

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import com.iksgmbh.moglicc.MogliTextConstants;
+import com.iksgmbh.moglicc.MOGLiTextConstants;
 import com.iksgmbh.moglicc.PluginMetaData;
-import com.iksgmbh.moglicc.exceptions.MogliCoreException;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.exceptions.UnresolvableDependenciesException;
-import com.iksgmbh.moglicc.plugin.PluginExecutable;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 
 /**
  * Helps PluginExecutor to verify that all dependencies defined 
@@ -28,7 +28,7 @@ public class DependencyResolver {
 	
 	private SOLVING_STATE state;
 	private HashSet<String> solvedPluginsIDs = new HashSet<String>();
-	private List<PluginExecutable> listOfPluginsWithUnresolvableDependencies;
+	private List<MOGLiPlugin> listOfPluginsWithUnresolvableDependencies;
 	
 	private List<PluginMetaData> pluginMetaDataList;
 	
@@ -38,7 +38,7 @@ public class DependencyResolver {
 		this.pluginMetaDataList = pluginMetaDataList;
 	}
 
-	public static List<PluginExecutable> doYourJob(List<PluginExecutable> pluginListToSort, 
+	public static List<MOGLiPlugin> doYourJob(List<MOGLiPlugin> pluginListToSort, 
 			                                        List<PluginMetaData> pluginMetaDataList) {
 		DependencyResolver dependencyResolver = new DependencyResolver(pluginMetaDataList);
 		return dependencyResolver.resolveDependencies(pluginListToSort);
@@ -46,9 +46,9 @@ public class DependencyResolver {
 
 	// *****************************  explicitely tested methods  ************************************
 	
-	List<PluginExecutable> resolveDependencies(List<PluginExecutable> pluginListToSort) throws UnresolvableDependenciesException {
+	List<MOGLiPlugin> resolveDependencies(List<MOGLiPlugin> pluginListToSort) throws UnresolvableDependenciesException {
 		state = SOLVING_STATE.GO_ON;
-		List<PluginExecutable> sortedPluginList = new ArrayList<PluginExecutable>();
+		List<MOGLiPlugin> sortedPluginList = new ArrayList<MOGLiPlugin>();
 		solveAllDependenciesIfPossible(pluginListToSort, sortedPluginList);
 		if (state == SOLVING_STATE.UNRESOLVABLE) {
 			updatePluginMetaData();
@@ -64,11 +64,11 @@ public class DependencyResolver {
 	 * @return updated list of plugins (pluginListToSort)
 	 *         whose dependencies could (not) yet be resolved
 	 */
-	List<PluginExecutable> solveDependenciesIfPossible(
-			                     List<PluginExecutable> pluginListToSort,
-			                     List<PluginExecutable> sortedPluginList) {
-		List<PluginExecutable> toReturn = new ArrayList<PluginExecutable>();
-		for (PluginExecutable plugin : pluginListToSort) {
+	List<MOGLiPlugin> solveDependenciesIfPossible(
+			                     List<MOGLiPlugin> pluginListToSort,
+			                     List<MOGLiPlugin> sortedPluginList) {
+		List<MOGLiPlugin> toReturn = new ArrayList<MOGLiPlugin>();
+		for (MOGLiPlugin plugin : pluginListToSort) {
 			if (areAllDependenciesSolved(plugin)) {
 				markPluginAsSolved(pluginListToSort, sortedPluginList, plugin);
 			} else {
@@ -79,26 +79,26 @@ public class DependencyResolver {
 	}
 	
 	void updatePluginMetaData() {
-		for (PluginExecutable plugin : listOfPluginsWithUnresolvableDependencies) {
+		for (MOGLiPlugin plugin : listOfPluginsWithUnresolvableDependencies) {
 			boolean doneForThisPlugin = false;
 			for (PluginMetaData pluginMetaData : pluginMetaDataList) {
 				if (pluginMetaData.getId().equals(plugin.getId())) {
-					pluginMetaData.setInfoMessage(MogliTextConstants.TEXT_UNRESOLVABLE_DEPENDENCIES);
+					pluginMetaData.setInfoMessage(MOGLiTextConstants.TEXT_UNRESOLVABLE_DEPENDENCIES);
 					doneForThisPlugin = true;
 					break;
 				}
 			}
 			if (! doneForThisPlugin) {
-				throw new MogliCoreException("unknownPlugin: " + plugin.getId());
+				throw new MOGLiCoreException("unknownPlugin: " + plugin.getId());
 			}
 		}
 	}
 
 	// *****************************  private methods  ************************************
 	
-	private void solveAllDependenciesIfPossible(List<PluginExecutable> pluginListToSort,
-			                                    List<PluginExecutable> sortedPluginList) {
-		List<PluginExecutable> updatedPluginListToSort = null;
+	private void solveAllDependenciesIfPossible(List<MOGLiPlugin> pluginListToSort,
+			                                    List<MOGLiPlugin> sortedPluginList) {
+		List<MOGLiPlugin> updatedPluginListToSort = null;
 		while (state == SOLVING_STATE.GO_ON) {
 			int numberUnsolvedPlugins = pluginListToSort.size();
 			updatedPluginListToSort = solveDependenciesIfPossible(pluginListToSort, sortedPluginList);
@@ -113,7 +113,7 @@ public class DependencyResolver {
 		}
 	}
 
-	private boolean areAllDependenciesSolved(PluginExecutable plugin) {
+	private boolean areAllDependenciesSolved(MOGLiPlugin plugin) {
 		List<String> dependencies = plugin.getDependencies();
 		if (dependencies.size() == 0) {
 			return true;
@@ -127,8 +127,8 @@ public class DependencyResolver {
 		return true;
 	}
 
-	private void markPluginAsSolved(List<PluginExecutable> pluginListToSort,
-			List<PluginExecutable> sortedPluginList, PluginExecutable plugin) {
+	private void markPluginAsSolved(List<MOGLiPlugin> pluginListToSort,
+			List<MOGLiPlugin> sortedPluginList, MOGLiPlugin plugin) {
 		sortedPluginList.add(plugin);
 		solvedPluginsIDs.add(plugin.getId());
 	}
@@ -137,14 +137,14 @@ public class DependencyResolver {
 	/**
 	 * FOR TEST PURPOSE ONLY
 	 */
-	List<PluginExecutable> getListOfPluginsWithUnresolvableDependencies() {
+	List<MOGLiPlugin> getListOfPluginsWithUnresolvableDependencies() {
 		return listOfPluginsWithUnresolvableDependencies;
 	}
 
 	/**
 	 * FOR TEST PURPOSE ONLY
 	 */
-	 void setListOfPluginsWithUnresolvableDependencies(List<PluginExecutable> plugins) {
+	 void setListOfPluginsWithUnresolvableDependencies(List<MOGLiPlugin> plugins) {
 		this.listOfPluginsWithUnresolvableDependencies = plugins;
 	}
 
