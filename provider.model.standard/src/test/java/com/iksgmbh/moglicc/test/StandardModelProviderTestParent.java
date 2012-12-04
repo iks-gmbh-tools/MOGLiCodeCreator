@@ -13,7 +13,7 @@ import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.utils.ImmutableUtil;
 
-public class StandardModelProviderTestParent extends AbstractMOGLiTest {
+public class StandardModelProviderTestParent extends AbstractMOGLiTest2 {
 
 	protected static final String PROJECT_ROOT_DIR = "../provider.model.standard/";
 	private static boolean isFirstTest = true;

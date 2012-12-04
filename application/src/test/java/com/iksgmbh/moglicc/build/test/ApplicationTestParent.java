@@ -1,9 +1,9 @@
 package com.iksgmbh.moglicc.build.test;
 
 import com.iksgmbh.moglicc.MOGLiCodeCreator;
-import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
+import com.iksgmbh.moglicc.test.AbstractMOGLiTest2;
 
-public class ApplicationTestParent extends AbstractMOGLiTest {
+public class ApplicationTestParent extends AbstractMOGLiTest2 {
 
 	private static final String PROJECT_ROOT_DIR = "../application/";
 

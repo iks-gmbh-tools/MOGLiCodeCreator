@@ -26,7 +26,7 @@ import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.utils.FileUtil;
 
-public abstract class AbstractMOGLiTest {
+public abstract class AbstractMOGLiTest2 {
 	
 	// *****************************  Constants  ************************************
 	

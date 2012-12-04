@@ -18,7 +18,7 @@ import com.iksgmbh.moglicc.test.starterclasses.DummyStandardModelProviderStarter
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
 
-public class CoreTestParent extends AbstractMOGLiTest {
+public class CoreTestParent extends AbstractMOGLiTest2 {
 	
 	private static final String PROJECT_ROOT_DIR = "../core/";
 	private static boolean isFirstTest = true;

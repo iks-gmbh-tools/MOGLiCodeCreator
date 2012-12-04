@@ -10,12 +10,12 @@ import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineProviderStarter;
-import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
+import com.iksgmbh.moglicc.test.AbstractMOGLiTest2;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.utils.FileUtil;
 
-public class VelocityEngineProviderTestParent extends AbstractMOGLiTest {
+public class VelocityEngineProviderTestParent extends AbstractMOGLiTest2 {
 	
 	public static final String PROJECT_ROOT_DIR = "../provider.engine.velocity/";
 	public static final String TEMPLATE_WITH_SUBTEMPLATE = "testMainTemplateWithSub.tpl";
