@@ -2,9 +2,9 @@ package com.iksgmbh.moglicc.generator.classbased.velocity;
 
 import java.io.File;
 
-import com.iksgmbh.moglicc.MOGLiSystemConstants2;
+import com.iksgmbh.moglicc.MOGLiSystemConstants;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 
 /**
  * return Object for {@code VelocityEngineProviderStarter.startEngineWithClassList()}
@@ -15,7 +15,7 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	
 	static final String PACKAGE = "package";
 	static final String PACKAGE_IDENTIFIER = "<" + PACKAGE + ">";
-	static final String ROOT_IDENTIFIER = MOGLiSystemConstants2.APPLICATION_ROOT_IDENTIFIER;
+	static final String ROOT_IDENTIFIER = MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER;
 	
 	static final String NO_TARGET_FILE_NAME = "TargetFileName not defined.";
 	static final String NO_TARGET_DIR = "TargetDir not defined.";
@@ -50,22 +50,22 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	 * @param applicationRootDir
 	 * @param pathAdaption neccassary for test purpose 
 	 * @return null if not defined in main template  
-	 * @throws MOGLiPluginException2
+	 * @throws MOGLiPluginException
 	 */
-	File getTargetDirAsFile(String applicationRootDir, String pathAdaption) throws MOGLiPluginException2;
+	File getTargetDirAsFile(String applicationRootDir, String pathAdaption) throws MOGLiPluginException;
 	
 	/**
 	 * Uses {@code getTargetDirAsFile} to create target file object and checks that it exists
 	 * @param applicationRootDir
 	 * @param pathAdaption neccassary for test purpose 
 	 * @return null if not defined in main template  
-	 * @throws MOGLiPluginException2
+	 * @throws MOGLiPluginException
 	 */
-	File getTargetFile(String applicationRootDir, String pathAdaptation) throws MOGLiPluginException2;
+	File getTargetFile(String applicationRootDir, String pathAdaptation) throws MOGLiPluginException;
 
 	/**
-	 * @throws MOGLiPluginException2 if conflicting or missing settings exist
+	 * @throws MOGLiPluginException if conflicting or missing settings exist
 	 */
-	void validate() throws MOGLiPluginException2;
+	void validate() throws MOGLiPluginException;
 
 }

@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.exceptions;
 
-public class MetaInfoValidatorException extends MOGLiPluginException2 {
+public class MetaInfoValidatorException extends MOGLiPluginException {
 
 	private static final long serialVersionUID = -1;
 	

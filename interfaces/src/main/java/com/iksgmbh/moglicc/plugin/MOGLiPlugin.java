@@ -3,7 +3,7 @@ package com.iksgmbh.moglicc.plugin;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 
 /**
  * Basic plugin type on which Mogli plugins are casted when they are loaded by reflection.
@@ -11,7 +11,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
  * 
  * @author Reik Oberrath
  */
-public interface MOGLiPlugin2 {
+public interface MOGLiPlugin {
 	
 	String DEFAULT_DATA_DIR = "defaultInputData";
 	String HELP_DATA_DIR = "helpData";
@@ -44,23 +44,23 @@ public interface MOGLiPlugin2 {
 	
 	/**
 	 * Called from core to execute the plugins.
-	 * @throws MOGLiPluginException2
+	 * @throws MOGLiPluginException
 	 */
-	void doYourJob() throws MOGLiPluginException2;
+	void doYourJob() throws MOGLiPluginException;
 	
 	/**
 	 * If plugin's input directory does not exist, the Core calls this method 
 	 * to create it and unpacks default data from plugin's jarfile into it.
 	 * @return true if default data has been initialized successfully
-	 * @throws MOGLiPluginException2
+	 * @throws MOGLiPluginException
 	 */
-	boolean unpackDefaultInputData() throws MOGLiPluginException2;
+	boolean unpackDefaultInputData() throws MOGLiPluginException;
 	
 	/**
 	 * If plugin's help directory does not exist, the Core calls this method 
 	 * to create it and unpacks help data from plugin's jarfile into it.
 	 * @return true if help data has been initialized successfully
-	 * @throws MOGLiPluginException2
+	 * @throws MOGLiPluginException
 	 */
-	boolean unpackPluginHelpFiles() throws MOGLiPluginException2;
+	boolean unpackPluginHelpFiles() throws MOGLiPluginException;
 }

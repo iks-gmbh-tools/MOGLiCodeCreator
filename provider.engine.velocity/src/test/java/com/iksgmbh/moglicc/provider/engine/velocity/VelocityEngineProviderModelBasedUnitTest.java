@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.engine.velocity.test.VelocityEngineProviderTestParent;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
 import com.iksgmbh.utils.FileUtil;
@@ -46,7 +46,7 @@ public class VelocityEngineProviderModelBasedUnitTest extends VelocityEngineProv
 	
 
 	@Test
-	public void generatesAllClassesIntoContent() throws MOGLiPluginException2 {
+	public void generatesAllClassesIntoContent() throws MOGLiPluginException {
 		// prepare test
 		copyFromProjectTestResourcesDirToInputDir("inserterTemplates", INSERTER_TEMPLATES_REPLACE_INSTRUCTIONS);
 		final VelocityEngineData engineData = MockDataBuilder.buildVelocityEngineDataMockWithStandardData( 

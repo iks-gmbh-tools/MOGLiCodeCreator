@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 
-public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGLiPlugin2 {
+public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGLiPlugin {
 
 	private static final String PLUGIN_ID = "DummyPlugin";
 	private InfrastructureService infrastructure;
@@ -19,11 +19,11 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGL
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin2.PluginType.GENERATOR;
+		return MOGLiPlugin.PluginType.GENERATOR;
 	}
 
 	@Override
-	public void doYourJob() throws MOGLiPluginException2 {
+	public void doYourJob() throws MOGLiPluginException {
 		throw new RuntimeException("fatal");
 	}
 
@@ -39,7 +39,7 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGL
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		return false;
 	}
 
@@ -49,7 +49,7 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGL
 	}
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
 	}
 

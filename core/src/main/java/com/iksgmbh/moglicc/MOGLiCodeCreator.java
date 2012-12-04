@@ -1,20 +1,20 @@
 package com.iksgmbh.moglicc;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.APPLICATION_ROOT_IDENTIFIER;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_HELP_FILES;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_INPUT_FILES;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_LOGS_FILES;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_OUTPUT_FILES;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.DIR_TEMP_FILES;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.FILENAME_APPLICATION_PROPERTIES;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.FILENAME_INTRODUCTION_HELPFILE;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.FILENAME_LOG_FILE;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.FILENAME_WORKSPACE_PROPERTIES;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.WORKSPACE_PROPERTY;
-import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_APPLICATION_TERMINATED;
-import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_DONE;
-import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_NOTHING_TO_DO;
-import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_PLUGINS_FOUND;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_HELP_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LOGS_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_OUTPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_TEMP_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_INTRODUCTION_HELPFILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.WORKSPACE_PROPERTY;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_APPLICATION_TERMINATED;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DONE;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NOTHING_TO_DO;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_PLUGINS_FOUND;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,22 +26,22 @@ import java.util.Properties;
 import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.exceptions.DuplicatePluginIdException;
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.exceptions.UnresolvableDependenciesException;
 import com.iksgmbh.moglicc.helper.MetaDataLoader;
 import com.iksgmbh.moglicc.helper.PluginExecutor;
 import com.iksgmbh.moglicc.helper.PluginExecutor.PluginExecutionData;
 import com.iksgmbh.moglicc.helper.PluginLoader;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
-import com.iksgmbh.moglicc.utils.MOGLiFileUtil2;
-import com.iksgmbh.moglicc.utils.MOGLiLogUtil2;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
 
 /**
  * Starter class of the MOGLiCodeCreator application
  * @author Reik Oberrath
  */
-public class MOGLiCodeCreator2 {
+public class MOGLiCodeCreator {
 	
 	// *****************************  static stuff  ************************************
 
@@ -56,29 +56,29 @@ public class MOGLiCodeCreator2 {
 	}
 
 	public static void setApplicationRootDir(String applicationRootDir) {
-		MOGLiCodeCreator2.applicationRootDir = applicationRootDir;
+		MOGLiCodeCreator.applicationRootDir = applicationRootDir;
 	}
 	
 	public static File getLogFile() {
-		return MOGLiLogUtil2.getCoreLogfile();
+		return MOGLiLogUtil.getCoreLogfile();
 	}
 
 	public static void main(String[] args) {
 		initStatics(args);
 		try {
-			final MOGLiCodeCreator2 mogliCodeCreator = new MOGLiCodeCreator2();
+			final MOGLiCodeCreator mogliCodeCreator = new MOGLiCodeCreator();
 			mogliCodeCreator.doYourJob();
 		} catch (Throwable t) {
 			t.printStackTrace();
-			if (MOGLiLogUtil2.getCoreLogfile() == null) {
+			if (MOGLiLogUtil.getCoreLogfile() == null) {
 				initEmergencyLogFile();
 			}
-			MOGLiLogUtil2.logError(t.getMessage());
+			MOGLiLogUtil.logError(t.getMessage());
 		}
 	}
 
 	private static void initEmergencyLogFile() {
-		MOGLiLogUtil2.setCoreLogfile(emergencyLogfile);
+		MOGLiLogUtil.setCoreLogfile(emergencyLogfile);
 		initLogFileContent();
 	}
 
@@ -105,7 +105,7 @@ public class MOGLiCodeCreator2 {
 
 	// *****************************  Constructor  ************************************	
 	
-	public MOGLiCodeCreator2() {
+	public MOGLiCodeCreator() {
 		readApplicationPropertiesFile();
 		initWorkspace();
 		initApplicationDirectories();
@@ -129,7 +129,7 @@ public class MOGLiCodeCreator2 {
 		if (! workspaceDir.exists()) {
 			boolean ok = workspaceDir.mkdirs();
 			if (! ok) {
-				throw new MOGLiCoreException2("Error creating workspaceDir <" + workspaceDir.getAbsolutePath() + ">");
+				throw new MOGLiCoreException("Error creating workspaceDir <" + workspaceDir.getAbsolutePath() + ">");
 			}
 		}
 	}
@@ -144,7 +144,7 @@ public class MOGLiCodeCreator2 {
 				logEntriesBeforeLogFileExists.add("File '" + FILENAME_WORKSPACE_PROPERTIES 
 						                           + "' did not exist and was created.");
 			} catch (IOException e) {
-				throw new MOGLiCoreException2("Error creating " + workspacePropertiesFile.getAbsolutePath(),  e);
+				throw new MOGLiCoreException("Error creating " + workspacePropertiesFile.getAbsolutePath(),  e);
 			}
 		}
 	
@@ -173,19 +173,19 @@ public class MOGLiCodeCreator2 {
 	private void initApplicationDirectories() {
 		helpDir = new File(applicationRootDir + "/" + DIR_HELP_FILES);
 		if (! helpDir.exists()) {
-			MOGLiLogUtil2.logInfo("Application help directory does not exist and will be created!");
+			MOGLiLogUtil.logInfo("Application help directory does not exist and will be created!");
 			helpDir.mkdirs();
 			String content = null;
 			
 			try {
 				content = FileUtil.readTextResourceContentFromClassPath(getClass(), FILENAME_INTRODUCTION_HELPFILE);
 			} catch (IOException e) {
-				MOGLiLogUtil2.logWarning("IOException reading " + FILENAME_INTRODUCTION_HELPFILE + " from core jarfile: " + e.getMessage());
+				MOGLiLogUtil.logWarning("IOException reading " + FILENAME_INTRODUCTION_HELPFILE + " from core jarfile: " + e.getMessage());
 				return;
 			}
 			
 			if (content == null) {
-				MOGLiLogUtil2.logWarning("Cannot find " + FILENAME_INTRODUCTION_HELPFILE + " in core jarfile.");
+				MOGLiLogUtil.logWarning("Cannot find " + FILENAME_INTRODUCTION_HELPFILE + " in core jarfile.");
 				return;				
 			}
 			
@@ -193,18 +193,18 @@ public class MOGLiCodeCreator2 {
 				final File file = new File(helpDir, FILENAME_INTRODUCTION_HELPFILE);
 				FileUtil.appendToFile(file, content);
 			} catch (IOException e) {
-				MOGLiLogUtil2.logWarning("Error writing " + FILENAME_INTRODUCTION_HELPFILE + " to " + helpDir.getAbsolutePath());
+				MOGLiLogUtil.logWarning("Error writing " + FILENAME_INTRODUCTION_HELPFILE + " to " + helpDir.getAbsolutePath());
 				return;
 			}
 			
-			MOGLiLogUtil2.logInfo("Application help directory created");
+			MOGLiLogUtil.logInfo("Application help directory created");
 		}
 	}
 
 	private void initDirectory(final File dir, final boolean createDir) {
 		FileUtil.deleteDirWithContent(dir.getAbsolutePath());
 		if (dir.exists()) {
-			throw new MOGLiCoreException2("Could not delete " + dir.getAbsolutePath());
+			throw new MOGLiCoreException("Could not delete " + dir.getAbsolutePath());
 		}
 		
 		if (createDir) {
@@ -212,7 +212,7 @@ public class MOGLiCodeCreator2 {
 		}
 
 		if (createDir && ! dir.exists()) {
-			throw new MOGLiCoreException2("Could not create " + dir.getAbsolutePath());
+			throw new MOGLiCoreException("Could not create " + dir.getAbsolutePath());
 		}
 	}
 	
@@ -220,16 +220,16 @@ public class MOGLiCodeCreator2 {
 		logDir = new File(workspaceDir, DIR_LOGS_FILES);
 		System.out.println(logDir.getAbsolutePath());
 		initDirectory(logDir, true);
-		MOGLiLogUtil2.createNewLogfile(new File(logDir, FILENAME_LOG_FILE));
+		MOGLiLogUtil.createNewLogfile(new File(logDir, FILENAME_LOG_FILE));
 		initLogFileContent();
 		for (final String logEntry : logEntriesBeforeLogFileExists) {
-			MOGLiLogUtil2.logInfo(logEntry);
+			MOGLiLogUtil.logInfo(logEntry);
 		}
 	}
 
 	private static void initLogFileContent() {
-		MOGLiLogUtil2.logInfo("MOGLi Code Creator " + VERSION);
-		MOGLiLogUtil2.logInfo("----------------------------");
+		MOGLiLogUtil.logInfo("MOGLi Code Creator " + VERSION);
+		MOGLiLogUtil.logInfo("----------------------------");
 	}
 	
 	// *****************************  explicitely tested methods  ************************************
@@ -237,15 +237,15 @@ public class MOGLiCodeCreator2 {
 	void doYourJob() {		
 		pluginMetaDataList = MetaDataLoader.doYourJob(applicationProperties);
 		if (getNumberOfPluginsToLoad(pluginMetaDataList) == 0) {
-			MOGLiLogUtil2.logInfo(TEXT_NOTHING_TO_DO);
+			MOGLiLogUtil.logInfo(TEXT_NOTHING_TO_DO);
 			return;
 		}
 		
-		List<MOGLiPlugin2> plugins = null;
+		List<MOGLiPlugin> plugins = null;
 		try {
 			plugins = PluginLoader.doYourJob(pluginMetaDataList);
 		} catch (DuplicatePluginIdException e) {
-			MOGLiLogUtil2.logInfo(TEXT_APPLICATION_TERMINATED + e.getMessage());
+			MOGLiLogUtil.logInfo(TEXT_APPLICATION_TERMINATED + e.getMessage());
 			return;
 		}
 		
@@ -253,7 +253,7 @@ public class MOGLiCodeCreator2 {
 			pluginMetaDataList = PluginExecutor.doYourJob(createPluginExecutionData(plugins));
 		} catch (UnresolvableDependenciesException e) {
 			logPluginMetaData(pluginMetaDataList);
-			MOGLiLogUtil2.logInfo(TEXT_APPLICATION_TERMINATED + e.getMessage());
+			MOGLiLogUtil.logInfo(TEXT_APPLICATION_TERMINATED + e.getMessage());
 			return;
 		}
 		
@@ -262,21 +262,21 @@ public class MOGLiCodeCreator2 {
 	
 	
 	private void logFinalInformation() {
-		MOGLiLogUtil2.logInfo("");
+		MOGLiLogUtil.logInfo("");
 		logPluginMetaData(pluginMetaDataList);
-		MOGLiLogUtil2.logInfo("");
+		MOGLiLogUtil.logInfo("");
 		int numberOfSuccessfullyExecutedPlugins = getNumberOfSuccessfullyExecutedPlugins(pluginMetaDataList);
 		int numberOfNotExecutedPlugins = getNumberOfNotExecutedPlugins(pluginMetaDataList);
 		if (numberOfNotExecutedPlugins == 0) {
-			MOGLiLogUtil2.logInfo("All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully!");
+			MOGLiLogUtil.logInfo("All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully!");
 		} else {
-			MOGLiLogUtil2.logInfo(numberOfSuccessfullyExecutedPlugins + " plugins executed successfully!");
-			MOGLiLogUtil2.logInfo(numberOfNotExecutedPlugins + " plugins not or erroneously executed!");
+			MOGLiLogUtil.logInfo(numberOfSuccessfullyExecutedPlugins + " plugins executed successfully!");
+			MOGLiLogUtil.logInfo(numberOfNotExecutedPlugins + " plugins not or erroneously executed!");
 		}
-		MOGLiLogUtil2.logInfo(TEXT_DONE);
+		MOGLiLogUtil.logInfo(TEXT_DONE);
 	}
 
-	private PluginExecutionData createPluginExecutionData(List<MOGLiPlugin2> plugins) {
+	private PluginExecutionData createPluginExecutionData(List<MOGLiPlugin> plugins) {
 		InfrastructureInitData infrastructureInitData = new InfrastructureInitData(new File(applicationRootDir), 
 				                                            logDir, outputDir, tempDir, inputDir, helpDir,
 				                                            applicationProperties);
@@ -287,9 +287,9 @@ public class MOGLiCodeCreator2 {
 		if (pluginMetaDataList.size() == 0) {
 			return;
 		}
-		MOGLiLogUtil2.logInfo(TEXT_PLUGINS_FOUND);
+		MOGLiLogUtil.logInfo(TEXT_PLUGINS_FOUND);
 		for (PluginMetaData pluginMetaData : pluginMetaDataList) {
-			MOGLiLogUtil2.logInfo(pluginMetaData.toString());
+			MOGLiLogUtil.logInfo(pluginMetaData.toString());
 		}
 	}
 	
@@ -305,7 +305,7 @@ public class MOGLiCodeCreator2 {
 	}
 
 	void checkApplicationPropertiesFile() {
-		final File applicationPropertiesFile = MOGLiFileUtil2.getNewFileInstance(FILENAME_APPLICATION_PROPERTIES);
+		final File applicationPropertiesFile = MOGLiFileUtil.getNewFileInstance(FILENAME_APPLICATION_PROPERTIES);
 		if (! applicationPropertiesFile.exists()) {
 			try {
 				applicationPropertiesFile.createNewFile();
@@ -314,7 +314,7 @@ public class MOGLiCodeCreator2 {
 				logEntriesBeforeLogFileExists.add("File '" + FILENAME_APPLICATION_PROPERTIES 
 						                           + "' did not exist and was created.");
 			} catch (IOException e) {
-				throw new MOGLiCoreException2("Error creating " + applicationPropertiesFile.getAbsolutePath(),  e);
+				throw new MOGLiCoreException("Error creating " + applicationPropertiesFile.getAbsolutePath(),  e);
 			}
 		}
 	}
@@ -346,7 +346,7 @@ public class MOGLiCodeCreator2 {
 	private void readApplicationPropertiesFile() {
 		checkApplicationPropertiesFile();
 		
-		final File propertiesFile = new File(MOGLiCodeCreator2.getApplicationRootDir() 
+		final File propertiesFile = new File(MOGLiCodeCreator.getApplicationRootDir() 
 				+ "/" + FILENAME_APPLICATION_PROPERTIES);
 		applicationProperties = readProperties(propertiesFile);
 	}
@@ -358,7 +358,7 @@ public class MOGLiCodeCreator2 {
 			properties.load(fileInputStream);
 		    fileInputStream.close();
 		} catch (IOException e) {
-			throw new MOGLiCoreException2("Could not load " + FILENAME_APPLICATION_PROPERTIES, e);
+			throw new MOGLiCoreException("Could not load " + FILENAME_APPLICATION_PROPERTIES, e);
 		}
 		return properties;
 	}
@@ -379,5 +379,3 @@ public class MOGLiCodeCreator2 {
 	}
 	
 }
-
-

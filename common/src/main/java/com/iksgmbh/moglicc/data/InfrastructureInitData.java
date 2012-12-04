@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 
 /**
  * Group of data fields used by the InfrastructureService and needed to instantiate it.
@@ -22,7 +22,7 @@ public class InfrastructureInitData {
 	
 	public final Properties applicationProperties;
 	
-	public List<MOGLiPlugin2> pluginList;
+	public List<MOGLiPlugin> pluginList;
 	
 	public String idOfThePluginToThisInfrastructure;
 

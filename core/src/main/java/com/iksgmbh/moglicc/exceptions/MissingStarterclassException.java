@@ -1,12 +1,12 @@
 package com.iksgmbh.moglicc.exceptions;
 
-import com.iksgmbh.moglicc.MOGLiTextConstants2;
+import com.iksgmbh.moglicc.MOGLiTextConstants;
 
-public class MissingStarterclassException extends MOGLiCoreException2 {
+public class MissingStarterclassException extends MOGLiCoreException {
 
 	private static final long serialVersionUID = 1L;
 
 	public MissingStarterclassException() {
-		super(MOGLiTextConstants2.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE);
+		super(MOGLiTextConstants.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE);
 	}
 }

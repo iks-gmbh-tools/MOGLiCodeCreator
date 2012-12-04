@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder2;
-import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder2.VERSION_TYPE;
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
-import com.iksgmbh.moglicc.utils.MOGLiFileUtil2;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder.VERSION_TYPE;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class VersionReplacer {
@@ -16,7 +16,7 @@ public class VersionReplacer {
 	private static final int MAX_LINE_NUMBER_TO_SEARCH_FOR_VERSION_STRING = 12;
 	private static final String APPLICATION_START_FILE = "MOGLiCodeCreator.java";
 	private static final String PATH_TO_APPLICATION_START_FILE = "core/src/main/java/com/iksgmbh/moglicc/" + APPLICATION_START_FILE;
-	private static final File applicationStartFile = new File(MOGLiReleaseBuilder2.WORKSPACE, PATH_TO_APPLICATION_START_FILE);
+	private static final File applicationStartFile = new File(MOGLiReleaseBuilder.WORKSPACE, PATH_TO_APPLICATION_START_FILE);
 	public static final String JAVA_VERSION_IDENTIFIER = "static final String VERSION";
 	
 	private String oldVersion;
@@ -50,7 +50,7 @@ public class VersionReplacer {
 
 	private static void replaceInJavaFile(final File file, final String oldVersion, 
 			                                               final String newVersion) {
-		final List<String> fileContentAsList = MOGLiFileUtil2.getFileContentAsList(file);
+		final List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
 		final List<String> newContent = new ArrayList<String>();
 		int matches = 0;
 		for (final String line : fileContentAsList) {
@@ -72,7 +72,7 @@ public class VersionReplacer {
 		}
 		
 		if (oldVersion != null && matches != 1) {
-			throw new MOGLiCoreException2("\nUnexpected number of version matches:\n" 
+			throw new MOGLiCoreException("\nUnexpected number of version matches:\n" 
 					+ "Expected matches of <" + JAVA_VERSION_IDENTIFIER + "> lines: 1\n" 
 					+ "Actual matches: "+ matches);
 		}
@@ -80,7 +80,7 @@ public class VersionReplacer {
 		try {
 			FileUtil.createNewFileWithContent(file, newContent);
 		} catch (Exception e) {
-			throw new MOGLiCoreException2("Error creating file\n" + file.getAbsolutePath());
+			throw new MOGLiCoreException("Error creating file\n" + file.getAbsolutePath());
 		}
 	}
 
@@ -91,7 +91,7 @@ public class VersionReplacer {
 		try {
 			FileUtil.createNewFileWithContent(new File(pomFile), overwrittenFileContent);
 		} catch (Exception e) {
-			throw new MOGLiCoreException2(e);
+			throw new MOGLiCoreException(e);
 		}
 	}
 
@@ -101,7 +101,7 @@ public class VersionReplacer {
 		try {
 			fileContent = FileUtil.getFileContentAsList(file);
 		} catch (IOException e) {
-			throw new MOGLiCoreException2(e);
+			throw new MOGLiCoreException(e);
 		}
 		return fileContent;
 	}
@@ -115,7 +115,7 @@ public class VersionReplacer {
 		try {
 			FileUtil.createNewFileWithContent(new File(pomFile), replacedFileContent);
 		} catch (Exception e) {
-			throw new MOGLiCoreException2(e);
+			throw new MOGLiCoreException(e);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class VersionReplacer {
 			replacedFileContent.append(FileUtil.getSystemLineSeparator());
 		}
 		if (matches != 1) {
-			throw new MOGLiCoreException2("\nUnexpected number of version matches:\n" 
+			throw new MOGLiCoreException("\nUnexpected number of version matches:\n" 
 					+ "Expected matches of <version> setting lines: 1\n" 
 					+ "Actual matches: "+ matches);
 		}
@@ -158,7 +158,7 @@ public class VersionReplacer {
 			replacedFileContent.append(FileUtil.getSystemLineSeparator());
 		}
 		if (matches != 1) {
-			throw new MOGLiCoreException2("\nUnexpected number of version matches:\n" 
+			throw new MOGLiCoreException("\nUnexpected number of version matches:\n" 
 					+ "Expected matches of <" + oldVersion + ">: 1\n" 
 					+ "Actual matches: "+ matches);
 		}
@@ -168,7 +168,7 @@ public class VersionReplacer {
 	public static void setVersionInPomsBackToOldValue() {
 		System.out.println("");
 		System.out.println("############################################################################");
-		final MOGLiReleaseBuilder2 releaseBuilder = new MOGLiReleaseBuilder2();
+		final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
 		final String newVersion = releaseBuilder.getVersion(VERSION_TYPE.Current);  // version before release build
 		final String oldVersion1 = releaseBuilder.getVersion(VERSION_TYPE.Next);    // version after release build
 		final String oldVersion2 = releaseBuilder.getVersion(VERSION_TYPE.Release); // version during release build
@@ -184,7 +184,7 @@ public class VersionReplacer {
 		System.out.println("############################################################################");
 	}
 
-	private static void replaceVersionStrings(final MOGLiReleaseBuilder2 releaseBuilder,
+	private static void replaceVersionStrings(final MOGLiReleaseBuilder releaseBuilder,
 			                                  final String newVersion, final String oldVersion) {
 		System.out.println("Setting back version " + oldVersion + " to " + newVersion);
 		VersionReplacer.doYourJob(oldVersion, newVersion, releaseBuilder.getPomFiles());
@@ -192,7 +192,7 @@ public class VersionReplacer {
 	
 	public static void main(String[] args) {
 		//setVersionInPomsBackToOldValue();
-		final MOGLiReleaseBuilder2 releaseBuilder = new MOGLiReleaseBuilder2();
+		final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
 		VersionReplacer.doYourJob(null, "0.1.2-SNAPSHOT", releaseBuilder.getPomFiles());
 	}
 }

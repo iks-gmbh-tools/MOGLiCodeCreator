@@ -11,12 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
 import com.iksgmbh.moglicc.generator.classbased.velocity.test.VelocityClassBasedGeneratorTestParent;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
-import com.iksgmbh.moglicc.utils.MOGLiFileUtil2;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGeneratorTestParent {
@@ -32,11 +32,11 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		applicationTempDir.mkdirs();
 		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), 
 		            VelocityClassBasedGeneratorStarter.PLUGIN_PROPERTIES_FILE);
-		MOGLiFileUtil2.createNewFileWithContent(generatorPropertiesFile, "");
+		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
 	}
 	
 	@Test
-	public void findsArtefactList() throws MOGLiPluginException2 {
+	public void findsArtefactList() throws MOGLiPluginException {
 		// call functionality under test
 		final List<String> artefactList = velocityClassBasedGenerator.getArtefactList();
 
@@ -54,7 +54,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		// call functionality under test
 		try {
 			velocityClassBasedGenerator.findMainTemplate(artefactDir);
-		} catch (MOGLiPluginException2 e) {
+		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), TemplateUtil.NO_MAIN_TEMPLATE_FOUND);
 
 			// cleanup
@@ -76,7 +76,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		 String mainTemplate = null;
 		try {
 			mainTemplate = velocityClassBasedGenerator.findMainTemplate(artefactDir);
-		} catch (MOGLiPluginException2 e) {
+		} catch (MOGLiPluginException e) {
 			fail(e.getMessage());
 		}
 		
@@ -85,7 +85,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 	
 	@Test
-	public void unpacksInputDefaultData() throws MOGLiPluginException2 {
+	public void unpacksInputDefaultData() throws MOGLiPluginException {
 		// prepare test
 		FileUtil.deleteDirWithContent(applicationInputDir);
 
@@ -97,7 +97,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 	
 	@Test
-	public void savesTargetFilesInPluginOutputDir() throws MOGLiPluginException2 {
+	public void savesTargetFilesInPluginOutputDir() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
 		VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "temp", "Content", true);
@@ -147,7 +147,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 	
 	@Test
-	public void savesTargetFilesInTargetDirReadFromTemplateFile() throws MOGLiPluginException2 {
+	public void savesTargetFilesInTargetDirReadFromTemplateFile() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "temp", "Content", true);
@@ -163,7 +163,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 
 	@Test
-	public void throwsExceptionIfOutputFileNameIsMissingInTemplateFile() throws MOGLiPluginException2 {
+	public void throwsExceptionIfOutputFileNameIsMissingInTemplateFile() throws MOGLiPluginException {
 		// prepare test
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(null, "temp", "Content", false);
 		prepareResultData(resultData);
@@ -171,7 +171,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		// call functionality under test
 		try {
 			velocityClassBasedGenerator.doYourJob();
-		} catch (MOGLiPluginException2 e) {
+		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), VelocityGeneratorResultData.NO_TARGET_FILE_NAME);
 			return;
 		}
@@ -180,7 +180,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	
 
 	@Test
-	public void createsNotExistingTargetDirWithCreateNewInstructions() throws MOGLiPluginException2 {
+	public void createsNotExistingTargetDirWithCreateNewInstructions() throws MOGLiPluginException {
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		final String targetFileName = "targetFile.txt";
@@ -199,7 +199,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 
 	@Test
-	public void createsNotExistingTargetFileDirWithoutCreateNewInstruction() throws MOGLiPluginException2 {
+	public void createsNotExistingTargetFileDirWithoutCreateNewInstruction() throws MOGLiPluginException {
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		final String targetFileName = "targetFile.txt";
@@ -260,7 +260,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 
 	@Test
-	public void createsTargetFileWithRootDirDefinedInTemplateFile() throws MOGLiPluginException2 {
+	public void createsTargetFileWithRootDirDefinedInTemplateFile() throws MOGLiPluginException {
 		// prepare test
 		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
 		final String targetFileName = "targetFile.txt";
@@ -279,7 +279,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 	
 	@Test
-	public void generatesTargetFileInPackageSubDirThatAlreadyExists() throws MOGLiPluginException2 {
+	public void generatesTargetFileInPackageSubDirThatAlreadyExists() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/"
@@ -300,7 +300,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 
 	@Test
-	public void generatesTargetFileInPackageSubDirThatMustBeCreated() throws MOGLiPluginException2 {
+	public void generatesTargetFileInPackageSubDirThatMustBeCreated() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/<package>", 
@@ -319,7 +319,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 	
 	@Test
-	public void throwsExceptionIfPackageForTargetDirIsNotContainedInGeneratedContent() throws MOGLiPluginException2 {
+	public void throwsExceptionIfPackageForTargetDirIsNotContainedInGeneratedContent() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/<package>", 
@@ -329,7 +329,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		// call functionality under test
 		try {
 			velocityClassBasedGenerator.doYourJob();
-		} catch (MOGLiPluginException2 e) {
+		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), VelocityGeneratorResultData.TEXT_PACKAGE_NOT_FOUND);
 			return;
 		}
@@ -337,12 +337,12 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	}
 	
 	@Test
-	public void ignoresSubdirAsArtefactIfDefinedInPluginPropertiesFile() throws MOGLiPluginException2 {
+	public void ignoresSubdirAsArtefactIfDefinedInPluginPropertiesFile() throws MOGLiPluginException {
 		// prepare test
 		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
 		subdir.mkdirs();
 		assertFileExists(subdir);
-		MOGLiFileUtil2.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
+		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example", 
 				"package com.iksgmbh.test", true);

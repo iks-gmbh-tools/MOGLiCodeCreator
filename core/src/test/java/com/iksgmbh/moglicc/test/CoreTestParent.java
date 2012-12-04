@@ -5,17 +5,17 @@ import static org.junit.Assert.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iksgmbh.moglicc.MOGLiCodeCreator2;
-import com.iksgmbh.moglicc.MOGLiTextConstants2;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.MOGLiTextConstants;
 import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.test.starterclasses.DummyDataProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyVelocityEngineProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyStandardModelProviderStarter;
-import com.iksgmbh.moglicc.utils.MOGLiLogUtil2;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class CoreTestParent extends AbstractMOGLiTest {
@@ -32,7 +32,7 @@ public class CoreTestParent extends AbstractMOGLiTest {
 		}
 		initPluginSubdir();
 		createMogliLogFile();
-		MOGLiLogUtil2.setCoreLogfile(applicationLogfile);
+		MOGLiLogUtil.setCoreLogfile(applicationLogfile);
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class CoreTestParent extends AbstractMOGLiTest {
 	@Override
 	protected String initTestApplicationRootDir() {
 		final String applicationRootDir = PROJECT_ROOT_DIR + TEST_SUBDIR;
-		MOGLiCodeCreator2.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
 
@@ -72,23 +72,23 @@ public class CoreTestParent extends AbstractMOGLiTest {
 		final StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < pluginNames.length; i++) {
 			sb.append(pluginNames[i] + "=" 
-				+ MOGLiTextConstants2.TEXT_DEACTIVATED_PLUGIN_PROPERTY
+				+ MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_PROPERTY
 				+ FileUtil.getSystemLineSeparator());
 		}
 		try {
 			initPropertiesWith(sb.toString());
 		} catch (Exception e) {
-			throw new MOGLiCoreException2(e);
+			throw new MOGLiCoreException(e);
 		}
 	}
 
-	protected List<MOGLiPlugin2> getPluginListForTest() {
+	protected List<MOGLiPlugin> getPluginListForTest() {
 		final DummyGeneratorStarter generator = new DummyGeneratorStarter();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
 		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();
 		final DummyVelocityEngineProviderStarter engineProvider = new DummyVelocityEngineProviderStarter();
 		
-		final List<MOGLiPlugin2> plugins = new ArrayList<MOGLiPlugin2>();
+		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		plugins.add(generator);
 		plugins.add(modelProvider);
 		plugins.add(dataProvider);

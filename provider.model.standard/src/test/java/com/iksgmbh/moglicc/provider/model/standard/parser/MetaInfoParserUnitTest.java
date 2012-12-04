@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
 import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpMetaInfo;
@@ -26,7 +26,7 @@ public class MetaInfoParserUnitTest extends StandardModelProviderTestParent {
 	}
 	
 	@Test
-	public void returnsMetaInfoWithManySpacesInInputLine() throws MOGLiPluginException2 {
+	public void returnsMetaInfoWithManySpacesInInputLine() throws MOGLiPluginException {
 		// prepare test
 		final String line = MetaModelConstants.META_INFO_IDENTIFIER + "   Name  abc";
 
@@ -40,7 +40,7 @@ public class MetaInfoParserUnitTest extends StandardModelProviderTestParent {
 	}
 
 	@Test
-	public void returnsMetaInfoWithSpaces() throws MOGLiPluginException2 {
+	public void returnsMetaInfoWithSpaces() throws MOGLiPluginException {
 		// prepare test
 		final String line = MetaModelConstants.META_INFO_IDENTIFIER + "   \"N a m e\"   \"a b c\"";
 

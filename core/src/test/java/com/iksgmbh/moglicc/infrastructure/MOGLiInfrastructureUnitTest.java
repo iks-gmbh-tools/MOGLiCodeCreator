@@ -11,14 +11,14 @@ import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 import com.iksgmbh.moglicc.test.CoreTestParent;
 
-public class MOGLiInfrastructureUnitTest2 extends CoreTestParent {
+public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 	
 	@Test
 	public void returnsCorrectNumberOfPluginsOfACertainType() {
 		// prepare test
 		final InfrastructureInitData initData = createInfrastructureInitData(null, null, null);
 		initData.pluginList = getPluginListForTest();
-		final MOGLiInfrastructure2 infrastructure = new MOGLiInfrastructure2(initData);
+		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(initData);
 
 		// call functionality under test
 		final List<Generator> generatorPlugins = infrastructure.getPluginsOfType(Generator.class);

@@ -19,10 +19,10 @@ import java.util.Properties;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MetaInfoValidatorException;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 import com.iksgmbh.moglicc.provider.model.standard.exceptions.ModelParserException;
 import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpModel;
@@ -33,7 +33,7 @@ import com.iksgmbh.moglicc.provider.model.standard.parser.ModelParser;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
-public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2 {
+public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin {
 
 	public static final String PLUGIN_ID = "StandardModelProvider";
 
@@ -54,7 +54,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin2.PluginType.MODEL_PROVIDER;
+		return MOGLiPlugin.PluginType.MODEL_PROVIDER;
 	}
 
 	InfrastructureService getInfrastructure() {
@@ -62,7 +62,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 	}
 	
 	@Override
-	public void doYourJob() throws MOGLiPluginException2 {
+	public void doYourJob() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
 		buildUpModel = buildModel();
 		validateMetaInfos();
@@ -70,7 +70,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 		infrastructure.getPluginLogger().logInfo("Done!");
 	}
 
-	void validateMetaInfos() throws MOGLiPluginException2 {
+	void validateMetaInfos() throws MOGLiPluginException {
 		final List<MetaInfoValidator> metaInfoValidatorList = getAllMetaInfoValidators();
 		
 		boolean validationErrorOccurredOnModelLevel = validateModelMetaInfos(metaInfoValidatorList);
@@ -133,14 +133,14 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 		return validationErrorOccurred;
 	}
 	
-	public List<MetaInfoValidator> getAllMetaInfoValidators() throws MOGLiPluginException2 {
+	public List<MetaInfoValidator> getAllMetaInfoValidators() throws MOGLiPluginException {
 		if (metaInfoValidatorList == null) {
 			metaInfoValidatorList = collectMetaInfoValidatorsFromVendors();
 		}
 		return metaInfoValidatorList;
 	}
 
-	private List<MetaInfoValidator> collectMetaInfoValidatorsFromVendors() throws MOGLiPluginException2 {
+	private List<MetaInfoValidator> collectMetaInfoValidatorsFromVendors() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Collecting MetaInfoValidators from vendors: ");
 		final List<MetaInfoValidator> toReturn = new ArrayList<MetaInfoValidator>();
 		final List<MetaInfoValidatorVendor> vendors = 
@@ -151,7 +151,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 		}
 		
 		for (final MetaInfoValidatorVendor metaInfoValidatorVendor : vendors) {
-			final MOGLiPlugin2 vendorPlugin = (MOGLiPlugin2) metaInfoValidatorVendor;
+			final MOGLiPlugin vendorPlugin = (MOGLiPlugin) metaInfoValidatorVendor;
 			int counter = 0;
 			final List<MetaInfoValidator> metaInfoValidatorList = metaInfoValidatorVendor.getMetaInfoValidatorList();
 			for (final MetaInfoValidator metaInfoValidator : metaInfoValidatorList) {
@@ -180,14 +180,14 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 	}
 
 	@Override
-	public Model getModel() throws MOGLiPluginException2 {
+	public Model getModel() throws MOGLiPluginException {
 		if (buildUpModel == null) {
-			throw new MOGLiPluginException2(TEXT_NO_MODEL_FILE_LOADED);
+			throw new MOGLiPluginException(TEXT_NO_MODEL_FILE_LOADED);
 		}
 		return buildUpModel;
 	}
 
-	public BuildUpModel buildModel() throws MOGLiPluginException2 {
+	public BuildUpModel buildModel() throws MOGLiPluginException {
 		modelFile = getModelFile();
 		checkModelFile();
 
@@ -196,7 +196,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 		try {
 			buildUpModel = ModelParser.doYourJob(fileContentAsList);
 		} catch (ModelParserException e) {
-			throw new MOGLiPluginException2(TEXT_PARSE_ERROR_FOUND
+			throw new MOGLiPluginException(TEXT_PARSE_ERROR_FOUND
 					+ e.getParserErrors());
 		}
 
@@ -207,40 +207,40 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 		return buildUpModel;
 	}
 
-	private List<String> readModelFileContent() throws MOGLiPluginException2 {
+	private List<String> readModelFileContent() throws MOGLiPluginException {
 		final List<String> fileContentAsList;
 		try {
 			fileContentAsList = FileUtil.getFileContentAsList(modelFile);
 		} catch (IOException e) {
-			throw new MOGLiPluginException2("Could not read file: "
+			throw new MOGLiPluginException("Could not read file: "
 					+ modelFile, e);
 		}
 		return fileContentAsList;
 	}
 
-	private void checkModelFile() throws MOGLiPluginException2 {
+	private void checkModelFile() throws MOGLiPluginException {
 		if (!modelFile.exists()) {
-			throw new MOGLiPluginException2(TEXT_MODEL_NOT_EXISTS + ":\n"
+			throw new MOGLiPluginException(TEXT_MODEL_NOT_EXISTS + ":\n"
 					+ modelFile.getAbsolutePath());
 		}
 		final String content;
 		try {
 			content = FileUtil.getFileContent(modelFile);
 		} catch (IOException e) {
-			throw new MOGLiPluginException2("Could not read file: "
+			throw new MOGLiPluginException("Could not read file: "
 					+ modelFile.getAbsolutePath(), e);
 		}
 		if (content.trim().length() == 0) {
-			throw new MOGLiPluginException2("Unexpected empty file: "
+			throw new MOGLiPluginException("Unexpected empty file: "
 					+ modelFile.getAbsolutePath());
 		}
 	}
 
-	File getModelFile() throws MOGLiPluginException2 {
+	File getModelFile() throws MOGLiPluginException {
 		if (modelFile == null) {
 			final String filename = getModelFileName();
 			if (filename ==  null) {
-				throw new MOGLiPluginException2(TEXT_NO_MODELFILE_FOUND);
+				throw new MOGLiPluginException(TEXT_NO_MODELFILE_FOUND);
 			}
 			modelFile = new File(infrastructure.getPluginInputDir(), filename);
 		}
@@ -297,7 +297,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackDefaultInputData");
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
 		defaultData.addFile(FILENAME_STANDARD_MODEL_TEXTFILE);
@@ -312,7 +312,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin2
 	}
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR);
 		helpData.addFile("AttributeDescriptor.htm");

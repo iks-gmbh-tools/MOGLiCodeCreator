@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.utils.FileUtil;
 
 /**
@@ -47,13 +47,13 @@ public class BuildUpGeneratorResultData implements GeneratorResultData {
 		return properties;
 	}
 	
-	public void validate() throws MOGLiPluginException2 {
+	public void validate() throws MOGLiPluginException {
 		if (generatedContent == null) {
 			validationErrors.add(NO_CONTENT);
 		}
 		
 		if (validationErrors.size() > 0) {
-			throw new MOGLiPluginException2(buildErrorString());
+			throw new MOGLiPluginException(buildErrorString());
 		}
 		
 	}

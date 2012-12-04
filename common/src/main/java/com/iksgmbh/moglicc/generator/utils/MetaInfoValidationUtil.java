@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorParent;
@@ -30,14 +30,14 @@ public class MetaInfoValidationUtil {
 
 
 	public static List<MetaInfoValidator> getMetaInfoValidatorList(final File inputFile, 
-								final String vendorPluginId) throws MOGLiPluginException2 {
+								final String vendorPluginId) throws MOGLiPluginException {
 		final List<MetaInfoValidator> toReturn = new ArrayList<MetaInfoValidator>();
 		if (inputFile != null && inputFile.exists()) {
 			final List<String> fileContentAsList;
 			try {
 				fileContentAsList = FileUtil.getFileContentAsList(inputFile);
 			} catch (IOException e) {
-				throw new MOGLiPluginException2("Error reading file\n" + inputFile.getAbsolutePath(), e);
+				throw new MOGLiPluginException("Error reading file\n" + inputFile.getAbsolutePath(), e);
 			}
 			for (final String line : fileContentAsList) {
 				final MetaInfoValidatorParent metaInfoValidatorParent = parseLine(line);
@@ -50,7 +50,7 @@ public class MetaInfoValidationUtil {
 		return toReturn;
 	}
 
-	static MetaInfoValidatorParent parseLine(String line) throws MOGLiPluginException2 {
+	static MetaInfoValidatorParent parseLine(String line) throws MOGLiPluginException {
 		if (StringUtils.isEmpty(line)) {
 			return null; // ignore this line
 		}
@@ -62,10 +62,10 @@ public class MetaInfoValidationUtil {
 		} else if (annotationParser.isCommentLine(line)) {
 			return null; // ignore this line
 		}
-		throw new MOGLiPluginException2("Line not parsable as MetaInfoValidator: " + line);
+		throw new MOGLiPluginException("Line not parsable as MetaInfoValidator: " + line);
 	}
 
-	private static MetaInfoValidatorParent createInstance(final Annotation annotation) throws MOGLiPluginException2 {
+	private static MetaInfoValidatorParent createInstance(final Annotation annotation) throws MOGLiPluginException {
 		for (final MetaInfoValidator.ValidationType validationType : MetaInfoValidator.ValidationType.values()) {
 			if (validationType.name().toLowerCase().equals(annotation.getName().toLowerCase())) {
 				final String className = "com.iksgmbh.moglicc.provider.model.standard.metainfo." 
@@ -76,24 +76,24 @@ public class MetaInfoValidationUtil {
 					return (MetaInfoValidatorParent) Class.forName(className).
 					                                 getConstructor(constructorTypes).newInstance(initArgs);
 				} catch (Exception e) {
-					throw new MOGLiPluginException2("Error creating instance of MetaInfoValidator from <" 
+					throw new MOGLiPluginException("Error creating instance of MetaInfoValidator from <" 
 							                            + annotation + ">.", e);
 				}
 			}
 		}
 		
-		throw new MOGLiPluginException2("Unknown ValidationType <" + annotation.getName() + ">.");
+		throw new MOGLiPluginException("Unknown ValidationType <" + annotation.getName() + ">.");
 	}
 
-	private static Object[] getArgs(final Annotation annotation) throws MOGLiPluginException2 {
+	private static Object[] getArgs(final Annotation annotation) throws MOGLiPluginException {
 		if (annotation.getAdditionalInfo() == null) {
-			throw new MOGLiPluginException2("Missing information parsing " + annotation);
+			throw new MOGLiPluginException("Missing information parsing " + annotation);
 		}
 		
 		final AnnotationContentParts annotationContentParts1 = 
 			                         annotationParser.getAnnotationContentParts(annotation.getAdditionalInfo());
 		if (annotationContentParts1.getSecondPart() == null) {
-			throw new MOGLiPluginException2("MetaInfoName or MetaInfoHierarchyLevel is missing.\n"
+			throw new MOGLiPluginException("MetaInfoName or MetaInfoHierarchyLevel is missing.\n"
 					 + "Error parsing " + annotation);
 		}
 
@@ -106,14 +106,14 @@ public class MetaInfoValidationUtil {
 		return toReturn;
 	}
 
-	public static HierarchyLevel getHierarchyLevel(final String metaInfoHierarchyLevel) throws MOGLiPluginException2 {
+	public static HierarchyLevel getHierarchyLevel(final String metaInfoHierarchyLevel) throws MOGLiPluginException {
 		final HierarchyLevel[] values = HierarchyLevel.values();
 		for (final HierarchyLevel hierarchyLevel : values) {
 			if (hierarchyLevel.name().toLowerCase().equals(metaInfoHierarchyLevel.toLowerCase())) {
 				return hierarchyLevel;
 			}
 		}
-		throw new MOGLiPluginException2("Unknown MetaInfoHierarchyLevel <" + metaInfoHierarchyLevel + ">.");
+		throw new MOGLiPluginException("Unknown MetaInfoHierarchyLevel <" + metaInfoHierarchyLevel + ">.");
 	}
 
 }

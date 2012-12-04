@@ -1,8 +1,8 @@
 package com.iksgmbh.moglicc.helper;
 
-import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_DUPLICATE_PLUGINIDS;
-import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_STARTERCLASS_UNKNOWN;
-import static com.iksgmbh.moglicc.MOGLiTextConstants2.TEXT_STARTERCLASS_WRONG_TYPE;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DUPLICATE_PLUGINIDS;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_STARTERCLASS_UNKNOWN;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_STARTERCLASS_WRONG_TYPE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -17,10 +17,10 @@ import org.junit.Test;
 import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.exceptions.DuplicatePluginIdException;
 import com.iksgmbh.moglicc.helper.PluginLoader.LoadResult;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2.PluginType;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin.PluginType;
 import com.iksgmbh.moglicc.test.CoreTestParent;
-import com.iksgmbh.moglicc.utils.MOGLiLogUtil2;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 
 public class PluginLoaderUnitTest extends CoreTestParent {
 
@@ -32,7 +32,7 @@ public class PluginLoaderUnitTest extends CoreTestParent {
 	
 	@Before
 	public void setup() {
-		MOGLiLogUtil2.setCoreLogfile(null);
+		MOGLiLogUtil.setCoreLogfile(null);
 		pluginLoader = new PluginLoader();
 		super.setup();
 	}
@@ -62,7 +62,7 @@ public class PluginLoaderUnitTest extends CoreTestParent {
 	@Test
 	public void testLoadThisPlugin() {
 		final String starterClassName = "com.iksgmbh.moglicc.test.starterclasses.DummyPluginStarter";
-		final MOGLiPlugin2 loadedPlugin = pluginLoader.loadThisPlugin(starterClassName).plugin;
+		final MOGLiPlugin loadedPlugin = pluginLoader.loadThisPlugin(starterClassName).plugin;
 		
 		assertNotNull("Plugin not found!", loadedPlugin);	
 		assertStringEquals("Unexpected plugin id!", "DummyPlugin", loadedPlugin.getId());

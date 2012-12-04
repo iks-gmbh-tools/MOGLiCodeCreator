@@ -11,8 +11,8 @@ import java.util.Properties;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.core.Logger;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.DataProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
@@ -24,11 +24,11 @@ import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
  * 
  * @author Reik Oberrath
  */
-public class MOGLiInfrastructure2 implements InfrastructureService {
+public class MOGLiInfrastructure implements InfrastructureService {
 	
 	private InfrastructureInitData initData;
 
-	private HashMap<String, MOGLiPlugin2> pluginMap;
+	private HashMap<String, MOGLiPlugin> pluginMap;
 	
 	private Properties applicationProperties;
 	
@@ -52,7 +52,7 @@ public class MOGLiInfrastructure2 implements InfrastructureService {
 
 	
 	
-	public MOGLiInfrastructure2(InfrastructureInitData initData) {
+	public MOGLiInfrastructure(InfrastructureInitData initData) {
 		this.initData = initData;
 		
 		idOfCurrentlyExecutedPlugin = initData.idOfThePluginToThisInfrastructure;
@@ -68,19 +68,19 @@ public class MOGLiInfrastructure2 implements InfrastructureService {
 		applicationProperties = initData.applicationProperties;
 	}
 
-	private HashMap<String, MOGLiPlugin2> createPluginMap() {
-		final HashMap<String, MOGLiPlugin2> map = new HashMap<String, MOGLiPlugin2>();
-		for (MOGLiPlugin2 plugin : initData.pluginList) {
-			map.put(plugin.getId(), (MOGLiPlugin2)plugin);
+	private HashMap<String, MOGLiPlugin> createPluginMap() {
+		final HashMap<String, MOGLiPlugin> map = new HashMap<String, MOGLiPlugin>();
+		for (MOGLiPlugin plugin : initData.pluginList) {
+			map.put(plugin.getId(), (MOGLiPlugin)plugin);
 		}
 		return map;
 	}
 
 	@Override
 	public ModelProvider getModelProvider(String id) {
-		 MOGLiPlugin2 plugin = pluginMap.get(id);
+		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null && 
-			 MOGLiPlugin2.PluginType.MODEL_PROVIDER == plugin.getPluginType()) {
+			 MOGLiPlugin.PluginType.MODEL_PROVIDER == plugin.getPluginType()) {
 			 return (ModelProvider) plugin;
 		 }
 		 return null;
@@ -88,9 +88,9 @@ public class MOGLiInfrastructure2 implements InfrastructureService {
 
 	@Override
 	public DataProvider getDataProvider(String id) {
-		 MOGLiPlugin2 plugin = pluginMap.get(id);
+		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null && 
-			 MOGLiPlugin2.PluginType.DATA_PROVIDER == plugin.getPluginType()) {
+			 MOGLiPlugin.PluginType.DATA_PROVIDER == plugin.getPluginType()) {
 			 return (DataProvider) plugin;
 		 }
 		 return null;
@@ -98,9 +98,9 @@ public class MOGLiInfrastructure2 implements InfrastructureService {
 
 	@Override
 	public EngineProvider getEngineProvider(String id) {
-		 MOGLiPlugin2 plugin = pluginMap.get(id);
+		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null && 
-			 MOGLiPlugin2.PluginType.ENGINE_PROVIDER == plugin.getPluginType()) {
+			 MOGLiPlugin.PluginType.ENGINE_PROVIDER == plugin.getPluginType()) {
 			 return (EngineProvider) plugin;
 		 }
 		 return null;
@@ -108,9 +108,9 @@ public class MOGLiInfrastructure2 implements InfrastructureService {
 
 	@Override
 	public Generator getGenerator(String id) {
-		 MOGLiPlugin2 plugin = pluginMap.get(id);
+		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null && 
-			 MOGLiPlugin2.PluginType.GENERATOR == plugin.getPluginType()) {
+			 MOGLiPlugin.PluginType.GENERATOR == plugin.getPluginType()) {
 			 return (Generator) plugin;
 		 }
 		 return null;
@@ -190,7 +190,7 @@ public class MOGLiInfrastructure2 implements InfrastructureService {
 			try {
 				pluginLogFile.createNewFile();
 			} catch (IOException e) {
-				throw new MOGLiCoreException2("Could not create file " + pluginLogFile.getAbsolutePath(), e);
+				throw new MOGLiCoreException("Could not create file " + pluginLogFile.getAbsolutePath(), e);
 			}
 		}
 		return pluginLogFile;
@@ -199,7 +199,7 @@ public class MOGLiInfrastructure2 implements InfrastructureService {
 	@Override
 	public Logger getPluginLogger() {
 		if (pluginLogger == null) {
-			pluginLogger = new MOGLiLogger2(getPluginLogFile());
+			pluginLogger = new MOGLiLogger(getPluginLogFile());
 		}
 		return pluginLogger;
 	}
@@ -219,8 +219,8 @@ public class MOGLiInfrastructure2 implements InfrastructureService {
 	@Override
 	public <T> List<T> getPluginsOfType(final Class<T> wantedType) {
 		final List<T> toReturn = new ArrayList<T>();
-		final Collection<MOGLiPlugin2> plugins = pluginMap.values();
-		for (final MOGLiPlugin2 plugin : plugins) {
+		final Collection<MOGLiPlugin> plugins = pluginMap.values();
+		for (final MOGLiPlugin plugin : plugins) {
 			final Class<?>[] interfaces = plugin.getClass().getInterfaces();
 			for (final Class<?> type : interfaces) {
 				if (type.getName().equals(wantedType.getName())) {

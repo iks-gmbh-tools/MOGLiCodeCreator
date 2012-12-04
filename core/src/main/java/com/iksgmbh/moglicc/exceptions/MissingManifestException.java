@@ -1,12 +1,12 @@
 package com.iksgmbh.moglicc.exceptions;
 
-import com.iksgmbh.moglicc.MOGLiTextConstants2;
+import com.iksgmbh.moglicc.MOGLiTextConstants;
 
-public class MissingManifestException extends MOGLiCoreException2 {
+public class MissingManifestException extends MOGLiCoreException {
 
 	private static final long serialVersionUID = 1L;
 
     public MissingManifestException() {
-		super(MOGLiTextConstants2.TEXT_NO_MANIFEST_FOUND);
+		super(MOGLiTextConstants.TEXT_NO_MANIFEST_FOUND);
 	}
 }

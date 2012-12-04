@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.basic.DataProvider;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
@@ -21,7 +21,7 @@ public class DummyDataProviderStarter implements DataProvider, MetaInfoValidator
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin2.PluginType.DATA_PROVIDER;
+		return MOGLiPlugin.PluginType.DATA_PROVIDER;
 	}
 
 	@Override
@@ -42,12 +42,12 @@ public class DummyDataProviderStarter implements DataProvider, MetaInfoValidator
 	}
 
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		return false;
 	}
 
 	@Override
-	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException2 {
+	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
 		return null;
 	}
 
@@ -57,7 +57,7 @@ public class DummyDataProviderStarter implements DataProvider, MetaInfoValidator
 	}
 
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
 	}
 

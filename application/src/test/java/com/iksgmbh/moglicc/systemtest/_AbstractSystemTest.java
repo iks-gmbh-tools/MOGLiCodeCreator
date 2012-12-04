@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.systemtest;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants2.FILENAME_LOG_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
 import static org.junit.Assert.assertFalse;
 
 import java.io.File;
@@ -12,12 +12,12 @@ import java.util.Properties;
 import org.junit.After;
 import org.junit.Before;
 
-import com.iksgmbh.moglicc.MOGLiCodeCreator2;
-import com.iksgmbh.moglicc.MOGLiTextConstants2;
-import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder2;
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.MOGLiTextConstants;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
 import com.iksgmbh.moglicc.build.helper.VersionReplacer;
 import com.iksgmbh.moglicc.build.test.ApplicationTestParent;
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.utils.CmdUtil;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ZipUtil;
@@ -35,7 +35,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 	protected static final String TEST_SUB_DIR_NAME = "SystemTestDir";
 	protected static final String MOGLI_EXE_COMMAND = "startMOGLiCodeCreator.bat";
 
-	protected final MOGLiReleaseBuilder2 releaseBuilder = new MOGLiReleaseBuilder2();
+	protected final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
 	protected final String TEST_DIR_NAME = releaseBuilder.getReleaseDir() + "/" + TEST_SUB_DIR_NAME;
 	protected final File testDir = new File(TEST_DIR_NAME);
 	private Properties testProperties;
@@ -68,7 +68,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 		try {
 			readPropertiesFile();
 		} catch (Exception e) {
-			throw new MOGLiCoreException2("Error reading file " + FILENAME_BUILD_PROPERTIES);
+			throw new MOGLiCoreException("Error reading file " + FILENAME_BUILD_PROPERTIES);
 		}
 		cleanupWhenFinished = isTrue((String) testProperties.get("cleanupWhenFinished"));
 		buildReleaseBeforeTesting = isTrue((String) testProperties.get("buildReleaseBeforeTesting"));
@@ -85,7 +85,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 	@Override
 	protected String initTestApplicationRootDir() {
 		final String applicationRootDir = TEST_DIR_NAME;
-		MOGLiCodeCreator2.setApplicationRootDir(applicationRootDir);
+		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
 
@@ -96,7 +96,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 		try {
 			ZipUtil.unzip(releaseBuilder.getReleaseZipFile(), TEST_DIR_NAME);			
 		} catch (Exception e) {
-			throw new MOGLiCoreException2("Error zipping " + releaseBuilder.getReleaseZipFile().getAbsolutePath());
+			throw new MOGLiCoreException("Error zipping " + releaseBuilder.getReleaseZipFile().getAbsolutePath());
 		}
 	}
 
@@ -125,9 +125,9 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 		try {
 			final String fileContent = FileUtil.getFileContent(logFile);
 			final int pos1 = fileContent
-					.lastIndexOf(MOGLiTextConstants2.TEXT_PLUGINS_FOUND);
+					.lastIndexOf(MOGLiTextConstants.TEXT_PLUGINS_FOUND);
 			final int pos2 = fileContent
-					.lastIndexOf(MOGLiTextConstants2.TEXT_DONE);
+					.lastIndexOf(MOGLiTextConstants.TEXT_DONE);
 			System.out
 					.println("\n\n#######################################################################");
 			System.out.println("###########       Summary from current "

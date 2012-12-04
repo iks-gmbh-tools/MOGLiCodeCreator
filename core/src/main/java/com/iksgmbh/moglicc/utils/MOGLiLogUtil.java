@@ -3,10 +3,10 @@ package com.iksgmbh.moglicc.utils;
 import java.io.File;
 import java.io.IOException;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiCoreException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.utils.FileUtil;
 
-public class MOGLiLogUtil2 {
+public class MOGLiLogUtil {
 
 	private static File coreLogfile;
 	
@@ -25,13 +25,13 @@ public class MOGLiLogUtil2 {
 		coreLogfile = file;
 		if (coreLogfile.exists()) {
 			if (! coreLogfile.delete()) {
-				throw new MOGLiCoreException2("Error deleting " + coreLogfile.getAbsolutePath());
+				throw new MOGLiCoreException("Error deleting " + coreLogfile.getAbsolutePath());
 			}
 		}
 		try {
 			coreLogfile.createNewFile();
 		} catch (IOException e) {
-			throw new MOGLiCoreException2("Error creating " + coreLogfile.getAbsolutePath() + coreLogfile.exists(), e);
+			throw new MOGLiCoreException("Error creating " + coreLogfile.getAbsolutePath() + coreLogfile.exists(), e);
 		}
 		System.out.println("Logfile created!");	
 		return coreLogfile;
@@ -43,12 +43,12 @@ public class MOGLiLogUtil2 {
 
 	public static void logInfo(final File currentLogfile, final String message) {
 		if (currentLogfile == null) {
-			throw new MOGLiCoreException2("Method createNewLogfile not called!");
+			throw new MOGLiCoreException("Method createNewLogfile not called!");
 		}
 		try {
 			FileUtil.appendToFile(currentLogfile, message);
 		} catch (IOException e) {
-			throw new MOGLiCoreException2("Error writer to logfile " + currentLogfile.getAbsolutePath(), e);
+			throw new MOGLiCoreException("Error writer to logfile " + currentLogfile.getAbsolutePath(), e);
 		}
 		System.out.println(message);
 	}

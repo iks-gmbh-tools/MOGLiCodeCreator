@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin2;
+import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
 
@@ -35,7 +35,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin2.PluginType.ENGINE_PROVIDER;
+		return MOGLiPlugin.PluginType.ENGINE_PROVIDER;
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 	}
 	
 	@Override
-	public boolean unpackDefaultInputData() throws MOGLiPluginException2 {
+	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		return false;
 	}
 
@@ -66,17 +66,17 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 	}
 
 	@Override
-	public Object startEngine() throws MOGLiPluginException2 {
+	public Object startEngine() throws MOGLiPluginException {
 		return null;
 	}
 
 	@Override
-	public GeneratorResultData startEngineWithModel() throws MOGLiPluginException2 {
+	public GeneratorResultData startEngineWithModel() throws MOGLiPluginException {
 		return velocityInserterResultData;
 	}
 
 	@Override
-	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException2 {
+	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException {
 		final List<GeneratorResultData> toReturn = new ArrayList<GeneratorResultData>();
 		for (final GeneratorResultData resultData : velocityGeneratorResultDataList) {
 			toReturn.add(resultData); 
@@ -90,7 +90,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 	}
 	
 	@Override
-	public boolean unpackPluginHelpFiles() throws MOGLiPluginException2 {
+	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
 	}
 

@@ -5,14 +5,14 @@ import java.io.File;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityClassBasedGeneratorIntTest extends IntTestParent {
 
 	@Test
-	public void createsJavaBeanMisc() throws MOGLiPluginException2 {
+	public void createsJavaBeanMisc() throws MOGLiPluginException {
 		// prepare test
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();

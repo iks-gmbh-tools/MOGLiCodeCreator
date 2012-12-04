@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpModel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoCounter;
@@ -20,17 +20,17 @@ public class StatisticsFileCreator {
 	private InfrastructureService infrastructure;
 	private BuildUpModel model;
 	
-	public static void doYourJob(final StandardModelProviderStarter modelProvider) throws MOGLiPluginException2 {
+	public static void doYourJob(final StandardModelProviderStarter modelProvider) throws MOGLiPluginException {
 		new StatisticsFileCreator(modelProvider).createStatisticsFile();
 	}
 
-	public StatisticsFileCreator(final StandardModelProviderStarter modelProvider) throws MOGLiPluginException2 {
+	public StatisticsFileCreator(final StandardModelProviderStarter modelProvider) throws MOGLiPluginException {
 		this.modelProvider = modelProvider;
 		infrastructure = modelProvider.getInfrastructure();
 		model = (BuildUpModel) modelProvider.getModel();
 	}
 	
-	private void createStatisticsFile()	throws MOGLiPluginException2 {
+	private void createStatisticsFile()	throws MOGLiPluginException {
 		final File file = new File(infrastructure.getPluginOutputDir(), 
 				                   StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		final StringBuffer sb = new StringBuffer();
@@ -43,14 +43,14 @@ public class StatisticsFileCreator {
 		try {
 			FileUtil.createFileWithContent(file, sb.toString());
 		} catch (Exception e) {
-			throw new MOGLiPluginException2("Error creating file "
+			throw new MOGLiPluginException("Error creating file "
 					+ file.getAbsolutePath());
 		}
 		infrastructure.getPluginLogger().logInfo("Model Statistics file created.");
 		
 	}
 
-	private void appendWarningForUnusedMetaInfoValidators(StringBuffer sb) throws MOGLiPluginException2 {
+	private void appendWarningForUnusedMetaInfoValidators(StringBuffer sb) throws MOGLiPluginException {
 		final String sep = FileUtil.getSystemLineSeparator();
 		final List<MetaInfoValidator> metaInfoValidatorList = modelProvider.getAllMetaInfoValidators();
 		boolean firstTime = true;
@@ -74,7 +74,7 @@ public class StatisticsFileCreator {
 		}
 	}
 
-	private void appendWarningForUnusedMetaInfos(final StringBuffer sb) throws MOGLiPluginException2 {
+	private void appendWarningForUnusedMetaInfos(final StringBuffer sb) throws MOGLiPluginException {
 		final String sep = FileUtil.getSystemLineSeparator();
 		final List<MetaInfo> allMetaInfos = model.getAllMetaInfos();
 		final Set<String> uniqueUnusedMetaInfoMessages = new HashSet<String>();

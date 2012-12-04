@@ -10,7 +10,7 @@ import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.UNRELATE
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException2;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
 import com.iksgmbh.moglicc.provider.model.standard.exceptions.ModelParserException;
 import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpAttributeDescriptor;
@@ -85,9 +85,9 @@ public class ModelParser {
 				buildUpMetaInfo.setLevel(MetaInfo.HierarchyLevel.Model);
 				buildUpModel.addMetaInfo(buildUpMetaInfo);
 			} else {
-				throw new MOGLiPluginException2(UNRELATED_METAINFO);
+				throw new MOGLiPluginException(UNRELATED_METAINFO);
 			}
-		} catch (MOGLiPluginException2 e) {
+		} catch (MOGLiPluginException e) {
 			errorList.add(e.getMessage() + " in line " + lineCounter + "!");
 		}
 	}
@@ -96,7 +96,7 @@ public class ModelParser {
 		try {
 			buildUpAttributeDescriptor = attributeDescriptorParser.parse(line);
 			if (buildUpClassDescriptor == null) {
-				throw new MOGLiPluginException2(ATTRIBUTE_WITHOUT_CLASS);
+				throw new MOGLiPluginException(ATTRIBUTE_WITHOUT_CLASS);
 			} else {
 				if (buildUpClassDescriptor.hasAttributeDescriptorAreadyInList(buildUpAttributeDescriptor.getName())) {
 					errorList.add(TextConstants.DUPLICATE_ATTRIBUTE_NAME + " in line " + lineCounter + ".");
@@ -104,7 +104,7 @@ public class ModelParser {
 					buildUpClassDescriptor.addAttributeDescriptor(buildUpAttributeDescriptor);
 				}
 			}
-		} catch (MOGLiPluginException2 e) {
+		} catch (MOGLiPluginException e) {
 			buildUpAttributeDescriptor = null;
 			errorList.add(e.getMessage() + " in line " + lineCounter + "!");
 		}
