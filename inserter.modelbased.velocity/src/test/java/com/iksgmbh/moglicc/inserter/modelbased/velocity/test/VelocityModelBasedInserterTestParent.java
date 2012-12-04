@@ -11,12 +11,12 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityModelBasedInserterStarter;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.test.AbstractMOGLiTest2;
+import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
 import com.iksgmbh.moglicc.test.starterclasses.DummyVelocityEngineProviderStarter;
 import com.iksgmbh.utils.FileUtil;
 
-public class VelocityModelBasedInserterTestParent extends AbstractMOGLiTest2 {
+public class VelocityModelBasedInserterTestParent extends AbstractMOGLiTest {
 	
 	public static final String PROJECT_ROOT_DIR = "../inserter.modelbased.velocity/";
 	

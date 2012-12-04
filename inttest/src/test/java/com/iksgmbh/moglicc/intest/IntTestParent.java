@@ -16,10 +16,10 @@ import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityModelBasedInsert
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineProviderStarter;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
-import com.iksgmbh.moglicc.test.AbstractMOGLiTest2;
+import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 import com.iksgmbh.utils.FileUtil;
 
-public class IntTestParent extends AbstractMOGLiTest2 {
+public class IntTestParent extends AbstractMOGLiTest {
 
 	public static final String PROJECT_ROOT_DIR = "../inttest/";
 	
