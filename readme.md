@@ -1,4 +1,5 @@
 The MOGLi Code Creator
+--------------
 
 Just another code generator? – NO! – It’s THE Lightweight autogeneration tool!
 
@@ -8,13 +9,13 @@ It’s written in Java but made to generate more than only Java code.
 
 MOGLi stands for the following attributes: 
 
-M  odel based
+**M**  odel based
 
-O  pen for extension
+**O**  pen for extension
 
-G  enerator based
+**G**  enerator based
 
-Li ghtweight
+**Li**  ghtweight
 
 
 It is a small standalone Tool for a quick start into model based development!

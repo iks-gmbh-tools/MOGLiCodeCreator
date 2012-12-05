@@ -1,1 +1,1 @@
-The MOGLiCC application project provides the technical infrastructure for building Release candidates and for starting the different types of tests.
+The MOGLiCC **application** project provides the technical infrastructure for building Release candidates and for starting the different types of tests.

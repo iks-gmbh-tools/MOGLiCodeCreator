@@ -1,1 +1,1 @@
-The MOGLiCC common project contains implementations that are common for all MOGLiCC projects.
+The MOGLiCC **common** project contains implementations that are common for all MOGLiCC projects.

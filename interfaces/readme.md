@@ -1,1 +1,1 @@
-The MOGLiCC interfaces project defines the API that share all MOGLiCC plugins.
+The MOGLiCC **interfaces** project defines the API that share all MOGLiCC plugins.

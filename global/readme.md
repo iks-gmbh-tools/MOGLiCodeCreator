@@ -1,1 +1,1 @@
-The MOGLiCC global project contains sources that are completely independent from the other MOGLiCC sources, so that they could reused for other applications as they are.
+The MOGLiCC **global** project contains sources that are completely independent from the other MOGLiCC sources, so that they could reused for other applications as they are.
