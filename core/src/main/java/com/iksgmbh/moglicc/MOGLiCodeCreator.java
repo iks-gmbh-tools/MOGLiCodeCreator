@@ -45,7 +45,7 @@ public class MOGLiCodeCreator {
 	
 	// *****************************  static stuff  ************************************
 
-	public static final String VERSION = "0.1.3-SNAPSHOT";
+	public static final String VERSION = "0.1.5-SNAPSHOT";
 	
 	private static String applicationRootDir = System.getProperty("user.dir");
 
@@ -379,6 +379,8 @@ public class MOGLiCodeCreator {
 	}
 	
 }
+
+
 
 
 
