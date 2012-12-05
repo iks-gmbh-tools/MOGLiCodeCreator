@@ -18,4 +18,5 @@
 </dependency>
 
 </dependencies>
+	<description>Provides the Velocity Engine plus some TemplateUtilities to be used by generator plugins and their templates.</description>
 </project>

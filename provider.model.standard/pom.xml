@@ -32,4 +32,5 @@
 </profiles>
 
 
+	<description>Standard implementation for the MetaModel defined in the interfaces project.</description>
 </project>

@@ -2,7 +2,7 @@
 <modelVersion>4.0.0</modelVersion>
 <artifactId>generator.classbased.velocity</artifactId>
 <name>Velocity Class Based Generator</name>
-<description>Generator that uses the Velocity Engine Provider and makes only the classes accessible in the templates.  This generator creates whole artefact files and is unable to do insert tasks.</description>
+<description>Generator that uses the Velocity Engine Provider and provides the functionality to generated new source files.</description>
 
 <parent>
 <artifactId>parent.plugin</artifactId>

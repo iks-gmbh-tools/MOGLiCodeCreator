@@ -2,7 +2,7 @@
 <modelVersion>4.0.0</modelVersion>
 <artifactId>common</artifactId>
 <name>Common </name>
-<description>Contains implementations that is common for all MOGLiCC projects</description>
+<description>Contains implementations that are common for all MOGLiCC projects</description>
 
 <parent>
 <groupId>com.iksgmbh.moglicc</groupId>

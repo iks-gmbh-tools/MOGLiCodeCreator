@@ -1,0 +1,1 @@
+The MOGLiCC inttest project implements integration tests in which – in contrast to unit tests – the plugins interact. In contrast to system tests, integration tests allow debugging.

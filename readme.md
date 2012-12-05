@@ -1,9 +1,24 @@
-The AutoMoBile LightWeight-Tool
-===========
+The MOGLi Code Creator
 
-AUTOgeneration by the MOdel based BuIldEr 
+Just another code generator? – NO! – It’s THE Lightweight autogeneration tool!
 
-A small standalone Tool for your quick start into model based development!
+It’s written in Java but made to generate more than only Java code.
+
+ 
+
+MOGLi stands for the following attributes: 
+
+M  odel based
+
+O  pen for extension
+
+G  enerator based
+
+Li ghtweight
+
+
+It is a small standalone Tool for a quick start into model based development!
+
 
 
 markdown-documentation

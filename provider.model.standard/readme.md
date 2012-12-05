@@ -1,0 +1,1 @@
+The MOGLiCC provider.model.standard propject provides the standard implementation for the MetaModel defined in the interfaces project.

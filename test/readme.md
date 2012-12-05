@@ -1,0 +1,1 @@
+The MOGLiCC test propject provides support for JUnit testing, mainly the class AbstractMOGLiTest and test data files for IntTests and SystemTests.

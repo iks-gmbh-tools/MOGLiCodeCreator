@@ -2,7 +2,7 @@
 <modelVersion>4.0.0</modelVersion>
 <artifactId>inserter.modelbased.velocity</artifactId>
 <name>Velocity Model Based Inserter</name>
-<description>Generator that uses the Velocity Engine Provider and makes the whose model accessisble for the templates</description>
+<description>Generator that uses the Velocity Engine Provider and provides the functionality to insert generated code into existing files.</description>
 
 <parent>
 <groupId>com.iksgmbh.moglicc</groupId>

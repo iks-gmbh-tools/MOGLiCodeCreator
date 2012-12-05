@@ -1,0 +1,1 @@
+The MOGLiCC generator.class based.velocity propject provides the functionality to generated new source files. Class based means, that for each artefact and each class defined in the model one target file is generated. Into the target file enter data of only one single class. The plugin built from this model depends on the StandardModelProvider and the VelocityEngineProvider.
