@@ -318,7 +318,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		helpData.addFile("AttributeDescriptor.htm");
 		helpData.addFile("ClassDescriptor.htm");
 		helpData.addFile("Model.htm");
-		helpData.addFile("MetaModel.htm");
+		helpData.addFile("_MetaModel.htm");
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
 	}

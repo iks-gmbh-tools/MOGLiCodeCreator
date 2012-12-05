@@ -13,6 +13,14 @@
 for building Release candidates and
 for starting the different types of tests</description>
 
+
+	<repositories>
+	   <repository>
+	     <id>http://maven.xwiki.org</id>
+	     <url>http://maven.xwiki.org/externals</url>
+	   </repository>
+	 </repositories>
+
 <dependencies>
 
 <dependency>
@@ -78,6 +86,13 @@ for starting the different types of tests</description>
 <scope>test</scope>
 </dependency>
 
+<dependency>
+  <groupId>cpsuite</groupId>
+  <artifactId>cpsuite</artifactId>
+  <version>1.2.5</version>
+</dependency>
+  
+  
 </dependencies>
 
 </project>

@@ -145,7 +145,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	private Template createVelocityTemplate(final VelocityEngine engine) throws MOGLiPluginException {
 		final Template template;
 		try {
-        	 template = engine.getTemplate(velocityEngineData.getMainTemplateSimpleFileName());
+        	 template = engine.getTemplate(velocityEngineData.getMainTemplateSimpleFileName(), "UTF-8");
 		} catch (ResourceNotFoundException e) {
 			final String templateDirAsString = velocityEngineData.getTemplateDir().getAbsolutePath();
 			throw new MOGLiPluginException("Error finding template file:\n" 
@@ -244,7 +244,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR);
-		helpData.addFile("TemplateUtilities.htm");
+		helpData.addFile("_TemplateUtilities.htm");
 		helpData.addFile("TemplateStringUtility.htm");
 		helpData.addFile("TemplateJavaUtility.htm");
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
