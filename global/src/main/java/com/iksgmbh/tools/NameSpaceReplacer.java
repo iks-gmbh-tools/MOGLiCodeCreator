@@ -11,25 +11,25 @@ import java.util.ArrayList;
 import com.iksgmbh.utils.FileUtil;
 
 /**
- * Helfer, um den Namespace von Eclipse-Projekten in einem Workspace zu ändern, z.B.
+ * Helfer, um den Namespace von Eclipse-Projekten in einem Workspace zu Ã¤ndern, z.B.
  * von "de.creditreform.aaa.orbis.client.rcp" in "de.iks.orbis.client".
  * 
- * Dafür sind drei unterschiedliche Dinge zu tun: 
- * 1. Die Namen der Projektverzeichnisse müssen geändert werden. 
- * 2. Die Package-Struktur innerhalb des src-Verzeichnisses muss geändert werden. 
+ * DafÃ¼r sind drei unterschiedliche Dinge zu tun: 
+ * 1. Die Namen der Projektverzeichnisse mÃ¼ssen geÃ¤ndert werden. 
+ * 2. Die Package-Struktur innerhalb des src-Verzeichnisses muss geÃ¤ndert werden. 
  * 3. In allen Dateien, die in ihrem Namen oder ihren Inhalt den Namespace enthalten,
- * 	  muss dieser geändert werden.
+ * 	  muss dieser geÃ¤ndert werden.
  * 
  * Hinweise: 
- * 1. Es wird grundsätzlich immer der ganze Workspace ersetzt.
+ * 1. Es wird grundsÃ¤tzlich immer der ganze Workspace ersetzt.
  * 2. Die Bezeichnung des Namespace beginnt immer mit der obersten Ebene z.B. de oder com. 
- * 3. Die Bezeichnung des Namespace hört immer auf der "untersten Ebene" auf. 
+ * 3. Die Bezeichnung des Namespace hÃ¶rt immer auf der "untersten Ebene" auf. 
  * 4. Die unterste Ebene des Namespaces endet auf dem letzten gemeinsamen Abschnitt der Projektnamen, z.B. client oder rcp.
  * 5. In der Verzeichnis-Hierarchie gibt es auf der oben genannten "untersten Ebene" des Namespaces noch
  *    keine Dateien, sondern erst in tieferen Verzeichnis-Ebenen. 
  * 6. Existiert das Verzeichnis des Ziel-Workspaces nicht, wird es erzeugt.
  * 7. Ist das Verzeichnis des Ziel-Workspaces nicht leer, wird kann es automatisch geleert werden (siehe initTarget).
- * 8. Der Quell-Workspace wird grundsätzlich nicht verändert!
+ * 8. Der Quell-Workspace wird grundsï¿½tzlich nicht verï¿½ndert!
  * 
  * @author OberratR
  */
@@ -118,7 +118,7 @@ public class NameSpaceReplacer {
 		
 		if (isSourceDirectory(sourceDir)) {
 			System.out.println("Package-Struktur des Verzeichnisses '" + sourceDir + "' wird " +
-					           "geändert von <" + sourcePackageStructure + "> auf <" + targetPackageStructure + ">.");
+					           "geï¿½ndert von <" + sourcePackageStructure + "> auf <" + targetPackageStructure + ">.");
 		}
 		
 		final String targetPath = sourceDir.getAbsolutePath().replace(sourcePackageStructure, targetPackageStructure);

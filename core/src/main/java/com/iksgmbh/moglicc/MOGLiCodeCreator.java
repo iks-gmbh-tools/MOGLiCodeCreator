@@ -64,6 +64,7 @@ public class MOGLiCodeCreator {
 	}
 
 	public static void main(String[] args) {
+		System.setProperty("file.encoding", "UTF-8");
 		initStatics(args);
 		try {
 			final MOGLiCodeCreator mogliCodeCreator = new MOGLiCodeCreator();
@@ -218,7 +219,6 @@ public class MOGLiCodeCreator {
 	
 	private void createMogliLogFile() {
 		logDir = new File(workspaceDir, DIR_LOGS_FILES);
-		System.out.println(logDir.getAbsolutePath());
 		initDirectory(logDir, true);
 		MOGLiLogUtil.createNewLogfile(new File(logDir, FILENAME_LOG_FILE));
 		initLogFileContent();
@@ -230,6 +230,7 @@ public class MOGLiCodeCreator {
 	private static void initLogFileContent() {
 		MOGLiLogUtil.logInfo("MOGLi Code Creator " + VERSION);
 		MOGLiLogUtil.logInfo("----------------------------");
+		MOGLiLogUtil.logInfo("Encoding: " + System.getProperty("file.encoding"));
 	}
 	
 	// *****************************  explicitely tested methods  ************************************
@@ -379,20 +380,3 @@ public class MOGLiCodeCreator {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

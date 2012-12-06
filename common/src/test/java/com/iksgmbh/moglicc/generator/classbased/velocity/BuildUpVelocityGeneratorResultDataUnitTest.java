@@ -106,7 +106,6 @@ public class BuildUpVelocityGeneratorResultDataUnitTest {
 		final String targetDir = velocityGeneratorResultData.getTargetDirAsFile(null, "").getAbsolutePath();
 		
 		// verify test result
-		System.out.println(targetDir);
 		assertTrue("Unexpected targetDir", targetDir.endsWith("\\temp\\de\\test"));
 	}
 	

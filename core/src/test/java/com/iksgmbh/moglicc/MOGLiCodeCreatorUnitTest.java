@@ -69,7 +69,7 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 	}
 	
 	@Test
-	public void canCreateMogliLogFile() {
+	public void createsMogliLogFile() {
 		// prepare test
 		String applicationRootDir = MOGLiCodeCreator.getApplicationRootDir();
 		initMogliWithNotExistingLogfile();
@@ -108,8 +108,7 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 		// verify test result
 		final String expectedLogEntry = TEXT_DUPLICATE_PLUGINIDS + "DummyPlugin";
 		
-		final String expectedLogFileEnding = TEXT_APPLICATION_TERMINATED + expectedLogEntry
-		                                      + FileUtil.getSystemLineSeparator();
+		final String expectedLogFileEnding = TEXT_APPLICATION_TERMINATED + expectedLogEntry;
 		final String actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
 		assertTrue("Unexpected logfile ending!" + actualFileContent, actualFileContent.endsWith(expectedLogFileEnding));
 	}
@@ -141,7 +140,7 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 	}
 	
 	@Test
-	public void handlePluginExecutedWithError() {
+	public void handlesPluginExecutedWithError() {
 		// prepare test
 		deactivatePluginsForTest("DummyPluginStarter", "DummyPluginStarter2");
 		mogliCodeCreator = new MOGLiCodeCreator();
@@ -193,7 +192,7 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 	
 
 	@Test
-	public void createPluginsPropertiesFileIfDoesNotExist() throws IOException {
+	public void createsApplicationPropertiesFileIfDoesNotExist() throws IOException {
 		// prepare test
 		boolean delete = applicationPropertiesFile.delete();
 		assertTrue("Could not delete " + applicationPropertiesFile.getAbsolutePath(), delete);

@@ -222,7 +222,6 @@ public abstract class AbstractMOGLiTest {
 		}
 		final int length = expected.length();
 		final String suffix = text.substring(text.length()-length);
-		System.out.println(text);
 		assertEquals("Unexpected suffix!", expected, suffix);
 	}
 
@@ -233,7 +232,6 @@ public abstract class AbstractMOGLiTest {
 		}
 		final int length = expected.length();
 		final String suffix = text.substring(0, length);
-		System.out.println(text);
 		assertEquals("Unexpected prefix!", expected, suffix);
 	}
 
@@ -326,7 +324,6 @@ public abstract class AbstractMOGLiTest {
 	
 	protected File getTestFile(final String filename) {
 		final File file = new File(PROJECT_ROOT_DIR, "src/main/resources/testdata/" + filename);
-		System.out.println(file.getAbsolutePath());
 		assertFileExists(file);
 		return file;
 	}

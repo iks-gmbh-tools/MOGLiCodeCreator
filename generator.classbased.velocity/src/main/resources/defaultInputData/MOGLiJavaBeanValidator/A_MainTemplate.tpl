@@ -31,7 +31,10 @@ public class ${classDescriptor.simpleName}Validator extends JavaBeanValidator {
 '	}
 '	
 	#parse("C_Constructor.tpl")
+
 '
+
 	#parse("D_validateMethod.tpl")
+
 '
 }

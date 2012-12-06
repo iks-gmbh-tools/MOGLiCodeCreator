@@ -80,7 +80,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		targetdir.mkdirs();
 		final File outputFile = new File(targetdir, resultData.getTargetFileName());
 		try {
-			FileUtil.createFileWithContent(outputFile, resultData.getGeneratedContent());
+			FileUtil.createNewFileWithContent(outputFile, resultData.getGeneratedContent());
 		} catch (Exception e) {
 			throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath());
 		}
@@ -93,7 +93,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		final String buildOutputFileContent = buildOutputFileContent(outputFile, resultData);
 		if (buildOutputFileContent !=  null) {
 			try {
-				FileUtil.createFileWithContent(outputFile, buildOutputFileContent);
+				FileUtil.createNewFileWithContent(outputFile, buildOutputFileContent);
 			} catch (Exception e) {
 				throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
 			}

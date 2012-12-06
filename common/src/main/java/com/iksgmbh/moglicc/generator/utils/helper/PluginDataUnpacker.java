@@ -64,7 +64,7 @@ public class PluginDataUnpacker {
 	private void createFile(final File dir, final String filename, final String fileContent) throws MOGLiPluginException {
 		final File file = new File(dir, filename);
 		try {
-			FileUtil.createFileWithContent(file, fileContent);
+			FileUtil.createNewFileWithContent(file, fileContent);
 		} catch (Exception e) {
 			throw new MOGLiPluginException("Error creating file\n" + file.getAbsolutePath(), e);
 		}

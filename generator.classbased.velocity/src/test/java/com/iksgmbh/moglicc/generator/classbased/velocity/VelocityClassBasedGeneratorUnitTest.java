@@ -360,4 +360,21 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		final File outputDir = new File(infrastructure.getPluginOutputDir(), ".svn");
 		assertFileDoesNotExist(outputDir);
 	}
+	
+	@Test
+	public void writesUmlautsIntoTargetFile() throws MOGLiPluginException {
+		// prepare test
+		final List<VelocityGeneratorResultData> resultList = new ArrayList<VelocityGeneratorResultData>();
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData("Umlaute.txt", "example", 
+				                                                                        "ßäüöÄÜÖ", true);
+		resultList.add(resultData);
+		
+		// call functionality under test
+		velocityClassBasedGenerator.writeFilesIntoTemplateTargetDir(resultList);
+		
+		// verify test result
+		final File file = new File(applicationRootDir + "/example", "Umlaute.txt");
+		String actualFileContent = MOGLiFileUtil.getFileContent(file);
+		assertStringEquals("file content", "ßäüöÄÜÖ", actualFileContent);
+	}
 }

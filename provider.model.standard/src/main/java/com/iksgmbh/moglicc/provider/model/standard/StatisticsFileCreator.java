@@ -41,7 +41,7 @@ public class StatisticsFileCreator {
 		appendWarningForUnusedMetaInfoValidators(sb);
 		
 		try {
-			FileUtil.createFileWithContent(file, sb.toString());
+			FileUtil.createNewFileWithContent(file, sb.toString());
 		} catch (Exception e) {
 			throw new MOGLiPluginException("Error creating file "
 					+ file.getAbsolutePath());

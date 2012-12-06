@@ -66,7 +66,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 
 	@Override
 	public void doYourJob() throws MOGLiPluginException {
-		// engine providers have nothing to do here – see startEngine
+		// engine providers have nothing to do here (see startEngine)
 	}
 
 	@Override
@@ -160,8 +160,8 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		final String templateDirAsString = velocityEngineData.getTemplateDir().getAbsolutePath();
 		final String templateParentDirAsString = velocityEngineData.getTemplateDir().getParentFile().getAbsolutePath();
 		final Properties velocityEngineProperties = new Properties();
-        velocityEngineProperties.setProperty("output.encoding", "utf-8");
-        velocityEngineProperties.setProperty("input.encoding", "utf-8");
+        velocityEngineProperties.setProperty("output.encoding", "UTF-8");
+        velocityEngineProperties.setProperty("input.encoding", "UTF-8");
         velocityEngineProperties.setProperty(RuntimeConstants.RESOURCE_LOADER, "file");
         velocityEngineProperties.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, 
         									 templateDirAsString + ", " + templateParentDirAsString);

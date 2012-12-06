@@ -54,14 +54,6 @@ public class MOGLiFileUtil {
 		return new File(MOGLiCodeCreator.getApplicationRootDir() + "/" + filename);
 	}
 	
-	public static void createFileWithContent(final File file, final String content) {
-		try {
-			FileUtil.createFileWithContent(file, content);
-		} catch (Exception e) {
-			throw new MOGLiCoreException("Error creating file " + file.getAbsolutePath(), e);
-		}
-	}
-
 	public static void createNewFileWithContent(final File file, final String content) {
 		try {
 			FileUtil.createNewFileWithContent(file, content);

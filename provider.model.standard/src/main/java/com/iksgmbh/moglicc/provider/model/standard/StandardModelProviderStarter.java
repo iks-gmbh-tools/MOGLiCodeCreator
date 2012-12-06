@@ -207,7 +207,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		return buildUpModel;
 	}
 
-	private List<String> readModelFileContent() throws MOGLiPluginException {
+	List<String> readModelFileContent() throws MOGLiPluginException {
 		final List<String> fileContentAsList;
 		try {
 			fileContentAsList = FileUtil.getFileContentAsList(modelFile);
@@ -323,4 +323,10 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		return true;
 	}
 
+	/**
+	 * FOR TEST PURPOSE ONLY
+	 */
+	void setModelFile(final File file) {
+		modelFile = file; 
+	}
 }

@@ -63,11 +63,11 @@ class com.iksgmbh.moglicc.demo.Address
 
   attribute city
     metainfo JavaType String 
-    metainfo ExampleData Münzhausen
+    metainfo ExampleData MÃ¼nzhausen
 
   attribute Street
     metainfo JavaType String 
-    metainfo ExampleData Münststr.
+    metainfo ExampleData MÃ¼nzstr.
 
   attribute streetNumber
     metainfo JavaType int 

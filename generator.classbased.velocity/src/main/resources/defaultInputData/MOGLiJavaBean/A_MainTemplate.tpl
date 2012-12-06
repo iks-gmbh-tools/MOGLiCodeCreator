@@ -19,10 +19,13 @@ package ${classDescriptor.package};
 '	// ===============  additional Javabean methods  ===============
 '
 	#parse("H_toStringMethod.tpl")
+
 '
 	#parse("I_equalsMethod.tpl")
+
 '
 	#parse("J_hashCodeMethod.tpl")
+	
 '
 
 #if ( $classDescriptor.doesHaveMetaInfo( "implements", "java.lang.Cloneable") )

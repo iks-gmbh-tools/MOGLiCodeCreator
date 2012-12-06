@@ -123,7 +123,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
 	}
 
-	private void writeFilesIntoTemplateTargetDir(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException {
+	void writeFilesIntoTemplateTargetDir(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException {
 		for (final VelocityGeneratorResultData resultData : resultList) {
 			final File outputFile = resultData.getTargetFile(infrastructure.getApplicationRootDir().getAbsolutePath(), 
 					                                             getTestPathPrefix(true));
@@ -133,7 +133,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 			if (resultData.isTargetToBeCreatedNewly()
 				|| ! outputFile.exists()) {
 				try {
-					FileUtil.createFileWithContent(outputFile, resultData.getGeneratedContent());
+					FileUtil.createNewFileWithContent(outputFile, resultData.getGeneratedContent());
 				} catch (Exception e) {
 					throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
 				}
@@ -151,7 +151,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		for (final VelocityGeneratorResultData resultData : resultList) {
 			final File outputFile = new File(targetdir, resultData.getTargetFileName());
 			try {
-				FileUtil.createFileWithContent(outputFile, resultData.getGeneratedContent());
+				FileUtil.createNewFileWithContent(outputFile, resultData.getGeneratedContent());
 			} catch (Exception e) {
 				throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
 			}

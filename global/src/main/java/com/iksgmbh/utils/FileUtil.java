@@ -1,40 +1,46 @@
 package com.iksgmbh.utils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtil {
+	
+	public static BufferedReader getBufferedReader(final File file) throws IOException {
+		return new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+	}
+	
+	public static BufferedWriter getBufferedWriter(final File file) throws IOException {
+		return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+	}
+	
 
 	public static String getFileContent(final File file) throws IOException {
-		final BufferedReader br = new BufferedReader(new FileReader(file));
-		return getFileContent(br, file.getName());
+		return getFileContent(getBufferedReader(file), file.getName());
 	}
 	
 	public static String getFileContent(final String filename) throws IOException {
-		final BufferedReader br = new BufferedReader(new FileReader(filename));
-		return getFileContent(br, filename);
+		final File file = new File(filename);
+		return getFileContent(getBufferedReader(file), filename);
 	}
 
 
 	public static List<String> getFileContentAsList(final File file) throws IOException {
-		final BufferedReader br = new BufferedReader(new FileReader(file));
-		return getFileContentAsList(br, file.getName());
+		return getFileContentAsList(getBufferedReader(file), file.getName());
 	}
 	
 	public static String getFileContent(final InputStream inputStream,
 			                            final String filename) throws IOException {
-		final BufferedReader br = new BufferedReader(new InputStreamReader(
-				inputStream)); 
+		final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8")); 
 		return getFileContent(br, filename);
 	}
 
@@ -49,7 +55,7 @@ public class FileUtil {
 			sb.append(line);
 			sb.append(getSystemLineSeparator());
 		}
-		return sb.toString();
+		return sb.toString().trim();
 	}
 
 	private static List<String> getFileContentAsList(
@@ -70,12 +76,26 @@ public class FileUtil {
 		return content;
 	}
 
-	public static void appendToFile(final File file, final String text)
-			throws IOException {
+	public static void appendToFile(final File file, final String text) throws IOException {
+		final String oldFileContent;
+		final String newFileContent;
+		
+		if (file.exists()) {
+			oldFileContent = getFileContent(file);
+		} else {
+			oldFileContent = "";
+		}
+		
+		if (oldFileContent.length() > 0) {
+			newFileContent = oldFileContent + getSystemLineSeparator() + text;
+		} else {
+			newFileContent = text;
+		}
+		
 		Writer writer = null;
 		try {
-			writer = new FileWriter(file, true);
-			writer.write(text + getSystemLineSeparator());
+			writer = getBufferedWriter(file);
+			writer.write(newFileContent);
 		} finally {
 			if (writer != null) {
 				writer.close();
@@ -83,34 +103,37 @@ public class FileUtil {
 		}
 	}
 
-	public static void createNewFileWithContent(final File file,
-			final List<String> content) throws Exception {
-		final boolean deleted = file.delete();
-		if (!deleted)
-			throw new Exception("File not deleted: " + file.getAbsolutePath());
-		file.createNewFile();
-		appendToFile(file, transformStringListToString(content));
+	public static void createNewFileWithContent(final File file, final List<String> content) throws Exception {
+		createNewFileWithContent(file, transformStringListToString(content));
 	}
 	
 	public static void createNewFileWithContent(final File file, final String content) throws Exception {
+		createNewFile(file);
+		
+		Writer writer = null;
+		try {
+			writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			writer.write(content);
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
+	}
+
+	protected static void createNewFile(final File file) throws IOException {
 		boolean exists = file.exists();
 		if (exists) {
 			final boolean deleted = file.delete();
 			if (!deleted)
-				throw new Exception("File not deleted: " + file.getAbsolutePath());
+				throw new RuntimeException("File not deleted: " + file.getAbsolutePath());
 		}
-		createFileWithContent(file, content);
-	}
-	
-	public static void createFileWithContent(final File file, final String content) throws Exception {
-		file.delete();
 		file.createNewFile();
-		appendToFile(file, content);
 	}
 
-	public static void createFileWithContent(final File dir, final String filename, final String content) throws Exception {
+	public static void createNewFileWithContent(final File dir, final String filename, final String content) throws Exception {
 		final File file = new File(dir, filename);
-		createFileWithContent(file, content);
+		createNewFileWithContent(file, content);
 	}
 
 	public static String getSystemLineSeparator() {
@@ -189,11 +212,11 @@ public class FileUtil {
 					+ targetdir);
 		}
 
-		FileReader in = null;
-		FileWriter out = null;
+		BufferedReader in = null;
+		BufferedWriter out = null;
 		try {
-			out = new FileWriter(targetFile);
-			in = new FileReader(sourcefile);
+			out = getBufferedWriter(targetFile);
+			in = getBufferedReader(sourcefile);
 			int c;
 
 			while ((c = in.read()) != -1)

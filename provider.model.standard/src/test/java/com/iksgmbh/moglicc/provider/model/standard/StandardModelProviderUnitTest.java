@@ -25,6 +25,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.OptionalMetaInfoVali
 import com.iksgmbh.moglicc.test.StandardModelProviderTestParent;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter2;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class StandardModelProviderUnitTest extends StandardModelProviderTestParent {
@@ -100,7 +101,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		final File modelfile = new File(getProjectTestResourcesDir(), "modelFiles/simpelModelFile.txt");
 		FileUtil.copyTextFile(modelfile, infrastructure.getPluginInputDir().getAbsolutePath());
 		final File propertiesFile = new File(infrastructure.getPluginInputDir(), StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE );
-		FileUtil.createFileWithContent(propertiesFile, "modelfile=simpelModelFile.txt");
+		FileUtil.createNewFileWithContent(propertiesFile, "modelfile=simpelModelFile.txt");
 		
 		// call functionality under test
 		Model model = modelProvider.buildModel();
@@ -356,5 +357,25 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 			return;
 		}
 		fail("Expected exception not thrown!");
+	}
+	
+	@Test
+	public void readsUmlauteFromModelFile() throws MOGLiPluginException {
+		// prepare test
+		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
+                StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		testPropertiesFile.delete();
+		assertFileDoesNotExist(testPropertiesFile);
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "Umlauts.txt");
+		MOGLiFileUtil.createNewFileWithContent(testModelFile, "ßüäöÜÄÖ");
+		assertFileExists(testModelFile);
+		modelProvider.setModelFile(testModelFile);
+		
+		// call functionality under test
+		final String actualFileContent = modelProvider.readModelFileContent().get(0);
+		
+		// verify test result
+		assertStringEquals("file content", "ßüäöÜÄÖ", actualFileContent);
+
 	}
 }

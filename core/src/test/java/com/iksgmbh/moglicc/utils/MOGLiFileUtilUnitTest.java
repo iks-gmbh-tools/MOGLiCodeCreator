@@ -1,5 +1,6 @@
 package com.iksgmbh.moglicc.utils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -34,7 +35,7 @@ public class MOGLiFileUtilUnitTest extends CoreTestParent {
 		try {
 			String actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
 			assertNotNull(actualFileContent);
-			String expectedFileContent = TEST_FILE_CONTENT + FileUtil.getSystemLineSeparator();
+			String expectedFileContent = TEST_FILE_CONTENT;
 			assertTrue("Unerwarteter filecontent: <" + actualFileContent + ">", expectedFileContent.equals(actualFileContent));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,13 +48,13 @@ public class MOGLiFileUtilUnitTest extends CoreTestParent {
 		try {
 			String actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
 			assertNotNull(actualFileContent);
-			String expectedFileContent = TEST_FILE_CONTENT + FileUtil.getSystemLineSeparator();
+			String expectedFileContent = TEST_FILE_CONTENT ;
 			assertTrue("Unerwarteter filecontent: <" + actualFileContent + ">", expectedFileContent.equals(actualFileContent));
 			
 			FileUtil.appendToFile(applicationLogfile, TEST_FILE_CONTENT);
 			actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
-			expectedFileContent += expectedFileContent;
-			assertTrue("Unerwarteter filecontent: <" + actualFileContent + ">", expectedFileContent.equals(actualFileContent));			
+			expectedFileContent += FileUtil.getSystemLineSeparator() + expectedFileContent;
+			assertEquals("file content",  expectedFileContent, actualFileContent);			
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

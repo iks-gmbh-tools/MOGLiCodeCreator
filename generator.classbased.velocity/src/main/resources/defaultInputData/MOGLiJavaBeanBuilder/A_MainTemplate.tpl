@@ -31,10 +31,16 @@ public class ${classDescriptor.simpleName}Builder {
 '		}
 '		return toReturn;
 '	}
+'
+	
+	#parse("C_withMethods.tpl")
+
 '	
-'	#parse("C_withMethods.tpl")
+
+	#parse("D_cloneWithMethods.tpl")
+
 '	
-'	#parse("D_cloneWithMethods.tpl")
-'	
-'	#parse("E_cloneDataObjectMethod.tpl")
+
+	#parse("E_cloneDataObjectMethod.tpl")
+
 }

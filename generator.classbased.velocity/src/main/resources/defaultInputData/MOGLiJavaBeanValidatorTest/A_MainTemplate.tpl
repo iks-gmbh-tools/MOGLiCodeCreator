@@ -4,8 +4,7 @@
 
 package ${classDescriptor.package};
 '
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 '
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,9 @@ public class ${classDescriptor.simpleName}ValidatorUnitTest {
 '
 '	private ${classDescriptor.simpleName} testData;
 '
+
 	#parse("C_setupMethod.tpl")
+	
 '	
 '	@Test
 '	public void validatesWithoutErrorIfAllFieldsAreSetCorrectly() {
@@ -22,8 +23,13 @@ public class ${classDescriptor.simpleName}ValidatorUnitTest {
 '	}
 '	
 	#parse("D_mandatoryTestMethods.tpl")
+
 '	
+
 	#parse("E_minLengthTestMethods.tpl")
+
 '
+
 	#parse("F_maxLengthTestMethods.tpl")
+
 }

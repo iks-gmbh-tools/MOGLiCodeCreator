@@ -38,8 +38,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 		// verify test result in target directory read from template file
 		file = new File(applicationRootDir + "/example", "BeanFactory.java");
 		List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
-		System.err.println(file.getAbsolutePath());
-		assertEquals("Line number", 29, fileContentAsList.size());
+		assertEquals("Line number", 26, fileContentAsList.size());
 	}
 	
 	@Test
@@ -66,7 +65,6 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 				artefactName);	
 		assertFileDoesNotExist(artefactTargetDir);
 		
-		
 		// prepare follow up test
 		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName ${classDescriptor.simpleName}.txt" +
 				FileUtil.getSystemLineSeparator() +
@@ -80,7 +78,5 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 		
 		// verify test result
 		assertFileExists(artefactTargetDir);
-				
 	}
-
 }
