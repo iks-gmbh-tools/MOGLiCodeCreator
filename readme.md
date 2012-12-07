@@ -1,5 +1,4 @@
-﻿The MOGLi Code Creator
---------------
+﻿#The MOGLi Code Creator
 
 Just another code generator? - NO! - It's THE Lightweight autogeneration tool! 
 
@@ -40,7 +39,7 @@ revision: will change for bug fixes
 * * *
 
 
-###Markdown Documentation
+####Markdown Documentation
 
 you can find documentation around markdown here:
 - [Daring Fireball] [1]
