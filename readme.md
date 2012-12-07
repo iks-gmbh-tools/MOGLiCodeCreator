@@ -41,7 +41,7 @@ revision: will change for bug fixes
 
 
 markdown-documentation
---------------
+------
 you can find documentation around markdown here:
 - [Daring Fireball] [1]
 - [Wikipedia - markdown] [2]
