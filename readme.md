@@ -21,9 +21,7 @@ MOGLi stands for the following attributes:
 It is a small standalone Tool for a quick start into model based development!
 
 
-**
-Current version: 1.0.0
-**
+**Current version: 1.0.0**
 
 Versioning convention: <major>.<minor>.<revision>
 
