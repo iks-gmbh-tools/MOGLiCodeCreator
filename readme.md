@@ -1,4 +1,4 @@
-﻿The MOGLi Code Creator
+The MOGLi Code Creator
 --------------
 
 Just another code generator? � NO! � It�s THE Lightweight autogeneration tool!
@@ -23,11 +23,11 @@ It is a small standalone Tool for a quick start into model based development!
 
 **Current version: 1.0.0**
 
-Versioning convention: <major>.<minor>.<revision>
+Versioning convention: major.minor.revision
 
-<major> will change for framework relevanr changes 
-<minor> will change for new features
-<revision> will change for bug fixes
+major:    will change for framework relevanr changes 
+minor:    will change for new features
+revision: will change for bug fixes
 
 
 
