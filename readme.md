@@ -40,8 +40,8 @@ revision: will change for bug fixes
 * * *
 
 
-markdown-documentation
-------
+##**Markdown Documentation**
+
 you can find documentation around markdown here:
 - [Daring Fireball] [1]
 - [Wikipedia - markdown] [2]
