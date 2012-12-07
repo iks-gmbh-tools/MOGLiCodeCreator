@@ -31,7 +31,7 @@ It's written in Java but made to generate more than only Java code.
 
 Versioning convention: major.minor.revision
 
-major:    will change for framework relevanr changes 
+major:    will change for basic framework modification
 
 minor:    will change for new features
 
