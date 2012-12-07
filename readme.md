@@ -7,6 +7,8 @@ It is a small standalone Tool for a quick start into model based development!
 
 It's written in Java but made to generate more than only Java code.  
 
+* * *
+
 MOGLi stands for the following attributes: 
 
 **M**  odel based
@@ -18,14 +20,13 @@ MOGLi stands for the following attributes:
 **Li**  ghtweight  
 
 
-
 * * *
-***
-*****
-- - -
----------------------------------------
+
 
 **Current version: 1.0.0**  
+
+* * *
+
 
 Versioning convention: major.minor.revision
 
@@ -35,6 +36,8 @@ minor:    will change for new features
 
 revision: will change for bug fixes
 
+
+* * *
 
 
 markdown-documentation
