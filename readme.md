@@ -1,9 +1,9 @@
-The MOGLi Code Creator
+ï»¿The MOGLi Code Creator
 --------------
 
-Just another code generator? – NO! – It’s THE Lightweight autogeneration tool!
+Just another code generator? ï¿½ NO! ï¿½ Itï¿½s THE Lightweight autogeneration tool!
 
-It’s written in Java but made to generate more than only Java code.
+Itï¿½s written in Java but made to generate more than only Java code.
 
  
 
@@ -19,6 +19,17 @@ MOGLi stands for the following attributes:
 
 
 It is a small standalone Tool for a quick start into model based development!
+
+
+**
+Current version: 1.0.0
+**
+
+Versioning convention: <major>.<minor>.<revision>
+
+<major> will change for framework relevanr changes 
+<minor> will change for new features
+<revision> will change for bug fixes
 
 
 

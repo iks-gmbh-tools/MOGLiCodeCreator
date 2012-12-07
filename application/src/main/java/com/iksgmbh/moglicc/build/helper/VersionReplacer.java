@@ -16,8 +16,14 @@ public class VersionReplacer {
 	private static final int MAX_LINE_NUMBER_TO_SEARCH_FOR_VERSION_STRING = 12;
 	private static final String APPLICATION_START_FILE = "MOGLiCodeCreator.java";
 	private static final String PATH_TO_APPLICATION_START_FILE = "core/src/main/java/com/iksgmbh/moglicc/" + APPLICATION_START_FILE;
+	private static final String PATH_TO_MAIN_HELP_FILE = "core/src/main/resources/MOGLi Code Creator.htm";
+	private static final String PATH_TO_MAIN_README_FILE = "readme.md";
 	private static final File applicationStartFile = new File(MOGLiReleaseBuilder.WORKSPACE, PATH_TO_APPLICATION_START_FILE);
+	public static final File mainReadmeFile = new File(MOGLiReleaseBuilder.WORKSPACE, PATH_TO_MAIN_README_FILE);
+	public static final File mainHelpFile = new File(MOGLiReleaseBuilder.WORKSPACE, PATH_TO_MAIN_HELP_FILE); 
+	
 	public static final String JAVA_VERSION_IDENTIFIER = "static final String VERSION";
+	public static final String DOKU_VERSION_IDENTIFIER = "Current version: ";
 	
 	private String oldVersion;
 	private String newVersion;
@@ -37,17 +43,58 @@ public class VersionReplacer {
 				versionReplacer.overwriteVersionInPomToNewVersion(poms[i]);
 			}
 			replaceInJavaFile(applicationStartFile, null, newVersion);
+			// replaceInDokuFile(mainReadmeFile, null, newVersion); must not contain snapshot - must be handled manually using word as editor!!
+			// replaceInDokuFile(mainHelpFile, null, newVersion);  binary file - must be handled manually using word as editor!!
 		} else {
 			System.out.println("Replacing " + oldVersion + " to " + newVersion + " in all " + poms.length + " pomfiles...");
 			for (int i = 0; i < poms.length; i++) {
 				versionReplacer.replaceVersionInPom(poms[i]);
 			}
 			replaceInJavaFile(applicationStartFile, oldVersion, newVersion);
+			// replaceInDokuFile(mainReadmeFile, oldVersion, newVersion);  must not contain snapshot - must be handled manually using word as editor!!
+			// replaceInDokuFile(mainHelpFile, null, newVersion);  binary file - must be handled manually using word as editor!!
 		}
 		System.out.println("--------------------------------------------------------------");
 		System.out.println("");
 	}
 
+/* currently not in use
+	private static void replaceInDokuFile(final File file, final String oldVersion, 
+            							  final String newVersion) {
+		final List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
+		final List<String> newContent = new ArrayList<String>();
+		int matches = 0;
+		for (final String line : fileContentAsList) {
+			if (line.contains(DOKU_VERSION_IDENTIFIER)) {
+				matches++;
+				final String newLine; 
+				if (oldVersion == null) {
+					System.out.println("Overwriting current version string with " + newVersion + " in " + file.getName() + "...");
+					newLine = DOKU_VERSION_IDENTIFIER + newVersion;
+				} else {
+					System.out.println("Replacing " + oldVersion + " to " + newVersion + " in " + file.getName() + "...");
+					newLine = line.replace(oldVersion, newVersion);
+				}
+				newContent.add(newLine);
+			} else {
+				newContent.add(line);
+			}
+		}
+		
+		if (matches != 1) {
+			throw new MOGLiCoreException("\nUnexpected number of version matches:\n" 
+					+ "Expected matches of <" + DOKU_VERSION_IDENTIFIER + "> lines: 1\n" 
+					+ "Actual matches: "+ matches + "\n"
+					+ "File: " + file.getAbsolutePath());
+		}
+		
+		try {
+			FileUtil.createNewFileWithContent(file, newContent);
+		} catch (Exception e) {
+			throw new MOGLiCoreException("Error creating file\n" + file.getAbsolutePath());
+		}
+	}
+*/
 	private static void replaceInJavaFile(final File file, final String oldVersion, 
 			                                               final String newVersion) {
 		final List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
@@ -123,12 +170,12 @@ public class VersionReplacer {
 		final StringBuffer replacedFileContent = new StringBuffer();
 		int matches = 0;
 		for (int i = 0; i < fileContent.size(); i++) {
-			String line = fileContent.get(i).trim();
+			String line = fileContent.get(i);
 			if (i <= MAX_LINE_NUMBER_TO_SEARCH_FOR_VERSION_STRING) {
 				// expecting the version within the first lines of the pom file
-				if (line.startsWith("<version>")) {
+				if (line.trim().startsWith("<version>")) {
 					matches++;
-					line = "<version>" + newVersion + "</version>";
+					line = "		<version>" + newVersion + "</version>";
 				}
 			}
 			replacedFileContent.append(line);
@@ -193,6 +240,6 @@ public class VersionReplacer {
 	public static void main(String[] args) {
 		//setVersionInPomsBackToOldValue();
 		final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
-		VersionReplacer.doYourJob(null, "0.1.2-SNAPSHOT", releaseBuilder.getPomFiles());
+		VersionReplacer.doYourJob(null, "0.1.6-SNAPSHOT", releaseBuilder.getPomFiles());
 	}
 }

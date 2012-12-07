@@ -34,6 +34,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 
 	public static final String ARTEFACT_COMMON = "commonSubtemplates";
 	public static final String ARTEFACT_JAVABEAN = "MOGLiJavaBean";
+	public static final String ARTEFACT_JAVABEAN_TEST = "MOGLiJavaBeanTest";
 	public static final String ARTEFACT_JAVABEAN_BUILDER = "MOGLiJavaBeanBuilder";
 	public static final String ARTEFACT_JAVABEAN_VALIDATOR = "MOGLiJavaBeanValidator";
 	public static final String ARTEFACT_JAVABEAN_VALIDATOR_TEST = "MOGLiJavaBeanValidatorTest";
@@ -45,6 +46,10 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 			"I3_equalsStandardTypes.tpl", "J_hashCodeMethod.tpl", "J2_hashCodePrimitiveTypes.tpl", 
 			"K_cloneMethod.tpl", "K1_cloneArrayType.tpl", "K2_cloneCollectionType.tpl", 
 			"K3_cloneStandardType.tpl"};
+
+	final static String[] javabeanTestTemplates = {"A_MainTemplate.tpl", "C_setupMethod.tpl", 
+                                                   "D_testEqualsMethods.tpl", "E_testHashcodeMethods.tpl",
+                                                   "modifyValueOfPrimitiveType.tpl"};
 
 	final static String[] javabeanBuilderTemplates = {"A_MainTemplate.tpl", "C_withMethods.tpl", 
 		                                              "D_cloneWithMethods.tpl", "E_cloneDataObjectMethod.tpl"};
@@ -194,6 +199,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
 		defaultData.addDirectory(ARTEFACT_COMMON, javabeanCommonSubtempates);
 		defaultData.addDirectory(ARTEFACT_JAVABEAN, javabeanTemplates);
+		defaultData.addDirectory(ARTEFACT_JAVABEAN_TEST, javabeanTestTemplates);
 		defaultData.addDirectory(ARTEFACT_JAVABEAN_BUILDER, javabeanBuilderTemplates);
 		defaultData.addDirectory(ARTEFACT_JAVABEAN_VALIDATOR, javabeanValidatorTemplates);
 		defaultData.addDirectory(ARTEFACT_JAVABEAN_VALIDATOR_TEST, javabeanValidatorTestTemplates);

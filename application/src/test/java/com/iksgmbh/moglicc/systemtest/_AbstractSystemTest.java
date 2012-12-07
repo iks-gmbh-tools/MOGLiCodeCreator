@@ -130,8 +130,8 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 					.lastIndexOf(MOGLiTextConstants.TEXT_DONE);
 			System.out
 					.println("\n\n#######################################################################");
-			System.out.println("###########       Summary from current "
-					+ FILENAME_LOG_FILE + "       ###########");
+			System.out.println("#############       Summary from current "
+					+ FILENAME_LOG_FILE + "       #############");
 			System.out
 					.println("#######################################################################\n");
 			System.out.println(fileContent.substring(pos1, pos2));
