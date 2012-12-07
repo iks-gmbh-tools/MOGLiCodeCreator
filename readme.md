@@ -3,9 +3,7 @@
 
 Just another code generator? - NO! - It's THE Lightweight autogeneration tool!
 
-It's written in Java but made to generate more than only Java code.
-
- 
+It's written in Java but made to generate more than only Java code.  
 
 MOGLi stands for the following attributes: 
 
@@ -15,14 +13,13 @@ MOGLi stands for the following attributes:
 
 **G**  enerator based
 
-**Li**  ghtweight
+**Li**  ghtweight  
 
 
 It is a small standalone Tool for a quick start into model based development!
 
 
-**Current version: 1.0.0**
-
+**Current version: 1.0.0**  
 
 Versioning convention: major.minor.revision
 
