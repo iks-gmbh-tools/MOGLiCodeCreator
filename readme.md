@@ -1,4 +1,4 @@
-﻿#The MOGLi Code Creator
+﻿#The MOGLi Code Creator   
 
 Just another code generator? - NO! - It's THE Lightweight autogeneration tool! 
 
@@ -8,7 +8,7 @@ It's written in Java but made to generate more than only Java code.
 
 * * *
 
-MOGLi stands for the following attributes: 
+**MOGLi** stands for the following attributes: 
 
 **M**  odel based
 
