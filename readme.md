@@ -26,6 +26,8 @@ It's written in Java but made to generate more than only Java code.
 
 **Current version: 1.0.0**  
 
+**Licence: All Rights Reserved**
+
 * * *
 
 
