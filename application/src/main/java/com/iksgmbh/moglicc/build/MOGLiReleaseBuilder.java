@@ -26,6 +26,7 @@ public class MOGLiReleaseBuilder {
 	public static final String FILENAME_STARTBAT = "startMOGLiCodeCreator.bat";
 	public static final String FILENAME_README = "readme.htm";
 	public static final String RELEASE_DATA_SOURCE_SUBDIR = "release";
+	public static final String RELEASE_ARCHIV_DIR = "releasedBuilds";
 	
 	public static final String PROPERTY_CURRENT_VERSION = "CurrentVersion";
 	public static final String PROPERTY_RELEASE_VERSION = "ReleaseVersion";
@@ -115,6 +116,7 @@ public class MOGLiReleaseBuilder {
 		if (MavenExecutor.EXECUTION_OK.equals(result)) {
 			ReleaseFileCollector.doYourJob(createFileCollectionData());
 			buildReleaseZipFile();
+			copyReleaseToArchive();
 		} else {
 			System.out.println(result);
 			System.out.println("###########################################");
@@ -124,6 +126,17 @@ public class MOGLiReleaseBuilder {
 		VersionReplacer.doYourJob(getVersion(VERSION_TYPE.Release), 
                                      getVersion(VERSION_TYPE.Next), pomFiles);		
 		return toReturn;
+	}
+
+	protected void copyReleaseToArchive() {
+		final File oldFile = new File(RELEASE_ARCHIV_DIR, getReleaseZipFile().getName());
+		if (oldFile.exists()) {
+			boolean ok = oldFile.delete();
+			if (!  ok) {
+				throw new RuntimeException("Cannot delete old file: " + oldFile.getAbsolutePath());
+			}
+		}
+		FileUtil.copyBinaryFile(getReleaseZipFile(), oldFile);
 	}
 
 	void buildReleaseZipFile() {
