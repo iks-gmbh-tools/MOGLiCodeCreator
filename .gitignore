@@ -1,2 +1,4 @@
 */target/*
 application/log/*
+application/temp/*
+application/workspaces/*
