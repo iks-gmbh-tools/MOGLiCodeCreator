@@ -15,16 +15,16 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <o:DocumentProperties>
   <o:Author>Reik</o:Author>
   <o:LastAuthor>Oberrath, Reik</o:LastAuthor>
-  <o:Revision>10</o:Revision>
+  <o:Revision>12</o:Revision>
   <o:Created>2012-12-05T10:57:00Z</o:Created>
-  <o:LastSaved>2012-12-07T12:45:00Z</o:LastSaved>
-  <o:Pages>3</o:Pages>
-  <o:Words>3153</o:Words>
-  <o:Characters>19866</o:Characters>
+  <o:LastSaved>2012-12-10T13:35:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>3163</o:Words>
+  <o:Characters>19934</o:Characters>
   <o:Company>WIR</o:Company>
-  <o:Lines>165</o:Lines>
-  <o:Paragraphs>45</o:Paragraphs>
-  <o:CharactersWithSpaces>22974</o:CharactersWithSpaces>
+  <o:Lines>166</o:Lines>
+  <o:Paragraphs>46</o:Paragraphs>
+  <o:CharactersWithSpaces>23051</o:CharactersWithSpaces>
   <o:Version>14.00</o:Version>
  </o:DocumentProperties>
  <o:OfficeDocumentSettings>
@@ -68,10 +68,6 @@ href="MOGLi%20Code%20Creator-Dateien/colorschememapping.xml">
    <w:Word11KerningPairs/>
    <w:CachedColBalance/>
   </w:Compatibility>
-  <w:DocumentVariables>
-   <w:dgnword-docGUID>{67406BC9-833C-442B-85F8-437CA8364C3B}</w:dgnword-docGUID>
-   <w:dgnword-eventsink>68018688</w:dgnword-eventsink>
-  </w:DocumentVariables>
   <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
   <m:mathPr>
    <m:mathFont m:val="Cambria Math"/>
@@ -735,6 +731,9 @@ EN-GB'>Just another code generator?</span></span><span lang=EN-GB
 style='mso-ansi-language:EN-GB'> – NO! – It’s THE Lightweight <span
 class=SpellE>autogeneration</span> tool!<o:p></o:p></span></p>
 
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>It is a
+small standalone Tool for a quick start into model based development!<o:p></o:p></span></p>
+
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>It’s
 written in Java but made to generate more than only Java code.<o:p></o:p></span></p>
 
@@ -1180,9 +1179,9 @@ Validation Feature<o:p></o:p></span></b></span></p>
 advantage of the <span class=SpellE>MOGLiCC</span> Standard Model is its <span
 class=SpellE>simpleness</span>, its disadvantage the large number of <span
 class=SpellE>MetaInfo</span> elements and the danger to <span class=SpellE>loose</span>
-the overview which <span class=SpellE>MetaInfo</span> element is really used. This
-is one reason for the <span class=SpellE>MetaInfo</span> Validation Feature. A
-second reason is the importance specific <span class=SpellE>MetaInfo</span>
+the overview which <span class=SpellE>MetaInfo</span> element is really used.
+This is one reason for the <span class=SpellE>MetaInfo</span> Validation
+Feature. A second reason is the importance specific <span class=SpellE>MetaInfo</span>
 elements can have, for instance, without a <span class=SpellE>MetaInfo</span>
 element “<span class=SpellE>JavaType</span>” it would be not possible to build
 a JavaBean artefact with a reasonable content. It would be good to assure that
@@ -1220,15 +1219,14 @@ vs. <span class=SpellE>VelocityModelBasedInserter</span><o:p></o:p></span></b></
 
 <span style='mso-bookmark:c4_4'></span>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>There are
-three differences between these two generators. First, only the inserter can
-insert into existing files, whereas the generator can only create new files.
-Second, the artefact attribute “<span class=SpellE>TargetDir</span>” is
-mandatory for the inserter but not so for the generator. Third, “class based”
-means, that for each class defined in the model file an artefact output file,
-e.g. a JavaBean, is created. “Model based” means, that for the whole model in
-only one existing file an insertion is made (or only one artefact output file
-is created). <o:p></o:p></span></p>
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>There are three
+differences between these two generators. First, only the inserter can insert
+into existing files, whereas the generator can only create new files. Second,
+the artefact attribute “<span class=SpellE>TargetDir</span>” is mandatory for
+the inserter but not so for the generator. Third, “class based” means, that for
+each class defined in the model file an artefact output file, e.g. a JavaBean,
+is created. “Model based” means, that for the whole model in only one existing
+file an insertion is made (or only one artefact output file is created). <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1259,8 +1257,8 @@ these JavaBean Group artefacts need to be created for each class within the
 model, the templates are default input files of the <span class=SpellE>VelocityClassBasedGenerator</span>
 plugin. If you do not like to define your own model, you can use the default
 model file “DemoModel.txt” which describes a few arbitrary objects just for
-illustration purpose. After starting the <span class=SpellE>MOGLiCC</span> application
-you find the generated artefacts in &lt;<span class=SpellE>workspaceDir</span>&gt;/output/
+illustration purpose. After starting the <span class=SpellE>MOGLiCC</span>
+application you find the generated artefacts in &lt;<span class=SpellE>workspaceDir</span>&gt;/output/
 <span class=SpellE>VelocityClassBasedGenerator</span>. Create a test project
 and move the generated java files into it. Then, you are able to execute the <span
 class=SpellE>JUnit</span> test cases.<o:p></o:p></span></p>
@@ -1327,8 +1325,8 @@ model provider is always executed before the generators.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The four
-other business logic components are the four plugins <span class=SpellE>StandardModelProvider</span>,
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The four other
+business logic components are the four plugins <span class=SpellE>StandardModelProvider</span>,
 <span class=SpellE>VelocityEngineProvider</span>, <span class=SpellE>VelocityClassBasedGenerator</span>
 and <span class=SpellE>VelocityModelBasedInserter</span>. Before executing
 these plugins, the core prepares each plugin for execution and sets an infrastructure
@@ -1400,8 +1398,8 @@ implemented?<o:p></o:p></span></b></span></p>
 of the <span class=SpellE>moglicc</span> source code followed the principles of
 the clean code developer (<a href="http://www.clean-code-developer.de/">http://www.clean-code-developer.de</a>).
 One rule of the clean code developers is “Test first”. To apply this rule, the
-source code author also followed the Test driven method of “Growing Object-Oriented
-Software, Guided by Tests” by Freeman &amp; Pryce. Thus, the <span
+source code author also followed the Test driven method of “Growing
+Object-Oriented Software, Guided by Tests” by Freeman &amp; Pryce. Thus, the <span
 class=SpellE>MOGLiCC</span> functionality of version 1.0.0 is regularly and
 automatically tested by 229 unit tests, 12 integration tests and 21 system
 tests. <o:p></o:p></span></p>
@@ -1433,9 +1431,9 @@ lang=EN-GB style='mso-ansi-language:EN-GB'>The benefit increases with the
 amount of “parallel functionality”. If a specific design concept is used again
 and again, parallel functionality exists, for instance, a number of modules or
 components with a similar internal structure to be embedded in a <span
-class=SpellE>simelar</span> environment. The higher the number of components (repetitions
-of the parallel functionality) and the higher the complexity of the parallel
-functionality, the higher is the benefit of <span class=SpellE>autogeneration</span>.
+class=SpellE>simelar</span> environment. The higher the number of components
+(repetitions of the parallel functionality) and the higher the complexity of
+the parallel functionality, the higher is the benefit of <span class=SpellE>autogeneration</span>.
 Is this complexity low (let’s say, only a few lines in one file are needed to
 be generated) the number of repetitions must be very high to benefit from <span
 class=SpellE>autogeneration</span>. Is the complexity high (many lines in many
@@ -1490,9 +1488,9 @@ lang=EN-GB style='mso-ansi-language:EN-GB'>Documentation of “How to” knowled
 
 <p class=MsoNormal style='margin-left:42.55pt;text-indent:-21.25pt;tab-stops:
 42.55pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'><span
-style='mso-tab-count:1'>       </span>Have you ever heard a statement like
-“Source code is the best documentation”. This may be true for clean code in its
-best appearance. However, source code is frequently the only documentation. Now
+style='mso-tab-count:1'>       </span>Have you ever heard a statement like “Source
+code is the best documentation”. This may be true for clean code in its best
+appearance. However, source code is frequently the only documentation. Now
 imagine a team of developers which has designed and implemented a complex
 system. The team members change and after a while the knowledge how to set up a
 new module in the system dies away. <span class=GramE>Familiar situation?</span>
@@ -1517,9 +1515,9 @@ EN-GB'>9. Road Map<o:p></o:p></span></b></a></p>
 <span style='mso-bookmark:c9'></span>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>What’s
-next? There is one limitation known: The encoding of target files (UTF-8) cannot
-be changed. For flexibility reasons, a template attribute will be introduced to
-have this ready for manipulation.<o:p></o:p></span></p>
+next? There is one limitation known: The encoding of target files (UTF-8)
+cannot be changed. For flexibility reasons, a template attribute will be
+introduced to have this ready for manipulation.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Furthermore,
 following extensions are planned:<o:p></o:p></span></p>
