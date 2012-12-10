@@ -24,6 +24,7 @@ public class MOGLiReleaseBuilder {
 	
 	public static final String FILENAME_BUILD_PROPERTIES = "build.properties";
 	public static final String FILENAME_STARTBAT = "startMOGLiCodeCreator.bat";
+	public static final String FILENAME_README = "readme.htm";
 	public static final String RELEASE_DATA_SOURCE_SUBDIR = "release";
 	
 	public static final String PROPERTY_CURRENT_VERSION = "CurrentVersion";
@@ -44,7 +45,7 @@ public class MOGLiReleaseBuilder {
 	private static final String ARTEFACT_GROUP_ID = "com.iksgmbh.moglicc";
 	
 	public static final List<String> FILES_TO_INSTALL_IN_ROOT = ImmutableUtil.getImmutableListOf(
-			                          FILENAME_STARTBAT);  
+			                          FILENAME_STARTBAT, FILENAME_README);  
 	public static final List<String> CORE_MODULES = ImmutableUtil.getImmutableListOf(
 			                          "global", "common", "core", "interfaces");  // basic mandatory modules for release 
 	public static final List<String> PLUGIN_MODULES = ImmutableUtil.getImmutableListOf(
