@@ -8,6 +8,8 @@ It is a small standalone Tool for a quick start into model based development!
 
 It's written in Java but made to generate more than only Java code.  
 
+You find the lastest release build under application/releasedBuilds.
+
 * * *
 
 **MOGLi** stands for the following attributes: 
