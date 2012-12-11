@@ -4,4 +4,5 @@ application/temp/*
 application/workspaces/*
 core/workspaces/*
 inserter.modelbased.velocity/temp/*
+core/workspaces/demo/log/_Mogli.log
 
