@@ -8,6 +8,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
 import com.iksgmbh.moglicc.build.helper.MavenExecutor.MavenData;
 import com.iksgmbh.moglicc.build.test.ApplicationTestParent;
 
@@ -18,8 +19,8 @@ public class MavenExecutorBuildTest extends ApplicationTestParent {
 	@Before
 	public void setup() {
 		super.setup();
-		MavenData mavenData = new MavenData("compile", getMavenRootDir(), 
-				new File("D:/Reik/dev/git/mogli/global"));
+		MavenData mavenData = new MavenData("compile", (new MOGLiReleaseBuilder()).getMavenRootDir(), 
+				new File(PROJECT_ROOT_DIR + "../global"));
 		mavenExecutor = new MavenExecutor(mavenData);
 	}
 	

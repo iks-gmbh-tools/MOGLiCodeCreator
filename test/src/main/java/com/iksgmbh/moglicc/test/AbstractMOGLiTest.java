@@ -31,7 +31,7 @@ public abstract class AbstractMOGLiTest {
 	// *****************************  Constants  ************************************
 	
 	private static final String PROJECT_ROOT_DIR = "../test/";
-	private static final String MAVEN_INSTALL_DIR = "D:/Reik/dev/Maven/apache-maven-2.2.1";
+	//private static final String MAVEN_INSTALL_DIR = "D:/Reik/dev/Maven/apache-maven-2.2.1";
 	
 	protected static final String TARGET_DIR = "target/";
 	protected static final String TEST_RESOURCES_DIR = "src/test/resources/";
@@ -160,10 +160,6 @@ public abstract class AbstractMOGLiTest {
 		infrastructureInitData.pluginList = pluginList;
 		infrastructureInitData.idOfThePluginToThisInfrastructure = pluginId;
 		return infrastructureInitData;
-	}
-	
-	public String getMavenRootDir() {
-		return MAVEN_INSTALL_DIR;
 	}
 	
 	public void assertStringEquals(String message, String expected, String actual) {
