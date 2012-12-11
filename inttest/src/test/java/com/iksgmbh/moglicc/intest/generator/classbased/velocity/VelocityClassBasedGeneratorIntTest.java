@@ -3,8 +3,6 @@ package com.iksgmbh.moglicc.intest.generator.classbased.velocity;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
@@ -15,34 +13,11 @@ import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityClassBasedGeneratorIntTest extends IntTestParent {
-
-	private File foreignResourceFileWithSameName = new File(PROJECT_ROOT_DIR +  "../inserter.modelbased.velocity/target/classes/defaultInputData/generator.properties");
-	private File tmpFile = new File(PROJECT_ROOT_DIR +  "../inserter.modelbased.velocity/target/classes/defaultInputData/generator.properties.tmp");
-
-	@Before
-	public void setup() {
-		// There are two files with name 'generator.properties'. 
-		// When unpacking them by FileUtil.readTextResourceContentFromClassPath 
-		// the first match on the classloader's classpath is returned.
-		// In the test environment this might be the wrong file.
-		// To be sure the right file is unpacked, the wrong one is deleted.
-		FileUtil.copyTextFile(foreignResourceFileWithSameName, tmpFile);
-		foreignResourceFileWithSameName.delete();
-		super.setup();
-	}
-	
-	@After
-	public void tearDown() {
-		// restore deleted file for following tests
-		FileUtil.copyTextFile(tmpFile, foreignResourceFileWithSameName);
-		tmpFile.delete();
-	}
 		
 	@Test
 	public void createsJavaBeanMisc() throws MOGLiPluginException {
 		// prepare test
 		standardModelProviderStarter.doYourJob();
-//		velocityEngineProviderStarter.doYourJob();
 
 		// call functionality under test
 		velocityClassBasedGeneratorStarter.doYourJob();
