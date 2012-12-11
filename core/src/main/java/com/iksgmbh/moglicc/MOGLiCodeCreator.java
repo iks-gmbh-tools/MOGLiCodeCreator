@@ -168,7 +168,8 @@ public class MOGLiCodeCreator {
 		tempDir = new File(workspaceDir, DIR_TEMP_FILES);
 		initDirectory(tempDir, false); // will be created when needed
 		
-		inputDir = new File(workspaceDir, DIR_INPUT_FILES);		
+		inputDir = new File(workspaceDir, DIR_INPUT_FILES);
+		inputDir.mkdirs();
 	}
 
 	private void initApplicationDirectories() {
