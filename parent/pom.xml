@@ -18,6 +18,7 @@
 		<module>../interfaces</module>
 		<module>../core</module>
 		<module>../test</module>
+		<module>../application</module>
 	</modules>
 	
 	<dependencies>
