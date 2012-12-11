@@ -80,14 +80,14 @@
 		
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
-			<artifactId>inserter.modelbased.velocity</artifactId>
+			<artifactId>generator.classbased.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
-			<artifactId>generator.classbased.velocity</artifactId>
+			<artifactId>inserter.modelbased.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
