@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector;
@@ -32,8 +33,8 @@ public class MOGLiReleaseBuilder {
 	public static final String PROPERTY_RELEASE_VERSION = "ReleaseVersion";
 	public static final String PROPERTY_NEXT_VERSION = "NextVersion";
 	public static final String PROPERTY_RELEASE_DIR= "ReleaseDir";
-	public static final String PROPERTY_MAVEN_INSTALL_DIR = "MavenRootDir";
-	public static final String PROPERTY_MAVEN_REPOSITORY_DIR = "MavenRepositoryDir";
+	public static final String PROPERTY_MAVEN_HOME = "MAVEN_HOME";
+	public static final String PROPERTY_MAVEN_REPO = "MAVEN_REPO";
 
 	public static final String USER_DIR = System.getProperty("user.dir");
 	public static final File WORKSPACE = new File(USER_DIR).getParentFile();
@@ -248,20 +249,53 @@ public class MOGLiReleaseBuilder {
 	}
 
 	String getMavenRootDir() {
-		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_INSTALL_DIR);
-		if (mavenPath == null) {
-			throw new MOGLiCoreException("Unknown Maven install dir.");
+		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_HOME);
+		if (mavenPath != null) {
+			final File file = new File(mavenPath);
+			if (file.exists()) {
+				return mavenPath;
+			}
 		}
-		return mavenPath;
+
+		mavenPath = System.getenv().get(PROPERTY_MAVEN_HOME);
+		if (mavenPath != null) {
+			final File file = new File(mavenPath);
+			if (file.exists()) {
+				return mavenPath;
+			}
+		}
+		throw new MOGLiCoreException("Property '" + PROPERTY_MAVEN_HOME + 
+				                     "' does not point to a existing directory. " +
+				                     "Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES + 
+				                     "' or as system property.");
 	}
 	
 
 	String getMavenRepositoryDir() {
-		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_REPOSITORY_DIR);
-		if (mavenPath == null) {
-			throw new MOGLiCoreException("Unknown Maven rrepository dir.");
+		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_REPO);
+		if (mavenPath != null) {
+			final File file = new File(mavenPath);
+			if (file.exists()) {
+				return  mavenPath.replace(MAVEN_INSTALL_DIR_PREFIX, getMavenRootDir());
+			}
 		}
-		return mavenPath.replace(MAVEN_INSTALL_DIR_PREFIX, getMavenRootDir());
+		Map<String, String> getenv = System.getenv();
+		for (final String key : getenv.keySet()) {
+			System.out.println(key + " " + getenv.get(key));
+		}
+
+		mavenPath = System.getenv().get(PROPERTY_MAVEN_REPO);
+		if (mavenPath != null) {
+			mavenPath = mavenPath.replace(MAVEN_INSTALL_DIR_PREFIX, getMavenRootDir());
+			final File file = new File(mavenPath);
+			if (file.exists()) {
+				return mavenPath;
+			}
+		}
+		throw new MOGLiCoreException("Property '" + PROPERTY_MAVEN_REPO + 
+				                     "' does not point to a existing directory. " +
+				                     "Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES + 
+				                     "' or as system property.");
 	}
 	
 	public String getVersion(VERSION_TYPE type) {
