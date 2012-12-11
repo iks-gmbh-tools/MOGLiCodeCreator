@@ -248,7 +248,7 @@ public class MOGLiReleaseBuilder {
 		return new File (WORKSPACE.getAbsolutePath() + "/" + module);
 	}
 
-	String getMavenRootDir() {
+	public String getMavenRootDir() {
 		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_HOME);
 		if (mavenPath != null) {
 			final File file = new File(mavenPath);

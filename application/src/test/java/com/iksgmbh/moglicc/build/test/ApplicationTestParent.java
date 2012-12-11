@@ -5,7 +5,7 @@ import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 
 public class ApplicationTestParent extends AbstractMOGLiTest {
 
-	private static final String PROJECT_ROOT_DIR = "../application/";
+	protected static final String PROJECT_ROOT_DIR = "../application/";
 
 	@Override
 	public void setup() {
