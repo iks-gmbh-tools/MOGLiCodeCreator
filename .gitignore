@@ -2,3 +2,6 @@
 application/log/*
 application/temp/*
 application/workspaces/*
+core/workspaces/*
+inserter.modelbased.velocity/temp/*
+
