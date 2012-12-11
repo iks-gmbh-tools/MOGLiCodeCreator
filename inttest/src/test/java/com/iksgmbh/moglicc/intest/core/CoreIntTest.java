@@ -1,22 +1,15 @@
 package com.iksgmbh.moglicc.intest.core;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_PLUGIN;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
 
 import java.io.File;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiCodeCreator;
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
-import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
-import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector;
-import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.intest.IntTestParent;
-import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class CoreIntTest extends IntTestParent {
@@ -27,9 +20,11 @@ public class CoreIntTest extends IntTestParent {
 	@Before
 	public void setup() {
 		super.setup();
-		initTestRootDir();
 	}
-	
+
+/*  
+   currently not needed:
+   	
 	private void initTestRootDir() {
 		FileUtil.deleteDirWithContent(applicationRootDir);
 		
@@ -72,7 +67,7 @@ public class CoreIntTest extends IntTestParent {
 		fileCollectionData.thirdPartyJars = mogliReleaseBuilder.getThirdPartyJars();
 		return fileCollectionData;
 	}
-
+*/
 
 	@Test
 	public void createsEmergencyLogFileIfDefinedWorkspaceDirCannotBeCreated() {
