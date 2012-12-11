@@ -6,11 +6,10 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.data.Annotation;
 import com.iksgmbh.helper.AnnotationParser;
-import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.utils.StringUtil;
 
 public class MergeResultAnalyser {
@@ -65,7 +64,13 @@ public class MergeResultAnalyser {
 	 * @return filecontent without annotation lines
 	 */
 	protected String parseMergeResult(final String originalFileContent) {
-		final String[] oldLines = originalFileContent.split(FileUtil.getSystemLineSeparator());
+		
+//		The following implementation does not work on all machines. 
+//		In case of error FileUtil.getSystemLineSeparator() is \r\n, but originalFileContent uses \n.
+//		Reason unkown. Probably a hidden line.separator property used by velocity.
+//		final String[] oldLines = originalFileContent.split(FileUtil.getSystemLineSeparator());
+		final String[] oldLines = originalFileContent.replaceAll("\r", "").split("\n");
+		
 		final List<String> newLines = new ArrayList<String>();
 		for (int i = 0; i < oldLines.length; i++) {
 			final String line = oldLines[i].trim();
