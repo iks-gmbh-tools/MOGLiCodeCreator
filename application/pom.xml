@@ -26,13 +26,6 @@
 	    </plugins>
 	</build>
   	
-	<repositories>
-		<repository>
-			<id>http://maven.xwiki.org</id>
-			<url>http://maven.xwiki.org/externals</url>
-		</repository>
-	</repositories>
-	
 	<dependencies>
 	
 		<dependency>
