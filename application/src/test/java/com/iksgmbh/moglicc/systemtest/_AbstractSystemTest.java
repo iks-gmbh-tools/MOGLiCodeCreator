@@ -27,10 +27,10 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 	private static final String FILENAME_BUILD_PROPERTIES = "test.properties";
 	
 	// configuration settings
-	public static boolean readTestProperties = false;
+	public static boolean readPropertiesFromFile = false;
 	protected static boolean cleanupWhenFinished = false;
 	protected static boolean buildReleaseBeforeTesting = false;
-	protected static boolean setVersionInPomsBackToOldValue = false;
+	protected static boolean testRun = false;
 
 	protected static final String TEST_SUB_DIR_NAME = "SystemTestDir";
 	protected static final String MOGLI_EXE_COMMAND = "startMOGLiCodeCreator.bat";
@@ -38,7 +38,9 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 	protected final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
 	protected final String TEST_DIR_NAME = releaseBuilder.getReleaseDir() + "/" + TEST_SUB_DIR_NAME;
 	protected final File testDir = new File(TEST_DIR_NAME);
+	
 	private Properties testProperties;
+	private Properties buildProperties;
 
 	protected static boolean firstTime = true;
 
@@ -52,8 +54,8 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 	}
 
 	private void initForFirstTime() {
-		if (readTestProperties) {
-			getTestProperties();
+		if (readPropertiesFromFile) {
+			getProperties();
 		}
 		
 		if (buildReleaseBeforeTesting) {
@@ -64,15 +66,16 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 		prepareTestDir();
 	}
 	
-	private void getTestProperties() {
+	private void getProperties() {
 		try {
-			readPropertiesFile();
+			readTestPropertiesFile();
+			readBuildProperties();
 		} catch (Exception e) {
 			throw new MOGLiCoreException("Error reading file " + FILENAME_BUILD_PROPERTIES);
 		}
 		cleanupWhenFinished = isTrue((String) testProperties.get("cleanupWhenFinished"));
 		buildReleaseBeforeTesting = isTrue((String) testProperties.get("buildReleaseBeforeTesting"));
-		setVersionInPomsBackToOldValue = isTrue((String) testProperties.get("setVersionInPomsBackToOldValue"));
+		testRun = isTrue((String) buildProperties.get("testRun"));
 	}
 
 	private boolean isTrue(final String s) {
@@ -114,7 +117,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 				}
 			});
 
-			if (setVersionInPomsBackToOldValue) {
+			if (testRun) {
 				VersionReplacer.setVersionInPomsBackToOldValue();
 			}
 		}
@@ -152,12 +155,12 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 		}
 	}
 
-	private void readPropertiesFile() throws FileNotFoundException, IOException {
+	private void readTestPropertiesFile() throws FileNotFoundException, IOException {
 		final String propertiesPath = getProjectResourcesDir() + "/" + FILENAME_BUILD_PROPERTIES;
 		final File propertiesFile = new File(propertiesPath);
 		if (propertiesFile.exists()) {
 			testProperties = new Properties();
-			FileInputStream fileInputStream = new FileInputStream(propertiesPath);
+			final FileInputStream fileInputStream = new FileInputStream(propertiesPath);
 			testProperties.load(fileInputStream);
 		} else {
 			System.out.println("Properties File not found: " + propertiesPath);
@@ -171,4 +174,18 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 			// ignore it
 		}
 	}
+	
+
+	private void readBuildProperties() throws FileNotFoundException, IOException {
+		final String propertiesPath = "../application/src/main/resources/build.properties";
+		final File propertiesFile = new File(propertiesPath);
+		if (propertiesFile.exists()) {
+			buildProperties = new Properties();
+			final FileInputStream fileInputStream = new FileInputStream(propertiesPath);
+			buildProperties.load(fileInputStream);
+		} else {
+			System.out.println("Properties File not found: " + propertiesPath);
+		}
+	}
+
 }

@@ -71,7 +71,7 @@ public class MOGLiReleaseBuilder {
 
 	
 	private Properties buildProperties;
-
+	
 	public static void main(String[] args) {
 		try {
 			final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
@@ -117,7 +117,7 @@ public class MOGLiReleaseBuilder {
 		if (MavenExecutor.EXECUTION_OK.equals(result)) {
 			ReleaseFileCollector.doYourJob(createFileCollectionData());
 			buildReleaseZipFile();
-			copyReleaseToArchive();
+			if (! isTestRun()) copyReleaseToArchive();
 		} else {
 			System.out.println(result);
 			System.out.println("###########################################");
@@ -127,6 +127,11 @@ public class MOGLiReleaseBuilder {
 		VersionReplacer.doYourJob(getVersion(VERSION_TYPE.Release), 
                                      getVersion(VERSION_TYPE.Next), pomFiles);		
 		return toReturn;
+	}
+
+	private boolean isTestRun() {
+		final String property = (String) buildProperties.get("testRun");
+		return property != null &&  property.equalsIgnoreCase("true");
 	}
 
 	protected void copyReleaseToArchive() {
