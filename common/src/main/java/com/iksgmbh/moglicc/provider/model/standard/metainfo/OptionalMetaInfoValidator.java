@@ -11,6 +11,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLe
  * Instanziation by reflection {@link MetaInfoValidationUtil}
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class OptionalMetaInfoValidator extends MetaInfoValidatorParent {
 

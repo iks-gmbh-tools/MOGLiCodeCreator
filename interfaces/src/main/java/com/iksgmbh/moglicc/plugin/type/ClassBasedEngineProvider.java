@@ -10,6 +10,7 @@ import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
  * EngineProvider that provides a class based execution strategy
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface ClassBasedEngineProvider extends EngineProvider {
 

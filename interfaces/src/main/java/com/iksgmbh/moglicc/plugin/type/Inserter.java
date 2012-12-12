@@ -8,6 +8,7 @@ import com.iksgmbh.moglicc.plugin.type.basic.Generator;
  * inserts such a part into a designated area within a existing file.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface Inserter extends Generator {
 

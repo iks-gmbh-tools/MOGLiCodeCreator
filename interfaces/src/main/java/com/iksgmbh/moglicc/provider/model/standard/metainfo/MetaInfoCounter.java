@@ -8,6 +8,7 @@ package com.iksgmbh.moglicc.provider.model.standard.metainfo;
  * which MetaInfo is used by which plugin (ValidatorVendor).
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface MetaInfoCounter {
 

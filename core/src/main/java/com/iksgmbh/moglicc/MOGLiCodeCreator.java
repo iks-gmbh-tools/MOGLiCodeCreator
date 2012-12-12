@@ -40,6 +40,7 @@ import com.iksgmbh.utils.FileUtil;
 /**
  * Starter class of the MOGLiCodeCreator application
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class MOGLiCodeCreator {
 	

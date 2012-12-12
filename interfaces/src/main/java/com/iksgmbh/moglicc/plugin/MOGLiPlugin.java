@@ -10,6 +10,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
  * It allows interaction between Core and Plugins.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface MOGLiPlugin {
 	

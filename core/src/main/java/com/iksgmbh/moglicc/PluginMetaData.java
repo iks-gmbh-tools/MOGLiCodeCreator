@@ -12,6 +12,7 @@ import com.iksgmbh.moglicc.plugin.MOGLiPlugin.PluginType;
 /**
  * Holds all necessary information about the Mogli plugins
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class PluginMetaData {
 	

@@ -11,6 +11,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 /**
  * Used to build a AttributeDescriptor Object.
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class BuildUpAttributeDescriptor extends MetaModelObject implements AttributeDescriptor {
 	

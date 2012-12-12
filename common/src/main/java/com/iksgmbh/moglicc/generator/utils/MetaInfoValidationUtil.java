@@ -19,6 +19,7 @@ import com.iksgmbh.utils.FileUtil;
 /**
  * Common helper for plugins to instantiate their MetaInfoValidator objects.
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class MetaInfoValidationUtil {
 	

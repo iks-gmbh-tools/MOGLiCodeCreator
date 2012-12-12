@@ -7,6 +7,7 @@ import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResult
  * return Object for {@code VelocityEngineProviderStarter.startEngineWithModel()}
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface VelocityInserterResultData extends VelocityGeneratorResultData {
 	

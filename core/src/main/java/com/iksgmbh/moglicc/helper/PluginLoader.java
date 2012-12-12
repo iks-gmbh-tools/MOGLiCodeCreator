@@ -18,6 +18,7 @@ import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 /**
  * Helps MOGLi class to do its job
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class PluginLoader {
 

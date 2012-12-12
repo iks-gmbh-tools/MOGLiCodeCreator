@@ -11,6 +11,7 @@ import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGenerato
  * insert content into a target file.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class BuildUpVelocityInserterResultData extends BuildUpVelocityGeneratorResultData 
                                                implements VelocityInserterResultData {

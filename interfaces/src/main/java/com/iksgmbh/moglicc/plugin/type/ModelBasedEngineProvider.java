@@ -8,6 +8,7 @@ import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
  * EngineProvider that provides a model based execution strategy 
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface ModelBasedEngineProvider extends EngineProvider {
 

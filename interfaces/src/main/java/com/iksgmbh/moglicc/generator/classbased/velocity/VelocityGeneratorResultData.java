@@ -10,6 +10,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
  * return Object for {@code VelocityEngineProviderStarter.startEngineWithClassList()}
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface VelocityGeneratorResultData extends GeneratorResultData {
 	

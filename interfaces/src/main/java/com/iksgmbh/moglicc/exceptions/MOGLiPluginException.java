@@ -4,6 +4,7 @@ package com.iksgmbh.moglicc.exceptions;
  * To be thrown only from code of plugin and code from common module that is used by plugins.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class MOGLiPluginException extends Exception {
 
