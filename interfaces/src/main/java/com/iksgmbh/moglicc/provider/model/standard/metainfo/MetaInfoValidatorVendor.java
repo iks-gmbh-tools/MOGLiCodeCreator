@@ -9,6 +9,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
  * the MetaInfo elements used in the model.
  *  
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface MetaInfoValidatorVendor {
 	

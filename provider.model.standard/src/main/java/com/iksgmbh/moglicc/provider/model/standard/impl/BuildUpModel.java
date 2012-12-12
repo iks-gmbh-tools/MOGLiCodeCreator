@@ -15,6 +15,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 /**
  * Used to build a Model Object. 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class BuildUpModel extends MetaModelObject implements Model {
 	

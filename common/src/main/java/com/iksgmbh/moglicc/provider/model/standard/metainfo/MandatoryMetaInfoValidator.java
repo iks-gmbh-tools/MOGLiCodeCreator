@@ -11,6 +11,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLe
  * Also used to analyse the usage of MetaInfo elements by generator plugins.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class MandatoryMetaInfoValidator extends MetaInfoValidatorParent {
 

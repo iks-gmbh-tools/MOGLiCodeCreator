@@ -8,6 +8,7 @@ import com.iksgmbh.data.Annotation;
  * <ANNOTATION_PREFIX_IDENTIFICATOR><FirstPart><DEFAULT_PART_SEPARATOR><SecondPart><DEFAULT_COMMENT_IDENTIFICATOR><comment>
  * or to use spaces within a part
  * <ANNOTATION_PREFIX_IDENTIFICATOR><DEFAULT_PART_BRACE_IDENTIFIER><FirstPart><DEFAULT_PART_BRACE_IDENTIFIER><SecondPart><DEFAULT_COMMENT_IDENTIFICATOR><comment>
+ *
  * @author Reik Oberrath
  */
 public class AnnotationParser {

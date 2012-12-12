@@ -14,6 +14,7 @@ import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
  * Interface for Transfer Object in {@link MOGLiPlugin.setMogliInfrastructure}.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface InfrastructureService {
 

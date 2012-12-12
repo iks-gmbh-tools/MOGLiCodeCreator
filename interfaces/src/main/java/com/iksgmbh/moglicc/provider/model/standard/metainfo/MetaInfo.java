@@ -7,6 +7,7 @@ import java.util.List;
  * that can be used in template files of generator plugins.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface MetaInfo {
 	

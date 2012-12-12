@@ -10,6 +10,7 @@ import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
  * Group of data fields used by the InfrastructureService and needed to instantiate it.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class InfrastructureInitData {
 	
@@ -38,4 +39,3 @@ public class InfrastructureInitData {
 		this.applicationProperties = applicationProperties;
 	}
 }
-

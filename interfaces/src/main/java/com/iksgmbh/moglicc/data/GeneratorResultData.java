@@ -4,6 +4,7 @@ package com.iksgmbh.moglicc.data;
  * Return object for EngineProvider.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface GeneratorResultData {
 	

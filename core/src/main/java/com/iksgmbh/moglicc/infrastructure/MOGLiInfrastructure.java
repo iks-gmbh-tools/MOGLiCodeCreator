@@ -23,6 +23,7 @@ import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
  * For each plugin a logger with an individual logfile and an individual resultDir is provided.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class MOGLiInfrastructure implements InfrastructureService {
 	

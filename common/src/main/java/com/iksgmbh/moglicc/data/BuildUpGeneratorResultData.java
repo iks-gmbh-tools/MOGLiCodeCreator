@@ -11,6 +11,7 @@ import com.iksgmbh.utils.FileUtil;
  * Object to build a data structure with information needed to create a result file
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class BuildUpGeneratorResultData implements GeneratorResultData {
 	

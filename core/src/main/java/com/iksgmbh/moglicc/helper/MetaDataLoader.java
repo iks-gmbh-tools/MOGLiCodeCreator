@@ -29,6 +29,7 @@ import com.iksgmbh.utils.FileUtil;
 /**
  * Helps MOGLiCodeCreator class to do its job
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class MetaDataLoader {
 

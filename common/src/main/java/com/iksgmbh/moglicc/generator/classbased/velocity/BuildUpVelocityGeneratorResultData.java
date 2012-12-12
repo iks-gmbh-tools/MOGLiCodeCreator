@@ -12,6 +12,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
  * Object to build a data structure with information needed to create a result file
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultData 
                                                 implements VelocityGeneratorResultData {

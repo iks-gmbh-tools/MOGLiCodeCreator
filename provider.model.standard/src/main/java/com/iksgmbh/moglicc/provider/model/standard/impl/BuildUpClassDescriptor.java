@@ -13,6 +13,7 @@ import com.iksgmbh.data.ClassNameData;
 /**
  * Used to build a ClassDescriptor Object.
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class BuildUpClassDescriptor extends MetaModelObject implements ClassDescriptor {
 
@@ -87,4 +88,3 @@ public class BuildUpClassDescriptor extends MetaModelObject implements ClassDesc
 	}
 
 }
-

@@ -25,6 +25,7 @@ import com.iksgmbh.utils.ImmutableUtil;
 /**
  * Helps MOGLi class to do its job
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class PluginExecutor {
 

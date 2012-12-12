@@ -19,6 +19,7 @@ import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
  * and plugins that depend on others are executed later.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class DependencyResolver {
 	

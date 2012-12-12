@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * Interface for model elements that provide MetaInfo functionality
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public interface MetaInfoSupport {
 

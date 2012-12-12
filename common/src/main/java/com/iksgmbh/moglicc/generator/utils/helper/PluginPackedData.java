@@ -7,6 +7,7 @@ import java.util.Set;
  * Used to unpack default data in empty input directory.
  * 
  * @author Reik Oberrath
+ * @since 1.0.0
  */
 public class PluginPackedData {
 	private HashMap<String, String[]> packedDataMap = new HashMap<String, String[]>();
