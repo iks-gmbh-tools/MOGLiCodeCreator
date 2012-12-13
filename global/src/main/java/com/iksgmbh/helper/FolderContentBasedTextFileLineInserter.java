@@ -8,6 +8,10 @@ import java.util.List;
 import com.iksgmbh.data.FolderContent;
 import com.iksgmbh.utils.FileUtil;
 
+/**
+ * Inserts in each file found by the {@link FolderContent} functionality a block of text, typically a single line.
+ * @author Reik Oberrath
+ */
 public class FolderContentBasedTextFileLineInserter {
 	
 	private FolderContent folderContent;

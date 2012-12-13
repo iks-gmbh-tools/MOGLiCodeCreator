@@ -1,34 +1,28 @@
 package com.iksgmbh.data;
 
+import static com.iksgmbh.test.FolderContentTestUtility.*;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
 public class FolderContentUnitTest {
-
-	private static final String TEST_MAIN_FOLDER = "../global/target/sourceFolder";
-	private static final String SUB_FOLDER1 = "subFolder1";
-	private static final String SUB_FOLDER2 = "subFolder2";
-	private static final String SUB_SUB_FOLDER = "subSubFolder";
 	
-	private File mainTestFolder = new File(TEST_MAIN_FOLDER);
-	
-	@After
-	public void tearDown() {
+	@Before
+	public void setup() {
 		FileUtil.deleteDirWithContent(mainTestFolder);
 	}
-
+	
 	@Test
-	public void returnsNumberOfFolders() throws IOException {
+	public void returnsNumberOfFolders() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -42,7 +36,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberOfAllFiles() throws IOException {
+	public void returnsNumberOfAllFiles() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -56,7 +50,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberOfAllFilesWithoutSubSubFolder() throws IOException {
+	public void returnsNumberOfAllFilesWithoutSubSubFolder() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -71,7 +65,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberOfAllFilesWithoutSubFolder2() throws IOException {
+	public void returnsNumberOfAllFilesWithoutSubFolder2() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -86,7 +80,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberOfJavaFilesWithoutSubFolder1And2() throws IOException {
+	public void returnsNumberOfJavaFilesWithoutSubFolder1And2() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -101,7 +95,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberFoldersWithoutSubFolder1And2() throws IOException {
+	public void returnsNumberFoldersWithoutSubFolder1And2() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -116,7 +110,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberOfJavaFiles() throws IOException {
+	public void returnsNumberOfJavaFiles() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -130,7 +124,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberOfTxtFiles() throws IOException {
+	public void returnsNumberOfTxtFiles() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -144,7 +138,7 @@ public class FolderContentUnitTest {
 	}
 	
 	@Test
-	public void returnsNumberOfIniFiles() throws IOException {
+	public void returnsNumberOfIniFiles() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -158,7 +152,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberOfXmlFiles() throws IOException {
+	public void returnsNumberOfXmlFiles() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -172,7 +166,7 @@ public class FolderContentUnitTest {
 	}
 
 	@Test
-	public void returnsNumberOfPropertiesFiles() throws IOException {
+	public void returnsNumberOfPropertiesFiles() throws Exception {
 		// prepare test
 		createTestFolder();
 
@@ -185,35 +179,4 @@ public class FolderContentUnitTest {
 		assertEquals("size of result list", 1, result.size());
 	}
 
-	private void createTestFolder() throws IOException {
-		mainTestFolder.mkdirs();
-		
-		File file = new File(mainTestFolder, "file1.txt");
-		file.createNewFile();
-		file = new File(mainTestFolder, "file2.xml");
-		file.createNewFile();
-		
-		File subFolder = new File(mainTestFolder, SUB_FOLDER1);
-		subFolder.mkdirs();
-		file = new File(subFolder, "file11.java");
-		file.createNewFile();
-		file = new File(subFolder, "file12.xml");
-		file.createNewFile();
-		
-		subFolder = new File(mainTestFolder, SUB_FOLDER2);
-		subFolder.mkdirs();
-		file = new File(subFolder, "file21.txt");
-		file.createNewFile();
-		file = new File(subFolder, "file22.txt");
-		file.createNewFile();
-		
-		subFolder = new File(subFolder, SUB_SUB_FOLDER);
-		subFolder.mkdirs();
-		file = new File(subFolder, "file.txt");
-		file.createNewFile();
-		file = new File(subFolder, "file.java");
-		file.createNewFile();
-		file = new File(subFolder, "file.properties");
-		file.createNewFile();
-	}
 }
