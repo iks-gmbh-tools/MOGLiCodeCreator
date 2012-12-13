@@ -106,4 +106,8 @@ public class FolderContent {
 		return getFilesWithExtensions(null);
 	}
 
+	public List<File> getFilesFor(final File folder) {
+		return content.get(folder);
+	}
+
 }

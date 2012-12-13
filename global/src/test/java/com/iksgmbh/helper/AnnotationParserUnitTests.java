@@ -76,7 +76,7 @@ public class AnnotationParserUnitTests {
 
 		// verify test result
 		assertNotNull("Not null expected", result);
-		assertEquals("Annotation Name", "Unable to parse annotated line content: <\"Name>", result.getName());
+		assertEquals("Annotation Name", "PARSER ERROR: Unable to parse annotated line content: <\"Name>", result.getName());
 		assertNull("Null expected", result.getAdditionalInfo());
 	}
 
