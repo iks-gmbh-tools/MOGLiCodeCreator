@@ -1,6 +1,7 @@
 package com.iksgmbh.moglicc.inserter.modelbased.velocity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -12,7 +13,7 @@ import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResult
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData.KnownInserterPropertyNames;
 
 public class BuildUpVelocityInserterResultDataUnitTest {
-	
+
 	private BuildUpVelocityInserterResultData velocityInserterResultData;
 	private BuildUpGeneratorResultData buildUpGeneratorResultData;
 
@@ -33,7 +34,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		buildUpGeneratorResultData.addProperty(KnownGeneratorPropertyNames.TargetDir.name(), "targetDir");
 		return buildUpGeneratorResultData;
 	}
-	
+
 	@Test
 	public void returnsTargetFileName() {
 		// call functionality under test
@@ -42,7 +43,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// verify test result
 		assertEquals("targetFileName", "filename", targetFileName);
 	}
-	
+
 	@Test
 	public void returnsReplaceStartIndicator() {
 		// call functionality under test
@@ -66,7 +67,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// prepare test
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertAbove.name(), "InsertAbove");
 		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
-		
+
 		// call functionality under test
 		final String InsertAboveIndicator = velocityInserterResultData.getInsertAboveIndicator();
 
@@ -79,49 +80,57 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// prepare test
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertBelow.name(), "InsertBelow");
 		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
-		
+
 		// call functionality under test
 		final String InsertBelowIndicator = velocityInserterResultData.getInsertBelowIndicator();
 
 		// verify test result
 		assertEquals("InsertBelowIndicator", "InsertBelow", InsertBelowIndicator);
 	}
-	
-	
+
+
 	@Test
 	public void throwsExceptionForMissingEndInstruction() {
 		// prepare test
 		buildUpGeneratorResultData = buildGeneratorResultData();
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceStart.name(), "Start");
 		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
-		
+
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
 		} catch (MOGLiPluginException e) {
-			assertEquals("Error message", BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION, e.getMessage());
+			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
+	private void assertStringContains(final String s, final String substring) {
+		final boolean expectedSubstringFound = s.contains(substring);
+		assertTrue("Expected substring not found in String."
+				+ "\nSubstring <" + substring + ">"
+				+ "\nString <" + s + ">", expectedSubstringFound);
+	}
+
+
 	@Test
 	public void throwsExceptionForMissingStartInstruction() {
 		// prepare test
 		buildUpGeneratorResultData = buildGeneratorResultData();
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "End");
 		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
-		
+
 		// call functionality under test
 		try {
 			velocityInserterResultData.validate();
 		} catch (MOGLiPluginException e) {
-			assertEquals("Error message", BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION, e.getMessage());
+			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void throwsExceptionForInsertBelowAndAboveInstruction() throws Exception {
 		// prepare test
@@ -134,12 +143,12 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		try {
 			velocityInserterResultData.validate();
 		} catch (MOGLiPluginException e) {
-			assertEquals("Error message", BuildUpVelocityInserterResultData.INVALID_INSERT_CONFIGURATION, e.getMessage());
+			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_INSERT_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void throwsExceptionForReplaceAndAboveInstruction() throws Exception {
 		// prepare test
@@ -153,13 +162,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		try {
 			velocityInserterResultData.validate();
 		} catch (MOGLiPluginException e) {
-			assertEquals("Error message", BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION, e.getMessage());
+			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
 	}
 
-	
+
 	@Test
 	public void throwsExceptionForReplaceAndBelowInstruction() throws Exception {
 		// prepare test
@@ -173,13 +182,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		try {
 			velocityInserterResultData.validate();
 		} catch (MOGLiPluginException e) {
-			assertEquals("Error message", BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION, e.getMessage());
+			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
 	}
-	
-	
+
+
 	@Test
 	public void throwsExceptionForCreateNewTrueAndAboveInstruction() throws Exception {
 		// prepare test
@@ -192,12 +201,12 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		try {
 			velocityInserterResultData.validate();
 		} catch (MOGLiPluginException e) {
-			assertEquals("Error message", BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION, e.getMessage());
+			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void throwsExceptionForCreateNewTrueAndBelowInstruction() throws Exception {
 		// prepare test
@@ -210,12 +219,12 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		try {
 			velocityInserterResultData.validate();
 		} catch (MOGLiPluginException e) {
-			assertEquals("Error message", BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION, e.getMessage());
+			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void throwsExceptionForCreateNewTrueAndReplaceInstruction() throws Exception {
 		// prepare test
@@ -229,7 +238,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		try {
 			velocityInserterResultData.validate();
 		} catch (MOGLiPluginException e) {
-			assertEquals("Error message", BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION, e.getMessage());
+			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
