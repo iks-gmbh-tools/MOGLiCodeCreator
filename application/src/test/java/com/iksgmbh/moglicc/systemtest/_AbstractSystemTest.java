@@ -25,7 +25,7 @@ import com.iksgmbh.utils.ZipUtil;
 public class _AbstractSystemTest extends ApplicationTestParent {
 
 	private static final String FILENAME_BUILD_PROPERTIES = "test.properties";
-	
+
 	// configuration settings
 	public static boolean readPropertiesFromFile = false;
 	protected static boolean cleanupWhenFinished = false;
@@ -38,7 +38,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 	protected final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
 	protected final String TEST_DIR_NAME = releaseBuilder.getReleaseDir() + "/" + TEST_SUB_DIR_NAME;
 	protected final File testDir = new File(TEST_DIR_NAME);
-	
+
 	private Properties testProperties;
 	private Properties buildProperties;
 
@@ -57,15 +57,15 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 		if (readPropertiesFromFile) {
 			getProperties();
 		}
-		
+
 		if (buildReleaseBeforeTesting) {
 			boolean ok = releaseBuilder.doYourJob();
 			if (! ok) System.exit(1);
 		}
-		
+
 		prepareTestDir();
 	}
-	
+
 	private void getProperties() {
 		try {
 			readTestPropertiesFile();
@@ -97,7 +97,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 		assertFalse("Directory not deleted:\n" + TEST_DIR_NAME,
 				testDir.exists());
 		try {
-			ZipUtil.unzip(releaseBuilder.getReleaseZipFile(), TEST_DIR_NAME);			
+			ZipUtil.unzip(releaseBuilder.getReleaseZipFile(), TEST_DIR_NAME);
 		} catch (Exception e) {
 			throw new MOGLiCoreException("Error zipping " + releaseBuilder.getReleaseZipFile().getAbsolutePath());
 		}
@@ -169,12 +169,12 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 
 	protected void executeMogliApplication() {
 		try {
-			CmdUtil.execWindowCommand(testDir, MOGLI_EXE_COMMAND, false);
+			CmdUtil.execWindowCommand(testDir, MOGLI_EXE_COMMAND, true);
 		} catch (Exception e) {
 			// ignore it
 		}
 	}
-	
+
 
 	private void readBuildProperties() throws FileNotFoundException, IOException {
 		final String propertiesPath = "../application/src/main/resources/build.properties";
