@@ -3,7 +3,7 @@
 	<groupId>com.iksgmbh.moglicc</groupId>
 	<artifactId>inttest</artifactId>
 		<version>1.1.0-SNAPSHOT</version>
-	<name>Integration Test</name>	
+	<name>Integration Test</name>
 	<description>project for for the integration tests</description>
 
 	<build>
@@ -15,83 +15,90 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<optimize>false</optimize>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
-	
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.iksgmbh</groupId>
 			<artifactId>global</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>interfaces</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>common</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>test</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>core</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>provider.model.standard</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>provider.engine.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>application</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>generator.classbased.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>inserter.modelbased.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-	
+
 	</dependencies>
 
 </project>
