@@ -46,7 +46,7 @@ public class MOGLiCodeCreator {
 	
 	// *****************************  static stuff  ************************************
 
-	public static final String VERSION = "1.1.0-SNAPSHOT";
+	public static final String VERSION = "1.0.2-SNAPSHOT";
 	
 	private static String applicationRootDir = System.getProperty("user.dir");
 
