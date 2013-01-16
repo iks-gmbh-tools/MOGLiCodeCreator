@@ -5,13 +5,18 @@ import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.generator.utils.*;
-import com.iksgmbh.moglicc.plugin.type.*;
-import com.iksgmbh.moglicc.plugin.type.basic.*;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.*;
+import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
+import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
+import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
+import com.iksgmbh.moglicc.plugin.type.basic.Generator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 import com.iksgmbh.utils.ImmutableUtil;
 
-public class XYStarter implements GENERATOR, MetaInfoValidatorVendor {
+/*
+ * dummy class for a new component
+ */
+public class XYStarter implements Generator, MetaInfoValidatorVendor {
 
 	public static final String PLUGIN_ID = "XY";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
