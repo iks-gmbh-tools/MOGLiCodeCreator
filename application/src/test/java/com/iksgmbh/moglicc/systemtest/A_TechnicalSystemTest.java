@@ -44,13 +44,13 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 	@Test
 	public void assertInitialFileStructure() {
 		assertTrue("TestsDir does not exist!", testDir.exists());
-		assertEquals("File number", 3, testDir.listFiles().length);
+		assertEquals("File number in root", 3, testDir.listFiles().length);
 		
 		final File libDir = FileUtil.getSubDir(testDir, "lib");
-		assertEquals("File number", getNumberOfJarFilesToExpectInLibDir() + 1, libDir.listFiles().length);
+		assertEquals("File number in lib subdir", getNumberOfJarFilesToExpectInLibDir() + 1, libDir.listFiles().length);
 		
 		final File pluginsDir = FileUtil.getSubDir(libDir, "plugins");
-		assertEquals("File number", getNumberOfJarFilesToExpectPluginsDir(), pluginsDir.listFiles().length);
+		assertEquals("File number in plugins subdir", getNumberOfJarFilesToExpectPluginsDir(), pluginsDir.listFiles().length);
 	}
 
 	private int getNumberOfJarFilesToExpectPluginsDir() {
@@ -80,7 +80,6 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 	public void createsMogliLogfile() {
 		// prepare test
 		assertFileDoesNotExist(applicationLogDir);
-		assertFileDoesNotExist(applicationLogfile);
 		
 		// call functionality under test
 		executeMogliApplication();
