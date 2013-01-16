@@ -26,7 +26,7 @@ You find the lastest release build under application/releasedBuilds.
 * * *
 
 
-Current version: **1.0.0**
+Current version: **1.0.1**
 
 License: **All Rights Reserved**
 
