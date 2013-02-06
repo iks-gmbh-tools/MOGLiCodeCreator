@@ -6,11 +6,11 @@
 	<name>MOGLiCC Parent</name>
 	<description>Provides a multi module build to create all MOGLiCC artefacts</description>
 	<packaging>pom</packaging>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<modules>
 		<module>../parent.plugin</module>
 		<module>../global</module>
@@ -20,23 +20,23 @@
 		<module>../test</module>
 		<module>../application</module>
 	</modules>
-	
+
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.4</version>
 		</dependency>
-	
+
 	</dependencies>
-	
+
 	<build>
 		<finalName>${project.groupId}.${project.artifactId}-${project.version}</finalName>
 		<plugins>
@@ -47,6 +47,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<optimize>false</optimize>
 				</configuration>
 			</plugin>
 		</plugins>

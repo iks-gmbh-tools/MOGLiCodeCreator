@@ -12,7 +12,7 @@ import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
-public class VelocityClassBasedGeneratorIntTest extends IntTestParent {
+public class VelocityClassBasedGeneratorDemoModelIntTest extends IntTestParent {
 		
 	@Test
 	public void createsJavaBeanMisc() throws MOGLiPluginException {

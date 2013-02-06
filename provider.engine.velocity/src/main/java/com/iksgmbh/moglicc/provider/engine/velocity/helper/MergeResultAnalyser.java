@@ -81,20 +81,24 @@ public class MergeResultAnalyser {
 		final List<String> newLines = new ArrayList<String>();
 		for (int i = 0; i < oldLines.length; i++) {
 			final String line = oldLines[i].trim();
-			parseLine(newLines, line);
+			parseLine(newLines, line, i+1);
 		}
 		removeTrailingEmptyLines(newLines);
 		return StringUtil.concat(newLines);
 	}
 
-	protected void parseLine(final List<String> newLines, final String line) throws MOGLiPluginException {
+	protected void parseLine(final List<String> newLines, final String line, final int lineNo) throws MOGLiPluginException {
 		if (! headerEndReached && annotationParser.hasCorrectPrefix(line)) {
 			final Annotation annotation = annotationParser.doYourJob(line);
 			if (annotation.getName() == null) {
-				throw new MOGLiPluginException("Attribute line '" + line + "' for " + artefactType + " is not parseble!");
+				throw new MOGLiPluginException("Header attribute '" + line + "' in line " + lineNo
+						                        + " of main template of artefact '" + artefactType
+						                        + "' is not parseble!");
 			}
 			if (annotation.getAdditionalInfo() == null) {
-				throw new MOGLiPluginException("Attribute '" + annotation.getName() + "' for artefact " + artefactType + " needs additional information.");
+				throw new MOGLiPluginException("Header attribute '" + annotation.getName() + "' in line " + lineNo
+						                       + " of main template of artefact '" + artefactType
+						                       + "' needs additional information.");
 			}
 			velocityResultData.addProperty(annotation.getName(), annotation.getAdditionalInfo());
 		} else if (annotationParser.isCommentLine(line)) {
