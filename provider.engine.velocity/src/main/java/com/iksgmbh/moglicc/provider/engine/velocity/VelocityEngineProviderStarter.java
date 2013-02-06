@@ -27,13 +27,13 @@ import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.utils.ImmutableUtil;
 
 public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, ModelBasedEngineProvider {
-	
+
 	public static final String ENGINE_STARTED_WITHOUT_DATA = "Velocity Engine started without VelocityEngineData set.";
 	public static final String TEMPLATE_REFERENCE_MODEL = "model";
 	public static final String TEMPLATE_REFERENCE_CLASS_DESCRIPTOR = "classDescriptor";
 	public static final String PLUGIN_ID = "VelocityEngineProvider";
 	public static final String DEFAULT_FILE_EXTENSION = ".txt";
-	
+
 	private InfrastructureService infrastructure;
 	private VelocityEngineData velocityEngineData;
 	private Model model;
@@ -57,7 +57,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
-	
+
 	@Override
 	public Object startEngine() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("startEngine called");
@@ -73,13 +73,21 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	public GeneratorResultData startEngineWithModel() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("startEngineAllClassesIntoSingleTargetFile called");
 		prepareStart();
-		
+
 		final VelocityContext context = getVelocityContextWith(model);
 		final String mergeResult = mergeTemplateWith(context);
-		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(mergeResult);
-        infrastructure.getPluginLogger().logInfo("GeneratorResultData created for model merged with template '" 
+
+		final BuildUpGeneratorResultData buildUpGeneratorResultData;
+		try {
+			buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(mergeResult, getVelocityEngineData().getArtefactType());
+		} catch (MOGLiPluginException e) {
+			infrastructure.getPluginLogger().logError(e.getMessage());
+			throw e;
+		}
+
+        infrastructure.getPluginLogger().logInfo("GeneratorResultData created for model merged with template '"
         		                                  + velocityEngineData.getMainTemplateSimpleFileName() + "'");
-	
+
 		infrastructure.getPluginLogger().logInfo("-----");
 		return buildUpGeneratorResultData;
 	}
@@ -88,19 +96,20 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("startEngineEachClassIntoSeparateTargetFiles called");
 		prepareStart();
-		
+
 		final List<GeneratorResultData> toReturn = new ArrayList<GeneratorResultData>();
 		for (int i = 0; i < model.getSize(); i++) {
 			final ClassDescriptor clDescr = (ClassDescriptor) model.getClassDescriptorList().get(i);
 			final VelocityContext context = getVelocityContextWith(clDescr, model);
 			final String mergeResult = mergeTemplateWith(context);
-			final BuildUpGeneratorResultData velocityResultData = MergeResultAnalyser.doYourJob(mergeResult);
+			final BuildUpGeneratorResultData velocityResultData = MergeResultAnalyser.doYourJob(mergeResult,
+					                                                 getVelocityEngineData().getArtefactType());
 	        infrastructure.getPluginLogger().logInfo("GeneratorResultData created for merging class '"
-	        		 + clDescr.getSimpleName() + "' with template '" 
+	        		 + clDescr.getSimpleName() + "' with template '"
 	        		 + velocityEngineData.getMainTemplateSimpleFileName() + "'");
 	        toReturn.add(velocityResultData);
 		}
-		infrastructure.getPluginLogger().logInfo("-----");	
+		infrastructure.getPluginLogger().logInfo("-----");
 		return toReturn;
 	}
 
@@ -108,14 +117,14 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		if (velocityEngineData == null) {
 			throw new MOGLiPluginException(ENGINE_STARTED_WITHOUT_DATA);
 		}
-		
+
 		infrastructure.getPluginLogger().logInfo("-");
 		infrastructure.getPluginLogger().logInfo("Engine started from " + velocityEngineData.getGeneratorPluginId());
-		infrastructure.getPluginLogger().logInfo("MainTemplate: " + velocityEngineData.getTemplateDir().getAbsolutePath() 
-				+ "/" + velocityEngineData.getMainTemplateSimpleFileName()); 
-		
+		infrastructure.getPluginLogger().logInfo("MainTemplate: " + velocityEngineData.getTemplateDir().getAbsolutePath()
+				+ "/" + velocityEngineData.getMainTemplateSimpleFileName());
+
 		model = velocityEngineData.getModel();
-		infrastructure.getPluginLogger().logInfo("Model " + model.getName() + " received from " 
+		infrastructure.getPluginLogger().logInfo("Model " + model.getName() + " received from "
 				                                 + velocityEngineData.getGeneratorPluginId());
 	}
 
@@ -125,18 +134,18 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 			if (object instanceof Model) {
 				context.put(TEMPLATE_REFERENCE_MODEL, object);
 			} else {
-				context.put(TEMPLATE_REFERENCE_CLASS_DESCRIPTOR, object);	
+				context.put(TEMPLATE_REFERENCE_CLASS_DESCRIPTOR, object);
 			}
 		}
         context.put("TemplateStringUtility", new TemplateStringUtility());
         context.put("TemplateJavaUtility", new TemplateJavaUtility());
 		return context;
 	}
-	
+
 	String mergeTemplateWith(final VelocityContext context) throws MOGLiPluginException {
         final VelocityEngine engine = getVelocityEngine();
         final StringWriter writer = new StringWriter();
-        final Template template = createVelocityTemplate(engine);	        	
+        final Template template = createVelocityTemplate(engine);
 		template.merge(context, writer); // create new content from template and class from model
         writer.flush();
         return writer.toString();
@@ -148,8 +157,8 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
         	 template = engine.getTemplate(velocityEngineData.getMainTemplateSimpleFileName(), "UTF-8");
 		} catch (ResourceNotFoundException e) {
 			final String templateDirAsString = velocityEngineData.getTemplateDir().getAbsolutePath();
-			throw new MOGLiPluginException("Error finding template file:\n" 
-					+ velocityEngineData.getMainTemplateSimpleFileName() 
+			throw new MOGLiPluginException("Error finding template file:\n"
+					+ velocityEngineData.getMainTemplateSimpleFileName()
 					+ "\nRootDir: " + templateDirAsString, e);
 		}
 		return template;
@@ -163,12 +172,12 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
         velocityEngineProperties.setProperty("output.encoding", "UTF-8");
         velocityEngineProperties.setProperty("input.encoding", "UTF-8");
         velocityEngineProperties.setProperty(RuntimeConstants.RESOURCE_LOADER, "file");
-        velocityEngineProperties.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, 
+        velocityEngineProperties.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH,
         									 templateDirAsString + ", " + templateParentDirAsString);
 
         final VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.init(velocityEngineProperties);
-        
+
 		return velocityEngine;
 	}
 
@@ -185,52 +194,52 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 			throw new MOGLiPluginException("Parameter 'engineData' must not be null!");
 		}
 		final VelocityEngineData velocityEngineData;
-		
+
 		if (engineData instanceof VelocityEngineData) {
 			velocityEngineData = (VelocityEngineData) engineData;
 		} else {
 			throw new MOGLiPluginException("VelocityEngineData expected! Wrong engine data set: " + engineData.getClass().getName());
 		}
-		
+
 		if (velocityEngineData.getModel() == null) {
 			throw new MOGLiPluginException("Model not set!");
 		}
-		
+
 		if (velocityEngineData.getGeneratorPluginId() == null) {
 			throw new MOGLiPluginException("GeneratorPluginId not set!");
 		}
-		
+
 		if (infrastructure.getGenerator(velocityEngineData.getGeneratorPluginId()) == null) {
 			throw new MOGLiPluginException("Unknown GeneratorPlugin!");
 		}
-		
+
 		if (StringUtils.isEmpty(velocityEngineData.getArtefactType())) {
 			throw new MOGLiPluginException("ArtefactType not set!");
 		}
-		
+
 		if (velocityEngineData.getMainTemplateSimpleFileName() == null) {
 			throw new MOGLiPluginException("MainTemplateName not set!");
 		}
-		
+
 		if (velocityEngineData.getTemplateDir() == null) {
 			throw new MOGLiPluginException("TemplateDir not set!");
 		}
-		
+
 		final File templateDir = velocityEngineData.getTemplateDir();
 		if (! templateDir.exists()) {
-			throw new MOGLiPluginException("TemplateDir does not exist:\n" 
+			throw new MOGLiPluginException("TemplateDir does not exist:\n"
 					                            + templateDir.getAbsolutePath());
 		}
-		
-		final File mainTemplateFile = new File(templateDir, 
+
+		final File mainTemplateFile = new File(templateDir,
 				                               velocityEngineData.getMainTemplateSimpleFileName());
 		if (! mainTemplateFile.exists()) {
-			throw new MOGLiPluginException("Main Template File does not exist:\n" 
+			throw new MOGLiPluginException("Main Template File does not exist:\n"
 					   + mainTemplateFile.getAbsolutePath());
 		}
-		
+
 		this.velocityEngineData = velocityEngineData;
-		infrastructure.getPluginLogger().logInfo("Setting velocity engine data:\n '" 
+		infrastructure.getPluginLogger().logInfo("Setting velocity engine data:\n '"
 				+ velocityEngineData + "'...");
 
 	}
@@ -250,7 +259,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
 	}
-	
+
 	/**
 	 * FOR TEST PURPOSE ONLY
 	 */

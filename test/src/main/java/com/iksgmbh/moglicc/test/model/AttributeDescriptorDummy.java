@@ -8,7 +8,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 
 public class AttributeDescriptorDummy implements AttributeDescriptor {
-	
+
 	private String name;
 	private String javaType;
 	private List<MetaInfo> metaInfoList = new ArrayList<MetaInfo>();
@@ -52,6 +52,12 @@ public class AttributeDescriptorDummy implements AttributeDescriptor {
 	@Override
 	public boolean doesHaveAnyMetaInfosWithName(String metaInfoName) {
 		return false;
+	}
+
+	@Override
+	public String getCommaSeparatedListOfAllMetaInfoValuesFor(
+			String metaInfoName) {
+		return null;
 	}
 
 }

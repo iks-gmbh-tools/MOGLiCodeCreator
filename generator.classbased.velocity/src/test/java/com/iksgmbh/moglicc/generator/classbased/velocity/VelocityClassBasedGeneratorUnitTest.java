@@ -41,7 +41,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		final List<String> artefactList = velocityClassBasedGenerator.getArtefactList();
 
 		// verify test result
-		assertEquals("artefact number", 6, artefactList.size());
+		assertEquals("artefact number", 7, artefactList.size());
 	}
 	
 	@Test
