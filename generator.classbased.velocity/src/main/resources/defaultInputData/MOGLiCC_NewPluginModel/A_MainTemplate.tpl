@@ -1,6 +1,6 @@
 @TargetFileName ${classDescriptor.simpleName}.java # Name of output file with extension but without path
 @TargetDir $model.getMetaInfoValueFor("eclipseWorkspaceProject")/src/main/java/<package>
-@NameOfValidModel MOGLiCC-Plugin
+@NameOfValidModel MOGLiCC_NewPluginModel
 @CreateNew true # creates target dir if not existing and overwrites target file if existing
 
 package ${classDescriptor.package};
@@ -13,17 +13,13 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.utils.*;
 import com.iksgmbh.moglicc.plugin.type.*;
 import com.iksgmbh.moglicc.plugin.type.basic.*;
+import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.*;
 import com.iksgmbh.utils.ImmutableUtil;
+import com.iksgmbh.moglicc.generator.utils.helper.*;
 '
-#if ($classDescriptor.getMetaInfoValueFor("isMetaInfoValidatorVendor") == "true")
-public class ${classDescriptor.simpleName} implements $classDescriptor.getMetaInfoValueFor("pluginType"), MetaInfoValidatorVendor {
 
-#else
-
-public class ${classDescriptor.simpleName} implements $classDescriptor.getMetaInfoValueFor("pluginType") {
-
-#end
+#parse("C_ClassDefinitionLine.tpl")
 
 '
 '	public static final String PLUGIN_ID = "$classDescriptor.getMetaInfoValueFor("pluginID")";
@@ -34,6 +30,9 @@ public class ${classDescriptor.simpleName} implements $classDescriptor.getMetaIn
 '	public static final String MAIN_TEMPLATE_IDENTIFIER = "Main";
 '
 '	private InfrastructureService infrastructure;
+#if ($classDescriptor.getMetaInfoValueFor("pluginType") == "ENGINE_PROVIDER")
+'	private Object engineData;
+#end
 '
 '	@Override
 '	public void setMOGLiInfrastructure(final InfrastructureService infrastructure) {
@@ -42,9 +41,21 @@ public class ${classDescriptor.simpleName} implements $classDescriptor.getMetaIn
 '
 '	@Override
 '	public void doYourJob() throws MOGLiPluginException {
+
+	#if ($classDescriptor.getMetaInfoValueFor("pluginType") == "ENGINE_PROVIDER")
+
+'		// engine providers have nothing to do here (see startEngine)
+
+	#else
+
 '		infrastructure.getPluginLogger().logInfo("Doing my job...");
 '
+'		//  TODO: implement here the plugin's job
+'
 '		infrastructure.getPluginLogger().logInfo("Done!");
+
+	#end
+
 '	}
 '
 '
@@ -57,19 +68,9 @@ public class ${classDescriptor.simpleName} implements $classDescriptor.getMetaIn
 '		return TemplateUtil.findMainTemplate(templateDir, MAIN_TEMPLATE_IDENTIFIER);
 '	}
 '
-'
-'	@Override
-'	public boolean unpackDefaultInputData() throws MOGLiPluginException {
-'		/*
-'		infrastructure.getPluginLogger().logInfo("initDefaultInputData");
-'		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
-'
-'		TODo : add help files here
-'
-'		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
-'		*/
-'		return false;  // set to true if
-'	}
+
+#parse("D_unpackDefaultInputData.tpl")
+
 '
 '	@Override
 '	public PluginType getPluginType() {
@@ -86,17 +87,7 @@ public class ${classDescriptor.simpleName} implements $classDescriptor.getMetaIn
 '		return ImmutableUtil.getImmutableListOf($classDescriptor.getCommaSeparatedListOfAllMetaInfoValuesFor("pluginDependency"));
 '	}
 '
-
-#if ($classDescriptor.getMetaInfoValueFor("isMetaInfoValidatorVendor") == "true")
-
-'	@Override
-'	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
-'		final File validationInputFile = new File(infrastructure.getPluginInputDir(),
-'				                                  MetaInfoValidationUtil.FILENAME_VALIDATION);
-'		return MetaInfoValidationUtil.getMetaInfoValidatorList(validationInputFile, getId());
-'	}
-
-#end
+#parse("E_getMetaInfoValidatorList.tpl")
 
 '
 '	@Override
@@ -104,17 +95,14 @@ public class ${classDescriptor.simpleName} implements $classDescriptor.getMetaIn
 '		return infrastructure;
 '	}
 '
-'	@Override
-'	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
-'		/*
-'		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
-'		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR);
+
+#parse("F_unpackPluginHelpFiles.tpl")
+
 '
-'		TO Do: add help files here
-'
-'		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
-'		*/
-'		return false;
-'	}
+
+#parse("G_getModel.tpl")
+
+#parse("H_engineMethods.tpl")
+
 '
 }

@@ -76,8 +76,15 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 
 		final VelocityContext context = getVelocityContextWith(model);
 		final String mergeResult = mergeTemplateWith(context);
-		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(mergeResult,
-				                                                          getVelocityEngineData().getArtefactType());
+
+		final BuildUpGeneratorResultData buildUpGeneratorResultData;
+		try {
+			buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(mergeResult, getVelocityEngineData().getArtefactType());
+		} catch (MOGLiPluginException e) {
+			infrastructure.getPluginLogger().logError(e.getMessage());
+			throw e;
+		}
+
         infrastructure.getPluginLogger().logInfo("GeneratorResultData created for model merged with template '"
         		                                  + velocityEngineData.getMainTemplateSimpleFileName() + "'");
 

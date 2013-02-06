@@ -5,7 +5,7 @@
 #end
 
 #if($model.doesHaveAnyMetaInfosWithName("ModelMetaInfo"))
-	model '${model.name}' has MetaInfo 'ModelMetaInfo' 
+	model '${model.name}' has MetaInfo 'ModelMetaInfo'
 #else
 	No MetaInfo 'ModelMetaInfo' in model '${model.name}'
 #end
@@ -13,14 +13,14 @@
 
 #foreach($classDescriptor in $model.classDescriptorList)
 
-	#set( $MetaInfoName = "ClassMetaInfo" ) 
+	#set( $MetaInfoName = "ClassMetaInfo" )
 
 	#if($classDescriptor.doesHaveAnyMetaInfosWithName($MetaInfoName))
 		class '${classDescriptor.simpleName}' has MetaInfo '${MetaInfoName}'
 	#else
 		No MetaInfo '${MetaInfoName}' in class '${classDescriptor.simpleName}'
 	#end
-	
+
 	#foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)
 		#if($attributeDescriptor.doesHaveAnyMetaInfosWithName("AttributeMetaInfo"))
 			attribute '${attributeDescriptor.name}' has MetaInfo 'AttributeMetaInfo'
