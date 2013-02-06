@@ -9,7 +9,7 @@ import com.iksgmbh.data.FolderContent;
 import com.iksgmbh.utils.FileUtil;
 
 /**
- * Inserts in each file found by the {@link FolderContent} functionality a block of text, typically a single line.
+ * Inserts in each file found by the {@link FolderContent}-functionality a block of text, typically a single line.
  * @author Reik Oberrath
  */
 public class FolderContentBasedTextFileLineInserter {
@@ -44,7 +44,7 @@ public class FolderContentBasedTextFileLineInserter {
 			for (final String msg : errorList) {
 				sb.append(msg).append(FileUtil.getSystemLineSeparator());
 			}
-			throw new RuntimeException(sb.toString());
+			throw new RuntimeException(sb.toString().trim());
 		}
 	}
 
