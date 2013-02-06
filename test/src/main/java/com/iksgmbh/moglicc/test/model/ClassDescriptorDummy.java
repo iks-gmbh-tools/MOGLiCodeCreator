@@ -11,8 +11,8 @@ public class ClassDescriptorDummy implements ClassDescriptor {
 
 	private List<AttributeDescriptor> attributeDescriptorList = new ArrayList<AttributeDescriptor>();
 	private List<MetaInfo> metaInfoList = new ArrayList<MetaInfo>();
-	
-	public ClassDescriptorDummy(final String name, final AttributeDescriptor attributeDescriptor, 
+
+	public ClassDescriptorDummy(final String name, final AttributeDescriptor attributeDescriptor,
 			                    final MetaInfo metaInfo) {
 		attributeDescriptorList.add(attributeDescriptor);
 		metaInfoList.add(metaInfo);
@@ -67,6 +67,12 @@ public class ClassDescriptorDummy implements ClassDescriptor {
 	@Override
 	public boolean doesHaveAnyMetaInfosWithName(String metaInfoName) {
 		return false;
+	}
+
+	@Override
+	public String getCommaSeparatedListOfAllMetaInfoValuesFor(
+			String metaInfoName) {
+		return null;
 	}
 
 }

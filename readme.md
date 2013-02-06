@@ -25,10 +25,15 @@ You find the lastest release build under application/releasedBuilds.
 
 * * *
 
-
-Current version: **1.0.1**
-
 License: **All Rights Reserved**
+
+Current version: **1.1.0**
+
+Changes to 1.0.0
+- Method 'doesHaveAnyMetaInfosWithName(metaInfoName)' added to Model, ClassDescriptor and AttributeDescriptor of StandardModelProvider.
+- New model file 'MOGLiCC-Plugin' introduced for StandardModelProvider
+- New artefact 'MOGLiCC-Plugin" introduced for VelocityClassBasedGenerator 
+
 
 * * *
 

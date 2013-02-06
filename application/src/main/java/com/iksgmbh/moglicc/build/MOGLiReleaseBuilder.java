@@ -112,7 +112,7 @@ public class MOGLiReleaseBuilder {
 		VersionReplacer.doYourJob(getVersion(VERSION_TYPE.Current),
 				                     getVersion(VERSION_TYPE.Release), pomFiles);
 
-		final String result = MavenExecutor.doYourJob(new MavenData("install", getMavenRootDir(),
+		final String result = MavenExecutor.doYourJob(new MavenData("clean install", getMavenRootDir(),
 				                getParentBuildDir()));
 		if (MavenExecutor.EXECUTION_OK.equals(result)) {
 			ReleaseFileCollector.doYourJob(createFileCollectionData());
