@@ -16,7 +16,7 @@ import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.data.ClassNameData;
 import com.iksgmbh.utils.FileUtil;
 
-public class D_VelocityModelBasedGeneratorAcceptanceSystemTest extends _AbstractSystemTest {
+public class F_VelocityModelBasedGeneratorAcceptanceSystemTest extends _AbstractSystemTest {
 	
 	public static final String GENERATOR_PLUGIN_ID = VelocityClassBasedGeneratorStarter.PLUGIN_ID;
 	
