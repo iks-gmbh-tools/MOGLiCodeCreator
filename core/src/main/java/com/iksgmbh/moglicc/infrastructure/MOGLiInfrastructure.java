@@ -21,18 +21,18 @@ import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 /**
  * Implementation to provide the MOGLiCodeCreator core functionality to the plugins.
  * For each plugin a logger with an individual logfile and an individual resultDir is provided.
- * 
+ *
  * @author Reik Oberrath
  * @since 1.0.0
  */
 public class MOGLiInfrastructure implements InfrastructureService {
-	
+
 	private InfrastructureInitData initData;
 
 	private HashMap<String, MOGLiPlugin> pluginMap;
-	
-	private Properties applicationProperties;
-	
+
+	private Properties workspaceProperties;
+
 	private File applicationRootDir;
 	private File applicationHelpDir;
 
@@ -41,7 +41,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 	private File workspaceOutputDir;
 	private File workspaceLogsDir;
 	private File workspaceTempDir;
-	
+
 	// plugin dependent fields
 	private String idOfCurrentlyExecutedPlugin;
 	private File pluginInputDir;
@@ -51,22 +51,22 @@ public class MOGLiInfrastructure implements InfrastructureService {
 	private File pluginHelpDir;
 	private Logger pluginLogger;
 
-	
-	
-	public MOGLiInfrastructure(InfrastructureInitData initData) {
+
+
+	public MOGLiInfrastructure(final InfrastructureInitData initData) {
 		this.initData = initData;
-		
+
 		idOfCurrentlyExecutedPlugin = initData.idOfThePluginToThisInfrastructure;
 		pluginMap = createPluginMap();
-		
+
 		applicationRootDir = initData.dirApplicationRoot;
 		applicationHelpDir = initData.helpDir;
-		
+
 		workspaceInputDir = initData.inputDir;
 		workspaceOutputDir = initData.outputDir;
 		workspaceLogsDir = initData.logsDir;
 		workspaceTempDir = initData.tempDir;
-		applicationProperties = initData.applicationProperties;
+		workspaceProperties = initData.workspaceProperties;
 	}
 
 	private HashMap<String, MOGLiPlugin> createPluginMap() {
@@ -80,7 +80,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 	@Override
 	public ModelProvider getModelProvider(String id) {
 		 MOGLiPlugin plugin = pluginMap.get(id);
-		 if (plugin != null && 
+		 if (plugin != null &&
 			 MOGLiPlugin.PluginType.MODEL_PROVIDER == plugin.getPluginType()) {
 			 return (ModelProvider) plugin;
 		 }
@@ -90,7 +90,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 	@Override
 	public DataProvider getDataProvider(String id) {
 		 MOGLiPlugin plugin = pluginMap.get(id);
-		 if (plugin != null && 
+		 if (plugin != null &&
 			 MOGLiPlugin.PluginType.DATA_PROVIDER == plugin.getPluginType()) {
 			 return (DataProvider) plugin;
 		 }
@@ -100,7 +100,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 	@Override
 	public EngineProvider getEngineProvider(String id) {
 		 MOGLiPlugin plugin = pluginMap.get(id);
-		 if (plugin != null && 
+		 if (plugin != null &&
 			 MOGLiPlugin.PluginType.ENGINE_PROVIDER == plugin.getPluginType()) {
 			 return (EngineProvider) plugin;
 		 }
@@ -110,7 +110,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 	@Override
 	public Generator getGenerator(String id) {
 		 MOGLiPlugin plugin = pluginMap.get(id);
-		 if (plugin != null && 
+		 if (plugin != null &&
 			 MOGLiPlugin.PluginType.GENERATOR == plugin.getPluginType()) {
 			 return (Generator) plugin;
 		 }
@@ -124,7 +124,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 		}
 		return workspaceTempDir;
 	}
-	
+
 	@Override
 	public File getWorkspaceLogsDir() {
 		if (! workspaceLogsDir.exists()) {
@@ -171,7 +171,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 	@Override
 	public String toString() {
 		return "MogliInfrastructure [pluginMap=" + pluginMap
-				+ ", applicationProperties=" + applicationProperties
+				+ ", applicationProperties=" + workspaceProperties
 				+ ", applicationRootDir=" + applicationRootDir
 				+ ", workspaceInputDir=" + workspaceInputDir
 				+ ", workspaceOutputDir=" + workspaceOutputDir
@@ -204,7 +204,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 		}
 		return pluginLogger;
 	}
-	
+
 
 	@Override
 	public File getApplicationRootDir() {
@@ -213,7 +213,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 
 	@Override
 	public String getWorkspaceProperty(final String key) {
-		return applicationProperties.getProperty(key);
+		return workspaceProperties.getProperty(key);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -227,7 +227,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 				if (type.getName().equals(wantedType.getName())) {
 					toReturn.add((T) plugin);
 					break;
-				}	
+				}
 			}
 		}
 		return toReturn;

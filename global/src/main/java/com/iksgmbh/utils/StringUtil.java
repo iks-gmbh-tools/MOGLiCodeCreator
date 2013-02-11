@@ -8,7 +8,7 @@ public class StringUtil {
 		String[] lines = text.split(FileUtil.getSystemLineSeparator());
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < lines.length; i++) {
-			String line = lines[i]; 
+			String line = lines[i];
 			if (line.length() > 0 && line.charAt(0) != COMMENT_INDICATOR) {
 				sb.append(line + ", ");
 			}
@@ -24,19 +24,19 @@ public class StringUtil {
 		if (line.trim().length() == 0) {
 			return new String[0];
 		}
-		
+
 		final String trimmedLine = line.replaceAll(" ", "");
 		return trimmedLine.split(",");
 	}
-	
+
 	public static boolean startsWithUpperCase(final String s) {
 		return Character.isUpperCase(s.charAt(0));
 	}
-	
+
 	public static boolean startsWithLowerCase(final String s) {
 		return Character.isLowerCase(s.charAt(0));
 	}
-	
+
 	public static String concat(final List<String> list) {
 		final StringBuffer sb = new StringBuffer();
 		int counter = 0;
@@ -48,6 +48,13 @@ public class StringUtil {
 			}
 		}
 		return sb.toString();
+	}
+
+	public static String removeSuffixIfExisting(final String s, final String suffix) {
+		if (s.endsWith(suffix)) {
+			return s.substring(0, s.indexOf(suffix));
+		}
+		return s;
 	}
 
 }

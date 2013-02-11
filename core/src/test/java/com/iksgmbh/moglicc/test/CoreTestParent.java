@@ -68,15 +68,15 @@ public class CoreTestParent extends AbstractMOGLiTest {
 		}
 	}
 
-	protected void deactivatePluginsForTest(String... pluginNames) {
+	protected void activatePluginsForTest(String... pluginNames) {
 		final StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < pluginNames.length; i++) {
 			sb.append(pluginNames[i] + "="
-				+ MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_PROPERTY
+				+ MOGLiTextConstants.TEXT_ACTIVATED_PLUGIN_PROPERTY
 				+ FileUtil.getSystemLineSeparator());
 		}
 		try {
-			initPropertiesWith(sb.toString());
+			initWorkspacePropertiesWith(sb.toString());
 		} catch (Exception e) {
 			throw new MOGLiCoreException(e);
 		}
