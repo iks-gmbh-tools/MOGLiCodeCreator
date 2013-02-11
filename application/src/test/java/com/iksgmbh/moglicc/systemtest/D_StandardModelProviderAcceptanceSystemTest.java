@@ -10,7 +10,7 @@ import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
-public class B_StandardModelProviderAcceptanceSystemTest extends _AbstractSystemTest {
+public class D_StandardModelProviderAcceptanceSystemTest extends _AbstractSystemTest {
 	
 	private static final String PROVIDER_PLUGIN_ID = StandardModelProviderStarter.PLUGIN_ID;
 

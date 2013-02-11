@@ -43,15 +43,16 @@ import com.iksgmbh.utils.FileUtil;
  * @since 1.0.0
  */
 public class MOGLiCodeCreator {
-	
+
 	// *****************************  static stuff  ************************************
 
 	public static final String VERSION = "1.1.0-SNAPSHOT";
-	
+
 	private static String applicationRootDir = System.getProperty("user.dir");
+	private static String workspaceDirArgument;
 
 	private static File emergencyLogfile;
-	
+
 	public static String getApplicationRootDir() {
 		return applicationRootDir;
 	}
@@ -59,24 +60,31 @@ public class MOGLiCodeCreator {
 	public static void setApplicationRootDir(String applicationRootDir) {
 		MOGLiCodeCreator.applicationRootDir = applicationRootDir;
 	}
-	
+
 	public static File getLogFile() {
 		return MOGLiLogUtil.getCoreLogfile();
 	}
 
 	public static void main(String[] args) {
-		System.setProperty("file.encoding", "UTF-8");
-		initStatics(args);
+		doBasicInits(args);
+
 		try {
 			final MOGLiCodeCreator mogliCodeCreator = new MOGLiCodeCreator();
 			mogliCodeCreator.doYourJob();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			if (MOGLiLogUtil.getCoreLogfile() == null) {
+				// used for basic errors before regular logFile could be created
 				initEmergencyLogFile();
 			}
 			MOGLiLogUtil.logError(t.getMessage());
 		}
+	}
+
+	protected static void doBasicInits(String[] args) {
+		cleanEmergencyLogFile();
+		System.setProperty("file.encoding", "UTF-8");
+		setArgumentParameters(args);
 	}
 
 	private static void initEmergencyLogFile() {
@@ -84,16 +92,19 @@ public class MOGLiCodeCreator {
 		initLogFileContent();
 	}
 
-	private static void initStatics(String[] args) {
+	private static void setArgumentParameters(String[] args) {
 		if (args.length > 0) {
-			setApplicationRootDir(args[0]);
-		}		
-		 // used for basic errors before regular logFile could be created
+			// setApplicationRootDir(args[0]); argument is application root
+			workspaceDirArgument = args[0];
+		}
+	}
+
+	private static void cleanEmergencyLogFile() {
 		emergencyLogfile = new File(applicationRootDir +  "/" + FILENAME_LOG_FILE);
 		emergencyLogfile.delete(); // delete if it exists
 	}
 
-	// **************************  Instance fields  *********************************	
+	// **************************  Instance fields  *********************************
 
 	private List<PluginMetaData> pluginMetaDataList;
 	private Properties applicationProperties;
@@ -103,16 +114,16 @@ public class MOGLiCodeCreator {
 	private File inputDir;
 	private File helpDir;
 	private File logDir;
-	private File outputDir; 
+	private File outputDir;
 
-	// *****************************  Constructor  ************************************	
-	
+	// *****************************  Constructor  ************************************
+
 	public MOGLiCodeCreator() {
 		readApplicationPropertiesFile();
 		initWorkspace();
 		initApplicationDirectories();
 	}
-	
+
 	private void initWorkspace() {
 		initWorkspaceDir();
 		createMogliLogFile();
@@ -121,12 +132,23 @@ public class MOGLiCodeCreator {
 	}
 
 	private void initWorkspaceDir() {
-		String workspace = readWorkspaceDirFromApplicationProperties();
-		if (workspace ==  null) {
-			workspace = applicationRootDir;
-		} else if (workspace.startsWith(APPLICATION_ROOT_IDENTIFIER)) {
-			workspace = workspace.replace(APPLICATION_ROOT_IDENTIFIER, applicationRootDir);
+		final String workspace;
+		if (workspaceDirArgument != null) {
+			// check first application argument
+			workspace = workspaceDirArgument;
+			logEntriesBeforeLogFileExists.add("Workspace set by application argument to <" + workspace + ">");
+		} else {
+			final String tmp = readWorkspaceDirFromApplicationProperties();
+			if (tmp == null) {
+				// last fallback
+				workspace = applicationRootDir;
+				logEntriesBeforeLogFileExists.add("No workspace defined. Application root dir is used: " + workspace);
+			} else {
+				workspace = tmp.replace(APPLICATION_ROOT_IDENTIFIER, applicationRootDir);
+				logEntriesBeforeLogFileExists.add("Workspace defined in application properties as <" + workspace + ">");
+			}
 		}
+
 		workspaceDir = new File(workspace);
 		if (! workspaceDir.exists()) {
 			boolean ok = workspaceDir.mkdirs();
@@ -143,20 +165,20 @@ public class MOGLiCodeCreator {
 				workspacePropertiesFile.createNewFile();
 				final String defaultContent = FileUtil.readTextResourceContentFromClassPath(getClass(), FILENAME_WORKSPACE_PROPERTIES);
 				FileUtil.appendToFile(workspacePropertiesFile, defaultContent);
-				logEntriesBeforeLogFileExists.add("File '" + FILENAME_WORKSPACE_PROPERTIES 
+				logEntriesBeforeLogFileExists.add("File '" + FILENAME_WORKSPACE_PROPERTIES
 						                           + "' did not exist and was created.");
 			} catch (IOException e) {
 				throw new MOGLiCoreException("Error creating " + workspacePropertiesFile.getAbsolutePath(),  e);
 			}
 		}
-	
+
 	}
 
 	String readWorkspaceDirFromApplicationProperties() {
 		String workspace = applicationProperties.getProperty(WORKSPACE_PROPERTY);
 		if (workspace == null) {
-			logEntriesBeforeLogFileExists.add("File '" + FILENAME_APPLICATION_PROPERTIES 
-					                          + "' does not contain a workspace definition. " 
+			logEntriesBeforeLogFileExists.add("File '" + FILENAME_APPLICATION_PROPERTIES
+					                          + "' does not contain a workspace definition. "
 					                          + "ApplicationRootDir is used.");
 		}
 		return workspace;
@@ -165,10 +187,10 @@ public class MOGLiCodeCreator {
 	private void initWorkspaceDirectories() {
 		outputDir = new File(workspaceDir, DIR_OUTPUT_FILES);
 		initDirectory(outputDir, true);
-		
+
 		tempDir = new File(workspaceDir, DIR_TEMP_FILES);
 		initDirectory(tempDir, false); // will be created when needed
-		
+
 		inputDir = new File(workspaceDir, DIR_INPUT_FILES);
 		inputDir.mkdirs();
 	}
@@ -179,19 +201,19 @@ public class MOGLiCodeCreator {
 			MOGLiLogUtil.logInfo("Application help directory does not exist and will be created!");
 			helpDir.mkdirs();
 			String content = null;
-			
+
 			try {
 				content = FileUtil.readTextResourceContentFromClassPath(getClass(), FILENAME_INTRODUCTION_HELPFILE);
 			} catch (IOException e) {
 				MOGLiLogUtil.logWarning("IOException reading " + FILENAME_INTRODUCTION_HELPFILE + " from core jarfile: " + e.getMessage());
 				return;
 			}
-			
+
 			if (content == null) {
 				MOGLiLogUtil.logWarning("Cannot find " + FILENAME_INTRODUCTION_HELPFILE + " in core jarfile.");
-				return;				
+				return;
 			}
-			
+
 			try {
 				final File file = new File(helpDir, FILENAME_INTRODUCTION_HELPFILE);
 				FileUtil.appendToFile(file, content);
@@ -199,7 +221,7 @@ public class MOGLiCodeCreator {
 				MOGLiLogUtil.logWarning("Error writing " + FILENAME_INTRODUCTION_HELPFILE + " to " + helpDir.getAbsolutePath());
 				return;
 			}
-			
+
 			MOGLiLogUtil.logInfo("Application help directory created");
 		}
 	}
@@ -209,7 +231,7 @@ public class MOGLiCodeCreator {
 		if (dir.exists()) {
 			throw new MOGLiCoreException("Could not delete " + dir.getAbsolutePath());
 		}
-		
+
 		if (createDir) {
 			dir.mkdirs();
 		}
@@ -218,7 +240,7 @@ public class MOGLiCodeCreator {
 			throw new MOGLiCoreException("Could not create " + dir.getAbsolutePath());
 		}
 	}
-	
+
 	private void createMogliLogFile() {
 		logDir = new File(workspaceDir, DIR_LOGS_FILES);
 		initDirectory(logDir, true);
@@ -234,16 +256,16 @@ public class MOGLiCodeCreator {
 		MOGLiLogUtil.logInfo("----------------------------");
 		MOGLiLogUtil.logInfo("Encoding: " + System.getProperty("file.encoding"));
 	}
-	
+
 	// *****************************  explicitely tested methods  ************************************
 
-	void doYourJob() {		
+	void doYourJob() {
 		pluginMetaDataList = MetaDataLoader.doYourJob(applicationProperties);
 		if (getNumberOfPluginsToLoad(pluginMetaDataList) == 0) {
 			MOGLiLogUtil.logInfo(TEXT_NOTHING_TO_DO);
 			return;
 		}
-		
+
 		List<MOGLiPlugin> plugins = null;
 		try {
 			plugins = PluginLoader.doYourJob(pluginMetaDataList);
@@ -251,7 +273,7 @@ public class MOGLiCodeCreator {
 			MOGLiLogUtil.logInfo(TEXT_APPLICATION_TERMINATED + e.getMessage());
 			return;
 		}
-		
+
 		try {
 			pluginMetaDataList = PluginExecutor.doYourJob(createPluginExecutionData(plugins));
 		} catch (UnresolvableDependenciesException e) {
@@ -259,11 +281,11 @@ public class MOGLiCodeCreator {
 			MOGLiLogUtil.logInfo(TEXT_APPLICATION_TERMINATED + e.getMessage());
 			return;
 		}
-		
+
 		logFinalInformation();
 	}
-	
-	
+
+
 	private void logFinalInformation() {
 		MOGLiLogUtil.logInfo("");
 		logPluginMetaData(pluginMetaDataList);
@@ -280,7 +302,7 @@ public class MOGLiCodeCreator {
 	}
 
 	private PluginExecutionData createPluginExecutionData(List<MOGLiPlugin> plugins) {
-		InfrastructureInitData infrastructureInitData = new InfrastructureInitData(new File(applicationRootDir), 
+		InfrastructureInitData infrastructureInitData = new InfrastructureInitData(new File(applicationRootDir),
 				                                            logDir, outputDir, tempDir, inputDir, helpDir,
 				                                            applicationProperties);
 		return new PluginExecutionData(plugins, pluginMetaDataList, infrastructureInitData);
@@ -295,8 +317,8 @@ public class MOGLiCodeCreator {
 			MOGLiLogUtil.logInfo(pluginMetaData.toString());
 		}
 	}
-	
-	
+
+
 	int getNumberOfPluginsToLoad(List<PluginMetaData> pluginMetaDataList) {
 		int counter = 0;
 		for (PluginMetaData pluginMetaData : pluginMetaDataList) {
@@ -314,15 +336,15 @@ public class MOGLiCodeCreator {
 				applicationPropertiesFile.createNewFile();
 				final String defaultContent = FileUtil.readTextResourceContentFromClassPath(getClass(), FILENAME_APPLICATION_PROPERTIES);
 				FileUtil.appendToFile(applicationPropertiesFile, defaultContent);
-				logEntriesBeforeLogFileExists.add("File '" + FILENAME_APPLICATION_PROPERTIES 
+				logEntriesBeforeLogFileExists.add("File '" + FILENAME_APPLICATION_PROPERTIES
 						                           + "' did not exist and was created.");
 			} catch (IOException e) {
 				throw new MOGLiCoreException("Error creating " + applicationPropertiesFile.getAbsolutePath(),  e);
 			}
 		}
 	}
-	
-	
+
+
 	// *****************************  private methods  ************************************
 
 	private int getNumberOfSuccessfullyExecutedPlugins(List<PluginMetaData> pluginMetaDataList) {
@@ -348,8 +370,8 @@ public class MOGLiCodeCreator {
 
 	private void readApplicationPropertiesFile() {
 		checkApplicationPropertiesFile();
-		
-		final File propertiesFile = new File(MOGLiCodeCreator.getApplicationRootDir() 
+
+		final File propertiesFile = new File(MOGLiCodeCreator.getApplicationRootDir()
 				+ "/" + FILENAME_APPLICATION_PROPERTIES);
 		applicationProperties = readProperties(propertiesFile);
 	}
@@ -365,7 +387,7 @@ public class MOGLiCodeCreator {
 		}
 		return properties;
 	}
-	
+
 	/**
 	 * FOR TEST PURPOSE ONLY
 	 */
@@ -373,12 +395,12 @@ public class MOGLiCodeCreator {
 		return applicationProperties;
 	}
 
-	
+
 	/**
 	 * FOR TEST PURPOSE ONLY
 	 */
 	public List<PluginMetaData> getPluginMetaDataList() {
 		return pluginMetaDataList;
 	}
-	
+
 }
