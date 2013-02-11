@@ -5,6 +5,8 @@ import java.io.File;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
+import com.iksgmbh.moglicc.MOGLiTextConstants;
+import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.CmdUtil;
 import com.iksgmbh.utils.FileUtil;
@@ -12,17 +14,38 @@ import com.iksgmbh.utils.FileUtil;
 public class B_WorkspaceConfigurationAcceptanceSystemTest extends _AbstractSystemTest {
 
 	@Test
+	public void doesNotExecuteDeactivatedPlugin() throws Exception {
+		// prepare test
+		final File workspacePropertiesFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
+		MOGLiFileUtil.createNewFileWithContent(workspacePropertiesFile, "com.iksgmbh.moglicc.provider.model.standard="
+				                                                        + MOGLiTextConstants.TEXT_ACTIVATED_PLUGIN_PROPERTY);
+
+		// call functionality under test
+		executeMogliApplication();
+
+		// cleanup
+		workspacePropertiesFile.delete();
+
+		// verify test result
+		assertChildrenNumberInDirectory(applicationOutputDir, 1);
+		final File pluginOutputDir = new File(applicationOutputDir, StandardModelProviderStarter.PLUGIN_ID);
+		assertFileExists(pluginOutputDir);
+	}
+
+	@Test
 	public void createsWorkspaceDirProvidedAsArgumentOfStartBatchFile() throws Exception {
 		// prepare test
 		final String workspace = "workspaces/test3";
 		final String startBat = "start.bat";
 		final File workspaceDir = initWorkspaceDir(workspace);
-		MOGLiFileUtil.createNewFileWithContent(new File(applicationRootDir, startBat), "startMOGLiCodeCreator.bat " + workspace);
+		final File startFile = new File(applicationRootDir, startBat);
+		MOGLiFileUtil.createNewFileWithContent(startFile, "startMOGLiCodeCreator.bat " + workspace);
 
 		// call functionality under test
 		CmdUtil.execWindowCommand(testDir, startBat, true);
 
 		// cleanup
+		startFile.delete();
 
 		// verify test result
 		assertWorkspace(workspaceDir);
@@ -122,5 +145,4 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends _AbstractSyste
 		final File targetFile = new File(applicationRootDir, "startMOGLiCodeCreator.bat");
 		MOGLiFileUtil.createNewFileWithContent(targetFile, MOGLiFileUtil.getFileContent(sourceFile));
 	}
-
 }

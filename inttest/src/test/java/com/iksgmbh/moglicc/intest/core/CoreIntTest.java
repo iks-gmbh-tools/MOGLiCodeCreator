@@ -71,7 +71,7 @@ public class CoreIntTest extends IntTestParent {
 	@Test
 	public void createsEmergencyLogFileIfDefinedWorkspaceDirCannotBeCreated() {
 		// prepare test
-		initPropertiesWith("workspace=");
+		initApplicationPropertiesWith("workspace=");
 		final File emergencyLogFile = new File(applicationRootDir, FILENAME_LOG_FILE);
 		assertFileDoesNotExist(emergencyLogFile);
 

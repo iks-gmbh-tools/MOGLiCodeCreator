@@ -27,29 +27,29 @@ import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class MOGLiInfrastructureUnitTest extends CoreTestParent {
-	
+
 	public static final String PLUGIN_TEST_ID = "PLUGIN_TEST_ID";
 	public static final String TEST_PROPERTY = "Test";
-	
+
 	private InfrastructureInitData infrastructureInitData;
 
 	@Before
 	public void setup() {
 		super.setup();
 		final List<MOGLiPlugin> plugins = getPluginListForTest();
-		initPropertiesWith(PLUGIN_TEST_ID + " = " + TEST_PROPERTY);
-		infrastructureInitData = createInfrastructureInitData(applicationProperties, null, null);
+		initWorkspacePropertiesWith(PLUGIN_TEST_ID + " = " + TEST_PROPERTY);
+		infrastructureInitData = createInfrastructureInitData(workspaceProperties, null, null);
 		infrastructureInitData.pluginList = plugins;
 	}
-	
+
 	// *****************************  test methods  ************************************
-	
+
 	@Test
-	public void returnsMogliProperty() {
+	public void returnsWorkspaceProperty() {
 		// prepare test
 		infrastructureInitData.idOfThePluginToThisInfrastructure = PLUGIN_TEST_ID;
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
-		
+
 		// call functionality under test
 		final String property = infrastructure.getWorkspaceProperty(PLUGIN_TEST_ID);
 
@@ -57,7 +57,7 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		assertNotNull(property);
 		assertStringEquals("property", TEST_PROPERTY, property);
 	}
-	
+
 	@Test
 	public void returnsLogDir() {
 		// prepare test
@@ -66,7 +66,7 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final File logsDir = MOGLiFileUtil.getNewFileInstance(DIR_LOGS_FILES);
 		FileUtil.deleteDirWithContent(logsDir);
 		assertFalse("LogDir not deleted: " + logsDir.getAbsolutePath(), logsDir.exists());
-		
+
 		// call functionality under test
 		File actualLogsDir = infrastructure.getWorkspaceLogsDir();
 
@@ -79,7 +79,7 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		// prepare test
 		infrastructureInitData.idOfThePluginToThisInfrastructure = PLUGIN_TEST_ID;
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
-		
+
 		// call functionality under test
 		File actualPluginInputDir = infrastructure.getPluginInputDir();
 
@@ -87,7 +87,7 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final File applicationInputDir = MOGLiFileUtil.getNewFileInstance(DIR_INPUT_FILES);
 		assertStringEquals("Wrong logDir created", applicationInputDir.getAbsolutePath() + "\\" + PLUGIN_TEST_ID, actualPluginInputDir.getAbsolutePath());
 	}
-	
+
 	@Test
 	public void createsPluginTempDir() {
 		// prepare test
@@ -96,10 +96,10 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final File tempDir = MOGLiFileUtil.getNewFileInstance(DIR_TEMP_FILES);
 		FileUtil.deleteDirWithContent(tempDir);
 		assertFileDoesNotExist(tempDir);
-		
+
 		// call functionality under test
 		final File actualPluginTempDir = infrastructure.getPluginTempDir();
-		
+
 		// verify test result
 		assertStringEquals("Wrong tempDir created", tempDir.getAbsolutePath() + "\\" + PLUGIN_TEST_ID, actualPluginTempDir.getAbsolutePath());
 	}
@@ -112,10 +112,10 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final File tempDir = MOGLiFileUtil.getNewFileInstance(DIR_TEMP_FILES);
 		FileUtil.deleteDirWithContent(tempDir);
 		assertFileDoesNotExist(tempDir);
-		
+
 		// call functionality under test
 		final File actualWorkspaceTempDir = infrastructure.getWorkspaceTempDir();
-		
+
 		// verify test result
 		assertStringEquals("Wrong tempDir created", tempDir.getAbsolutePath(), actualWorkspaceTempDir.getAbsolutePath());
 	}
@@ -128,10 +128,10 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final File resultDir = MOGLiFileUtil.getNewFileInstance(DIR_OUTPUT_FILES);
 		FileUtil.deleteDirWithContent(resultDir);
 		assertFileDoesNotExist(resultDir);
-		
+
 		// call functionality under test
 		final File pluginResultDir = infrastructure.getPluginOutputDir();
-		
+
 		// verify test result
 		assertFileExists(pluginResultDir);
 		assertStringEquals("PluginResultDir", resultDir.getAbsolutePath() + "\\" + PLUGIN_TEST_ID, pluginResultDir.getAbsolutePath());
@@ -146,10 +146,10 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final File logDir = MOGLiFileUtil.getNewFileInstance(DIR_LOGS_FILES);
 		FileUtil.deleteDirWithContent(logDir);
 		assertFileDoesNotExist(logDir);
-		
+
 		// call functionality under test
 		final File pluginLogFile = infrastructure.getPluginLogFile();
-	
+
 		// verify test result
 		assertFileExists(pluginLogFile);
 		assertStringEquals("PluginResultDir", logDir.getAbsolutePath() + "\\" + PLUGIN_TEST_ID + ".log", pluginLogFile.getAbsolutePath());
@@ -160,10 +160,10 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		// prepare test
 		infrastructureInitData.idOfThePluginToThisInfrastructure = PLUGIN_TEST_ID;
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
-		
+
 		// call functionality under test
 		Generator generator = infrastructure.getGenerator("null");
-		
+
 		// verify test result
 		assertNull("Null expected", generator);
 		generator = infrastructure.getGenerator("DummyGenerator");
@@ -175,25 +175,25 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		// prepare test
 		infrastructureInitData.idOfThePluginToThisInfrastructure = PLUGIN_TEST_ID;
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
-		
+
 		// call functionality under test
 		ModelProvider modelProvider = infrastructure.getModelProvider("null");
-		
+
 		// verify test result
 		assertNull("Null expected", modelProvider);
 		modelProvider = infrastructure.getModelProvider("StandardModelProvider");
 		assertNotNull("Not null expected", modelProvider);
 	}
-	
+
 	@Test
 	public void returnsDataProvider() {
 		// prepare test
 		infrastructureInitData.idOfThePluginToThisInfrastructure = PLUGIN_TEST_ID;
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
-		
+
 		// call functionality under test
 		DataProvider dataProvider = infrastructure.getDataProvider("null");
-			
+
 		// verify test result
 		assertNull("Null expected", dataProvider);
 		dataProvider = infrastructure.getDataProvider("DummyDataProvider");
@@ -205,10 +205,10 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		// prepare test
 		infrastructureInitData.idOfThePluginToThisInfrastructure = PLUGIN_TEST_ID;
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
-	
+
 		// call functionality under test
 		EngineProvider engineProvider = infrastructure.getEngineProvider("null");
-		
+
 		// verify test result
 		assertNull("Null expected", engineProvider);
 		engineProvider = infrastructure.getEngineProvider("VelocityEngineProvider");

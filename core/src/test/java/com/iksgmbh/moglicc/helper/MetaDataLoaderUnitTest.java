@@ -28,13 +28,13 @@ import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 
 public class MetaDataLoaderUnitTest extends CoreTestParent {
 
-	// **************************  Instance fields  *********************************	
-	
+	// **************************  Instance fields  *********************************
+
 	private MetaDataLoader metaDataLoader;
 
 
-	// **************************  Instantiation stuff  *********************************	
-	
+	// **************************  Instantiation stuff  *********************************
+
 	@Before
 	public void setup() {
 		MOGLiLogUtil.setCoreLogfile(null);
@@ -42,41 +42,42 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 		metaDataLoader = new MetaDataLoader(applicationProperties);
 	}
 
-	// **************************  Test Methods  *********************************	
-	
+	// **************************  Test Methods  *********************************
+
 	@Test
-	public void testLoadMetaData() throws FileNotFoundException, IOException {		
-		deactivatePluginsForTest("DummyPluginStarter");
-		List<PluginMetaData> pluginMetaDataList = MetaDataLoader.doYourJob(applicationProperties);
+	public void testLoadMetaData() throws FileNotFoundException, IOException {
+		activatePluginsForTest("pluginWithoutPropertiesFile", "pluginWithoutStarterClassEntry",
+				               "pluginWithoutExistingStarterClass");
+		List<PluginMetaData> pluginMetaDataList = MetaDataLoader.doYourJob(workspaceProperties);
 
 		assertNotNull(pluginMetaDataList);
-		assertPluginData(pluginMetaDataList, "DummyPluginStarter.jar", PluginStatus.ANALYSED, 
-				"com.iksgmbh.moglicc.test.starterclasses.DummyPluginStarter", 
+		assertPluginData(pluginMetaDataList, "DummyPluginStarter.jar", PluginStatus.ANALYSED,
+				"com.iksgmbh.moglicc.test.starterclasses.DummyPluginStarter",
 				TEXT_DEACTIVATED_PLUGIN_INFO);
-		assertPluginData(pluginMetaDataList, "pluginWithoutPropertiesFile.jar", PluginStatus.ANALYSED, 
+		assertPluginData(pluginMetaDataList, "pluginWithoutPropertiesFile.jar", PluginStatus.ANALYSED,
 				PluginMetaData.NO_MANIFEST, TEXT_NO_MANIFEST_FOUND);
-		assertPluginData(pluginMetaDataList, "pluginWithoutStarterClassEntry.jar", PluginStatus.ANALYSED, 
+		assertPluginData(pluginMetaDataList, "pluginWithoutStarterClassEntry.jar", PluginStatus.ANALYSED,
 				PluginMetaData.NO_STARTERCLASS, TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE);
-		assertPluginData (pluginMetaDataList, "pluginWithoutExistingStarterClass.jar", PluginStatus.ANALYSED, 
+		assertPluginData (pluginMetaDataList, "pluginWithoutExistingStarterClass.jar", PluginStatus.ANALYSED,
 				"notExistingStarterClass", TEXT_INFOMESSAGE_OK);
 	}
 
 	@Test
-	public void testSearchForAvailablePlugins() {		
+	public void testSearchForAvailablePlugins() {
 		List<PluginMetaData> pluginMetaDataList = metaDataLoader.searchForAvailablePlugins();
 		assertNotNull(pluginMetaDataList);
-		assertPluginData (pluginMetaDataList, "DummyPluginStarter.jar", PluginStatus.ANALYSED, 
+		assertPluginData (pluginMetaDataList, "DummyPluginStarter.jar", PluginStatus.ANALYSED,
 				"com.iksgmbh.moglicc.test.starterclasses.DummyPluginStarter", TEXT_INFOMESSAGE_OK);
-		assertPluginData(pluginMetaDataList, "pluginWithoutPropertiesFile.jar", PluginStatus.ANALYSED, 
+		assertPluginData(pluginMetaDataList, "pluginWithoutPropertiesFile.jar", PluginStatus.ANALYSED,
 				PluginMetaData.NO_MANIFEST, TEXT_NO_MANIFEST_FOUND);
-		assertPluginData (pluginMetaDataList, "pluginWithoutStarterClassEntry.jar", PluginStatus.ANALYSED, 
+		assertPluginData (pluginMetaDataList, "pluginWithoutStarterClassEntry.jar", PluginStatus.ANALYSED,
 				PluginMetaData.NO_STARTERCLASS, TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE);
-		assertPluginData(pluginMetaDataList, "pluginWithoutExistingStarterClass.jar", PluginStatus.ANALYSED, 
+		assertPluginData(pluginMetaDataList, "pluginWithoutExistingStarterClass.jar", PluginStatus.ANALYSED,
 				"notExistingStarterClass", TEXT_INFOMESSAGE_OK);
 	}
-	
+
 	@Test
-	public void testSearchPluginsJars() {		
+	public void testSearchPluginsJars() {
 		File[] pluginMetaDataList = metaDataLoader.searchPluginJars();
 		assertNotNull(pluginMetaDataList);
 		assertPluginJarFound(pluginMetaDataList, "DummyPluginStarter.jar");
@@ -84,13 +85,13 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 		assertPluginJarFound(pluginMetaDataList, "pluginWithoutStarterClassEntry.jar");
 		assertPluginJarFound(pluginMetaDataList, "pluginWithoutExistingStarterClass.jar");
 	}
-	
+
 	@Test
 	public void testReadStarterClassFromJar() throws MissingManifestException, MissingStarterclassException {
 		File jar = MOGLiFileUtil.getNewFileInstance(DIR_LIB_PLUGIN + "/DummyPluginStarter.jar");
 		String starterClassFromJar = metaDataLoader.readStarterClassFromJar(jar);
 		assertStringEquals ("Wrong starterClass read from jar", "com.iksgmbh.moglicc.test.starterclasses.DummyPluginStarter", starterClassFromJar);
-		
+
 		jar = MOGLiFileUtil.getNewFileInstance(DIR_LIB_PLUGIN + "/pluginWithoutExistingStarterClass.jar");
 		starterClassFromJar = metaDataLoader.readStarterClassFromJar(jar);
 		assertStringEquals ("Wrong starterClass read from jar", "notExistingStarterClass", starterClassFromJar);
@@ -117,10 +118,10 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 	@Test
 	public void testCheckActivationPluginState() throws FileNotFoundException, IOException {
 		// prepare test
-		deactivatePluginsForTest("a");
-		metaDataLoader = new MetaDataLoader(applicationProperties);
+		activatePluginsForTest("b", "c", "d");
+		metaDataLoader = new MetaDataLoader(workspaceProperties);
 		List<PluginMetaData> pluginMetaDataList = getPluginMetaDataListForTest();
-		
+
 		// call functionality under test
 		metaDataLoader.checkActivationPluginState(pluginMetaDataList);
 
@@ -129,7 +130,7 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 		assertPluginData(pluginMetaDataList, "c", PluginStatus.ANALYSED, "d", TEXT_INFOMESSAGE_OK);
 	}
 
-	
+
 	@Test
 	public void testSearchPluginsJarsNoJarsFound() {
 		String applicationRootDir = MOGLiCodeCreator.getApplicationRootDir();
@@ -141,7 +142,7 @@ public class MetaDataLoaderUnitTest extends CoreTestParent {
 		assertEquals("Unexpected number of plugins found.", 0, plugins.length);
 	}
 
-	// **************************  Private Methods  *********************************	
+	// **************************  Private Methods  *********************************
 
 	private void assertPluginJarFound(File[] plugins, String pluginName) {
 		boolean found = false;

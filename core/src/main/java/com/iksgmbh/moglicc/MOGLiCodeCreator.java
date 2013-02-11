@@ -108,6 +108,7 @@ public class MOGLiCodeCreator {
 
 	private List<PluginMetaData> pluginMetaDataList;
 	private Properties applicationProperties;
+	private Properties workspaceProperties;
 	final List<String> logEntriesBeforeLogFileExists = new ArrayList<String>();
 	private File workspaceDir;
 	private File tempDir;
@@ -127,7 +128,7 @@ public class MOGLiCodeCreator {
 	private void initWorkspace() {
 		initWorkspaceDir();
 		createMogliLogFile();
-		checkWorkspacePropertiesFile();
+		readWorkspaceProperties();
 		initWorkspaceDirectories();
 	}
 
@@ -158,7 +159,7 @@ public class MOGLiCodeCreator {
 		}
 	}
 
-	private void checkWorkspacePropertiesFile() {
+	private void readWorkspaceProperties() {
 		final File workspacePropertiesFile = new File(workspaceDir, FILENAME_WORKSPACE_PROPERTIES);
 		if (! workspacePropertiesFile.exists()) {
 			try {
@@ -171,6 +172,8 @@ public class MOGLiCodeCreator {
 				throw new MOGLiCoreException("Error creating " + workspacePropertiesFile.getAbsolutePath(),  e);
 			}
 		}
+
+		workspaceProperties = readProperties(workspacePropertiesFile, FILENAME_WORKSPACE_PROPERTIES);
 
 	}
 
@@ -260,7 +263,7 @@ public class MOGLiCodeCreator {
 	// *****************************  explicitely tested methods  ************************************
 
 	void doYourJob() {
-		pluginMetaDataList = MetaDataLoader.doYourJob(applicationProperties);
+		pluginMetaDataList = MetaDataLoader.doYourJob(workspaceProperties);
 		if (getNumberOfPluginsToLoad(pluginMetaDataList) == 0) {
 			MOGLiLogUtil.logInfo(TEXT_NOTHING_TO_DO);
 			return;
@@ -371,19 +374,19 @@ public class MOGLiCodeCreator {
 	private void readApplicationPropertiesFile() {
 		checkApplicationPropertiesFile();
 
-		final File propertiesFile = new File(MOGLiCodeCreator.getApplicationRootDir()
+		final File applicationPropertiesFile = new File(MOGLiCodeCreator.getApplicationRootDir()
 				+ "/" + FILENAME_APPLICATION_PROPERTIES);
-		applicationProperties = readProperties(propertiesFile);
+		applicationProperties = readProperties(applicationPropertiesFile, FILENAME_APPLICATION_PROPERTIES);
 	}
 
-	protected Properties readProperties(final File propertiesFile) {
+	protected Properties readProperties(final File propertiesFile, final String filename) {
 		final Properties properties = new Properties();
 		try {
 			final FileInputStream fileInputStream = new FileInputStream(propertiesFile);
 			properties.load(fileInputStream);
 		    fileInputStream.close();
 		} catch (IOException e) {
-			throw new MOGLiCoreException("Could not load " + FILENAME_APPLICATION_PROPERTIES, e);
+			throw new MOGLiCoreException("Could not load " + filename, e);
 		}
 		return properties;
 	}

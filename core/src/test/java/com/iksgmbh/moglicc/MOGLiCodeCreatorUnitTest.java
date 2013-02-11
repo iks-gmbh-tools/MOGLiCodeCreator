@@ -41,7 +41,7 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 		initProperties();
 	}
 
-	// *****************************  test methods  ************************************	
+	// *****************************  test methods  ************************************
 
 	@Test
 	public void cleanupOnInstantiation() throws IOException {
@@ -52,10 +52,10 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 		final File resultDir = MOGLiFileUtil.getNewFileInstance(DIR_OUTPUT_FILES);
 		createFileIn(resultDir);
 		assertChildrenNumberInDirectory(resultDir, 1);
-				
+
 		// call functionality under test
-		mogliCodeCreator = new MOGLiCodeCreator();  
-		
+		mogliCodeCreator = new MOGLiCodeCreator();
+
 		// verify test result
 		assertChildrenNumberInDirectory(logsDir, 1);
 		assertChildrenNumberInDirectory(resultDir, 0);
@@ -67,21 +67,21 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 		file.createNewFile();
 		return file;
 	}
-	
+
 	@Test
 	public void createsMogliLogFile() {
 		// prepare test
 		String applicationRootDir = MOGLiCodeCreator.getApplicationRootDir();
 		initMogliWithNotExistingLogfile();
 		assertFileDoesNotExist(applicationLogfile);
-		
+
 		// call functionality under test
 		mogliCodeCreator.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(applicationLogfile);
 		assertFileContainsEntry(applicationLogfile, TEXT_NOTHING_TO_DO);
-		
+
 		// cleanup
 		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 	}
@@ -99,71 +99,81 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 	@Test
 	public void terminatesTwoPluginWithSameId() throws FileNotFoundException, IOException {
 		// prepare test
-		setEmptyProperties();
+		activatePluginsForTest("DummyPluginStarter", "DummyPluginStarter2");
 		mogliCodeCreator = new MOGLiCodeCreator();  // read properties again
-		
+
 		// call functionality under test
 		mogliCodeCreator.doYourJob();
-		
+
 		// verify test result
 		final String expectedLogEntry = TEXT_DUPLICATE_PLUGINIDS + "DummyPlugin";
-		
+
 		final String expectedLogFileEnding = TEXT_APPLICATION_TERMINATED + expectedLogEntry;
 		final String actualFileContent = MOGLiFileUtil.getFileContent(applicationLogfile);
 		assertTrue("Unexpected logfile ending!" + actualFileContent, actualFileContent.endsWith(expectedLogFileEnding));
 	}
-	
+
 	@Test
 	public void handlePluginWithNotExistingStarterClass() {
+		// prepare test
+		activatePluginsForTest("pluginWithoutExistingStarterClass");
+		mogliCodeCreator = new MOGLiCodeCreator();  // read properties again
+
 		// call functionality under test
 		mogliCodeCreator.doYourJob();
-		
+
 		// verify test result
 		List<PluginMetaData> pluginMetaDataList = mogliCodeCreator.getPluginMetaDataList();
-		assertPluginData(pluginMetaDataList, "pluginWithoutExistingStarterClass.jar", PluginStatus.ANALYSED, 
+		assertPluginData(pluginMetaDataList, "pluginWithoutExistingStarterClass.jar", PluginStatus.ANALYSED,
 				"notExistingStarterClass", TEXT_STARTERCLASS_UNKNOWN);
 	}
-	
+
 	@Test
 	public void executesPluginSuccessfully() {
 		// prepare test
-		deactivatePluginsForTest("DummyPluginStarter", "DummyPluginStarter2");
+		activatePluginsForTest("DummyStandardModelProviderStarter");
 		mogliCodeCreator = new MOGLiCodeCreator();  // read properties again
-		
+
 		// call functionality under test
 		mogliCodeCreator.doYourJob();
-		
+
 		// verify test result
 		List<PluginMetaData> pluginMetaDataList = mogliCodeCreator.getPluginMetaDataList();
-		assertPluginData(pluginMetaDataList, "DummyStandardModelProviderStarter.jar", PluginStatus.EXECUTED, 
+		assertPluginData(pluginMetaDataList, "DummyStandardModelProviderStarter.jar", PluginStatus.EXECUTED,
 				"com.iksgmbh.moglicc.test.starterclasses.DummyStandardModelProviderStarter", TEXT_INFOMESSAGE_OK);
 	}
-	
+
 	@Test
 	public void handlesPluginExecutedWithError() {
 		// prepare test
-		deactivatePluginsForTest("DummyPluginStarter", "DummyPluginStarter2");
-		mogliCodeCreator = new MOGLiCodeCreator();
-		
+		activatePluginsForTest("DummyPluginThrowsRuntimeExceptionStarter");
+		mogliCodeCreator = new MOGLiCodeCreator();  // read properties again
+
 		// call functionality under test^
 		mogliCodeCreator.doYourJob();
-		
+
 		// verify test result
 		List<PluginMetaData> pluginMetaDataList = mogliCodeCreator.getPluginMetaDataList();
-		assertPluginData(pluginMetaDataList, "DummyPluginThrowsRuntimeExceptionStarter.jar", PluginStatus.LOADED, 
-				"com.iksgmbh.moglicc.test.starterclasses.DummyPluginThrowsRuntimeExceptionStarter", 
+		assertPluginData(pluginMetaDataList, "DummyPluginThrowsRuntimeExceptionStarter.jar", PluginStatus.LOADED,
+				"com.iksgmbh.moglicc.test.starterclasses.DummyPluginThrowsRuntimeExceptionStarter",
 				"UNEXPECTED PROBLEM: RuntimeException: fatal");
 	}
-	
+
 	@Test
 	public void logsPluginMetaData() {
 		// prepare test
-		deactivatePluginsForTest("DummyPluginStarter", "DummyPluginStarter2");
-		mogliCodeCreator = new MOGLiCodeCreator(); 
-		
+		activatePluginsForTest("DummyPluginThrowsRuntimeExceptionStarter",
+							   "DummyStandardModelProviderStarter",
+							   "DummyDataProviderStarter",
+							   "pluginWithoutExistingStarterClass",
+							   "pluginWithoutPropertiesFile",
+							   "pluginWithoutStarterClassEntry",
+				               "PluginWithStarterClassWithMissingInterface");
+		mogliCodeCreator = new MOGLiCodeCreator();
+
 		// call functionality under test
 		mogliCodeCreator.doYourJob();
-		
+
 		// verify test result
 		assertFileContainsEntry(applicationLogfile, "Plugins found:");
 		assertFileContainsEntry(applicationLogfile, "jarName=DummyPluginThrowsRuntimeExceptionStarter.jar, id=DummyPlugin, pluginType=GENERATOR, status=LOADED, infoMessage=UNEXPECTED PROBLEM: RuntimeException: fatal");
@@ -176,27 +186,28 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 		assertFileContainsEntry(applicationLogfile, "jarName=pluginWithoutStarterClassEntry.jar, id=null, pluginType=null, status=ANALYSED, infoMessage=" + TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE);
 		assertFileContainsEntry(applicationLogfile, "jarName=PluginWithStarterClassWithMissingInterface.jar, id=null, pluginType=null, status=ANALYSED, infoMessage=" + TEXT_STARTERCLASS_WRONG_TYPE);
 	}
-	
+
 	@Test
 	public void countNumberOfActivePlugins() {
 		// prepare test
 		final List<PluginMetaData> pluginMetaDataList = getPluginMetaDataListForTest();
 		pluginMetaDataList.get(0).setInfoMessage(TEXT_DEACTIVATED_PLUGIN_INFO);
-		
+
 		// call functionality under test
 		final int numberOfActivePlugins = mogliCodeCreator.getNumberOfPluginsToLoad(pluginMetaDataList);
-		
+
 		// verify test result
 		assertEquals("Unexpected number of active plugins", 1, numberOfActivePlugins);
 	}
-	
+
 
 	@Test
 	public void createsApplicationPropertiesFileIfDoesNotExist() throws IOException {
 		// prepare test
+		initApplicationPropertiesWith("");
 		boolean delete = applicationPropertiesFile.delete();
 		assertTrue("Could not delete " + applicationPropertiesFile.getAbsolutePath(), delete);
-		
+
 		// call functionality under test
 		mogliCodeCreator.checkApplicationPropertiesFile();
 
@@ -206,16 +217,16 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 		final String expected = FileUtil.getFileContent(defaultPropertiesFile).trim();
 		assertEquals("Content of '" + FILENAME_APPLICATION_PROPERTIES + "'", expected , fileContent);
 	}
-	
+
 	@Test
-	public void readsWorkspaceFromProperties() {
+	public void readsWorkspaceFromApplicationProperties() {
 		// prepare test
-		initPropertiesWith("workspace=workspaces/demo");
-		mogliCodeCreator = new MOGLiCodeCreator();
-		
+		initApplicationPropertiesWith("workspace=workspaces/demo");
+		mogliCodeCreator = new MOGLiCodeCreator();  // read properties again
+
 		// call functionality under test
 		final String workspace = mogliCodeCreator.readWorkspaceDirFromApplicationProperties();
-		
+
 		// verify test result
 		assertStringEquals("workspace", "workspaces/demo", workspace);
 	}
