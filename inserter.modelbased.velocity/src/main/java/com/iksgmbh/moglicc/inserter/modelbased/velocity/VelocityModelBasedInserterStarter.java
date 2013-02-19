@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.iksgmbh.helper.IOEncodingHelper;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
@@ -14,6 +15,7 @@ import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
+import com.iksgmbh.moglicc.generator.utils.VelocityUtils;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.type.Inserter;
@@ -30,10 +32,11 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	public static final String PLUGIN_ID = "VelocityModelBasedInserter";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 	public static final String ENGINE_PROVIDER_ID = "VelocityEngineProvider";
-	public static final String MAIN_TEMPLATE_IDENTIFIER = "Main";	
+	public static final String MAIN_TEMPLATE_IDENTIFIER = "Main";
 	public static final String PLUGIN_PROPERTIES_FILE = "generator.properties";
-	
+
 	private InfrastructureService infrastructure;
+	private IOEncodingHelper encodingHelper;
 
 	@Override
 	public void setMOGLiInfrastructure(final InfrastructureService infrastructure) {
@@ -43,17 +46,18 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	@Override
 	public void doYourJob() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
-		
+		encodingHelper = null;
+
 		final Model model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel();
-		infrastructure.getPluginLogger().logInfo("Model '" + model.getName() + "' retrieved from " + MODEL_PROVIDER_ID);		
-		
+		infrastructure.getPluginLogger().logInfo("Model '" + model.getName() + "' retrieved from " + MODEL_PROVIDER_ID);
+
 		final List<String> list = getArtefactList();
 		for (final String artefact : list) {
 			infrastructure.getPluginLogger().logInfo("-");
 			applyModelToArtefactTemplate(model, artefact);
 		}
 		infrastructure.getPluginLogger().logInfo("-");
-		
+
 		infrastructure.getPluginLogger().logInfo("Done!");
 	}
 
@@ -62,79 +66,81 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		final VelocityInserterResultData result = insert(engineData);
 		if (! ModelValidationGeneratorUtil.validateModel(result.getNameOfValidModel(), model.getName())) {
 			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' not generated, because only model '"
-	                + result.getNameOfValidModel() + "' is valid for this artefact, " 
+	                + result.getNameOfValidModel() + "' is valid for this artefact, "
 	                + "but not the current model '" + model.getName() + "'.");
-			
+
 			return;
 		}
 		result.validate();
+		encodingHelper = IOEncodingHelper.getInstance(VelocityUtils.getOutputEncodingFormat(result,
+				                                      infrastructure.getPluginLogger()));
 		writeResultIntoPluginOutputDir(result, artefact);
 		writeResultIntoTargetDefinedInTemplate(result);
-		infrastructure.getPluginLogger().logInfo("Generated content for artefact '" + artefact 
+		infrastructure.getPluginLogger().logInfo("Generated content for artefact '" + artefact
 				+ "' inserted into " + result.getTargetDir() + "/" + result.getTargetFileName());
 	}
 
-	private void writeResultIntoPluginOutputDir(final VelocityInserterResultData resultData, final String subDir) 
+	private void writeResultIntoPluginOutputDir(final VelocityInserterResultData resultData, final String subDir)
 	             throws MOGLiPluginException {
 		final File targetdir = new File(infrastructure.getPluginOutputDir(), subDir);
 		targetdir.mkdirs();
 		final File outputFile = new File(targetdir, resultData.getTargetFileName());
 		try {
-			FileUtil.createNewFileWithContent(outputFile, resultData.getGeneratedContent());
+			FileUtil.createNewFileWithContent(encodingHelper, outputFile, resultData.getGeneratedContent());
 		} catch (Exception e) {
 			throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath());
 		}
 	}
 
-	private void writeResultIntoTargetDefinedInTemplate(final VelocityInserterResultData resultData) 
+	private void writeResultIntoTargetDefinedInTemplate(final VelocityInserterResultData resultData)
 	             throws MOGLiPluginException {
 		final File outputFile = resultData.getTargetFile(infrastructure.getApplicationRootDir().getAbsolutePath(), null);
 		infrastructure.getPluginLogger().logInfo("Creating file: " + outputFile.getAbsolutePath());
 		final String buildOutputFileContent = buildOutputFileContent(outputFile, resultData);
 		if (buildOutputFileContent !=  null) {
 			try {
-				FileUtil.createNewFileWithContent(outputFile, buildOutputFileContent);
+				FileUtil.createNewFileWithContent(encodingHelper, outputFile, buildOutputFileContent);
 			} catch (Exception e) {
 				throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
 			}
 		}
 	}
 
-	private String buildOutputFileContent(final File outputFile, final VelocityInserterResultData resultData) 
+	private String buildOutputFileContent(final File outputFile, final VelocityInserterResultData resultData)
 	               throws MOGLiPluginException {
-		
+
 		if (resultData.isTargetToBeCreatedNewly()) {
 			if (outputFile.exists()) {
-				infrastructure.getPluginLogger().logInfo("Old output file will be overwritten:\n" 
+				infrastructure.getPluginLogger().logInfo("Old output file will be overwritten:\n"
 						+ outputFile.getAbsolutePath());
 			} else {
-				infrastructure.getPluginLogger().logInfo("Output file will be created:\n" 
+				infrastructure.getPluginLogger().logInfo("Output file will be created:\n"
 						+ outputFile.getAbsolutePath());
 			}
 			return resultData.getGeneratedContent();
-		}	
-		
+		}
+
 		if (resultData.mustGeneratedContentBeMergedWithExistingTargetFile()) {
 			if (! outputFile.exists()) {
 				throw new MOGLiPluginException("File does not exist:\n" + outputFile.getAbsolutePath());
 			}
-			infrastructure.getPluginLogger().logInfo("Generated content merged with content of\n" 
+			infrastructure.getPluginLogger().logInfo("Generated content merged with content of\n"
 					                                 + outputFile.getAbsolutePath());
 			return mergeOldAndNewContent(outputFile, resultData);
-		}	
+		}
 
 		if (! outputFile.exists()) {
-			infrastructure.getPluginLogger().logInfo("An old output file does not exist:\n" 
+			infrastructure.getPluginLogger().logInfo("An old output file does not exist:\n"
 					+ outputFile.getAbsolutePath());
 			return resultData.getGeneratedContent();
 		}
 
-		infrastructure.getPluginLogger().logWarning("Output file already exists and will not be overwritten:\n" 
+		infrastructure.getPluginLogger().logWarning("Output file already exists and will not be overwritten:\n"
                 + outputFile.getAbsolutePath());
 		return null;
 	}
 
-	private String mergeOldAndNewContent(final File outputFile, 
+	private String mergeOldAndNewContent(final File outputFile,
 			                           final VelocityInserterResultData resultData) throws MOGLiPluginException {
 		final List<String> oldContent;
 		try {
@@ -142,31 +148,31 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		} catch (IOException e) {
 			throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
 		}
-		
+
 		String generatedContent = resultData.getGeneratedContent();
 		final String InsertAboveIndicator = resultData.getInsertAboveIndicator();
 		if (InsertAboveIndicator != null) {
 			generatedContent = InsertAbove(oldContent, generatedContent, InsertAboveIndicator);
-			infrastructure.getPluginLogger().logInfo("Generated Content inserted above '" 
+			infrastructure.getPluginLogger().logInfo("Generated Content inserted above '"
 		            + InsertAboveIndicator + "' in\n" + outputFile.getAbsolutePath());
 			return generatedContent;
 		}
-		
+
 		final String InsertBelowIndicator = resultData.getInsertBelowIndicator();
 		if (InsertBelowIndicator != null) {
 			generatedContent = InsertBelow(oldContent, generatedContent, InsertBelowIndicator);
-			infrastructure.getPluginLogger().logInfo("Generated Content inserted below '" 
+			infrastructure.getPluginLogger().logInfo("Generated Content inserted below '"
 					                                 + InsertBelowIndicator + "' in\n" + outputFile.getAbsolutePath());
 			return generatedContent;
 		}
-		
+
 		final String ReplaceStartIndicator = resultData.getReplaceStartIndicator();
 		if (ReplaceStartIndicator != null) {
 			generatedContent = replace(oldContent, generatedContent, ReplaceStartIndicator, resultData.getReplaceEndIndicator());
 			infrastructure.getPluginLogger().logInfo("Generated Content replaced in\n" + outputFile.getAbsolutePath());
 			return generatedContent;
 		}
-		
+
 		throw new MOGLiPluginException("Invalid VelocityInserterResultData Setting");
 	}
 
@@ -200,7 +206,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		if (! ReplaceEndFound) {
 			throw new MOGLiPluginException(TEXT_END_REPLACE_INDICATOR_NOT_FOUND + ReplaceStartIndicator);
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -246,17 +252,17 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		final File generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
 		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
 	}
-	
+
 	VelocityInserterResultData insert(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException {
 		final File templateDir = new File(infrastructure.getPluginInputDir(), engineData.getArtefactType());
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(findMainTemplate(templateDir));
-		
-		final ModelBasedEngineProvider velocityEngineProvider = 
+
+		final ModelBasedEngineProvider velocityEngineProvider =
 		       (ModelBasedEngineProvider) infrastructure.getEngineProvider(ENGINE_PROVIDER_ID);
-		
-		infrastructure.getPluginLogger().logInfo("Starting velocity engine for artefact '" 
-				+ engineData.getArtefactType()  + " and with template '" 
+
+		infrastructure.getPluginLogger().logInfo("Starting velocity engine for artefact '"
+				+ engineData.getArtefactType()  + " and with template '"
 				+ engineData.getMainTemplateSimpleFileName() + "'...");
 
 		velocityEngineProvider.setEngineData(engineData);
@@ -272,8 +278,8 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	@Override
 	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("initDefaultInputData");
-		
-		
+
+
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
 		final String[] beanFactoryClass = {"BeanFactoryClass.tpl"};
 		defaultData.addDirectory("BeanFactoryClass", beanFactoryClass);
@@ -284,7 +290,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		final String[] beanFactoryInsertBelowTemplate = {"BeanFactoryInsertBelowTemplate.tpl"};
 		defaultData.addDirectory("BeanFactoryInsertBelowTemplate", beanFactoryInsertBelowTemplate);
 		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
-		
+
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
 	}
@@ -303,10 +309,10 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	public List<String> getDependencies() {
 		return ImmutableUtil.getImmutableListOf(MODEL_PROVIDER_ID, ENGINE_PROVIDER_ID);
 	}
-	
+
 	@Override
 	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
-		final File validationInputFile = new File(infrastructure.getPluginInputDir(), 
+		final File validationInputFile = new File(infrastructure.getPluginInputDir(),
 				                                  MetaInfoValidationUtil.FILENAME_VALIDATION);
 		return MetaInfoValidationUtil.getMetaInfoValidatorList(validationInputFile, getId());
 	}
