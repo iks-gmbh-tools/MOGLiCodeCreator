@@ -10,7 +10,7 @@ import com.iksgmbh.helper.AnnotationParser;
 public class AttributeDescriptorParser extends AnnotationParser {
 	
 	public AttributeDescriptorParser() {
-		super(MetaModelConstants.ATTRIBUTE_IDENTIFIER + " ", AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
+		super(MetaModelConstants.ATTRIBUTE_IDENTIFIER + " ", AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER, AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
 	}
 	
 	public BuildUpAttributeDescriptor parse(String line) throws MOGLiPluginException {

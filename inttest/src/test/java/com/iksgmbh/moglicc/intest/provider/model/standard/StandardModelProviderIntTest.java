@@ -12,6 +12,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 
 public class StandardModelProviderIntTest extends IntTestParent {
 
@@ -27,13 +28,26 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		final File expectedFile = getTestFile("ExpectedModelStatistics.txt");
 		assertFileEquals(expectedFile, file);
 	}
-	
+
+	@Test
+	public void filtersMetaInfoValidatorVendorsByNameOfModel() throws MOGLiPluginException {
+		// prepare test
+		setMetaInfoValidationFile(velocityClassBasedGeneratorStarter, "MetaInfoValidatorsForDifferentModels.txt");
+		standardModelProviderStarter.doYourJob();
+
+		// call functionality under test
+		final List<MetaInfoValidator> allMetaInfoValidators = standardModelProviderStarter.getAllMetaInfoValidators();
+
+		// verify test result
+		assertEquals("Number of vendors", 2, allMetaInfoValidators.size());
+	}
+
 	@Test
 	public void createsStatisticsFileWithMetaInfoNamesThatContainSpaces() throws MOGLiPluginException {
 		// prepare test
 		setModelFile("ModelFileWithMetaInfosContainingSpacesInNames.txt");
 		setMetaInfoValidationFile(velocityClassBasedGeneratorStarter, "MetaInfoValidatoresContainingSpacesInNames.txt");
-		
+
 		// call functionality under test
 		standardModelProviderStarter.doYourJob();
 
@@ -41,21 +55,30 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		final InfrastructureService infrastructure = standardModelProviderStarter.getMOGLiInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		assertFileExists(file);
-		final File expectedFile = new File(getProjectTestResourcesDir(), 
+		final File expectedFile = new File(getProjectTestResourcesDir(),
 				                           "ExpectedStatisticsFileWithMetaInfosContainingSpacesInNames.txt");
 		assertFileEquals(expectedFile, file);
 	}
 
 	@Test
-	public void filtersMetaInfoValidatorVendorsByNameOfModel() throws MOGLiPluginException {
+	public void readsModelFileWithCustomizedBraceSymbolForMetaInfoValues() throws MOGLiPluginException {
 		// prepare test
-		setMetaInfoValidationFile(velocityClassBasedGeneratorStarter, "MetaInfoValidatorsForDifferentModels.txt");
-		standardModelProviderStarter.doYourJob();
-		
+		setModelFile("ModelFileWithMetaInfosContainingDoubleQoutesInNames.txt");
+		final File modelPropertiesFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+				                                  StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "BraceSymbolForMetaInfoValues=*");
+
+
 		// call functionality under test
-		final List<MetaInfoValidator> allMetaInfoValidators = standardModelProviderStarter.getAllMetaInfoValidators();
+		standardModelProviderStarter.doYourJob();
 
 		// verify test result
-		assertEquals("Number of vendors", 2, allMetaInfoValidators.size());
+		final InfrastructureService infrastructure = standardModelProviderStarter.getMOGLiInfrastructure();
+		final File file = new File(infrastructure.getPluginOutputDir(), StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
+		assertFileExists(file);
+		final File expectedFile = new File(getProjectTestResourcesDir(),
+				                           "ExpectedStatisticsFileWithMetaInfosContainingDoubleQoutesInNames.txt");
+		assertFileEquals(expectedFile, file);
 	}
+
 }

@@ -7,7 +7,7 @@ import com.iksgmbh.helper.AnnotationParser;
 public class ModelNameParser extends AnnotationParser {
 	
 	public ModelNameParser() {
-		super(MetaModelConstants.MODEL_IDENTIFIER + " ", AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
+		super(MetaModelConstants.MODEL_IDENTIFIER + " ", AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER, AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
 	}
 	
 	public String parse(String line) {

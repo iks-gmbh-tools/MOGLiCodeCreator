@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.iksgmbh.helper.AnnotationParser;
 import com.iksgmbh.moglicc.provider.model.standard.exceptions.ModelParserException;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.parser.ModelParser;
@@ -30,7 +31,7 @@ public class ModelUnitTest extends StandardModelProviderTestParent {
                 "class de.test.Address", 
                 "metainfo extends java.lang.Object",
                 "attribute Street");
-		final Model model = ModelParser.doYourJob(fileContentAsList);		
+		final Model model = ModelParser.doYourJob(fileContentAsList, AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER);		
 
 		// call functionality under test
 		final List<MetaInfo> allMetaInfos = model.getAllMetaInfos();
