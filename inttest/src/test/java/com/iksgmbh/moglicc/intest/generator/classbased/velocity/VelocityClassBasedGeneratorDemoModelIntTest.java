@@ -15,7 +15,7 @@ import com.iksgmbh.utils.FileUtil;
 public class VelocityClassBasedGeneratorDemoModelIntTest extends IntTestParent {
 
 	@Test
-	public void createsJavaBeanMisc() throws MOGLiPluginException {
+	public void createsJavaBeanMiscJavaFile() throws MOGLiPluginException {
 		// prepare test
 		standardModelProviderStarter.doYourJob();
 
@@ -96,7 +96,6 @@ public class VelocityClassBasedGeneratorDemoModelIntTest extends IntTestParent {
 				                                             "@TargetDir <applicationRootDir>/example" + FileUtil.getSystemLineSeparator() +
 				                                             "ßüäöÜÄÖ $model.getMetaInfoValueFor(\"umlauts\")");
 		assertFileExists(templateFile);
-
 
 		// call functionality under test
 		standardModelProviderStarter.doYourJob();

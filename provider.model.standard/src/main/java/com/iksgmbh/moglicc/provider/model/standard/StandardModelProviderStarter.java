@@ -1,5 +1,6 @@
 package com.iksgmbh.moglicc.provider.model.standard;
 
+import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.METAINFO_BRACE_SYMBOL_PROPERTY;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.MODELFILE_PROPERTY;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_MODEL_NOT_EXISTS;
@@ -17,9 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.iksgmbh.helper.AnnotationParser;
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.exceptions.MetaInfoValidatorException;
+
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.exceptions.MetaInfoValidatorException;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
@@ -47,6 +50,8 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 
 	private List<MetaInfoValidator> metaInfoValidatorList;
 
+	private Properties pluginProperties;
+
 	@Override
 	public String getId() {
 		return PLUGIN_ID;
@@ -60,10 +65,11 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
-	
+
 	@Override
 	public void doYourJob() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
+		readPluginProperties();
 		buildUpModel = buildModel();
 		validateMetaInfos();
 		StatisticsFileCreator.doYourJob(this); // must be called after validateMetaInfos() !
@@ -72,15 +78,15 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 
 	void validateMetaInfos() throws MOGLiPluginException {
 		final List<MetaInfoValidator> metaInfoValidatorList = getAllMetaInfoValidators();
-		
+
 		boolean validationErrorOccurredOnModelLevel = validateModelMetaInfos(metaInfoValidatorList);
 		boolean validationErrorOccurredOnClassLevel = validateClassMetaInfos(metaInfoValidatorList);
 		boolean validationErrorOccurredOnAttributeLevel = validateAttributeMetaInfos(metaInfoValidatorList);
-		
-		if (validationErrorOccurredOnModelLevel 
+
+		if (validationErrorOccurredOnModelLevel
 			|| validationErrorOccurredOnClassLevel
 			|| validationErrorOccurredOnAttributeLevel) {
-			throw new MetaInfoValidatorException(TEXT_METAINFO_VALIDATION_ERROR_OCCURRED 
+			throw new MetaInfoValidatorException(TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                            + infrastructure.getPluginLogFile().getName());
 		}
 	}
@@ -90,12 +96,12 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		final List<ClassDescriptor> classDescriptorList = buildUpModel.getClassDescriptorList();
 		for (final ClassDescriptor classDescriptor : classDescriptorList) {
 			final List<AttributeDescriptor> attributeDescriptorList = classDescriptor.getAttributeDescriptorList();
-			for (final AttributeDescriptor attributeDescriptor : attributeDescriptorList) {				
+			for (final AttributeDescriptor attributeDescriptor : attributeDescriptorList) {
 				for (final MetaInfoValidator metaInfoValidator : allMetaInfoValidators) {
 					boolean validationOk = metaInfoValidator.validate(attributeDescriptor.getMetaInfoList(), HierarchyLevel.Attribute);
 					if (! validationOk) {
 						validationErrorOccurred = true;
-						infrastructure.getPluginLogger().logError(metaInfoValidator.getValidationErrorMessage() 
+						infrastructure.getPluginLogger().logError(metaInfoValidator.getValidationErrorMessage()
 								+ "for attributeDescriptor '" + attributeDescriptor.getName() + "'");
 					}
 				}
@@ -112,7 +118,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 				boolean validationOk = metaInfoValidator.validate(classDescriptor.getMetaInfoList(), HierarchyLevel.Class);
 				if (! validationOk) {
 					validationErrorOccurred = true;
-					infrastructure.getPluginLogger().logError(metaInfoValidator.getValidationErrorMessage() 
+					infrastructure.getPluginLogger().logError(metaInfoValidator.getValidationErrorMessage()
 							                                  + "for classDescriptor '" + classDescriptor.getSimpleName() + "'");
 				}
 			}
@@ -132,7 +138,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		}
 		return validationErrorOccurred;
 	}
-	
+
 	public List<MetaInfoValidator> getAllMetaInfoValidators() throws MOGLiPluginException {
 		if (metaInfoValidatorList == null) {
 			metaInfoValidatorList = collectMetaInfoValidatorsFromVendors();
@@ -143,13 +149,13 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	private List<MetaInfoValidator> collectMetaInfoValidatorsFromVendors() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Collecting MetaInfoValidators from vendors: ");
 		final List<MetaInfoValidator> toReturn = new ArrayList<MetaInfoValidator>();
-		final List<MetaInfoValidatorVendor> vendors = 
+		final List<MetaInfoValidatorVendor> vendors =
 			   infrastructure.getPluginsOfType(MetaInfoValidatorVendor.class);
-		
+
 		if (vendors.isEmpty()) {
 			infrastructure.getPluginLogger().logInfo("No vendor for MetaInfoValidators found.");
 		}
-		
+
 		for (final MetaInfoValidatorVendor metaInfoValidatorVendor : vendors) {
 			final MOGLiPlugin vendorPlugin = (MOGLiPlugin) metaInfoValidatorVendor;
 			int counter = 0;
@@ -164,7 +170,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 			infrastructure.getPluginLogger().logInfo("Found MetaInfoValidatorVendor '" + vendorPlugin.getId() + "'" +
 					" providing " + counter + " MetaInfoValidators to model '" + buildUpModel.getName() + "'.");
 		}
-		
+
 		return toReturn;
 	}
 
@@ -192,9 +198,10 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		checkModelFile();
 
 		final List<String> fileContentAsList = readModelFileContent();
+	    final String braceSymbolForMetaInfoValues = getMetaInfoBraceSymbol();
 
 		try {
-			buildUpModel = ModelParser.doYourJob(fileContentAsList);
+			buildUpModel = ModelParser.doYourJob(fileContentAsList, braceSymbolForMetaInfoValues);
 		} catch (ModelParserException e) {
 			throw new MOGLiPluginException(TEXT_PARSE_ERROR_FOUND
 					+ e.getParserErrors());
@@ -205,6 +212,19 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 						+ modelFile.getAbsolutePath());
 
 		return buildUpModel;
+	}
+
+	private String getMetaInfoBraceSymbol() {
+		String toReturn;
+		if (pluginProperties == null) {
+			toReturn = AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER;
+		} else {
+			toReturn = pluginProperties.getProperty(METAINFO_BRACE_SYMBOL_PROPERTY);
+			if (toReturn == null || toReturn.length() == 0) {
+				toReturn = AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER;
+			}
+		}
+		return toReturn;
 	}
 
 	List<String> readModelFileContent() throws MOGLiPluginException {
@@ -239,61 +259,79 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	File getModelFile() throws MOGLiPluginException {
 		if (modelFile == null) {
 			final String filename = getModelFileName();
-			if (filename ==  null) {
-				throw new MOGLiPluginException(TEXT_NO_MODELFILE_FOUND);
-			}
+
+
+
 			modelFile = new File(infrastructure.getPluginInputDir(), filename);
 		}
 		return modelFile;
 	}
 
-	private String getModelFileName() {
-		String toReturn = readFilenameFromPropertiesFile();
-		
+	private String getModelFileName() throws MOGLiPluginException {
+		String toReturn = null;
+
+		if (pluginProperties != null) {
+			toReturn = pluginProperties.getProperty(MODELFILE_PROPERTY);
+		}
+
 		if (toReturn == null) {
+			infrastructure.getPluginLogger().logWarning(TEXT_NO_MODELFILE_DEFINED_IN_PROPERTIES_FILE);
 			toReturn = readModelFileNameFromFileSystem();
 		}
-		
-		return toReturn;
-	}
-	
-	private String readModelFileNameFromFileSystem() {
-		String toReturn = null;
-		final List<File> files = FileUtil.getOnlyFileChildren(infrastructure.getPluginInputDir());
-		if (files.size() == 1 && ! files.get(0).getName().equals(PLUGIN_PROPERTIES_FILE)) {
-			toReturn = files.get(0).getName();
+
+		if (toReturn == null) {
+			throw new MOGLiPluginException(TEXT_NO_MODELFILE_FOUND);
 		}
+
 		return toReturn;
 	}
 
-	private String readFilenameFromPropertiesFile() {
+	private String readModelFileNameFromFileSystem() {
 		String toReturn = null;
-		final File propertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
-		if (propertiesFile.exists()) {
-			FileInputStream fileInputStream = null;
-			try {
-				fileInputStream = new FileInputStream(propertiesFile);
-				final Properties pluginProperties = new Properties();
-				pluginProperties.load(fileInputStream);
-				toReturn = pluginProperties.getProperty(MODELFILE_PROPERTY);
-				if (toReturn == null) {
-					infrastructure.getPluginLogger().logWarning(TEXT_NO_MODELFILE_DEFINED_IN_PROPERTIES_FILE);
-				}
-			} catch (IOException e) {
-				infrastructure.getPluginLogger().logError(TEXT_PROPERTIES_FILE_NOT_LOADED + e.getMessage());
-			} finally {
-				if (fileInputStream != null) {
-					try {
-						fileInputStream.close();
-					} catch (IOException e) {
-						infrastructure.getPluginLogger().logError("Error reading file\n" + propertiesFile.getAbsolutePath());
+		final List<File> files = FileUtil.getOnlyFileChildren(infrastructure.getPluginInputDir());
+		final List<File> list = new ArrayList<File>();
+
+		for (final File file : files) {
+			if (! file.getName().equals(PLUGIN_PROPERTIES_FILE)) {
+				list.add(file);
+			}
+		}
+
+		if (list.size() == 1) {
+			toReturn = files.get(0).getName();
+		}
+
+		return toReturn;
+	}
+
+	void readPluginProperties() {
+		if (pluginProperties == null) {
+			final File propertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
+			if (propertiesFile.exists()) {
+				FileInputStream fileInputStream = null;
+				try {
+					fileInputStream = new FileInputStream(propertiesFile);
+					pluginProperties = new Properties();
+					pluginProperties.load(fileInputStream);
+
+
+
+
+				} catch (IOException e) {
+					infrastructure.getPluginLogger().logError(TEXT_PROPERTIES_FILE_NOT_LOADED + e.getMessage());
+				} finally {
+					if (fileInputStream != null) {
+						try {
+							fileInputStream.close();
+						} catch (IOException e) {
+							infrastructure.getPluginLogger().logError("Error reading file\n" + propertiesFile.getAbsolutePath());
+						}
 					}
 				}
+			} else {
+				infrastructure.getPluginLogger().logWarning(TEXT_NO_PROPERTIESFILE_FOUND);
 			}
-		} else {
-			infrastructure.getPluginLogger().logWarning(TEXT_NO_PROPERTIESFILE_FOUND);
 		}
-		return toReturn;
 	}
 
 	@Override
@@ -310,7 +348,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	public InfrastructureService getMOGLiInfrastructure() {
 		return infrastructure;
 	}
-	
+
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
@@ -327,6 +365,6 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	 * FOR TEST PURPOSE ONLY
 	 */
 	void setModelFile(final File file) {
-		modelFile = file; 
+		modelFile = file;
 	}
 }

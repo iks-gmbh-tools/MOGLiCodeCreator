@@ -11,7 +11,7 @@ import com.iksgmbh.helper.AnnotationParser;
 public class ClassDescriptorParser extends AnnotationParser {
 	
 	public ClassDescriptorParser() {
-		super(MetaModelConstants.CLASS_IDENTIFIER + " ", AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
+		super(MetaModelConstants.CLASS_IDENTIFIER + " ", AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER, AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
 	}
 	
 	public BuildUpClassDescriptor parse(String line) throws MOGLiPluginException {

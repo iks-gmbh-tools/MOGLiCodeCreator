@@ -7,48 +7,56 @@ import com.iksgmbh.data.Annotation;
  * Valid lines are one of the following:
  * <ANNOTATION_PREFIX_IDENTIFICATOR><FirstPart><DEFAULT_PART_SEPARATOR><SecondPart><DEFAULT_COMMENT_IDENTIFICATOR><comment>
  * or to use spaces within a part
- * <ANNOTATION_PREFIX_IDENTIFICATOR><DEFAULT_PART_BRACE_IDENTIFIER><FirstPart><DEFAULT_PART_BRACE_IDENTIFIER><SecondPart><DEFAULT_COMMENT_IDENTIFICATOR><comment>
+ * <ANNOTATION_PREFIX_IDENTIFICATOR><PART_BRACE_IDENTIFIER><FirstPart><PART_BRACE_IDENTIFIER><SecondPart><DEFAULT_COMMENT_IDENTIFICATOR><comment>
  *
  * @author Reik Oberrath
  */
 public class AnnotationParser {
-	
+
+	public static final String DEFAULT_PART_SEPARATOR = " "; // not customizable
+	public static final String DEFAULT_PART_BRACE_IDENTIFIER = "\"";
 	public static final String DEFAULT_ANNOTATION_PREFIX_IDENTIFICATOR = "@";
 	public static final String DEFAULT_COMMENT_IDENTIFICATOR = "#";
-	public static final String DEFAULT_PART_SEPARATOR = " ";
-	public static final String DEFAULT_PART_BRACE_IDENTIFIER = "\"";
-	
+
+
+
 	public static final String ERROR = "PARSER ERROR: ";
-	
+
 	private static AnnotationParser annotationParserInstance;
 
 	protected String annotationPrefixIdentificator;
 	protected String commentIdentificator;
-	
+	protected String partBraceIdentifier;
+
 	protected AnnotationParser(final String annotationPrefixIdentificator,
-			                 final String commentIdentificator) {
+							   final String partBraceIdentifier,
+			                   final String commentIdentificator) {
 		this.annotationPrefixIdentificator = annotationPrefixIdentificator;
+		this.partBraceIdentifier = partBraceIdentifier;
 		this.commentIdentificator = commentIdentificator;
 	}
-	
-	public static AnnotationParser getInstance(final String annotationPrefixIdentificator, 
-			                  final String commentIdentificator) {
-		annotationParserInstance = new AnnotationParser(annotationPrefixIdentificator, 
+
+	public static AnnotationParser getInstance(final String annotationPrefixIdentificator,
+			                                   final String commentIdentificator) {
+		annotationParserInstance = new AnnotationParser(annotationPrefixIdentificator,
+				                                        DEFAULT_PART_BRACE_IDENTIFIER,
 				                                        commentIdentificator);
 		return annotationParserInstance;
 	}
-	
+
 	public static AnnotationParser getInstance(final String annotationPrefixIdentificator) {
-		annotationParserInstance = new AnnotationParser(annotationPrefixIdentificator, 
+		annotationParserInstance = new AnnotationParser(annotationPrefixIdentificator,
+														DEFAULT_PART_BRACE_IDENTIFIER,
 				                                        DEFAULT_COMMENT_IDENTIFICATOR);
 		return annotationParserInstance;
 	}
-	
+
 	public static AnnotationParser getInstance() {
-		annotationParserInstance = new AnnotationParser(DEFAULT_ANNOTATION_PREFIX_IDENTIFICATOR, 
+		annotationParserInstance = new AnnotationParser(DEFAULT_ANNOTATION_PREFIX_IDENTIFICATOR,
+														DEFAULT_PART_BRACE_IDENTIFIER,
 				                                        DEFAULT_COMMENT_IDENTIFICATOR);
 		return annotationParserInstance;
-	}	
+	}
 
 	/**
 	 * Performs case internsitive prefix check
@@ -59,7 +67,7 @@ public class AnnotationParser {
 		// a prefix may have leading or trailing spaces !
 		return line.trim().toLowerCase().startsWith(annotationPrefixIdentificator.trim().toLowerCase());
 	}
-	
+
 	public Annotation doYourJob(String line) {
 		Annotation toReturn = null;
 		if (hasCorrectPrefix(line)) {
@@ -73,7 +81,7 @@ public class AnnotationParser {
 
 	public AnnotationContentParts getAnnotationContentParts(final String line) {
 		try {
-			if (line.startsWith(DEFAULT_PART_BRACE_IDENTIFIER)) {
+			if (line.startsWith(partBraceIdentifier)) {
 				return parseWithBraces(line);
 			} else {
 				return parseWithSeparator(line.trim());
@@ -91,7 +99,7 @@ public class AnnotationParser {
 		if (pos == -1) {
 			toReturn.firstPart = line;
 		} else {
-			toReturn.firstPart = line.substring(0, pos);				
+			toReturn.firstPart = line.substring(0, pos);
 			toReturn.secondPart = line.substring(pos + 1).trim();
 		}
 		return toReturn;
@@ -99,13 +107,13 @@ public class AnnotationParser {
 
 	private AnnotationContentParts parseWithBraces(final String line) {
 		final AnnotationContentParts toReturn = new AnnotationContentParts();
-		String tmpLine = line.substring(DEFAULT_PART_BRACE_IDENTIFIER.length());
-		int pos = tmpLine.indexOf(DEFAULT_PART_BRACE_IDENTIFIER);
+		String tmpLine = line.substring(partBraceIdentifier.length());
+		int pos = tmpLine.indexOf(partBraceIdentifier);
 		if (pos == -1) {
 			throwParseException(line);
 		}
 		toReturn.firstPart = tmpLine.substring(0, pos);
-		pos = pos + DEFAULT_PART_BRACE_IDENTIFIER.length() 
+		pos = pos + partBraceIdentifier.length()
 				  + DEFAULT_PART_SEPARATOR.length();
 		if (tmpLine.length() > pos) {
 			toReturn.secondPart = tmpLine.substring(pos);
@@ -134,8 +142,8 @@ public class AnnotationParser {
 
 	public String getCommentIdentificator() {
 		return commentIdentificator;
-	}	
-	
+	}
+
 	public boolean isCommentLine(final String line) {
 		return line.trim().startsWith(commentIdentificator);
 	}
@@ -143,11 +151,11 @@ public class AnnotationParser {
 	public class AnnotationContentParts {
 		String firstPart;
 		String secondPart;
-		
+
 		public String getFirstPart() {
 			return firstPart;
 		}
-		
+
 		public String getSecondPart() {
 			return secondPart;
 		}
