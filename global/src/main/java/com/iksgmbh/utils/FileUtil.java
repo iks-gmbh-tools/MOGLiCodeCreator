@@ -7,42 +7,34 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.iksgmbh.helper.IOEncodingHelper;
+
 public class FileUtil {
-	
-	public static BufferedReader getBufferedReader(final File file) throws IOException {
-		return new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+
+
+	public static String getFileContent(final InputStream inputStream, final String filename) throws IOException {
+		final BufferedReader br = IOEncodingHelper.STANDARD.getBufferedReader(inputStream);
+		return getFileContent(br, filename);
 	}
-	
-	public static BufferedWriter getBufferedWriter(final File file) throws IOException {
-		return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
-	}
-	
 
 	public static String getFileContent(final File file) throws IOException {
-		return getFileContent(getBufferedReader(file), file.getName());
+		return getFileContent(IOEncodingHelper.STANDARD.getBufferedReader(file), file.getName());
 	}
-	
+
 	public static String getFileContent(final String filename) throws IOException {
 		final File file = new File(filename);
-		return getFileContent(getBufferedReader(file), filename);
+		return getFileContent(IOEncodingHelper.STANDARD.getBufferedReader(file), filename);
 	}
 
 
 	public static List<String> getFileContentAsList(final File file) throws IOException {
-		return getFileContentAsList(getBufferedReader(file), file.getName());
+		return getFileContentAsList(IOEncodingHelper.STANDARD.getBufferedReader(file), file.getName());
 	}
-	
-	public static String getFileContent(final InputStream inputStream,
-			                            final String filename) throws IOException {
-		final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8")); 
-		return getFileContent(br, filename);
-	}
+
 
 	private static String getFileContent(BufferedReader br, String filename) throws IOException {
 		List<String> fileContentAsList = getFileContentAsList(br, filename);
@@ -59,7 +51,7 @@ public class FileUtil {
 	}
 
 	private static List<String> getFileContentAsList(
-			                    final BufferedReader br, 
+			                    final BufferedReader br,
 			                    final String filename) throws IOException {
 		final List<String> content = new ArrayList<String>();
 		try {
@@ -79,22 +71,22 @@ public class FileUtil {
 	public static void appendToFile(final File file, final String text) throws IOException {
 		final String oldFileContent;
 		final String newFileContent;
-		
+
 		if (file.exists()) {
 			oldFileContent = getFileContent(file);
 		} else {
 			oldFileContent = "";
 		}
-		
+
 		if (oldFileContent.length() > 0) {
 			newFileContent = oldFileContent + getSystemLineSeparator() + text;
 		} else {
 			newFileContent = text;
 		}
-		
+
 		Writer writer = null;
 		try {
-			writer = getBufferedWriter(file);
+			writer = IOEncodingHelper.STANDARD.getBufferedWriter(file);
 			writer.write(newFileContent);
 		} finally {
 			if (writer != null) {
@@ -103,22 +95,36 @@ public class FileUtil {
 		}
 	}
 
-	public static void createNewFileWithContent(final File file, final List<String> content) throws Exception {
-		createNewFileWithContent(file, transformStringListToString(content));
-	}
-	
-	public static void createNewFileWithContent(final File file, final String content) throws Exception {
+	public static void createNewFileWithContent(IOEncodingHelper encodingHelper,
+			                                    final File file, final String content) throws Exception {
+
+		if (encodingHelper == null) {
+			encodingHelper = IOEncodingHelper.STANDARD;
+		}
+
+		if (file == null) {
+			throw new IllegalArgumentException("FileUtil: file must not be null");
+		}
+
 		createNewFile(file);
-		
+
 		Writer writer = null;
 		try {
-			writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			writer = encodingHelper.getOutputStreamWriter(file);
 			writer.write(content);
 		} finally {
 			if (writer != null) {
 				writer.close();
 			}
 		}
+	}
+
+	public static void createNewFileWithContent(final File file, final String content) throws Exception {
+		createNewFileWithContent(IOEncodingHelper.STANDARD, file, content);
+	}
+
+	public static void createNewFileWithContent(final File file, final List<String> content) throws Exception {
+		createNewFileWithContent(file, transformStringListToString(content));
 	}
 
 	protected static void createNewFile(final File file) throws IOException {
@@ -175,7 +181,7 @@ public class FileUtil {
 		}
 		return ok;
 	}
-	
+
 	public static void deleteFiles(final File[] cleanUpFiles) {
 		for (int i = 0; i < cleanUpFiles.length; i++) {
 			final File f = cleanUpFiles[i];
@@ -186,12 +192,12 @@ public class FileUtil {
 			}
 		}
 	}
-	
+
 	public static void copyTextFile(final File sourcefile, final String targetdir) {
 		final File targetFile = new File(targetdir + "/" + sourcefile.getName());
 		copyTextFile(sourcefile, targetFile);
 	}
-	
+
 	/**
 	 * Uses reader and writer to perform copy
 	 * @param sourcefile
@@ -215,8 +221,8 @@ public class FileUtil {
 		BufferedReader in = null;
 		BufferedWriter out = null;
 		try {
-			out = getBufferedWriter(targetFile);
-			in = getBufferedReader(sourcefile);
+			out = IOEncodingHelper.STANDARD.getBufferedWriter(targetFile);
+			in = IOEncodingHelper.STANDARD.getBufferedReader(sourcefile);
 			int c;
 
 			while ((c = in.read()) != -1)
@@ -241,7 +247,7 @@ public class FileUtil {
 			}
 		}
 	}
-	
+
 	/**
 	 * Uses streams to perform copy
 	 * @param fromFileName
@@ -321,7 +327,7 @@ public class FileUtil {
 				}
 		}
 	}
-	
+
 	public static File getSubDir(final File parent, final String subDir) {
 		final File[] listFiles = parent.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
@@ -329,7 +335,7 @@ public class FileUtil {
 			if (f.isDirectory() && f.getName().equals(subDir)) {
 				return f;
 			}
-			
+
 		}
 		return null;
 	}
@@ -339,7 +345,7 @@ public class FileUtil {
          long fileSizeInKB = filesize / 1024;
 		return fileSizeInKB;
 	}
-	
+
 	public static String readTextResourceContentFromClassPath(final Class<?> clazz,
 			                                                  final String pathToResource) throws IOException {
 		final InputStream resource = clazz.getClassLoader().getResourceAsStream(pathToResource);
@@ -347,7 +353,7 @@ public class FileUtil {
 		final String filename = pathToResource.substring(pos);
 		return FileUtil.getFileContent(resource, filename);
 	}
-	
+
 	public static List<String> getNamesOfSubdirs(final File dir) {
 		if (dir.isFile()) {
 			return null;
@@ -361,7 +367,7 @@ public class FileUtil {
 		}
 		return toReturn;
 	}
-	
+
 	public static List<File> getOnlyFileChildren(final File dir) {
 		if (dir.isFile() || ! dir.exists()) {
 			return null;

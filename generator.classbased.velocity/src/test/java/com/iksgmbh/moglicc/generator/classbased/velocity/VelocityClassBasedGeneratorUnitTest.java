@@ -20,9 +20,9 @@ import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGeneratorTestParent {
-	
+
 	private static final String MAIN_TEMPLATE = "A_MainTemplate.tpl";
-	
+
 	private File generatorPropertiesFile;
 
 	@Override
@@ -30,11 +30,11 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	public void setup() {
 		super.setup();
 		applicationTempDir.mkdirs();
-		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), 
+		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(),
 		            VelocityClassBasedGeneratorStarter.PLUGIN_PROPERTIES_FILE);
 		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
 	}
-	
+
 	@Test
 	public void findsArtefactList() throws MOGLiPluginException {
 		// call functionality under test
@@ -43,7 +43,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		// verify test result
 		assertEquals("artefact number", 7, artefactList.size());
 	}
-	
+
 	@Test
 	public void throwsExceptionIfMainTemplateIsNotFound() {
 		// prepare test
@@ -59,12 +59,11 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 
 			// cleanup
 			FileUtil.deleteDirWithContent(generatorPluginInputDir);
-			
+
 			return;
 		}
-		
+
 		fail("Expected exception not thrown!");
-		
 	}
 
 	@Test
@@ -73,17 +72,17 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		final File artefactDir = new File(infrastructure.getPluginInputDir(), VelocityClassBasedGeneratorStarter.ARTEFACT_JAVABEAN);
 
 		// call functionality under test
-		 String mainTemplate = null;
+		String mainTemplate = null;
 		try {
 			mainTemplate = velocityClassBasedGenerator.findMainTemplate(artefactDir);
 		} catch (MOGLiPluginException e) {
 			fail(e.getMessage());
 		}
-		
+
 		// verify test result
 		assertEquals("Main Template filename", MAIN_TEMPLATE, mainTemplate);
 	}
-	
+
 	@Test
 	public void unpacksInputDefaultData() throws MOGLiPluginException {
 		// prepare test
@@ -91,36 +90,36 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 
 		// call functionality under test
 		velocityClassBasedGenerator.unpackDefaultInputData();
-		
+
 		// verify test result
 		assertFileExists(applicationInputDir);
 	}
-	
+
 	@Test
 	public void savesTargetFilesInPluginOutputDir() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
 		VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "temp", "Content", true);
 		prepareResultData(resultData);
-		final File targetFile = prepareTargetFile(applicationOutputDir, VelocityClassBasedGeneratorStarter.PLUGIN_ID 
-                                                                        + "/" + VelocityClassBasedGeneratorStarter.ARTEFACT_JAVABEAN 
+		final File targetFile = prepareTargetFile(applicationOutputDir, VelocityClassBasedGeneratorStarter.PLUGIN_ID
+                                                                        + "/" + VelocityClassBasedGeneratorStarter.ARTEFACT_JAVABEAN
                                                                         + "/" + targetFileName);
 
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(targetFile);
 		assertFileContainsEntry(targetFile, "Content");
 	}
 
-	private VelocityGeneratorResultData buildVelocityGeneratorResultData(final String targetFileName, 
+	private VelocityGeneratorResultData buildVelocityGeneratorResultData(final String targetFileName,
 			final String targetdir, final String content, final boolean createNew) {
 		final BuildUpGeneratorResultData buildUpGeneratorResultData = new BuildUpGeneratorResultData();
 		buildUpGeneratorResultData.setGeneratedContent(content);
-		final BuildUpVelocityGeneratorResultData toReturn = 
+		final BuildUpVelocityGeneratorResultData toReturn =
 			   new BuildUpVelocityGeneratorResultData(buildUpGeneratorResultData);
-		
+
 		if (targetFileName != null) {
 			toReturn.addProperty(KnownGeneratorPropertyNames.TargetFileName.name(), targetFileName);
 		}
@@ -145,7 +144,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		assertFileDoesNotExist(targetFile);
 		return targetFile;
 	}
-	
+
 	@Test
 	public void savesTargetFilesInTargetDirReadFromTemplateFile() throws MOGLiPluginException {
 		// prepare test
@@ -156,7 +155,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(targetFile);
 		assertFileContainsEntry(targetFile, "Content");
@@ -167,7 +166,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		// prepare test
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(null, "temp", "Content", false);
 		prepareResultData(resultData);
-		
+
 		// call functionality under test
 		try {
 			velocityClassBasedGenerator.doYourJob();
@@ -177,7 +176,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 
 	@Test
 	public void createsNotExistingTargetDirWithCreateNewInstructions() throws MOGLiPluginException {
@@ -193,7 +192,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(dir);
 	}
@@ -203,7 +202,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		final String targetFileName = "targetFile.txt";
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, 
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName,
 				                                       targetDir, "Content", false);
 		prepareResultData(resultData);
 		final File targetDirAsFile = new File(targetDir);
@@ -215,7 +214,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(targetFile);
 	}
@@ -231,30 +230,30 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		FileUtil.createNewFileWithContent(targetFile, "Test");
 		assertFileDoesNotContainEntry(targetFile, "ContentToInsert");
 		velocityClassBasedGenerator.setTestDir(null);
-		
+
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		assertFileContainsEntry(targetFile, "ContentToInsert");
 	}
-	
+
 	@Test
 	public void doesNotOverwriteExistingTargetFile() throws Exception {
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		final String targetFileName = "targetFile.txt";
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, 
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName,
 				                                       targetDir, "ContentToInsert", false);
 		prepareResultData(resultData);
 		final File targetFile = new File(targetDir, targetFileName);
 		FileUtil.createNewFileWithContent(targetFile, "Test");
 		assertFileContainsEntry(targetFile, "Test");
 		velocityClassBasedGenerator.setTestDir(null);
-		
+
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		assertFileContainsEntry(targetFile, "Test");
 	}
@@ -272,18 +271,18 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		final File file = new File(PROJECT_ROOT_DIR + TEST_SUBDIR + "/example", targetFileName);
 		assertFileExists(file);
 	}
-	
+
 	@Test
 	public void generatesTargetFileInPackageSubDirThatAlreadyExists() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/"
-				                                          + VelocityGeneratorResultData.PACKAGE_IDENTIFIER, 
+				                                          + VelocityGeneratorResultData.PACKAGE_IDENTIFIER,
 				"package com.iksgmbh.test;", false);
 		prepareResultData(resultData);
 		final File targetDirAsFile = new File(PROJECT_ROOT_DIR + TEST_SUBDIR + "/example/com/iksgmbh/test");
@@ -294,7 +293,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(targetFile);
 	}
@@ -303,7 +302,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	public void generatesTargetFileInPackageSubDirThatMustBeCreated() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/<package>", 
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/<package>",
 				"package com.iksgmbh.test;", true);
 		prepareResultData(resultData);
 		final File dir = new File(PROJECT_ROOT_DIR + TEST_SUBDIR + "/example");
@@ -312,20 +311,20 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// verify test result
 		final File targetFile = new File(dir, "com/iksgmbh/test");
 		assertFileExists(targetFile);
 	}
-	
+
 	@Test
 	public void throwsExceptionIfPackageForTargetDirIsNotContainedInGeneratedContent() throws MOGLiPluginException {
 		// prepare test
 		final String targetFileName = "targetFile.txt";
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/<package>", 
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/<package>",
 				"package com.iksgmbh.test", true);
 		prepareResultData(resultData);
-		
+
 		// call functionality under test
 		try {
 			velocityClassBasedGenerator.doYourJob();
@@ -335,7 +334,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void ignoresSubdirAsArtefactIfDefinedInPluginPropertiesFile() throws MOGLiPluginException {
 		// prepare test
@@ -344,34 +343,34 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		assertFileExists(subdir);
 		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
 		final String targetFileName = "targetFile.txt";
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example", 
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example",
 				"package com.iksgmbh.test", true);
 		prepareResultData(resultData);
-		
+
 		// call functionality under test
 		velocityClassBasedGenerator.doYourJob();
-		
+
 		// cleanup
 		subdir.delete();
 		assertFileDoesNotExist(subdir);
 
-		
+
 		// verify test result
 		final File outputDir = new File(infrastructure.getPluginOutputDir(), ".svn");
 		assertFileDoesNotExist(outputDir);
 	}
-	
+
 	@Test
 	public void writesUmlautsIntoTargetFile() throws MOGLiPluginException {
 		// prepare test
 		final List<VelocityGeneratorResultData> resultList = new ArrayList<VelocityGeneratorResultData>();
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData("Umlaute.txt", "example", 
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData("Umlaute.txt", "example",
 				                                                                        "ßäüöÄÜÖ", true);
 		resultList.add(resultData);
-		
+
 		// call functionality under test
 		velocityClassBasedGenerator.writeFilesIntoTemplateTargetDir(resultList);
-		
+
 		// verify test result
 		final File file = new File(applicationRootDir + "/example", "Umlaute.txt");
 		String actualFileContent = MOGLiFileUtil.getFileContent(file);

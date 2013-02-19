@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.iksgmbh.helper.IOEncodingHelper;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
@@ -13,6 +14,7 @@ import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
+import com.iksgmbh.moglicc.generator.utils.VelocityUtils;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
@@ -70,6 +72,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		                                                 "H_engineMethods.tpl"};
 
 	private InfrastructureService infrastructure;
+	private IOEncodingHelper encodingHelper;
 	private String testDir = "";
 
 	@Override
@@ -95,6 +98,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	@Override
 	public void doYourJob() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
+		encodingHelper = null;
 
 		final Model model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel();
 		infrastructure.getPluginLogger().logInfo("Model '" + model.getName() + "' retrieved from " + MODEL_PROVIDER_ID);
@@ -118,6 +122,8 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 			return;
 		}
 		validate(resultList);
+		encodingHelper = IOEncodingHelper.getInstance(VelocityUtils.getOutputEncodingFormat(resultList.get(0),
+				                                      infrastructure.getPluginLogger()));
 		writeFilesIntoPluginOutputDir(resultList, artefact);
 		writeFilesIntoTemplateTargetDir(resultList);
 		infrastructure.getPluginLogger().logInfo(resultList.size() + " files for artefact '" + artefact + "' created!");
@@ -144,7 +150,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 			if (resultData.isTargetToBeCreatedNewly()
 				|| ! outputFile.exists()) {
 				try {
-					FileUtil.createNewFileWithContent(outputFile, resultData.getGeneratedContent());
+					FileUtil.createNewFileWithContent(encodingHelper, outputFile, resultData.getGeneratedContent());
 				} catch (Exception e) {
 					throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
 				}
@@ -152,7 +158,6 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 				infrastructure.getPluginLogger().logWarning("Target file " + outputFile.getAbsolutePath() + " exists and will not overwritten!");
 			}
 		}
-
 	}
 
 	private void writeFilesIntoPluginOutputDir(final List<VelocityGeneratorResultData> resultList, final String subDir)
@@ -162,7 +167,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		for (final VelocityGeneratorResultData resultData : resultList) {
 			final File outputFile = new File(targetdir, resultData.getTargetFileName());
 			try {
-				FileUtil.createNewFileWithContent(outputFile, resultData.getGeneratedContent());
+				FileUtil.createNewFileWithContent(encodingHelper, outputFile, resultData.getGeneratedContent());
 			} catch (Exception e) {
 				throw new MOGLiPluginException("Error creating file\n" + outputFile.getAbsolutePath(), e);
 			}
@@ -251,8 +256,15 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	/**
 	 * FOR TEST PURPOSE ONLY
 	 */
-	public void setTestDir(String testDir) {
+	public void setTestDir(final String testDir) {
 		this.testDir = testDir;
+	}
+
+	/**
+	 * FOR TEST PURPOSE ONLY
+	 */
+	public IOEncodingHelper getEncodingHelper() {
+		return encodingHelper;
 	}
 
 }
