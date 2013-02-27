@@ -403,7 +403,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt"
 				                                              + FileUtil.getSystemLineSeparator() 
-				                                              + TextConstants.METAINFO_BRACE_SYMBOL_PROPERTY 
+				                                              + TextConstants.BRACE_SYMBOL_PROPERTY 
 				                                              + "=" + testBraceSymbol);
 		assertChildrenNumberInDirectory(infrastructure.getPluginInputDir(), 2);
 
