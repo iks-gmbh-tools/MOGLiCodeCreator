@@ -64,7 +64,6 @@ public class VelocityClassBasedGeneratorDemoModelIntTest extends IntTestParent {
 
 		// verify test result
 		assertFileExists(artefactTargetDir);
-
 	}
 
 	@Test

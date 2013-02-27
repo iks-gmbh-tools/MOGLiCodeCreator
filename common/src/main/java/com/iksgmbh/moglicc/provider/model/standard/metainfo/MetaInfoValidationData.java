@@ -1,0 +1,139 @@
+package com.iksgmbh.moglicc.provider.model.standard.metainfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
+
+/**
+ * Data used from the ConditionalMetaInfoValidator.
+ *
+ * @author Reik Oberrath
+ */
+public class MetaInfoValidationData {
+
+	private String nameOfValidModel;
+	private HierarchyLevel hierarchyLevel;
+	private String metaInfoName;
+	private String metaInfoValue;
+	private int minOccurs = 0;
+	private int maxOccurs = 0;
+	private String conditionFilename;
+	private List<MetaInfoValidationCondition> conditionBlock = new ArrayList<MetaInfoValidationCondition>();
+
+
+
+	public MetaInfoValidationData withNameOfValidModel(final String nameOfValidModel) {
+		this.nameOfValidModel = nameOfValidModel;
+		return this;
+	}
+
+	public MetaInfoValidationData withHierarchyLevel(final HierarchyLevel hierarchyLevel) {
+		this.hierarchyLevel = hierarchyLevel;
+		return this;
+	}
+
+	public MetaInfoValidationData withMetaInfoName(final String metaInfoName) {
+		this.metaInfoName = metaInfoName;
+		return this;
+	}
+
+	public MetaInfoValidationData withMetaInfoValue(final String metaInfoValue) {
+		this.metaInfoValue = metaInfoValue;
+		return this;
+	}
+
+	public MetaInfoValidationData withMinOccurs(final int minOccurs) {
+		this.minOccurs = minOccurs;
+		return this;
+	}
+
+	public MetaInfoValidationData withMaxOccurs(final int maxOccurs) {
+		this.maxOccurs = maxOccurs;
+		return this;
+	}
+
+	public MetaInfoValidationData withConditionFilename(final String conditionFilename) {
+		this.conditionFilename = conditionFilename;
+		return this;
+	}
+
+	public MetaInfoValidationData addCondition(final MetaInfoValidationCondition condition) {
+		this.conditionBlock.add(condition);
+		return this;
+	}
+
+
+	public String getNameOfValidModel() {
+		return nameOfValidModel;
+	}
+
+	public HierarchyLevel getMetaInfoHierarchyLevel() {
+		return hierarchyLevel;
+	}
+
+	public String getMetaInfoName() {
+		return metaInfoName;
+	}
+
+	public int getMinOccurs() {
+		return minOccurs;
+	}
+
+	public int getMaxOccurs() {
+		return maxOccurs;
+	}
+
+	public String getConditionFilename() {
+		return conditionFilename;
+	}
+
+	public List<MetaInfoValidationCondition> getConditionBlock() {
+		return conditionBlock;
+	}
+
+	public String getMetaInfoValue() {
+		return metaInfoValue;
+	}
+
+	/**
+	 * Parses input string
+	 * @param occurence string containing an ordinal number (e.g. 2) or a range (e.g. 0-1)
+	 * @return instance with minOccur and maxOccur set
+	 */
+	public MetaInfoValidationData withOccurrence(final String occurence) {
+		final Integer result = parseToInt(occurence); //, "Value <"a1"> is no valid occurence!")
+
+		if (result == null) {
+			final String[] splitResult = occurence.split("-");
+			if (splitResult.length == 2) {
+				final Integer min = parseToInt(splitResult[0]);
+				final Integer max = parseToInt(splitResult[1]);
+				if (min == null || max == null) {
+					throw new IllegalArgumentException("Range <" + occurence + "> is no valid occurence!");
+				}
+				minOccurs = min.intValue();
+				maxOccurs = max.intValue();
+			} else {
+				throw new IllegalArgumentException("Value <" + occurence + "> is no valid occurence!");
+			}
+		} else {
+			if (result.intValue() < 0) {
+				throw new IllegalArgumentException("Value <" + occurence + "> is no valid occurence!");
+			}
+			maxOccurs = result;
+			minOccurs = result;
+		}
+
+		return this;
+	}
+
+	private Integer parseToInt(final String s) {
+		try {
+			return Integer.valueOf(s);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+}

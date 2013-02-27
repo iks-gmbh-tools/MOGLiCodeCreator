@@ -18,10 +18,10 @@ import com.iksgmbh.moglicc.MOGLiCodeCreator;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MandatoryMetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.MandatoryMetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.OptionalMetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.OptionalMetaInfoValidator;
 import com.iksgmbh.moglicc.test.StandardModelProviderTestParent;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter2;
@@ -214,7 +214,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'modelMetaInfoMandatory' does not found for model 'MetaInfoValidatorTestModel'");
+					                "ERROR: MetaInfo 'modelMetaInfoMandatory' was not found for model 'MetaInfoValidatorTestModel'");
 			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
 			return;
 		}
@@ -233,7 +233,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'classMetaInfoMandatory' does not found for classDescriptor 'TestklasseA'");
+					                "ERROR: MetaInfo 'classMetaInfoMandatory' was not found for classDescriptor 'TestklasseA'");
 			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
 			return;
 		}
@@ -252,7 +252,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'attributeMetaInfoMandatory' does not found for attributeDescriptor 'A2'");
+					                "ERROR: MetaInfo 'attributeMetaInfoMandatory' was not found for attributeDescriptor 'A2'");
 			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
 			return;
 		}

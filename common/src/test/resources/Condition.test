@@ -1,0 +1,17 @@
+|if MetaInfo| The \"other\" MetaInfo Name1 |exists.|  # comment
+|if MetaInfo| The \"other\" MetaInfo Name2 |does not exist.|
+
+|if MetaInfo| The \"other\" MetaInfo Name3 |with value| my value |does not exist.|  # comment
+
+OR
+
+|if MetaInfo| The MetaInfoName2 |exists.|  # comment
+
+OR
+
+|if MetaInfo| The MetaInfoName3 |with value| 4 |exists.|  # comment
+
+OR
+
+|if MetaInfo| The MetaInfoName4 |does not exist.|  # comment
+|if MetaInfo| The MetaInfoName5 |does not exist.|  # comment

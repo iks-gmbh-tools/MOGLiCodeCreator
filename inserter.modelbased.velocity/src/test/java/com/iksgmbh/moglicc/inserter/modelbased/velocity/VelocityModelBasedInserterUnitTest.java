@@ -18,15 +18,18 @@ import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData.KnownInserterPropertyNames;
 import com.iksgmbh.moglicc.inserter.modelbased.velocity.test.VelocityModelBasedInserterTestParent;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInserterTestParent {
-	
+
 	private static final String TARGET_FILE_TXT = "targetFile.txt";
 	private static final String MAIN_TEMPLATE = "BeanFactoryClass.tpl";
 	private static final String ARTEFACT_BEAN_FACTORY = "BeanFactoryClass";
-	
+
 	private File targetFile;
 	private File generatorPropertiesFile;
 
@@ -35,16 +38,16 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	public void setup() {
 		super.setup();
 		applicationTempDir.mkdirs();
-		
+
 		final File sourcefile = new File(getProjectTestResourcesDir(), TARGET_FILE_TXT);
 		targetFile = new File(applicationTempDir, TARGET_FILE_TXT);
 		FileUtil.copyTextFile(sourcefile, targetFile);
-		
-		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), 
+
+		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(),
 	            VelocityModelBasedInserterStarter.PLUGIN_PROPERTIES_FILE);
 		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
 	}
-	
+
 	@Test
 	public void findsArtefactList() throws MOGLiPluginException {
 		// call functionality under test
@@ -53,7 +56,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// verify test result
 		assertEquals("artefact number", 4, artefactList.size());
 	}
-	
+
 	@Test
 	public void throwsExceptionIfMainTemplateIsNotFound() {
 		// prepare test
@@ -69,12 +72,12 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 			// cleanup
 			FileUtil.deleteDirWithContent(generatorPluginInputDir);
-			
+
 			return;
 		}
-		
+
 		fail("Expected exception not thrown!");
-		
+
 	}
 
 	@Test
@@ -89,11 +92,11 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		} catch (MOGLiPluginException e) {
 			fail(e.getMessage());
 		}
-		
+
 		// verify test result
 		assertEquals("Main Template filename", MAIN_TEMPLATE, mainTemplate);
 	}
-	
+
 	@Test
 	public void unpacksInputDefaultData() throws MOGLiPluginException {
 		// prepare test
@@ -101,47 +104,47 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 		// call functionality under test
 		velocityModelBasedInserter.unpackDefaultInputData();
-		
+
 		// verify test result
 		assertFileExists(applicationInputDir);
 	}
-	
+
 	@Test
 	public void savesGeneratedContentInPluginOutputDir() throws MOGLiPluginException {
 		// prepare test
-		VelocityInserterResultData resultData = buildVelocityInserterResultData("Content", 
+		VelocityInserterResultData resultData = buildVelocityInserterResultData("Content",
 				"temp", TARGET_FILE_TXT, KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
-		final File targetFile = prepareTargetFile(applicationOutputDir, VelocityModelBasedInserterStarter.PLUGIN_ID 
-                                                                        + "/" + ARTEFACT_BEAN_FACTORY 
+		final File targetFile = prepareTargetFile(applicationOutputDir, VelocityModelBasedInserterStarter.PLUGIN_ID
+                                                                        + "/" + ARTEFACT_BEAN_FACTORY
                                                                         + "/" + TARGET_FILE_TXT);
 		assertFileDoesNotExist(targetFile);
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(targetFile);
 		assertFileContainsEntry(targetFile, "Content");
 	}
 
-	private BuildUpVelocityInserterResultData buildVelocityInserterResultData(final String content, 
-			final String targetdir, final String targetFileName, 
+	private BuildUpVelocityInserterResultData buildVelocityInserterResultData(final String content,
+			final String targetdir, final String targetFileName,
 			final String propertyName, final String propertyValue) {
-		
+
 		final BuildUpGeneratorResultData buildUpGeneratorResultData = new BuildUpGeneratorResultData();
 		buildUpGeneratorResultData.setGeneratedContent(content);
-		
-		final BuildUpVelocityInserterResultData toReturn = 
+
+		final BuildUpVelocityInserterResultData toReturn =
 			   new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
-		
+
 		if (targetFileName != null) {
 			toReturn.addProperty(KnownGeneratorPropertyNames.TargetFileName.name(), targetFileName);
 		}
 		if (targetdir != null) {
 			toReturn.addProperty(KnownGeneratorPropertyNames.TargetDir.name(), targetdir);
 		}
-		
+
 		if (StringUtils.isNotBlank(propertyName) && StringUtils.isNotBlank(propertyValue)) {
 			toReturn.addProperty(propertyName, propertyValue);
 		}
@@ -151,15 +154,15 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	@Test
 	public void savesGeneratedContentInNewFileInTemplateTargetDir() throws MOGLiPluginException {
 		// prepare test
-		VelocityInserterResultData resultData = buildVelocityInserterResultData("Content", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		VelocityInserterResultData resultData = buildVelocityInserterResultData("Content",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(targetFile);
 		assertFileContainsEntry(targetFile, "Content");
@@ -171,12 +174,12 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		assertFileDoesNotExist(targetFile);
 		return targetFile;
 	}
-	
+
 	@Test
 	public void throwsExceptionIfTargetDirFromTemplateFileIsNotFound() throws MOGLiPluginException {
 		// prepare test
-		VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/FOO", 
+		VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/FOO",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		final File targetFile = prepareTargetFile(applicationTempDir, TARGET_FILE_TXT);
@@ -190,18 +193,18 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 			// cleanup
 			FileUtil.deleteDirWithContent(generatorPluginInputDir);
-			
+
 			return;
 		}
-		
+
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void throwsExceptionIfTargetFileFromTemplateFileIsNotFound() throws MOGLiPluginException {
 		// prepare test
-		VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		targetFile.delete();
@@ -215,47 +218,47 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 			// cleanup
 			FileUtil.deleteDirWithContent(generatorPluginInputDir);
-			
+
 			return;
 		}
-		
+
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void insertsGeneratedContentAboveMarkerInTemplateTargetDir() throws MOGLiPluginException {
 		// prepare test
 		velocityModelBasedInserter = new VelocityModelBasedInserterStarter();
-		velocityModelBasedInserter.setMOGLiInfrastructure(createInfrastructure(new File(getProjectTestResourcesDir(), 
+		velocityModelBasedInserter.setMOGLiInfrastructure(createInfrastructure(new File(getProjectTestResourcesDir(),
 				"applicationTestInputDir")));
-		final VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedInsertAboveResultContent.txt");
 		assertFileEquals(expectedFile, targetFile);
 	}
-	
+
 	@Test
 	public void insertsGeneratedContentBelowMarkerInTemplateTargetDir() throws MOGLiPluginException {
 		// prepare test
 		velocityModelBasedInserter = new VelocityModelBasedInserterStarter();
 		velocityModelBasedInserter.setMOGLiInfrastructure(createInfrastructure(new File(getProjectTestResourcesDir(), "applicationTestInputDir")));
-		VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertBelow.name(), "-InsertBelow");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedInsertBelowResultContent.txt");
 		assertFileEquals(expectedFile, targetFile);
@@ -264,8 +267,8 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	@Test
 	public void replacesGeneratedContentInTemplateTargetFile() throws MOGLiPluginException {
 		// prepare test
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.ReplaceStart.name(), "-ReplaceStart");
 		resultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "-ReplaceEnd");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
@@ -273,22 +276,22 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedReplaceResultContent.txt");
 		assertFileEquals(expectedFile, targetFile);
 	}
-	
+
 	@Test
 	public void throwsExceptionIfReplaceStartIndicatorNotFound() throws MOGLiPluginException {
 		// prepare test
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.ReplaceStart.name(), "-replStart");
 		resultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "-ReplaceEnd");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
-		
+
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
@@ -298,17 +301,17 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void throwsExceptionIfReplaceEndIndicatorNotFound() throws MOGLiPluginException {
 		// prepare test
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.ReplaceStart.name(), "-ReplaceStart");
 		resultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "-replEnd");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
-		
+
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
@@ -322,12 +325,12 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	@Test
 	public void throwsExceptionIfInsertBelowIndicatorNotFound() throws MOGLiPluginException {
 		// prepare test
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertBelow.name(), "-BI");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
-		
+
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
@@ -342,12 +345,12 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	@Test
 	public void throwsExceptionIfInsertAboveIndicatorNotFound() throws MOGLiPluginException {
 		// prepare test
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-AI");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
-		
+
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
@@ -362,12 +365,12 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	@Test
 	public void throwsExceptionIfOutputFileNameIsMissingInTemplateFile() throws MOGLiPluginException {
 		// prepare test
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				null, null, null);
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
-		
+
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
@@ -377,15 +380,15 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void throwsExceptionIfOutputDirIsMissingInTemplateFile() throws MOGLiPluginException {
 		// prepare test
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
 				null, TARGET_FILE_TXT, null, null);
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		assertFileExists(targetFile);
-		
+
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
@@ -400,8 +403,8 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	public void createsNotExistingTargetDirWithCreateNewInstructions() throws MOGLiPluginException {
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				targetDir, TARGET_FILE_TXT, 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				targetDir, TARGET_FILE_TXT,
 				KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		resultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
@@ -411,7 +414,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(dir);
 	}
@@ -420,7 +423,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	public void createsNotExistingTargetFileDirWithoutCreateNewInstruction() throws MOGLiPluginException {
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
 				targetDir, TARGET_FILE_TXT, null, null);
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		final File targetDirAsFile = new File(targetDir);
@@ -431,7 +434,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(targetFile);
 	}
@@ -441,8 +444,8 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		final String content = "ContentToInsert";
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData(content, 
-				targetDir, TARGET_FILE_TXT, 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData(content,
+				targetDir, TARGET_FILE_TXT,
 				KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		resultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
@@ -452,7 +455,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		assertFileContainsEntry(targetFile, "ContentToInsert");
 	}
@@ -461,8 +464,8 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 	public void createsTargetFileWithRootDirDefinedInTemplateFile() throws MOGLiPluginException {
 		// prepare test
 		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				targetDir, TARGET_FILE_TXT, 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				targetDir, TARGET_FILE_TXT,
 				KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		targetFile = new File(targetDir, TARGET_FILE_TXT);
@@ -471,38 +474,38 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		final File file = new File(PROJECT_ROOT_DIR + TEST_SUBDIR + "/example", TARGET_FILE_TXT);
 		assertFileExists(file);
 	}
-	
+
 	@Test
 	public void doesNotOverwriteExistingTargetFile() throws Exception {
 		// prepare test
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
-		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				targetDir, TARGET_FILE_TXT, 
+		BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				targetDir, TARGET_FILE_TXT,
 				KnownGeneratorPropertyNames.CreateNew.name(), "false");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
 		final File targetFile = new File(targetDir, TARGET_FILE_TXT);
 		FileUtil.createNewFileWithContent(targetFile, "Test");
 		assertFileContainsEntry(targetFile, "Test");
-		
+
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// verify test result
 		assertFileContainsEntry(targetFile, "Test");
 	}
-	
+
 	@Test
 	public void throwsExceptionIfSubdirContainsNoMainTemplate() {
 		// prepare test
 		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
 		subdir.mkdirs();
 		assertFileExists(subdir);
-		
+
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
@@ -513,7 +516,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		fail("Expected exception not thrown!");
 	}
 
-	
+
 	@Test
 	public void throwsExceptionIfSubdirContainsNoMainTemplateAndIgnorePropertyIsWrong() {
 		// prepare test
@@ -521,7 +524,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		subdir.mkdirs();
 		assertFileExists(subdir);
 		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=doNOT" + ArtefactListUtil.IGNORE);
-		
+
 		// call functionality under test
 		try {
 			velocityModelBasedInserter.doYourJob();
@@ -539,21 +542,48 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		subdir.mkdirs();
 		assertFileExists(subdir);
 		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
-		final VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert", 
-				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp", 
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
 		velocityEngineProvider.setVelocityInserterResultData(resultData);
-		
+
 		// call functionality under test
 		velocityModelBasedInserter.doYourJob();
-		
+
 		// cleanup
 		subdir.delete();
 		assertFileDoesNotExist(subdir);
-		
+
 		// verify test result
 		final File outputDir = new File(infrastructure.getPluginOutputDir(), ".svn");
 		assertFileDoesNotExist(outputDir);
 	}
 
+
+	@Test
+	public void returnsMetaInfoValidatorList() throws MOGLiPluginException {
+		// prepare test
+		final File conditionFile = new File(velocityModelBasedInserter.getMOGLiInfrastructure().getPluginInputDir(), "condition.txt");
+		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| The \"other\" MetaInfo Name1 |exists.|"
+													          + FileUtil.getSystemLineSeparator() +
+													          "|if MetaInfo| The \"other\" MetaInfo Name2 |does not exist.|"
+													          + FileUtil.getSystemLineSeparator() +
+													          "|if MetaInfo| The \"other\" MetaInfo Name3 |with value| my value |does not exist.|" );
+
+        final File validatorFile = new File(velocityModelBasedInserter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|"
+				                                             + FileUtil.getSystemLineSeparator() +
+				                                             "|MetaInfo| MetaInfoTestName2 |is| mandatory |for| attributes |in| ModelName |.|"
+				                                             + FileUtil.getSystemLineSeparator() +
+				                                             "|MetaInfo| MetaInfoTestName3 |must occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
+				                                             + FileUtil.getSystemLineSeparator() +
+				                                             "|MetaInfo| MetaInfoTestName4 |must occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
+
+		// call functionality under test
+		final List<MetaInfoValidator> metaInfoValidatorList = velocityModelBasedInserter.getMetaInfoValidatorList();
+
+		// verify test result
+		assertEquals("validator number", 4, metaInfoValidatorList.size());
+		assertEquals("condition number", 3, ((ConditionalMetaInfoValidator)metaInfoValidatorList.get(3)).getTotalNumberOfConditions());
+	}
 }

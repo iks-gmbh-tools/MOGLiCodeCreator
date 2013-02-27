@@ -12,7 +12,6 @@ import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
-import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.generator.utils.VelocityUtils;
@@ -22,8 +21,10 @@ import com.iksgmbh.moglicc.plugin.type.Inserter;
 import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
@@ -290,6 +291,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		final String[] beanFactoryInsertBelowTemplate = {"BeanFactoryInsertBelowTemplate.tpl"};
 		defaultData.addDirectory("BeanFactoryInsertBelowTemplate", beanFactoryInsertBelowTemplate);
 		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
+		defaultData.addFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
 
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
@@ -312,9 +314,25 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 
 	@Override
 	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
-		final File validationInputFile = new File(infrastructure.getPluginInputDir(),
-				                                  MetaInfoValidationUtil.FILENAME_VALIDATION);
-		return MetaInfoValidationUtil.getMetaInfoValidatorList(validationInputFile, getId());
+		final File validationInputFile = new File(infrastructure.getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+		final List<MetaInfoValidator> metaInfoValidatorList = MetaInfoValidationUtil.getMetaInfoValidatorList(validationInputFile, getId());
+
+		for (final MetaInfoValidator metaInfoValidator : metaInfoValidatorList) {
+			if (metaInfoValidator instanceof ConditionalMetaInfoValidator) {
+				readConditionFileIfNecessary(metaInfoValidator);
+			}
+		}
+
+		infrastructure.getPluginLogger().logInfo(metaInfoValidatorList.size() + " MetaInfoValidators found.");
+		return metaInfoValidatorList;
+	}
+
+	private void readConditionFileIfNecessary(final MetaInfoValidator metaInfoValidator) throws MOGLiPluginException {
+		final ConditionalMetaInfoValidator conditionalMetaInfoValidator = (ConditionalMetaInfoValidator) metaInfoValidator;
+		if (conditionalMetaInfoValidator.getConditionFilename() != null) {
+			final File conditionInputFile = new File(infrastructure.getPluginInputDir(), conditionalMetaInfoValidator.getConditionFilename());
+			conditionalMetaInfoValidator.setConditionList(MetaInfoValidationUtil.getConditionList(conditionInputFile));
+		}
 	}
 
 	@Override

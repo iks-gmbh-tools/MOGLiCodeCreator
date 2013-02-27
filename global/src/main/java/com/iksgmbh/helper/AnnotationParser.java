@@ -18,8 +18,6 @@ public class AnnotationParser {
 	public static final String DEFAULT_ANNOTATION_PREFIX_IDENTIFICATOR = "@";
 	public static final String DEFAULT_COMMENT_IDENTIFICATOR = "#";
 
-
-
 	public static final String ERROR = "PARSER ERROR: ";
 
 	private static AnnotationParser annotationParserInstance;

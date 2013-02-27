@@ -36,6 +36,16 @@ public class StringUtil {
 	public static boolean startsWithLowerCase(final String s) {
 		return Character.isLowerCase(s.charAt(0));
 	}
+	
+	public static String firstToUpperCase(String string) {
+		if (string == null) {
+			return null;
+		}
+		if ("".equals(string)) {
+			return "";
+		}
+		return string.substring(0, 1).toUpperCase() + string.substring(1);
+	}
 
 	public static String concat(final List<String> list) {
 		final StringBuffer sb = new StringBuffer();
@@ -50,11 +60,22 @@ public class StringUtil {
 		return sb.toString();
 	}
 
+	public static String removePrefixIfExisting(final String s, final String prefix) {
+		if (s.startsWith(prefix)) {
+			return s.substring(prefix.length());
+		}
+		return s;
+	}
+	
 	public static String removeSuffixIfExisting(final String s, final String suffix) {
 		if (s.endsWith(suffix)) {
 			return s.substring(0, s.indexOf(suffix));
 		}
 		return s;
+	}
+
+	public static String removeSuffixByLength(final String s, final int numberOfChars) {
+		return s.substring(0, s.length() - numberOfChars);
 	}
 
 }

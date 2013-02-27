@@ -149,8 +149,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	private List<MetaInfoValidator> collectMetaInfoValidatorsFromVendors() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Collecting MetaInfoValidators from vendors: ");
 		final List<MetaInfoValidator> toReturn = new ArrayList<MetaInfoValidator>();
-		final List<MetaInfoValidatorVendor> vendors =
-			   infrastructure.getPluginsOfType(MetaInfoValidatorVendor.class);
+		final List<MetaInfoValidatorVendor> vendors = infrastructure.getPluginsOfType(MetaInfoValidatorVendor.class);
 
 		if (vendors.isEmpty()) {
 			infrastructure.getPluginLogger().logInfo("No vendor for MetaInfoValidators found.");
@@ -259,9 +258,6 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	File getModelFile() throws MOGLiPluginException {
 		if (modelFile == null) {
 			final String filename = getModelFileName();
-
-
-
 			modelFile = new File(infrastructure.getPluginInputDir(), filename);
 		}
 		return modelFile;
