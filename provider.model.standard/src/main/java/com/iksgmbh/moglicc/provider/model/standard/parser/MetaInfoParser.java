@@ -12,8 +12,8 @@ public class MetaInfoParser extends AnnotationParser {
 		this(AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER);
 	}
 
-	public MetaInfoParser(final String braceSymbolForMetaInfoValues) {
-		super(MetaModelConstants.META_INFO_IDENTIFIER + " ", braceSymbolForMetaInfoValues, AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
+	public MetaInfoParser(final String braceSymbol) {
+		super(MetaModelConstants.META_INFO_IDENTIFIER + " ", braceSymbol, AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
 	}
 	
 	public BuildUpMetaInfo parse(String line) {

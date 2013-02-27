@@ -13,7 +13,7 @@ public class TextConstants {
 	public static final String DUPLICATE_CLASS_NAME = "Identical class name";
 	public static final String DUPLICATE_ATTRIBUTE_NAME = "Identical attribute name";
 	public static final String MODELFILE_PROPERTY = "modelfile";
-	public static final String METAINFO_BRACE_SYMBOL_PROPERTY = "BraceSymbolForMetaInfoValues";
+	public static final String BRACE_SYMBOL_PROPERTY = "BraceSymbolForModelFileParsing";
 
 	public static final String TEXT_PROPERTIES_FILE_NOT_LOADED = StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE + " not loaded: ";
 	public static final String TEXT_NO_MODELFILE_DEFINED_IN_PROPERTIES_FILE = StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE

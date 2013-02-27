@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.provider.model.standard;
 
-import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.METAINFO_BRACE_SYMBOL_PROPERTY;
+import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.BRACE_SYMBOL_PROPERTY;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.MODELFILE_PROPERTY;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_MODEL_NOT_EXISTS;
@@ -197,10 +197,10 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		checkModelFile();
 
 		final List<String> fileContentAsList = readModelFileContent();
-	    final String braceSymbolForMetaInfoValues = getMetaInfoBraceSymbol();
+	    final String braceSymbol = getMetaInfoBraceSymbol();
 
 		try {
-			buildUpModel = ModelParser.doYourJob(fileContentAsList, braceSymbolForMetaInfoValues);
+			buildUpModel = ModelParser.doYourJob(fileContentAsList, braceSymbol);
 		} catch (ModelParserException e) {
 			throw new MOGLiPluginException(TEXT_PARSE_ERROR_FOUND
 					+ e.getParserErrors());
@@ -218,7 +218,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		if (pluginProperties == null) {
 			toReturn = AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER;
 		} else {
-			toReturn = pluginProperties.getProperty(METAINFO_BRACE_SYMBOL_PROPERTY);
+			toReturn = pluginProperties.getProperty(BRACE_SYMBOL_PROPERTY);
 			if (toReturn == null || toReturn.length() == 0) {
 				toReturn = AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER;
 			}
