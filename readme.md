@@ -29,11 +29,18 @@ License: **All Rights Reserved**
 
 Current version: **1.1.0**
 
-Changes to 1.0.0
+**Changes to 1.0.1**
+- New property 'BraceSymbolForMetaInfoValues' for the plugin.properties file of the StandardModelProvider. By replacing the standard symbol Double Quotes <"> by another symbol Double Quotes can be used within names or values of MetaInfos.
+- New template header attribute '@OutputEncodingFormat' that is used by generator plugins to create output files 
+- New Feature when starting MOGLiCC: an argument specifying the workspace to use can be defined. If not set, the workspace to use is read dorm the application properies file as in version 1.0.1.
+- New type of MetaInfo validation introduced: MetaInfo can be validated both by number of occurrences and by MetaInfo values. In addition, validation can depend on conditions that must be met. For this purpose a specific MetaInfoValidator-DSL is introduced.
+- Since V1.1.0 plugins are deactivated by default. To activate plugins, a corresponding activation setting in the workspace.properties file must exist.
 - Method 'doesHaveAnyMetaInfosWithName(metaInfoName)' added to Model, ClassDescriptor and AttributeDescriptor of StandardModelProvider.
-- New model file 'MOGLiCC-Plugin' introduced for StandardModelProvider
-- New artefact 'MOGLiCC-Plugin" introduced for VelocityClassBasedGenerator 
+- New model file 'MOGLiCC-Plugin' added to the StandardModelProvider
+- New artefact 'MOGLiCC-Plugin" added to the VelocityClassBasedGenerator 
 
+**Changes to 1.0.0**
+- empty output file bug fixed
 
 * * *
 

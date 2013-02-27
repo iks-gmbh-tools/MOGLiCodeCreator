@@ -141,7 +141,6 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 		assertChildrenNumberInDirectory(workspaceInputDir, 3);
 		final File workspaceOutputDir = new File(workspaceDir, MOGLiSystemConstants.DIR_OUTPUT_FILES);
 		assertChildrenNumberInDirectory(workspaceOutputDir, 3);
-			// TEMP dir ?
 
 		// cleanup
 		FileUtil.deleteDirWithContent(workspaceDir.getParentFile());

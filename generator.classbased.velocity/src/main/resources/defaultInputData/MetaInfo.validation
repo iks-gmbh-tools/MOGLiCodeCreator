@@ -1,11 +1,11 @@
-# This file is place to define MetaInfoValidators. 
-' MetaInfoValidators are used by the StandardModelProvider to validate the MetaInfos
-# used in its model file and to build a statistcs file on the MetaInfo usage.
-# The statistics file is useful to find MetaInfoValidators or MetaInfos 
-# that are not (any more) in use. 
+# This file the is place to define MetaInfoValidators for the VelocityClassBasedGenerator.
+# MetaInfoValidators are used by the StandardModelProvider to validate the MetaInfos
+# used in its model file and to build a statistics file on the MetaInfo usage.
+# The statistics file is useful to find MetaInfoValidators or MetaInfos
+# that are not (any more) in use.
 #
 # Syntax:
-# 
+#
 # |MetaInfo| <name of MetaInfo> |is| <Validation Type> |for| <Hierarchy Level Descriptor> |in| <name of valid model> |.|
 #
 # Possible values for <Validation Type> are "optional" and "mandatory"
@@ -27,15 +27,15 @@
 #
 # |MetaInfo| <name of MetaInfo> |must occur| <occurrence> |time(s) for| <Hierarchy Level Descriptor> |in| <name of valid model> |if| <name of condition file> |is true.|
 #
-# A condition file is a separate file (located relatively to its validation file) 
-# that contains one or more conditions in one or more condition blocks 
+# A condition file is a separate file (located relatively to its validation file)
+# that contains one or more conditions in one or more condition blocks
 # defined by the following syntax:
 #
 # |if MetaInfo| <name of another MetaInfo> |with value| <value of the other MetaInfo> |exists.|
-# 
+#
 # The value information is optional. In addition, it is possible to define exclusion conditions, for example:
 #
-# |if MetaInfo| JavaType |with value| String |does not exist.| 
+# |if MetaInfo| JavaType |with value| String |does not exist.|
 # |if MetaInfo| JavaType |exists.|
 #
 # Conditions separated by line breaks (without Block sepatator) represent a condition block.
@@ -43,8 +43,8 @@
 # As Block separator serves a line with content "OR".
 # As indicated by the block separator, condition blocks are linked by an OR-Relation (disjunction).
 #
-# In case the overall condition defined by its condition file is false, the validator returns true. 
-# This means, the occurence and value of the MetaInfo is not validated (i.e. ignored) 
+# In case the overall condition defined by its condition file is false, the validator returns true.
+# This means, the occurence and value of the MetaInfo is not validated (i.e. ignored)
 # because the failing condition shows the irrelevance of this validator.
 #
 
