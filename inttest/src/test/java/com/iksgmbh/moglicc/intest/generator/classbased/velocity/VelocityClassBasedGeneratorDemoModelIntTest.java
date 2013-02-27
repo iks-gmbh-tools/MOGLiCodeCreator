@@ -12,10 +12,10 @@ import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
-public class VelocityClassBasedGeneratorIntTest extends IntTestParent {
-		
+public class VelocityClassBasedGeneratorDemoModelIntTest extends IntTestParent {
+
 	@Test
-	public void createsJavaBeanMisc() throws MOGLiPluginException {
+	public void createsJavaBeanMiscJavaFile() throws MOGLiPluginException {
 		// prepare test
 		standardModelProviderStarter.doYourJob();
 
@@ -36,35 +36,34 @@ public class VelocityClassBasedGeneratorIntTest extends IntTestParent {
 		final String artefactName = "TestArtefact";
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
-		final File artefactTemplateDir = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+		final File artefactTemplateDir = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(),
 				artefactName);
 		artefactTemplateDir.mkdirs();
 		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
 		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName ${classDescriptor.simpleName}.txt" + FileUtil.getSystemLineSeparator() +
-				                                     "@NameOfValidModel na" + FileUtil.getSystemLineSeparator() + 
+				                                     "@NameOfValidModel na" + FileUtil.getSystemLineSeparator() +
 				                                     "${classDescriptor.simpleName}");
 
 		// call functionality under test
 		velocityClassBasedGeneratorStarter.doYourJob();
 
 		// verify test result
-		final File artefactTargetDir = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginOutputDir(), 
-				artefactName);	
+		final File artefactTargetDir = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginOutputDir(),
+				artefactName);
 		assertFileDoesNotExist(artefactTargetDir);
-		
-		
+
+
 		// prepare follow up test
 		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName ${classDescriptor.simpleName}.txt" +
 				FileUtil.getSystemLineSeparator() +
-                "@NameOfValidModel DemoModel" + FileUtil.getSystemLineSeparator() + 
+                "@NameOfValidModel DemoModel" + FileUtil.getSystemLineSeparator() +
                 "${classDescriptor.simpleName}");
 
 		// call functionality under test
 		velocityClassBasedGeneratorStarter.doYourJob();
-		
+
 		// verify test result
 		assertFileExists(artefactTargetDir);
-				
 	}
 
 	@Test
@@ -78,25 +77,24 @@ public class VelocityClassBasedGeneratorIntTest extends IntTestParent {
                                                  StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 		testPropertiesFile.delete();
 		assertFileDoesNotExist(testPropertiesFile);
-		final File testModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+		final File testModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
 				                            "Umlauts.txt");
-		MOGLiFileUtil.createNewFileWithContent(testModelFile, "model DemoModel" + FileUtil.getSystemLineSeparator() + 
-				                                              "metainfo umlauts ßüäöÜÄÖ" + FileUtil.getSystemLineSeparator() + 
+		MOGLiFileUtil.createNewFileWithContent(testModelFile, "model DemoModel" + FileUtil.getSystemLineSeparator() +
+				                                              "metainfo umlauts ßüäöÜÄÖ" + FileUtil.getSystemLineSeparator() +
                                                               "class de.Test");
 		assertFileExists(testModelFile);
-		
+
 		File inputDir = velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir();
 		FileUtil.deleteDirWithContent(inputDir);
 		assertFileDoesNotExist(inputDir);
 		inputDir = new File(inputDir, "Test");
 		inputDir.mkdirs();
 		final File templateFile = new File(inputDir, "Umlauts.tpl");
-		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() + 
-				                                             "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() + 
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+				                                             "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
 				                                             "@TargetDir <applicationRootDir>/example" + FileUtil.getSystemLineSeparator() +
 				                                             "ßüäöÜÄÖ $model.getMetaInfoValueFor(\"umlauts\")");
 		assertFileExists(templateFile);
-		
 
 		// call functionality under test
 		standardModelProviderStarter.doYourJob();
@@ -107,5 +105,61 @@ public class VelocityClassBasedGeneratorIntTest extends IntTestParent {
 		assertFileExists(resultFile);
 		final String actualFileContent = FileUtil.getFileContent(resultFile);
 		assertStringEquals("file content", "ßüäöÜÄÖ ßüäöÜÄÖ", actualFileContent);
+	}
+
+	@Test
+	public void usesStandardOutputEncodingFormatIfNotDefinedInMainTemplate() throws Exception {
+		// prepare test
+		final File templateFile = prepareOutputEncodingFormatTest();
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
+                "@TargetDir <applicationRootDir>/example");
+
+		// call functionality under test
+		velocityClassBasedGeneratorStarter.doYourJob();
+
+		// verify test result
+		assertStringEquals("OutputEncodingFormat", "UTF-8", velocityClassBasedGeneratorStarter.getEncodingHelper().getEncoding());
+	}
+
+	protected File prepareOutputEncodingFormatTest() throws MOGLiPluginException {
+		standardModelProviderStarter.doYourJob();
+		velocityEngineProviderStarter.doYourJob();
+		final File generatorPluginInputDir = velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir();
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		final File targetDir = new File(generatorPluginInputDir, "myNewArtefact");
+		targetDir.mkdirs();
+		final File templateFile = new File(targetDir, "main.tpl");
+		return templateFile;
+	}
+
+	@Test
+	public void usesStandardOutputEncodingFormatIfValueInMainTemplateIsNotValid() throws Exception {
+		final File templateFile = prepareOutputEncodingFormatTest();
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
+                "@TargetDir <applicationRootDir>/example" + FileUtil.getSystemLineSeparator() +
+                "@OutputEncodingFormat bubu");
+
+		// call functionality under test
+		velocityClassBasedGeneratorStarter.doYourJob();
+
+		// verify test result
+		assertStringEquals("OutputEncodingFormat", "UTF-8", velocityClassBasedGeneratorStarter.getEncodingHelper().getEncoding());
+	}
+
+	@Test
+	public void readsOutputEncodingFormatFromMainTemplate() throws Exception {
+		final File templateFile = prepareOutputEncodingFormatTest();
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
+                "@TargetDir <applicationRootDir>/example" + FileUtil.getSystemLineSeparator() +
+                "@OutputEncodingFormat UTF-16");
+
+		// call functionality under test
+		velocityClassBasedGeneratorStarter.doYourJob();
+
+		// verify test result
+		assertStringEquals("OutputEncodingFormat", "UTF-16", velocityClassBasedGeneratorStarter.getEncodingHelper().getEncoding());
 	}
 }

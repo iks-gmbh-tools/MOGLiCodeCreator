@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.iksgmbh.moglicc</groupId>
 	<artifactId>parent</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	<name>MOGLiCC Parent</name>
 	<description>Provides a multi module build to create all MOGLiCC artefacts</description>
 	<packaging>pom</packaging>
@@ -34,12 +34,6 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.4</version>
 		</dependency>
-
-		<dependency>
-        	<groupId>org.codehaus.sonar</groupId>
-        	<artifactId>sonar-maven-plugin</artifactId>
-        	<version>2.5</version>
-      	</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>

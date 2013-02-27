@@ -9,7 +9,11 @@ import com.iksgmbh.helper.AnnotationParser;
 public class MetaInfoParser extends AnnotationParser {
 	
 	public MetaInfoParser() {
-		super(MetaModelConstants.META_INFO_IDENTIFIER + " ", AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
+		this(AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER);
+	}
+
+	public MetaInfoParser(final String braceSymbolForMetaInfoValues) {
+		super(MetaModelConstants.META_INFO_IDENTIFIER + " ", braceSymbolForMetaInfoValues, AnnotationParser.DEFAULT_COMMENT_IDENTIFICATOR);
 	}
 	
 	public BuildUpMetaInfo parse(String line) {

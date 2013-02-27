@@ -10,41 +10,46 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 
 /**
  * Object to build a data structure with information needed to create a result file
- * 
+ *
  * @author Reik Oberrath
  * @since 1.0.0
  */
-public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultData 
+public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultData
                                                 implements VelocityGeneratorResultData {
-		
-	
+
+
 
 	public BuildUpVelocityGeneratorResultData(final GeneratorResultData generatorResultData) {
 		final BuildUpGeneratorResultData buildUpGeneratorResultData = (BuildUpGeneratorResultData) generatorResultData;
 		properties = buildUpGeneratorResultData.getProperties();
 		generatedContent = buildUpGeneratorResultData.getGeneratedContent();
 	}
-	
+
 	@Override
 	public String getTargetFileName() {
 		return getProperty(KnownGeneratorPropertyNames.TargetFileName.name());
 	}
-	
+
 	@Override
 	public String getTargetDir() {
 		return getProperty(KnownGeneratorPropertyNames.TargetDir.name());
 	}
-	
+
 	@Override
 	public String getNameOfValidModel() {
 		return getProperty(KnownGeneratorPropertyNames.NameOfValidModel.name());
 	}
 
 	@Override
+	public String getOutputEncodingFormat() {
+		return getProperty(KnownGeneratorPropertyNames.OutputEncodingFormat.name());
+	}
+
+	@Override
 	public String getGeneratedContent() {
 		return generatedContent;
 	}
-	
+
 	@Override
 	public boolean isTargetToBeCreatedNewly() {
 		final String value = getProperty(KnownGeneratorPropertyNames.CreateNew.name());
@@ -53,7 +58,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		}
 		return "true".equals(value.toLowerCase().trim());
 	}
-	
+
 	@Override
 	public void validate() throws MOGLiPluginException {
 		if (getTargetFileName() == null) {
@@ -63,7 +68,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 
 	@Override
-	public File getTargetDirAsFile(final String applicationRootDir, final String pathAdaption) 
+	public File getTargetDirAsFile(final String applicationRootDir, final String pathAdaption)
 	            throws MOGLiPluginException {
 		String targetDir = getTargetDir();
 		if (targetDir == null) {
@@ -75,7 +80,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		checkTargetDir(targetDirAsFile);
 		return targetDirAsFile;
 	}
-	
+
 	private void checkTargetDir(final File targetDirAsFile) throws MOGLiPluginException {
 		if (isTargetToBeCreatedNewly()) {
 			targetDirAsFile.mkdirs();
@@ -86,9 +91,9 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		}
 		if (! targetDirAsFile.isDirectory()) {
 			throw new MOGLiPluginException(TEXT_TARGET_DIR_IS_A_FILE + "\n" + targetDirAsFile.getAbsolutePath());
-		}		
+		}
 	}
-	
+
 	@Override
 	public File getTargetFile(final String applicationRootDir, final String pathAdaptation) throws MOGLiPluginException {
 		final File targetDirAsFile = getTargetDirAsFile(applicationRootDir, pathAdaptation);
@@ -98,7 +103,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		final File toReturn = new File(targetDirAsFile, getTargetFileName());
 		checkTargetFile(toReturn);
 		return toReturn;
-	}	
+	}
 
 	protected void checkTargetFile(final File targetFile) throws MOGLiPluginException {
 		if (isTargetToBeCreatedNewly()) {
@@ -106,7 +111,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		}
 		if (targetFile.exists() && ! targetFile.isFile()) {
 			throw new MOGLiPluginException(TEXT_TARGET_FILE_IS_A_DIRECTORY + "\n" + targetFile.getAbsolutePath());
-		}		
+		}
 	}
 
 
@@ -131,7 +136,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 				targetDir = targetDir.replace(ROOT_IDENTIFIER, applicationRootDir);
 			}
 		} else {
-			if (pathAdaption != null) {				
+			if (pathAdaption != null) {
 				targetDir = pathAdaption + targetDir;
 			}
 		}

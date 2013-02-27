@@ -1,3 +1,5 @@
 [user]
 	name = Reik Oberrath
 	email = r.oberrath@iks-gmbh.com
+[diff]
+	tool = winmerge

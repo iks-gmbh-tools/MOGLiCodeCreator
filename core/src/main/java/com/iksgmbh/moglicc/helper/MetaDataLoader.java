@@ -2,7 +2,7 @@ package com.iksgmbh.moglicc.helper;
 
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB_PLUGIN;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_INFO;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_PROPERTY;
+import static com.iksgmbh.moglicc.MOGLiTextConstants.*;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_MANIFEST_FOUND;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_STARTERCLASS_MANIFEST_PROPERTIES;
@@ -17,6 +17,7 @@ import java.util.Properties;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
+import com.iksgmbh.moglicc.MOGLiCodeCreator;
 import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.exceptions.MissingManifestException;
@@ -25,6 +26,7 @@ import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.StringUtil;
 
 /**
  * Helps MOGLiCodeCreator class to do its job
@@ -33,25 +35,25 @@ import com.iksgmbh.utils.FileUtil;
  */
 public class MetaDataLoader {
 
-	private Properties applicationProperties;
+	private Properties workspaceProperties;
 
-	MetaDataLoader(final Properties applicationProperties) {
-		this.applicationProperties = applicationProperties;
+	MetaDataLoader(final Properties workspaceProperties) {
+		this.workspaceProperties = workspaceProperties;
 	};
-	
-	public static List<PluginMetaData> doYourJob(final Properties applicationProperties) {
+
+	public static List<PluginMetaData> doYourJob(final Properties workspaceProperties) {
 		MOGLiLogUtil.logInfo("Searching for plugins...");
-		MetaDataLoader metaDataLoader = new MetaDataLoader(applicationProperties);
+		MetaDataLoader metaDataLoader = new MetaDataLoader(workspaceProperties);
 		List<PluginMetaData> availablePluginList = metaDataLoader.searchForAvailablePlugins();
 		metaDataLoader.checkActivationPluginState(availablePluginList);
 		return availablePluginList;
 	}
-		
+
 	 List<PluginMetaData> searchForAvailablePlugins() {
 		final File[] pluginJars = searchPluginJars();
-		
+
 		final List<PluginMetaData> pluginMetaDataList = new ArrayList<PluginMetaData>();
-		
+
 		for (int i = 0; i < pluginJars.length; i++) {
 			String starterClassFromJar;
 			try {
@@ -63,7 +65,7 @@ public class MetaDataLoader {
 				starterClassFromJar = PluginMetaData.NO_STARTERCLASS;
 				MOGLiLogUtil.logWarning(TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE + " " + pluginJars[i]);
 			}
-			PluginMetaData pluginMetaData = new PluginMetaData(pluginJars[i].getName(), 
+			PluginMetaData pluginMetaData = new PluginMetaData(pluginJars[i].getName(),
 					                                           starterClassFromJar);
 			pluginMetaDataList.add(pluginMetaData);
 		}
@@ -78,7 +80,7 @@ public class MetaDataLoader {
 				return name.endsWith(".jar");
 			}
 		});
-		
+
 		if (files == null) {
 			files = new File[0];
 		}
@@ -112,7 +114,7 @@ public class MetaDataLoader {
 			p.load(inputStream);
 			inputStream.close();
 		} catch (IOException e) {
-			throw new MOGLiCoreException("Error reading " + MOGLiPlugin.FILENAME_PLUGIN_JAR_PROPERTIES 
+			throw new MOGLiCoreException("Error reading " + MOGLiPlugin.FILENAME_PLUGIN_JAR_PROPERTIES
 					+ " from "+ jarFile.getName());
 		}
 		return p;
@@ -120,18 +122,22 @@ public class MetaDataLoader {
 
 	void checkActivationPluginState(List<PluginMetaData> pluginMetaDataList) {
 		for (PluginMetaData pluginMetaData : pluginMetaDataList) {
-			if (pluginMetaData.isStatusOK()) { 
-				String jarName = pluginMetaData.getJarName();
-				String activationProperty = applicationProperties.getProperty(jarName);
+			if (pluginMetaData.isStatusOK()) {
+				final String jarName = FileUtil.removeFileExtension(pluginMetaData.getJarName());
+				final String basicJarName = StringUtil.removeSuffixIfExisting(jarName, "-" + MOGLiCodeCreator.VERSION);
+				final String activationProperty = workspaceProperties.getProperty(basicJarName);
+
 				if (activationProperty == null) {
-					jarName = FileUtil.removeFileExtension(pluginMetaData.getJarName());
-					activationProperty = applicationProperties.getProperty(jarName);
+					// no setting in workspace properties, thus deactivate plugin by default
+					pluginMetaData.setInfoMessage(TEXT_DEACTIVATED_PLUGIN_INFO);					
 				}
-				if (activationProperty != null) {
-					if (activationProperty.toUpperCase().equals(TEXT_DEACTIVATED_PLUGIN_PROPERTY)) {
-						pluginMetaData.setInfoMessage(TEXT_DEACTIVATED_PLUGIN_INFO); 
-					}
+				else if (! activationProperty.toUpperCase().equals(TEXT_ACTIVATED_PLUGIN_PROPERTY)) {
+					// plugin deactivated by user setting
+					pluginMetaData.setInfoMessage(TEXT_DEACTIVATED_PLUGIN_INFO);
+				} else {
+					// plugin is activated, thus do nothing here
 				}
+
 			} else {
 				// no need to consider
 			}

@@ -10,9 +10,13 @@
 6.  In file 'application/src/main/resources/build.properties' assure that 'testRun' equals 'false'.
 7.  Execute 'BuildReleaseAndTestSystem.java' as JUnit test. This builds the release candidate
     and executes the system tests automatically on it.
-8.  In file 'application/src/main/resources/build.properties' adapt the three version settings to new values
-9.  In file 'application/src/main/resources/build.properties' set 'testRun' back to 'true'.
-    This allows test runs of the release process executed automatically by 'BuildReleaseAndTestSystem.java'.
-10. Verify that in 'application/releaseBuilds' the Release Candidate can be found.
+8.  Open 'help/MOGLi Code Creator.htm' of unzipped (!) Release Candidate in a web browser and check
+    a) Is the file readable? If not, encoding of file in repository is not UTF-8!
+    b) Is MOGLiCC version correct?
+    c) Are all links working?
+9.  Verify that in 'application/releaseBuilds' the Release Candidate can be found.
     If not check that property 'testRun' is 'false' in file 'application/src/main/resources/build.properties'.
-11. Commit and tag source code in git and push it to iks gitblit and/or to github remote repositories.
+10. In file 'application/src/main/resources/build.properties' adapt the three version settings to new values
+11. In file 'application/src/main/resources/build.properties' set 'testRun' back to 'true'.
+    This allows test runs of the release process executed automatically by 'BuildReleaseAndTestSystem.java'.
+12. Commit and tag source code in git and push it to iks gitblit and/or to github remote repositories.

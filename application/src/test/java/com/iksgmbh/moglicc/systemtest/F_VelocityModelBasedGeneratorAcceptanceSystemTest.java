@@ -13,39 +13,40 @@ import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityClassBasedGeneratorStarter;
 import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.data.ClassNameData;
 import com.iksgmbh.utils.FileUtil;
 
-public class D_VelocityModelBasedGeneratorAcceptanceSystemTest extends _AbstractSystemTest {
-	
+public class F_VelocityModelBasedGeneratorAcceptanceSystemTest extends _AbstractSystemTest {
+
 	public static final String GENERATOR_PLUGIN_ID = VelocityClassBasedGeneratorStarter.PLUGIN_ID;
-	
+
 
 	// *****************************  test methods  ************************************
-	
+
 	@Test
 	public void createsPluginLogFile() {
 		// prepare test
 		FileUtil.deleteDirWithContent(applicationLogDir);
 		final File pluginLogFile = new File(applicationLogDir, GENERATOR_PLUGIN_ID + ".log");
 		assertFileDoesNotExist(pluginLogFile);
-		
+
 		// call functionality under test
 		executeMogliApplication();
-		
+
 		// verify test result
 		assertFileExists(pluginLogFile);
 	}
-	
+
 	@Test
 	public void createsGeneratorResultFiles() throws IOException {
 		// prepare test
 		FileUtil.deleteDirWithContent(applicationOutputDir);
 		assertFileDoesNotExist(applicationOutputDir);
-		
+
 		// call functionality under test
 		executeMogliApplication();
-		
+
 		// verify test result
 		assertFileExists(applicationOutputDir);
 		assertAllResultFileCreated();
@@ -53,7 +54,7 @@ public class D_VelocityModelBasedGeneratorAcceptanceSystemTest extends _Abstract
 
 	private void assertAllResultFileCreated() throws IOException {
 		final List<String> classnamesFromModelfile = readClassnameFromModelfile();
-		final File pluginOutputDir = new File(applicationOutputDir, GENERATOR_PLUGIN_ID 
+		final File pluginOutputDir = new File(applicationOutputDir, GENERATOR_PLUGIN_ID
 				                              + "/" + VelocityClassBasedGeneratorStarter.ARTEFACT_JAVABEAN);
 		assertChildrenNumberInDirectory(pluginOutputDir, classnamesFromModelfile.size());
 		for (String classname : classnamesFromModelfile) {
@@ -78,20 +79,59 @@ public class D_VelocityModelBasedGeneratorAcceptanceSystemTest extends _Abstract
 		}
 		return list;
 	}
-	
-	
+
+
 	@Test
 	public void createsHelpData() {
 		// prepare test
-		final File pluginHelpDir = new File(applicationHelpDir, GENERATOR_PLUGIN_ID); 
+		final File pluginHelpDir = new File(applicationHelpDir, GENERATOR_PLUGIN_ID);
 		FileUtil.deleteDirWithContent(applicationHelpDir);
 		assertFileDoesNotExist(pluginHelpDir);
-		
+
 		// call functionality under test
 		executeMogliApplication();
-		
+
 		// verify test result
 		assertFileExists(pluginHelpDir);
 		assertChildrenNumberInDirectory(pluginHelpDir, 1);
+	}
+
+	@Test
+	public void createsOutputFilesWithASCIIEncodingReadFromMainTemplate() throws Exception {
+		final File templateFile = prepareEncodingTest();
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                "@TargetFileName UmlautTest.txt" + FileUtil.getSystemLineSeparator() +
+                "@TargetDir <applicationRootDir>/example" + FileUtil.getSystemLineSeparator() +
+                "@OutputEncodingFormat ASCII" + FileUtil.getSystemLineSeparator() + "äüößÜÖÄ");
+
+		// call functionality under test
+		executeMogliApplication();
+
+		// verify test result
+		final File outputFile = new File(applicationOutputDir, GENERATOR_PLUGIN_ID + "/myNewArtefact/UmlautTest.txt");
+		assertStringEquals("outputFileContent", "???????", MOGLiFileUtil.getFileContent(outputFile));
+	}
+
+	@Test
+	public void createsOutputFilesWithDefaultEncodingReadFromMainTemplate() throws Exception {
+		final File templateFile = prepareEncodingTest();
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                "@TargetFileName UmlautTest.txt" + FileUtil.getSystemLineSeparator() +
+                "@TargetDir <applicationRootDir>/example" + FileUtil.getSystemLineSeparator() +
+                "äüößÜÖÄ");
+
+		// call functionality under test
+		executeMogliApplication();
+
+		// verify test result
+		final File outputFile = new File(applicationOutputDir, GENERATOR_PLUGIN_ID + "/myNewArtefact/UmlautTest.txt");
+		assertStringEquals("outputFileContent", "äüößÜÖÄ", MOGLiFileUtil.getFileContent(outputFile));
+	}
+
+	protected File prepareEncodingTest() {
+		final File targetDir = new File(applicationInputDir, GENERATOR_PLUGIN_ID + "/myNewArtefact");
+		targetDir.mkdirs();
+		final File templateFile = new File(targetDir, "main.tpl");
+		return templateFile;
 	}
 }

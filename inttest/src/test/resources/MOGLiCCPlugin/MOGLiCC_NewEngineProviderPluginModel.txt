@@ -1,0 +1,19 @@
+####################################################################################
+# The MOGLiCC_NewPluginModel provides data for the MOGLiCC_NewPlugin templates.
+# Model data and templates are used to create a new MOGLiCC Plugin starter class.
+# The generated starter artefact is defined as a basic implementation and is
+# supposed to be manually completed. In this way the startup for a new MOGLiCC
+# Plugin is accelerated.
+# Known plugin types are GENERATOR, MODEL_PROVIDER, DATA_PROVIDER, ENGINE_PROVIDER
+# Known values for pluginDependency: MODEL_PROVIDER_ID, ENGINE_PROVIDER_ID
+####################################################################################
+model MOGLiCC_NewPluginModel
+  metainfo eclipseWorkspaceProject D:/temp/mogli
+
+class com.iksgmbh.moglicc.generator.classbased.velocity.NewEngineProviderStarter
+    metainfo pluginID MyEngineProvider
+	metainfo pluginType ENGINE_PROVIDER
+	metainfo pluginDependency MODEL_PROVIDER_ID
+    metainfo isMetaInfoValidatorVendor false
+    metainfo hasDefaultDataToUnpack true
+    metainfo hasHelpDataToUnpack true
