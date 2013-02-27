@@ -47,15 +47,3 @@
 # This means, the occurence and value of the MetaInfo is not validated (i.e. ignored) 
 # because the failing condition shows the irrelevance of this validator.
 #
-
-|MetaInfo| extends     |must occur| 0-1 |time(s) for| classes |in| ModelName |.| # optional metainfo. but if present only once is allowed
-
-|MetaInfo| extends     |is| optional  |for| classes    |in| DemoModel |.|
-|MetaInfo| implements  |is| optional  |for| classes    |in| DemoModel |.|
-
-|MetaInfo| JavaType    |is| mandatory |for| attributes |in| DemoModel |.| # must occur exactly once
-|MetaInfo| Mandatory   |is| optional  |for| attributes |in| DemoModel |.|
-|MetaInfo| MinLength   |is| optional  |for| attributes |in| DemoModel |.|
-|MetaInfo| MaxLength   |is| optional  |for| attributes |in| DemoModel |.|
-
-|MetaInfo| ExampleData |must occur| 1 |time(s) for| attributes |in| DemoModel |.| # must occur exactly once - alternatively defined as mandatory validator

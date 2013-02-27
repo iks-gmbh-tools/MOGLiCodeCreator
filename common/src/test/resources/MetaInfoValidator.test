@@ -1,0 +1,5 @@
+|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|  # comment
+|MetaInfo| MetaInfoTestName2 |is| mandatory |for| attributes |in| ModelName |.| # comment
+
+|MetaInfo| MetaInfoTestName3 |must occur| 0-4 |time(s) for| attributes |in| ModelName |.|
+|MetaInfo| MetaInfoTestName4 |must occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|

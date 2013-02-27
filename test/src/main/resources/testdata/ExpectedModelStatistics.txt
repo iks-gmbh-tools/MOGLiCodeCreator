@@ -1,8 +1,17 @@
 Model Name: DemoModel
 Number of class descriptions in model file: 4
-Number of known MetaInfoValidator vendor plugins: 1
+Number of known MetaInfoValidator vendor plugins: 2
 
 Plugin 'VelocityClassBasedGenerator' uses the following MetaInfo elements:
+'JavaType' in Attribute level
+'Mandatory' in Attribute level
+'extends' in Class level
+'MaxLength' in Attribute level
+'MinLength' in Attribute level
+'ExampleData' in Attribute level
+'implements' in Class level
+
+Plugin 'VelocityModelBasedInserter' uses the following MetaInfo elements:
 'JavaType' in Attribute level
 'Mandatory' in Attribute level
 'extends' in Class level

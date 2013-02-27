@@ -45,6 +45,16 @@ public class StringUtilUnitTest {
 	}
 
 	@Test
+	public void removesSuffixByLength() {
+		// call functionality under test
+		final String result = StringUtil.removeSuffixByLength("abc", 1);
+
+		// verify test result
+		assertEquals("result ", "ab", result );
+		
+	}
+
+	@Test
 	public void removesSuffixIfExisting() {
 		// prepare test
 		final String suffix = "-1.2.3";
@@ -57,4 +67,18 @@ public class StringUtilUnitTest {
 		assertEquals("result ", s, result );
 		assertEquals("result ", s, StringUtil.removeSuffixIfExisting(s + suffix, suffix) );
 	}
+	
+	@Test
+	public void removesPrefixIfExisting() {
+		// prepare test
+		final String prefix = "1.2.3-";
+		final String s = "abcde";
+
+		// call functionality under test
+		final String result = StringUtil.removePrefixIfExisting(prefix + s, prefix);
+
+		// verify test result
+		assertEquals("result ", s, result );
+	}
+	
 }

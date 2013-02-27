@@ -3,15 +3,31 @@ package com.iksgmbh.moglicc.provider.model.standard.metainfo;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MetaInfoDummy implements MetaInfo {
 
-	private HierarchyLevel hierarchyLevel;
 	private String name;
+	private String value;
+	private HierarchyLevel hierarchyLevel;
 	final List<String> plugins = new ArrayList<String>();
-	
+
 	public MetaInfoDummy(final HierarchyLevel hierarchyLevel, final String name) {
 		this.hierarchyLevel = hierarchyLevel;
+		this.name = name;
+	}
+
+	public MetaInfoDummy(final HierarchyLevel hierarchyLevel, final String name, final String value) {
+		this.hierarchyLevel = hierarchyLevel;
+		this.name = name;
+		this.value = value;
+	}
+
+	public MetaInfoDummy(final String name, final String value) {
+		this.name = name;
+		this.value = value;
+	}
+
+
+	public MetaInfoDummy(final String name) {
 		this.name = name;
 	}
 
@@ -22,7 +38,7 @@ public class MetaInfoDummy implements MetaInfo {
 
 	@Override
 	public String getValue() {
-		return null;
+		return value;
 	}
 
 	@Override

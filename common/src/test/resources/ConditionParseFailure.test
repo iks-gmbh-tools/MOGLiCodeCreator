@@ -1,0 +1,4 @@
+|if MetaInfo| The \"other\" MetaInfo Name1 |exists.|  # comment
+AND
+|if MetaInfo| The \"other\" MetaInfo Name2 |does not exist.|
+
