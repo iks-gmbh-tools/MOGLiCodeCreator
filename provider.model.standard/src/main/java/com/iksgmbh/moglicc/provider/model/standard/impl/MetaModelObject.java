@@ -7,13 +7,13 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoSupport;
 
 public abstract class MetaModelObject implements MetaInfoSupport {
-	
+
 	protected List<MetaInfo> metaInfoList;
-	
+
 	public void addMetaInfo(final MetaInfo metaInfo) {
 		this.metaInfoList.add(metaInfo);
-	}	
-	
+	}
+
 	@Override
 	public String getMetaInfoValueFor(final String metaInfoName) {
 		for (final MetaInfo element : metaInfoList) {
@@ -23,7 +23,7 @@ public abstract class MetaModelObject implements MetaInfoSupport {
 		}
 		return META_INFO_NOT_FOUND.replaceFirst("#", metaInfoName);
 	}
-	
+
 	@Override
 	public List<String> getAllMetaInfoValuesFor(final String metaInfoName) {
 		final List<String> toReturn = new ArrayList<String>();
@@ -34,12 +34,12 @@ public abstract class MetaModelObject implements MetaInfoSupport {
 		}
 		return toReturn;
 	}
-	
+
 	@Override
 	public List<MetaInfo> getMetaInfoList() {
 		return metaInfoList;
 	}
-	
+
 
 	@Override
 	public boolean doesHaveMetaInfo(final String metaInfoName, final String value) {
@@ -51,7 +51,7 @@ public abstract class MetaModelObject implements MetaInfoSupport {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean doesHaveAnyMetaInfosWithName(final String metaInfoName) {
 		for (final MetaInfo element : metaInfoList) {
@@ -62,17 +62,34 @@ public abstract class MetaModelObject implements MetaInfoSupport {
 		return false;
 	}
 
+
+	@Override
+	public String getCommaSeparatedListOfAllMetaInfoValuesFor(final String metaInfoName) {
+		final StringBuffer sb = new StringBuffer();
+		final List<String> metaInfoValues = getAllMetaInfoValuesFor(metaInfoName);
+		for (final String name : metaInfoValues) {
+			sb.append(name);
+			sb.append(", ");
+		}
+		return getCommaSeparatedListAsStringFromStringBuffer(sb);
+	}
+
+	protected String getCommaSeparatedListAsStringFromStringBuffer(final StringBuffer sb) {
+		final String s = sb.toString();
+		if (s.length() < 3) {
+			return "";
+		}
+		return s.substring(0, s.length()-2);
+	}
+
+
 	protected String getCommaSeparatedListOfMetaInfoNames() {
 		final StringBuffer sb = new StringBuffer();
 		for (final MetaInfo element : metaInfoList) {
 			sb.append(element.getName());
 			sb.append(", ");
 		}
-		final String s = sb.toString();
-		if (s.length() < 3) {
-			return "";
-		}
-		return s.substring(0, s.length()-2);
+		return getCommaSeparatedListAsStringFromStringBuffer(sb);
 	}
 
 }

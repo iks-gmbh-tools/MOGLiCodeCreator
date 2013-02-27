@@ -18,10 +18,10 @@ import com.iksgmbh.moglicc.MOGLiCodeCreator;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MandatoryMetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.MandatoryMetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.OptionalMetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.OptionalMetaInfoValidator;
 import com.iksgmbh.moglicc.test.StandardModelProviderTestParent;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter2;
@@ -39,6 +39,12 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		infrastructure.getPluginLogFile().delete();
 		FileUtil.deleteDirWithContent(infrastructure.getPluginInputDir());
 		infrastructure.getPluginInputDir().mkdirs();
+		final File propertiesFile = new File(infrastructure.getPluginInputDir(), StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE );
+		try {
+			FileUtil.createNewFileWithContent(propertiesFile, "");			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	protected void setModelFile(String filename) {
@@ -53,8 +59,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	// **************************  Test Methods  *********************************
 	
 	@Test
-	public void handlesMissingModelFile() throws MOGLiPluginException{
-
+	public void handlesMissingModelFile() throws MOGLiPluginException {
 		try {
 			// call functionality under test
 			modelProvider.buildModel();
@@ -84,6 +89,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	public void buildsModel() throws MOGLiPluginException{
 		// prepare test
 		setModelFile("simpelModelFile.txt");
+		modelProvider.readPluginProperties();
 		
 		// call functionality under test
 		Model model = modelProvider.buildModel();
@@ -102,6 +108,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		FileUtil.copyTextFile(modelfile, infrastructure.getPluginInputDir().getAbsolutePath());
 		final File propertiesFile = new File(infrastructure.getPluginInputDir(), StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE );
 		FileUtil.createNewFileWithContent(propertiesFile, "modelfile=simpelModelFile.txt");
+		modelProvider.readPluginProperties();
 		
 		// call functionality under test
 		Model model = modelProvider.buildModel();
@@ -207,7 +214,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'modelMetaInfoMandatory' does not found for model 'MetaInfoValidatorTestModel'");
+					                "ERROR: MetaInfo 'modelMetaInfoMandatory' was not found for model 'MetaInfoValidatorTestModel'");
 			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
 			return;
 		}
@@ -226,7 +233,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'classMetaInfoMandatory' does not found for classDescriptor 'TestklasseA'");
+					                "ERROR: MetaInfo 'classMetaInfoMandatory' was not found for classDescriptor 'TestklasseA'");
 			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
 			return;
 		}
@@ -245,7 +252,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 			assertStringEquals("Error message", TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
 					                             + infrastructure.getPluginLogFile().getName(), e.getMessage());
 			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'attributeMetaInfoMandatory' does not found for attributeDescriptor 'A2'");
+					                "ERROR: MetaInfo 'attributeMetaInfoMandatory' was not found for attributeDescriptor 'A2'");
 			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
 			return;
 		}
@@ -378,4 +385,34 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		assertStringEquals("file content", "ßüäöÜÄÖ", actualFileContent);
 
 	}
+
+	@Test
+	public void readsMetaInfoValueContainingDoubleQuotesUsingCustomizedBraceSymbol() throws Exception {
+		// prepare test
+		final String testBraceSymbol = "++";
+		final String testMetaInfoName = "metainfoWithDoubleQuote";
+		final String testMetaInfoValue = "double quote \"containing\" value";
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "TestModel.txt");
+		FileUtil.createNewFileWithContent(testModelFile, "model TestModel" + FileUtil.getSystemLineSeparator() +
+                                                         "metainfo " + testMetaInfoName + " " +
+                                                         testBraceSymbol + testMetaInfoValue + testBraceSymbol +
+                                                         FileUtil.getSystemLineSeparator() + 
+                                                         "class com.iksgmbh.moglicc.demo.Person1");
+
+		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
+				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt"
+				                                              + FileUtil.getSystemLineSeparator() 
+				                                              + TextConstants.METAINFO_BRACE_SYMBOL_PROPERTY 
+				                                              + "=" + testBraceSymbol);
+		assertChildrenNumberInDirectory(infrastructure.getPluginInputDir(), 2);
+
+		// call functionality under test
+		modelProvider.doYourJob();
+		
+		// verify test result
+		final Model model = modelProvider.getModel();
+		assertStringEquals("model name", testMetaInfoValue, model.getMetaInfoValueFor(testMetaInfoName));
+	}
+
 }

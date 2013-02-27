@@ -22,15 +22,15 @@ public class MergeResultAnalyserUnitTest extends VelocityEngineProviderTestParen
 		final String textToParse = FileUtil.getFileContent(originalTemplateFile);
 
 		// call functionality under test
-		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(textToParse);
-		
+		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(textToParse, null);
+
 		// verify test result
 		assertNotNull("Not null expected", buildUpGeneratorResultData);
 		final String velocityFileContent = "public class ${classDescriptor.simpleName} {" + FileUtil.getSystemLineSeparator() + "}";
 		assertEquals("Result File Content", velocityFileContent, buildUpGeneratorResultData.getGeneratedContent());
 		assertEquals("Number of Properties", 2, buildUpGeneratorResultData.getPropertiesNumber());
 	}
-	
+
 	@Test
 	public void removesCommentLines() throws MOGLiPluginException {
 		// prepare test
@@ -42,13 +42,13 @@ public class MergeResultAnalyserUnitTest extends VelocityEngineProviderTestParen
 									 + FileUtil.getSystemLineSeparator() + "}";
 
 		// call functionality under test
-		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(textToParse);
-		
+		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(textToParse, null);
+
 		// verify test result
 		final String velocityFileContent = "public class ${classDescriptor.simpleName} {" + FileUtil.getSystemLineSeparator() + "}";
 		assertEquals("Result File Content", velocityFileContent, buildUpGeneratorResultData.getGeneratedContent());
 	}
-	
+
 	@Test
 	public void parsesPropertiesCaseInsensitive() throws MOGLiPluginException {
 		// prepare test
@@ -59,8 +59,8 @@ public class MergeResultAnalyserUnitTest extends VelocityEngineProviderTestParen
 									 + "@TEST foo";
 
 		// call functionality under test
-		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(textToParse);
-		
+		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(textToParse, null);
+
 		// verify test result
 		String property = VelocityGeneratorResultData.KnownGeneratorPropertyNames.TargetFileName.name();
 		assertEquals("property", "TestName.java", buildUpGeneratorResultData.getProperty(property));

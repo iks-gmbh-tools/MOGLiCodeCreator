@@ -9,7 +9,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 public class ModelDummy implements Model {
 
 	private String name;
-	
+
 	public ModelDummy(String name) {
 		this.name = name;
 	}
@@ -57,6 +57,12 @@ public class ModelDummy implements Model {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String getCommaSeparatedListOfAllMetaInfoValuesFor(
+			String metaInfoName) {
+		return null;
 	}
 
 }

@@ -10,6 +10,7 @@ import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.UNRELATE
 import java.util.ArrayList;
 import java.util.List;
 
+import com.iksgmbh.helper.AnnotationParser;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
 import com.iksgmbh.moglicc.provider.model.standard.exceptions.ModelParserException;
@@ -28,15 +29,24 @@ public class ModelParser {
 	private final ModelNameParser modelNameParser = new ModelNameParser();
 	private final ClassDescriptorParser classDescriptorParser = new ClassDescriptorParser();
 	private final AttributeDescriptorParser attributeDescriptorParser = new AttributeDescriptorParser();
-	private final MetaInfoParser metaInfoParser = new MetaInfoParser();
+	private final MetaInfoParser metaInfoParser;
 	
 	private BuildUpModel buildUpModel;
 	private BuildUpClassDescriptor buildUpClassDescriptor;
 	private BuildUpAttributeDescriptor buildUpAttributeDescriptor;
 
 
-	public static BuildUpModel doYourJob(final List<String> fileContentAsList) throws ModelParserException {
-		final ModelParser modelParser = new ModelParser();
+	private ModelParser(final String braceSymbolForMetaInfoValues) {
+		metaInfoParser = new MetaInfoParser(braceSymbolForMetaInfoValues);
+	}
+
+	public ModelParser() {
+		metaInfoParser = new MetaInfoParser(AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER);
+	}
+
+	public static BuildUpModel doYourJob(final List<String> fileContentAsList,    
+			                             final String braceSymbolForMetaInfoValues) throws ModelParserException {
+		final ModelParser modelParser = new ModelParser(braceSymbolForMetaInfoValues);
 		return modelParser.parse(fileContentAsList);
 	}
 

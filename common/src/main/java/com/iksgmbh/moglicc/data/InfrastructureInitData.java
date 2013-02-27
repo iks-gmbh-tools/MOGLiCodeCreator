@@ -21,7 +21,7 @@ public class InfrastructureInitData {
 	public final File inputDir;
 	public final File helpDir;
 	
-	public final Properties applicationProperties;
+	public final Properties workspaceProperties;
 	
 	public List<MOGLiPlugin> pluginList;
 	
@@ -36,6 +36,6 @@ public class InfrastructureInitData {
 		this.tempDir = dirTempFiles;
 		this.inputDir = inputDir;
 		this.helpDir = helpDir;
-		this.applicationProperties = applicationProperties;
+		this.workspaceProperties = applicationProperties;
 	}
 }
