@@ -50,6 +50,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 	@Before
 	public void setup() {
 		super.setup();
+		
 		applicationLogDir.mkdirs();
 
 		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
@@ -76,6 +77,8 @@ public class IntTestParent extends AbstractMOGLiTest {
 		final File pluginInputDir = standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir();
 		modelTextfile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
 		modelPropertiesFile = new File(pluginInputDir, StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		final File modelFileNotNeededForIntTest = new File(pluginInputDir, "MOGLiCC_NewPluginModel.txt");
+		modelFileNotNeededForIntTest.delete();
 	}
 
 	protected MOGLiInfrastructure initPlugin(final MOGLiPlugin plugin) throws MOGLiPluginException {

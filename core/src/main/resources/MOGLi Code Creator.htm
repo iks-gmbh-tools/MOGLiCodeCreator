@@ -15,16 +15,16 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <o:DocumentProperties>
   <o:Author>Reik</o:Author>
   <o:LastAuthor>Oberrath, Reik</o:LastAuthor>
-  <o:Revision>13</o:Revision>
+  <o:Revision>14</o:Revision>
   <o:Created>2012-12-05T10:57:00Z</o:Created>
-  <o:LastSaved>2012-12-13T13:18:00Z</o:LastSaved>
-  <o:Pages>3</o:Pages>
-  <o:Words>3165</o:Words>
-  <o:Characters>19943</o:Characters>
+  <o:LastSaved>2013-02-27T17:40:00Z</o:LastSaved>
+  <o:Pages>4</o:Pages>
+  <o:Words>3253</o:Words>
+  <o:Characters>20501</o:Characters>
   <o:Company>WIR</o:Company>
-  <o:Lines>166</o:Lines>
-  <o:Paragraphs>46</o:Paragraphs>
-  <o:CharactersWithSpaces>23062</o:CharactersWithSpaces>
+  <o:Lines>170</o:Lines>
+  <o:Paragraphs>47</o:Paragraphs>
+  <o:CharactersWithSpaces>23707</o:CharactersWithSpaces>
   <o:Version>14.00</o:Version>
  </o:DocumentProperties>
  <o:OfficeDocumentSettings>
@@ -36,6 +36,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 href="MOGLi%20Code%20Creator-Dateien/colorschememapping.xml">
 <!--[if gte mso 9]><xml>
  <w:WordDocument>
+  <w:Zoom>103</w:Zoom>
   <w:SpellingState>Clean</w:SpellingState>
   <w:GrammarState>Clean</w:GrammarState>
   <w:TrackMoves>false</w:TrackMoves>
@@ -69,8 +70,8 @@ href="MOGLi%20Code%20Creator-Dateien/colorschememapping.xml">
    <w:CachedColBalance/>
   </w:Compatibility>
   <w:DocumentVariables>
-   <w:dgnword-docGUID>{91BEC3C2-6BF4-412B-8326-B27B9E501032}</w:dgnword-docGUID>
-   <w:dgnword-eventsink>99599784</w:dgnword-eventsink>
+   <w:dgnword-docGUID>{DBF49B32-A4C4-497B-8F23-F9AAA0155D78}</w:dgnword-docGUID>
+   <w:dgnword-eventsink>97890544</w:dgnword-eventsink>
   </w:DocumentVariables>
   <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
   <m:mathPr>
@@ -768,7 +769,7 @@ EN-GB'> <span class=SpellE>ghtweight</span><o:p></o:p></span></p>
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Current
-version: 1.0.1<o:p></o:p></span></p>
+version: 1.1.0<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -886,7 +887,7 @@ tooling needed to work with it - which is a simple text editor, and <o:p></o:p><
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='mso-ansi-language:
 EN-GB'><span style='mso-list:Ignore'>d)<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]><span lang=EN-GB style='mso-ansi-language:EN-GB'>The
-main reason: <span style='mso-spacerun:yes'> </span>the small knowledge you
+main reason:<span style='mso-spacerun:yes'>  </span>the small knowledge you
 need to learn to work with it.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>With the
@@ -940,12 +941,12 @@ work?</span></b></span><b><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Think of <span
 class=SpellE>MOGLiCC</span> as a reactor for two separate source code
 ingredients: a model and a generator. The <span class=SpellE>MOGLiCC</span>
-plugin called <span class=SpellE>StandardModelProvider</span> allows you to
-define a model in a simple text file. Another <span class=SpellE>MOGLiCC</span>
-plugin called <span class=SpellE>VelocityClassBasedGenerator</span> allows you
-to define a template file. Now <span class=SpellE>MOGLiCC</span> works like
-this: model + template = code. Therefore, <span class=SpellE>MOGLi</span> is
-based on two equally important parts: model and generator.<o:p></o:p></span></p>
+plugin called <span class=SpellE>StandardModelProvider</span> allows you to define
+a model in a simple text file. Another <span class=SpellE>MOGLiCC</span> plugin
+called <span class=SpellE>VelocityClassBasedGenerator</span> allows you to
+define a template file. Now <span class=SpellE>MOGLiCC</span> works like this:
+model + template = code. Therefore, <span class=SpellE>MOGLi</span> is based on
+two equally important parts: model and generator.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1009,15 +1010,15 @@ jar files and a start batch file is present. Having set the environment
 variable JAVA_HOME pointing on a 1.6 JRE, the Code Creator will do its job when
 calling the start batch. When called the first time, some directories are
 created and a number of default files are extracted from the jar source files.
-The most important directories are “input” and “output”. For each plugin that
-needs input data, the input directory contains a subdirectories named after the
+The most important directories are “input” and “output”. For each plugin that needs
+input data, the input directory contains a subdirectories named after the
 plugin the data belongs to. The same is true for the output <span class=SpellE>dir</span>,
 but in addition old output files are deleted on every application start. The
 input directory together with the corresponding output directory can be
 organized in different workspaces. The “<span class=SpellE>application.properties</span>”
 file allows you to move the default workspace directory – the application root
-directory – to an arbitrary file system folder. In this way, you can manage
-code generation for different projects. For more information how to configure a
+directory – to an arbitrary file system folder. In this way, you can manage code
+generation for different projects. For more information how to configure a
 workspace directory read the default application properties file.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -1051,11 +1052,11 @@ EN-GB'>4.1 Writing a model file<o:p></o:p></span></b></a></p>
 <span style='mso-bookmark:c4_1'></span>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The model
-file is by default expected to be found in the plugin specific input directories
-of the <span class=SpellE>StandardModelProvider</span>. If only one file is
-found there, it is selected automatically. Otherwise, the model file must be
-defined in the model properties file. It can be used to manage more than one
-model file in one workspace. For more information about model file
+file is by default expected to be found in the plugin specific input
+directories of the <span class=SpellE>StandardModelProvider</span>. If only one
+file is found there, it is selected automatically. Otherwise, the model file
+must be defined in the model properties file. It can be used to manage more
+than one model file in one workspace. For more information about model file
 configuration read the default model properties file. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The whole
@@ -1135,19 +1136,19 @@ start, this output will be deleted.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The
-behaviour of Velocity Template Language (VTL) concerning white space is
-quarrelsome, intensively discussed and strict: leading white space is simply
-removed. This is troublesome for formatting purpose. To increase the <span
-class=SpellE>easeness</span> to create well formatted content, the <span
-class=SpellE>MOGLiCC</span> generators apply a little parser after merging
-model and template. This <span class=SpellE>MOGLiCC</span> specific parser
-removes leading apostrophes &lt;’&gt; from each line of the generated content.
-An apostrophe prevents Velocity from removing the whitespace that follows it.
-With this parser it is possible to write both well formatted templates and well
-formatted generation result. Use white space without or before an apostrophe to
-format only a template line. Use white space after an apostrophe to format the
-generation results.<o:p></o:p></span></p>
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The behaviour
+of Velocity Template Language (VTL) concerning white space is quarrelsome,
+intensively discussed and strict: leading white space is simply removed. This
+is troublesome for formatting purpose. To increase the <span class=SpellE>easeness</span>
+to create well formatted content, the <span class=SpellE>MOGLiCC</span>
+generators apply a little parser after merging model and template. This <span
+class=SpellE>MOGLiCC</span> specific parser removes leading apostrophes
+&lt;’&gt; from each line of the generated content. An apostrophe prevents
+Velocity from removing the whitespace that follows it. With this parser it is
+possible to write both well formatted templates and well formatted generation
+result. Use white space without or before an apostrophe to format only a
+template line. Use white space after an apostrophe to format the generation
+results.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1222,13 +1223,12 @@ vs. <span class=SpellE>VelocityModelBasedInserter</span><o:p></o:p></span></b></
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>There are
 three differences between these two generators. First, only the inserter can
-insert into existing files, whereas the generator can only create new files.
-Second, the artefact attribute “<span class=SpellE>TargetDir</span>” is
-mandatory for the inserter but not so for the generator. Third, “class based”
-means, that for each class defined in the model file an artefact output file,
-e.g. a JavaBean, is created. “Model based” means that an insertion is made for
-the whole model in only one existing file (or only one artefact output file is
-created). <o:p></o:p></span></p>
+insert into existing files, whereas the generator can only create new files. Second,
+the artefact attribute “<span class=SpellE>TargetDir</span>” is mandatory for
+the inserter but not so for the generator. Third, “class based” means, that for
+each class defined in the model file an artefact output file, e.g. a JavaBean,
+is created. “Model based” means that an insertion is made for the whole model
+in only one existing file (or only one artefact output file is created). <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1312,9 +1312,9 @@ article: “<span class=SpellE>fachliche</span> <span class=SpellE>Komponenten</
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The heart
 of the application is the business logic component “core” which actually
 represents a container for <span class=SpellE>MOGLiCC</span> plugins. With each
-application start, a special plugin folder is scanned for jar-files that
-contain a file named “<span class=SpellE>mogli.properties</span>”. From this
-file a fully qualified name of the plugin starter class is read and used to
+application start, a special plugin folder is scanned for jar-files that contain
+a file named “<span class=SpellE>mogli.properties</span>”. From this file a
+fully qualified name of the plugin starter class is read and used to
 instantiate the starter class via reflection. The starter classes of all
 plugins are cast on the common <span class=SpellE>MOGLiCC</span> interface type
 “<span class=SpellE>MOGLiPlugin</span>”. After loading the starter classes, the
@@ -1402,9 +1402,9 @@ the clean code developer (<a href="http://www.clean-code-developer.de/">http://w
 One rule of the clean code developers is “Test first”. To apply this rule, the
 source code author also followed the Test Driven Development method of “Growing
 Object-Oriented Software, Guided by Tests” by Freeman &amp; Pryce. Thus, the <span
-class=SpellE>MOGLiCC</span> functionality of version 1.0.0 is regularly and
-automatically tested by 229 unit tests, 12 integration tests and 21 system
-tests. <o:p></o:p></span></p>
+class=SpellE>MOGLiCC</span> functionality of version 1.1.0 is regularly and
+automatically tested by 336 unit tests (70-90% coverage), 23 integration tests (10-40%
+coverage) and 30 system tests. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1474,8 +1474,8 @@ bugs. <o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent style='margin-left:42.55pt;text-indent:-21.25pt;
 tab-stops:42.55pt'><span lang=EN-GB><span style='mso-tab-count:1'>       </span>Typically,
-there are three types of stupid errors caused by programming parallel functionality
-manually. 1. copy-paste-errors, 2. <span class=GramE>misspelled</span>
+there are three types of stupid errors caused by programming parallel
+functionality manually. 1. copy-paste-errors, 2. <span class=GramE>misspelled</span>
 expressions and 3. <span class=GramE>forgotten</span> source locations where an
 adaptation is necessary. Cost of bug fixing can increase the coding effort
 dramatically and fixing stupid errors decreases the motivation of the most
@@ -1496,11 +1496,11 @@ best appearance. However, source code is frequently the only documentation. Now
 imagine a team of developers which has designed and implemented a complex
 system. The team members change and after a while the knowledge how to set up a
 new module in the system dies away. <span class=GramE>Familiar situation?</span>
-Given the system is developed by the <span class=SpellE>MOGLi</span> Code
-Creator, the developer simply study the templates for the artefacts generated
-by the <span class=SpellE>VelocityClassBasedGenerator</span> and the insertions
-done by the <span class=SpellE>VelocityModelBasedInserter</span> and the
-knowledge where to create which code is quickly available. <o:p></o:p></span></p>
+Given the system is developed by the <span class=SpellE>MOGLi</span> Code Creator,
+the developer simply study the templates for the artefacts generated by the <span
+class=SpellE>VelocityClassBasedGenerator</span> and the insertions done by the <span
+class=SpellE>VelocityModelBasedInserter</span> and the knowledge where to
+create which code is quickly available. <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:35.4pt'><span lang=EN-GB
 style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -1517,46 +1517,84 @@ EN-GB'>9. Road Map<o:p></o:p></span></b></a></p>
 <span style='mso-bookmark:c9'></span>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>What’s
-next? There is one limitation known: The encoding of target files (UTF-8)
-cannot be changed. For flexibility reasons, a template attribute will be
-introduced to have this ready for manipulation.<o:p></o:p></span></p>
+next? There are two limitations known: <o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>a) Input
+file are read using UTF-8 encoding. To represent symbols which are not represented
+by UTF-8, <span class=SpellE>unicode</span> notation may help. However there is
+currently no possibility to translate Unicode into the <span class=SpellE>OutputEncodingFormat</span>
+defined in the template file.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>b) The
+support for Utility methods within template files is limited. A <span
+class=SpellE>TemplateJavaUtility</span> and a <span class=SpellE>TemplateStringUtility</span>
+currently exist with a certain set of methods. This limitation may be removed
+by the possibility to provide a customized utility class that is defined by the
+user within a generator plugin and transferred during runtime to the <span
+class=SpellE>VelocityEngineProvider</span> where it is added to the Velocity
+engine so that the utility’s methods can be used in the templates in the same
+way as the existing utilities are used.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Furthermore,
 following extensions are planned:<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
-14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>a)<span
-style='mso-tab-count:1'>  </span>A template for a new <span class=SpellE>VelocityClassBasedGenerator</span>
-artefact called “<span class=SpellE>MOGLiPlugin</span>”. This will speed up the
-development of new <span class=SpellE>MOGLiCC</span> plugins.<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
-14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>b)<span
-style='mso-tab-count:1'>  </span>A new generator possibly called ‘<span
-class=SpellE>FileStructureCreator</span>’ to create for each artefact a
-complete file structure (folder with subfolders and files). <o:p></o:p></span></p>
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
 14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>c)<span
-style='mso-tab-count:1'>  </span>A first artefact for the ‘<span class=SpellE>FileStructureCreator</span>’
+style='mso-tab-count:1'>  </span>A new generator possibly called ‘<span
+class=SpellE>ModelBasedFolderCreator</span>’ to create for each artefact a
+complete file structure (folder with subfolders and files). <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>d)<span
+style='mso-tab-count:1'> </span>An artefact for the ‘<span class=SpellE>ModelBasedFolderCreator</span>’
 to generate a complete new maven project for a new <span class=SpellE>MOGLiCC</span>
 plugin. This will additionally speed up the development of new <span
 class=SpellE>MOGLiCC</span> plugins.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
-14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>d)<span
-style='mso-tab-count:1'> </span>A new <span class=SpellE>MOGLiPlugin</span>
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>e)<span
+style='mso-tab-count:1'>  </span>An artefact for the ‘<span class=SpellE>ModelBasedFolderCreator</span>’
+to generate a complete new maven project for <span class=GramE>a the</span> <span
+class=SpellE>MOGLiCC</span>-JavaBean-Group.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>f)<span
+style='mso-tab-count:1'>  </span>A new <span class=SpellE>MOGLiPlugin</span>
 with the plugin type ‘<span class=SpellE>DataProvider</span>’ that provides a
 way to define many sets of sample data which are accessible for other plugins.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
-14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>e)<span
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>g)<span
 style='mso-tab-count:1'>  </span>New <span class=SpellE>TemplateUtility</span>
 for <span class=SpellE>VelocityEngineData</span> to make the sample data of the
 <span class=SpellE>DataProvider</span> accessible from the template files.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
-14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>f)<span
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
+14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>h)<span
 style='mso-tab-count:1'>  </span>A new <span class=SpellE>aretefact</span> for
 the <span class=SpellE>VelocityClassBasedGenerator</span> called ‘<span
 class=SpellE>JavaBeanFactory</span>’ to create a factory for various JavaBean

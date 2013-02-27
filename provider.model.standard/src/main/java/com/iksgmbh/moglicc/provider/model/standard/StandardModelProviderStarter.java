@@ -336,6 +336,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
 		defaultData.addFile(FILENAME_STANDARD_MODEL_TEXTFILE);
 		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
+		defaultData.addFile("MOGLiCC_NewPluginModel.txt");
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
 	}

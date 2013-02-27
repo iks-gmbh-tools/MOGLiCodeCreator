@@ -2,7 +2,6 @@ package com.iksgmbh.moglicc.provider.model.standard;
 
 public class TextConstants {
 
-
 	public static final String MODEL_IDENTIFIER_NOT_FOUND = "MODEL_IDENTIFIER '" + MetaModelConstants.MODEL_IDENTIFIER + "' not found!";
 	public static final String DUPLICATE_MODEL_IDENTIFIER = "Duplicate MODEL_IDENTIFIER '" + MetaModelConstants.MODEL_IDENTIFIER + "' found ";
 	public static final String EMPTY_CLASS_LIST = "No valid '" + MetaModelConstants.CLASS_IDENTIFIER + "' entry found ";
