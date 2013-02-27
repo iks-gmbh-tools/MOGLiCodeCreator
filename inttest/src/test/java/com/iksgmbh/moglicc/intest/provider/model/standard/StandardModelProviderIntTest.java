@@ -75,12 +75,12 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	}
 
 	@Test
-	public void readsModelFileWithCustomizedBraceSymbolForMetaInfoValues() throws MOGLiPluginException {
+	public void readsModelFileWithCustomizedBraceSymbolForModelFileParsing() throws MOGLiPluginException {
 		// prepare test
 		setModelFile("ModelFileWithMetaInfosContainingDoubleQoutesInNames.txt");
 		final File modelPropertiesFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
 				                                  StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
-		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "BraceSymbolForMetaInfoValues=*");
+		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "BraceSymbolForModelFileParsing=*");
 
 
 		// call functionality under test

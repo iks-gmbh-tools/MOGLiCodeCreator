@@ -36,8 +36,8 @@ public class ModelParser {
 	private BuildUpAttributeDescriptor buildUpAttributeDescriptor;
 
 
-	private ModelParser(final String braceSymbolForMetaInfoValues) {
-		metaInfoParser = new MetaInfoParser(braceSymbolForMetaInfoValues);
+	private ModelParser(final String braceSymbol) {
+		metaInfoParser = new MetaInfoParser(braceSymbol);
 	}
 
 	public ModelParser() {
@@ -45,8 +45,8 @@ public class ModelParser {
 	}
 
 	public static BuildUpModel doYourJob(final List<String> fileContentAsList,    
-			                             final String braceSymbolForMetaInfoValues) throws ModelParserException {
-		final ModelParser modelParser = new ModelParser(braceSymbolForMetaInfoValues);
+			                             final String braceSymbol) throws ModelParserException {
+		final ModelParser modelParser = new ModelParser(braceSymbol);
 		return modelParser.parse(fileContentAsList);
 	}
 
