@@ -48,14 +48,14 @@
 # because the failing condition shows the irrelevance of this validator.
 #
 
-|MetaInfo| extends     |must occur| 0-1 |time(s) for| classes |in| ModelName |.| # optional metainfo. but if present only once is allowed
+|MetaInfo| extends     |must occur| 0-1 |time(s) for| classes    |in| DemoModel |.| # optional metainfo. but if present only once is allowed
 
-|MetaInfo| extends     |is| optional  |for| classes    |in| DemoModel |.|
-|MetaInfo| implements  |is| optional  |for| classes    |in| DemoModel |.|
+|MetaInfo| extends     |is| optional            |for| classes    |in| DemoModel |.|
+|MetaInfo| implements  |is| optional            |for| classes    |in| DemoModel |.|
 
-|MetaInfo| JavaType    |is| mandatory |for| attributes |in| DemoModel |.| # must occur exactly once
-|MetaInfo| Mandatory   |is| optional  |for| attributes |in| DemoModel |.|
-|MetaInfo| MinLength   |is| optional  |for| attributes |in| DemoModel |.|
-|MetaInfo| MaxLength   |is| optional  |for| attributes |in| DemoModel |.|
+|MetaInfo| JavaType    |is| mandatory           |for| attributes |in| DemoModel |.| # must occur exactly once
+|MetaInfo| MinLength   |is| optional            |for| attributes |in| DemoModel |.|
+|MetaInfo| MaxLength   |is| optional            |for| attributes |in| DemoModel |.|
 
-|MetaInfo| ExampleData |must occur| 1 |time(s) for| attributes |in| DemoModel |.| # must occur exactly once - alternatively defined as mandatory validator
+|MetaInfo| Mandatory   |must occur| 0   |time(s) for| attributes |in| DemoModel |.| # optional - alternatively defined as optional validator
+|MetaInfo| ExampleData |must occur| 1   |time(s) for| attributes |in| DemoModel |.| # must occur exactly once - alternatively defined as mandatory validator
