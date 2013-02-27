@@ -5,7 +5,7 @@ xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
 xmlns="http://www.w3.org/TR/REC-html40">
 
 <head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta http-equiv=Content-Type content="text/html; charset=unicode">
 <meta name=ProgId content=Word.Document>
 <meta name=Generator content="Microsoft Word 14">
 <meta name=Originator content="Microsoft Word 14">
@@ -17,6 +17,7 @@ href="TemplateFileHeaderInserterAttributes-Dateien/themedata.thmx">
 href="TemplateFileHeaderInserterAttributes-Dateien/colorschememapping.xml">
 <!--[if gte mso 9]><xml>
  <w:WordDocument>
+  <w:Zoom>103</w:Zoom>
   <w:SpellingState>Clean</w:SpellingState>
   <w:GrammarState>Clean</w:GrammarState>
   <w:TrackMoves>false</w:TrackMoves>
@@ -34,6 +35,10 @@ href="TemplateFileHeaderInserterAttributes-Dateien/colorschememapping.xml">
    <w:BreakWrappedTables/>
    <w:SplitPgBreakAndParaMark/>
   </w:Compatibility>
+  <w:DocumentVariables>
+   <w:dgnword-docGUID>{075046FA-B413-48E7-BA0E-23FA2946CD40}</w:dgnword-docGUID>
+   <w:dgnword-eventsink>58897872</w:dgnword-eventsink>
+  </w:DocumentVariables>
   <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
   <m:mathPr>
    <m:mathFont m:val="Cambria Math"/>
@@ -487,30 +492,39 @@ lang=EN-US style='mso-ansi-language:EN-US'>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Determines that the <span class=GramE>target file</span> is only modified if
 the name of the model provided by the <span class=SpellE>StandardModelProvider</span>
-is equal to the model name defined here. <o:p></o:p></span></p>
+is equal to the model name defined here. If not provided, the template is
+applied to all models.<o:p></o:p></span></p>
 
-<p class=MsoListParagraph style='margin-left:120.4pt;text-indent:21.2pt'><span
-lang=EN-US style='mso-ansi-language:EN-US'>By default the template is applied
-to all models.<o:p></o:p></span></p>
+<p class=MsoListParagraph style='margin-left:14.2pt;text-indent:-14.2pt'><span
+lang=EN-US style='mso-ansi-language:EN-US'>5.</span><span lang=EN-US
+style='font-size:7.0pt;line-height:115%;font-family:"Times New Roman","serif";
+mso-ansi-language:EN-US'>&nbsp;&nbsp;&nbsp;</span><span class=SpellE><span
+lang=EN-US style='mso-ansi-language:EN-US'>OutputEncodingFormat</span></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><span style='mso-tab-count:1'>         </span>Encoding
+applied when generating the <span class=SpellE>artefact’s</span> output file(s).
+Default is UTF-8. Since 1.1.0<o:p></o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>5. <span
-class=SpellE>ReplaceStart</span><span style='mso-tab-count:3'>                                </span>Defines
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>6.<span
+style='mso-spacerun:yes'>   </span><span class=SpellE>ReplaceStart</span><span
+style='mso-tab-count:1'>               </span><span style='mso-tab-count:1'>                </span>Defines
 a single line text after which the lines will be replaced by the generated
 content. This attributes requires the additional attribute “<span class=SpellE>ReplaceEnd</span>”.<o:p></o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>6. <span
-class=SpellE>ReplaceEnd</span><span style='mso-tab-count:3'>                                  </span>Defines
-a single line text before which the lines will be replaced by the generated
-content. This attributes requires the additional attribute “<span class=SpellE>ReplaceStart</span>”.<o:p></o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>7.<span
-style='mso-spacerun:yes'>  </span><span class=SpellE>InsertBelow</span><span
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>7. <span
+style='mso-spacerun:yes'>  </span><span class=SpellE>ReplaceEnd</span><span
 style='mso-tab-count:3'>                                </span>Defines a single
-line text after which the generated content is added to the existing <span
-class=GramE>file</span> content. <o:p></o:p></span></p>
+line text before which the lines will be replaced by the generated content.
+This attributes requires the additional attribute “<span class=SpellE>ReplaceStart</span>”.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>8. <span
-class=SpellE>InsertAbove</span><span style='mso-tab-count:3'>                                 </span>Defines
+style='mso-spacerun:yes'> </span><span style='mso-spacerun:yes'> </span><span
+class=SpellE>InsertBelow</span><span style='mso-tab-count:3'>                                               </span>Defines
+a single line text after which the generated content is added to the existing
+file content. <o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>9. <span
+style='mso-spacerun:yes'>  </span><span class=SpellE>InsertAbove</span><span
+style='mso-tab-count:3'>                                              </span>Defines
 a single line text before which the generated content is added to the existing
 file content.<o:p></o:p></span></p>
 
