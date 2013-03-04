@@ -50,6 +50,28 @@ public class MergeResultAnalyserUnitTest extends VelocityEngineProviderTestParen
 	}
 
 	@Test
+	public void doesNotRemoveLineConsistingOfSeparatorSymbols() throws MOGLiPluginException {
+		// prepare test
+		final String textToParse = "@TargetFileName ${classDescriptor.simpleName}.java # Name of file with extension without path"
+									 + FileUtil.getSystemLineSeparator()
+									 + "#@TargetDir ../targetDirFromTemplateFile"
+									 + FileUtil.getSystemLineSeparator()
+									 + "public class ${classDescriptor.simpleName} {"
+									 + FileUtil.getSystemLineSeparator() + "  #####################################"
+									 + FileUtil.getSystemLineSeparator() + "}";
+
+		// call functionality under test
+		final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(textToParse, null);
+
+		// verify test result
+		final String expected = "public class ${classDescriptor.simpleName} {"
+				 + FileUtil.getSystemLineSeparator() + "#####################################"
+				 + FileUtil.getSystemLineSeparator() + "}";		
+		
+		assertEquals("Result File Content", expected, buildUpGeneratorResultData.getGeneratedContent());
+	}
+	
+	@Test
 	public void parsesPropertiesCaseInsensitive() throws MOGLiPluginException {
 		// prepare test
 		final String textToParse = "@targetFileName TestName.java # Name of file with extension without path"
