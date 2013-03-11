@@ -33,6 +33,7 @@ import com.iksgmbh.moglicc.helper.PluginExecutor;
 import com.iksgmbh.moglicc.helper.PluginExecutor.PluginExecutionData;
 import com.iksgmbh.moglicc.helper.PluginLoader;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
@@ -109,6 +110,8 @@ public class MOGLiCodeCreator {
 	private List<PluginMetaData> pluginMetaDataList;
 	private Properties applicationProperties;
 	private Properties workspaceProperties;
+	private String workspace;
+	private List<MOGLiPlugin> plugins = null;
 	final List<String> logEntriesBeforeLogFileExists = new ArrayList<String>();
 	private File workspaceDir;
 	private File tempDir;
@@ -133,7 +136,6 @@ public class MOGLiCodeCreator {
 	}
 
 	private void initWorkspaceDir() {
-		final String workspace;
 		if (workspaceDirArgument != null) {
 			// check first application argument
 			workspace = workspaceDirArgument;
@@ -174,7 +176,6 @@ public class MOGLiCodeCreator {
 		}
 
 		workspaceProperties = readProperties(workspacePropertiesFile, FILENAME_WORKSPACE_PROPERTIES);
-
 	}
 
 	String readWorkspaceDirFromApplicationProperties() {
@@ -269,7 +270,6 @@ public class MOGLiCodeCreator {
 			return;
 		}
 
-		List<MOGLiPlugin> plugins = null;
 		try {
 			plugins = PluginLoader.doYourJob(pluginMetaDataList);
 		} catch (DuplicatePluginIdException e) {
@@ -291,17 +291,43 @@ public class MOGLiCodeCreator {
 
 	private void logFinalInformation() {
 		MOGLiLogUtil.logInfo("");
+		
 		logPluginMetaData(pluginMetaDataList);
+		
 		MOGLiLogUtil.logInfo("");
-		int numberOfSuccessfullyExecutedPlugins = getNumberOfSuccessfullyExecutedPlugins(pluginMetaDataList);
-		int numberOfNotExecutedPlugins = getNumberOfNotExecutedPlugins(pluginMetaDataList);
+		
+		logMainResult();
+
+		MOGLiLogUtil.logInfo("");
+				
+		MOGLiLogUtil.logInfo(TEXT_DONE);
+	}
+
+	private String getModelName() {
+		String toReturn = "  ";
+		if (plugins != null && plugins.size() > 0) {
+			final List<ModelProvider> modelProviders = plugins.get(0).getMOGLiInfrastructure().getPluginsOfType(ModelProvider.class);
+			for (final ModelProvider modelProvider : modelProviders) {
+				toReturn += modelProvider.getModelName() + ", ";  // in case their are more than one modelProviders
+			}
+			toReturn = toReturn.substring(0, toReturn.length() - 2); 
+		}
+		
+		return toReturn.trim();
+	}
+
+	private void logMainResult() {
+		final int numberOfSuccessfullyExecutedPlugins = getNumberOfSuccessfullyExecutedPlugins(pluginMetaDataList);
+		final int numberOfNotExecutedPlugins = getNumberOfNotExecutedPlugins(pluginMetaDataList);
+		final String contextString = " in <" + workspace + "> on model '" + getModelName() + "'.";
+
 		if (numberOfNotExecutedPlugins == 0) {
-			MOGLiLogUtil.logInfo("All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully!");
+			MOGLiLogUtil.logInfo("All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully" + contextString);
 		} else {
-			MOGLiLogUtil.logInfo(numberOfSuccessfullyExecutedPlugins + " plugins executed successfully!");
+			MOGLiLogUtil.logInfo(numberOfSuccessfullyExecutedPlugins + " plugins executed " + contextString);
+			MOGLiLogUtil.logInfo(numberOfSuccessfullyExecutedPlugins + " plugins executed successfully.");
 			MOGLiLogUtil.logInfo(numberOfNotExecutedPlugins + " plugins not or erroneously executed!");
 		}
-		MOGLiLogUtil.logInfo(TEXT_DONE);
 	}
 
 	private PluginExecutionData createPluginExecutionData(List<MOGLiPlugin> plugins) {

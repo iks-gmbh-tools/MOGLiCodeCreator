@@ -35,7 +35,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .addCondition(condition);
 
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result); // condition true & mandatory MetaInfo exists -> result is true
@@ -55,7 +55,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .addCondition(condition2)
         																				   .addCondition(condition3);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result); // all three condition true & mandatory MetaInfo exists -> result is true
@@ -76,7 +76,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .addCondition(condition2)
         																				   .addCondition(condition3);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result);  // true because second condition is false and therefore occurrence is not validated
@@ -90,7 +90,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .withOccurrence("1") // mandatory
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result); // mandatory MetaInfo with the defined value exists -> result is true
@@ -106,7 +106,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute)
         																				   .addCondition(condition);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertFalse("Validation failed!", result); // condition true & mandatory MetaInfo exists, but not with the defined value -> false
@@ -122,7 +122,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute)
         																				   .addCondition(condition);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result);
@@ -140,7 +140,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute)
         																				   .addCondition(condition);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result); // true because condition is false and therefore occurence is not validated
@@ -157,7 +157,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute)
         																				   .addCondition(condition);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertFalse("Validation failed!", result); // false because condition is true and notExistingMetaInfo does not exist
@@ -177,7 +177,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute)
         																				   .addCondition(condition);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result); // true because condition is false and therefore occurence is not validated
@@ -194,7 +194,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute)
         																				   .addCondition(condition);
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertFalse("Validation failed!", result); // false because condition is true and notExistingMetaInfo does not exist
@@ -224,7 +224,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 		final MetaInfoValidationData metaInfoValidationData = getSpecialRuleValidation("1");
 
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, null);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertFalse("Validation failed!", result);
@@ -240,7 +240,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 		final MetaInfoValidationData metaInfoValidationData = getSpecialRuleValidation("1");
 
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, null);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result);
@@ -255,7 +255,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 		final MetaInfoValidationData metaInfoValidationData = getSpecialRuleValidation("1");
 
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, null);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertFalse("Validation failed!", result);
@@ -270,7 +270,7 @@ public class ConditionalMetaInfoValidatorUnitTest {
 		final MetaInfoValidationData metaInfoValidationData = getSpecialRuleValidation("0-1");  // nullable is optional !
 
 		// call functionality under test
-		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList, null);
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result);

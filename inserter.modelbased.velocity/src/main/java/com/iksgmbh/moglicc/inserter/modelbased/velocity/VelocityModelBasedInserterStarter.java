@@ -30,6 +30,7 @@ import com.iksgmbh.utils.ImmutableUtil;
 
 public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoValidatorVendor {
 
+	public static final String BEAN_FACTORY_DIR = "BeanFactory";
 	public static final String PLUGIN_ID = "VelocityModelBasedInserter";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 	public static final String ENGINE_PROVIDER_ID = "VelocityEngineProvider";
@@ -38,6 +39,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 
 	private InfrastructureService infrastructure;
 	private IOEncodingHelper encodingHelper;
+	private Model model;
 
 	@Override
 	public void setMOGLiInfrastructure(final InfrastructureService infrastructure) {
@@ -49,21 +51,27 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
 		encodingHelper = null;
 
-		final Model model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel();
+		model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel();
 		infrastructure.getPluginLogger().logInfo("Model '" + model.getName() + "' retrieved from " + MODEL_PROVIDER_ID);
 
 		final List<String> list = getArtefactList();
 		for (final String artefact : list) {
-			infrastructure.getPluginLogger().logInfo("-");
-			applyModelToArtefactTemplate(model, artefact);
+			final File templateDir = new File(infrastructure.getPluginInputDir(), artefact);
+			final List<String> mainTemplates = findMainTemplates(templateDir);
+			for (final String mainTemplate : mainTemplates) {
+				infrastructure.getPluginLogger().logInfo("-");
+				applyModelToArtefactTemplate(artefact, templateDir, mainTemplate);
+			}
 		}
-		infrastructure.getPluginLogger().logInfo("-");
 
 		infrastructure.getPluginLogger().logInfo("Done!");
 	}
 
-	private void applyModelToArtefactTemplate(final Model model, final String artefact) throws MOGLiPluginException {
+	private void applyModelToArtefactTemplate(final String artefact, final File templateDir, final String mainTemplate) throws MOGLiPluginException {
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, model, PLUGIN_ID);
+		engineData.setTemplateDir(templateDir);
+		engineData.setTemplateFileName(mainTemplate);
+
 		final VelocityInserterResultData result = insert(engineData);
 		if (! ModelValidationGeneratorUtil.validateModel(result.getNameOfValidModel(), model.getName())) {
 			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' not generated, because only model '"
@@ -255,9 +263,6 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	}
 
 	VelocityInserterResultData insert(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException {
-		final File templateDir = new File(infrastructure.getPluginInputDir(), engineData.getArtefactType());
-		engineData.setTemplateDir(templateDir);
-		engineData.setTemplateFileName(findMainTemplate(templateDir));
 
 		final ModelBasedEngineProvider velocityEngineProvider =
 		       (ModelBasedEngineProvider) infrastructure.getEngineProvider(ENGINE_PROVIDER_ID);
@@ -271,8 +276,8 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		return new BuildUpVelocityInserterResultData(generatorResultData);
 	}
 
-	String findMainTemplate(final File templateDir) throws MOGLiPluginException {
-		return TemplateUtil.findMainTemplate(templateDir, MAIN_TEMPLATE_IDENTIFIER);
+	List<String> findMainTemplates(final File templateDir) throws MOGLiPluginException {
+		return TemplateUtil.findMainTemplates(templateDir, MAIN_TEMPLATE_IDENTIFIER);
 	}
 
 
@@ -282,14 +287,9 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 
 
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
-		final String[] beanFactoryClass = {"BeanFactoryClass.tpl"};
-		defaultData.addDirectory("BeanFactoryClass", beanFactoryClass);
-		final String[] beanFactoryReplaceTemplate = {"BeanFactoryReplaceTemplate.tpl"};
-		defaultData.addDirectory("BeanFactoryReplaceTemplate", beanFactoryReplaceTemplate);
-		final String[] beanFactoryInsertAboveTemplate = {"BeanFactoryInsertAboveTemplate.tpl"};
-		defaultData.addDirectory("BeanFactoryInsertAboveTemplate", beanFactoryInsertAboveTemplate);
-		final String[] beanFactoryInsertBelowTemplate = {"BeanFactoryInsertBelowTemplate.tpl"};
-		defaultData.addDirectory("BeanFactoryInsertBelowTemplate", beanFactoryInsertBelowTemplate);
+		final String[] templates = {"BeanFactoryClassMain.tpl",               "BeanFactoryReplaceTemplateMain.tpl",
+				                    "BeanFactoryInsertAboveTemplateMain.tpl", "BeanFactoryInsertBelowTemplateMain.tpl"};
+		defaultData.addDirectory(BEAN_FACTORY_DIR, templates);
 		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
 		defaultData.addFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
 

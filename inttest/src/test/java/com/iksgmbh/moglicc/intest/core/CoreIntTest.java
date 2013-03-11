@@ -3,12 +3,20 @@ package com.iksgmbh.moglicc.intest.core;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
 
 import java.io.File;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiCodeCreator;
+import com.iksgmbh.moglicc.MOGLiSystemConstants;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
+import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector;
+import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.intest.IntTestParent;
+import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
+import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
+import com.iksgmbh.utils.FileUtil;
 
 public class CoreIntTest extends IntTestParent {
 
@@ -19,9 +27,6 @@ public class CoreIntTest extends IntTestParent {
 	public void setup() {
 		super.setup();
 	}
-
-/*
-   currently not needed:
 
 	private void initTestRootDir() {
 		FileUtil.deleteDirWithContent(applicationRootDir);
@@ -55,8 +60,8 @@ public class CoreIntTest extends IntTestParent {
 	private FileCollectionData createFileCollectionData() {
 		final MOGLiReleaseBuilder mogliReleaseBuilder = new MOGLiReleaseBuilder();
 		final FileCollectionData fileCollectionData = new FileCollectionData();
-		fileCollectionData.libSubdir = DIR_LIB;
-		fileCollectionData.pluginsSubdir = DIR_PLUGIN;
+		fileCollectionData.libSubdir = applicationRootDir + "/" + MOGLiSystemConstants.DIR_LIB;
+		fileCollectionData.pluginsSubdir = fileCollectionData.libSubdir + "/" + MOGLiSystemConstants.DIR_PLUGIN;
 		fileCollectionData.sourceDir = null;
 		fileCollectionData.releaseDir = new File(applicationRootDir);
 		fileCollectionData.fileListForRootDir = null;
@@ -66,11 +71,23 @@ public class CoreIntTest extends IntTestParent {
 		return fileCollectionData;
 	}
 
-*/
+	@Test
+	public void testFinalLogout() {
+		// prepare test
+		initTestRootDir();
+		
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+		
+		// verify test result
+		final File logfile = MOGLiFileUtil.getNewFileInstance(LOGFILE);
+		assertFileContainsEntry(logfile, "All 4 plugins executed successfully in <../inttest/target/TestDir> on model 'DemoModel'.");
+	}
 
 	@Test
 	public void createsEmergencyLogFileIfDefinedWorkspaceDirCannotBeCreated() {
 		// prepare test
+		MOGLiLogUtil.setCoreLogfile(null);
 		initApplicationPropertiesWith("workspace=");
 		final File emergencyLogFile = new File(applicationRootDir, FILENAME_LOG_FILE);
 		assertFileDoesNotExist(emergencyLogFile);

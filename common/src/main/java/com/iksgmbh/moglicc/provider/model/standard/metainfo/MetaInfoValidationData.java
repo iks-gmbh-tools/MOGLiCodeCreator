@@ -11,7 +11,9 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLe
  * @author Reik Oberrath
  */
 public class MetaInfoValidationData {
-
+	
+	private static final String ANY = "any";
+	
 	private String nameOfValidModel;
 	private HierarchyLevel hierarchyLevel;
 	private String metaInfoName;
@@ -19,6 +21,7 @@ public class MetaInfoValidationData {
 	private int minOccurs = 0;
 	private int maxOccurs = 0;
 	private String conditionFilename;
+	
 	private List<MetaInfoValidationCondition> conditionBlock = new ArrayList<MetaInfoValidationCondition>();
 
 
@@ -102,6 +105,12 @@ public class MetaInfoValidationData {
 	 * @return instance with minOccur and maxOccur set
 	 */
 	public MetaInfoValidationData withOccurrence(final String occurence) {
+		if (ANY.equalsIgnoreCase(occurence.trim())) {
+			maxOccurs = 999999999;
+			minOccurs = 0;
+			return this;
+		}
+		
 		final Integer result = parseToInt(occurence); //, "Value <"a1"> is no valid occurence!")
 
 		if (result == null) {

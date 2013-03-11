@@ -3,7 +3,6 @@ package com.iksgmbh.moglicc.provider.model.standard.metainfo.validator;
 import java.util.List;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationData;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorParent;
 
@@ -23,7 +22,7 @@ public class NumOccurMetaInfoValidator extends MetaInfoValidatorParent {
 	protected int maxOccurs;
 
 	public NumOccurMetaInfoValidator(final MetaInfoValidationData metaInfoValidationData) {
-		super(metaInfoValidationData.getMetaInfoName(), metaInfoValidationData.getMetaInfoHierarchyLevel(), ValidationType.Conditional, metaInfoValidationData.getNameOfValidModel());
+		super(metaInfoValidationData.getMetaInfoName(), metaInfoValidationData.getMetaInfoHierarchyLevel(), ValidationType.NumOccur, metaInfoValidationData.getNameOfValidModel());
 
 		minOccurs = metaInfoValidationData.getMinOccurs();
 		maxOccurs = metaInfoValidationData.getMaxOccurs();
@@ -35,11 +34,7 @@ public class NumOccurMetaInfoValidator extends MetaInfoValidatorParent {
 	}
 
 	@Override
-	public boolean validate(final List<MetaInfo> metaInfoList, final HierarchyLevel hierarchyLevel) {
-		if (metaInfoHierarchyLevel != hierarchyLevel) {
-			return true; // this validator does not validate MetaInfo elements of this HierarchyLevel
-		}
-
+	public boolean validate(final List<MetaInfo> metaInfoList) {
 		final int occurences = countOccurences(metaInfoList);
 		return checkOccurrences(occurences);
 	}
@@ -59,8 +54,8 @@ public class NumOccurMetaInfoValidator extends MetaInfoValidatorParent {
 	}
 
 	protected boolean checkOccurrences(final int occurences) {
-		if (maxOccurs < 1) {
-			return true; // this is an optional validator
+		if (maxOccurs < 0) {
+			//return true; // this is an optional validator
 		}
 
 		if (occurences == 0 && minOccurs > 0) {
@@ -69,16 +64,24 @@ public class NumOccurMetaInfoValidator extends MetaInfoValidatorParent {
 		}
 
 		if (minOccurs > 0 && minOccurs > occurences) {
-			errorMessage = "MetaInfo '" + metaInfoName + "' was found too few times (expected: " + minOccurs + ", actual: " + occurences + ")";
+			errorMessage = getMetaInfoDescription() + "' was found too few times (expected: " + minOccurs + ", actual: " + occurences + ")";
 			return false;
 		}
 
 		if (maxOccurs < occurences) {
-			errorMessage = "MetaInfo '" + metaInfoName + "' was found too many times (expected: " + maxOccurs + ", actual: " + occurences + ")";
+			errorMessage = getMetaInfoDescription() + "' was found too many times (expected: " + maxOccurs + ", actual: " + occurences + ")";
 			return false;
 		}
 
 		return true;
+	}
+	
+	private String getMetaInfoDescription() {
+		String toReturn = "MetaInfo '" + metaInfoName;
+		if (metaInfoValue != null) {
+			toReturn += "with value '" + metaInfoValue + "'";
+		}
+		return toReturn;
 	}
 
 	public String getMetaInfoValue() {

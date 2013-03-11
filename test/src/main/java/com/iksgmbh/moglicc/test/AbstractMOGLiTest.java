@@ -1,11 +1,12 @@
 package com.iksgmbh.moglicc.test;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.*;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_HELP_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB_PLUGIN;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LOGS_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_OUTPUT_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_TEMP_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +22,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.iksgmbh.moglicc.MOGLiSystemConstants;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.utils.FileUtil;
@@ -36,6 +38,7 @@ public abstract class AbstractMOGLiTest {
 	protected static final String TEST_RESOURCES_DIR = "src/test/resources/";
 	protected static final String RESOURCES_DIR = "src/main/resources/";
 	protected static final String TEST_SUBDIR = TARGET_DIR + "TestDir"; // in target it will be deleted automatically with each clean
+	protected static final String LOGFILE = MOGLiSystemConstants.DIR_LOGS_FILES + "/" + MOGLiSystemConstants.FILENAME_LOG_FILE;
 
 
 	// **************************  Instance fields  *********************************
