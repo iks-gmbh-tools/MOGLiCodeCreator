@@ -27,8 +27,7 @@ import com.iksgmbh.utils.FileUtil;
 public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInserterTestParent {
 
 	private static final String TARGET_FILE_TXT = "targetFile.txt";
-	private static final String MAIN_TEMPLATE = "BeanFactoryClass.tpl";
-	private static final String ARTEFACT_BEAN_FACTORY = "BeanFactoryClass";
+	private static final String ARTEFACT_BEAN_FACTORY = "BeanFactory";
 
 	private File targetFile;
 	private File generatorPropertiesFile;
@@ -43,30 +42,30 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		targetFile = new File(applicationTempDir, TARGET_FILE_TXT);
 		FileUtil.copyTextFile(sourcefile, targetFile);
 
-		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(),
-	            VelocityModelBasedInserterStarter.PLUGIN_PROPERTIES_FILE);
+		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), VelocityModelBasedInserterStarter.PLUGIN_PROPERTIES_FILE);
 		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
 	}
 
 	@Test
-	public void findsArtefactList() throws MOGLiPluginException {
+	public void findsDefaultArtefactList() throws MOGLiPluginException {
 		// call functionality under test
 		final List<String> artefactList = velocityModelBasedInserter.getArtefactList();
 
 		// verify test result
-		assertEquals("artefact number", 4, artefactList.size());
+		assertEquals("artefact number", 1, artefactList.size());
 	}
 
 	@Test
 	public void throwsExceptionIfMainTemplateIsNotFound() {
 		// prepare test
 		final File artefactDir = new File(infrastructure.getPluginInputDir(), ARTEFACT_BEAN_FACTORY);
-		final File mainTemplateFile = new File(artefactDir, MAIN_TEMPLATE);
-		mainTemplateFile.delete();
+		FileUtil.deleteDirWithContent(artefactDir);
+		assertFileDoesNotExist(artefactDir);
+		artefactDir.mkdirs();
 
 		// call functionality under test
 		try {
-			velocityModelBasedInserter.findMainTemplate(artefactDir);
+			velocityModelBasedInserter.findMainTemplates(artefactDir);
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), TemplateUtil.NO_MAIN_TEMPLATE_FOUND);
 
@@ -76,25 +75,23 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 			return;
 		}
 
+		// cleanup
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+
 		fail("Expected exception not thrown!");
 
 	}
 
 	@Test
-	public void findsMainTemplate() {
+	public void findsDefaultMainTemplates() throws MOGLiPluginException {
 		// prepare test
 		final File artefactDir = new File(infrastructure.getPluginInputDir(), ARTEFACT_BEAN_FACTORY);
 
 		// call functionality under test
-		 String mainTemplate = null;
-		try {
-			mainTemplate = velocityModelBasedInserter.findMainTemplate(artefactDir);
-		} catch (MOGLiPluginException e) {
-			fail(e.getMessage());
-		}
+		 List<String> mainTemplate = velocityModelBasedInserter.findMainTemplates(artefactDir);
 
 		// verify test result
-		assertEquals("Main Template filename", MAIN_TEMPLATE, mainTemplate);
+		assertEquals("Number of Main Templates", 4, mainTemplate.size());
 	}
 
 	@Test
@@ -575,9 +572,9 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 				                                             + FileUtil.getSystemLineSeparator() +
 				                                             "|MetaInfo| MetaInfoTestName2 |is| mandatory |for| attributes |in| ModelName |.|"
 				                                             + FileUtil.getSystemLineSeparator() +
-				                                             "|MetaInfo| MetaInfoTestName3 |must occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
+				                                             "|MetaInfo| MetaInfoTestName3 |is valid to occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
 				                                             + FileUtil.getSystemLineSeparator() +
-				                                             "|MetaInfo| MetaInfoTestName4 |must occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
+				                                             "|MetaInfo| MetaInfoTestName4 |is valid to occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
 
 		// call functionality under test
 		final List<MetaInfoValidator> metaInfoValidatorList = velocityModelBasedInserter.getMetaInfoValidatorList();

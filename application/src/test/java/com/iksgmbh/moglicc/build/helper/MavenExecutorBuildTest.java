@@ -29,7 +29,7 @@ public class MavenExecutorBuildTest extends ApplicationTestParent {
 		String mavenResult = mavenExecutor.callMaven();
 		assertNotNull(mavenResult);
 		System.out.println(mavenResult);
-		assertTrue("Unexpected mavenResult: " + mavenResult, mavenResult.contains("[INFO] [compiler:compile {execution: default-compile}]"));
-		assertTrue("Maven Build not successful: " + mavenResult, mavenResult.contains("[INFO] BUILD SUCCESSFUL"));
+		assertTrue("Unexpected mavenResult: " + mavenResult, mavenResult.contains("[INFO] Building Global"));
+		assertTrue("Maven Build not successful: " + mavenResult, mavenResult.contains("[INFO] BUILD SUCCESS"));
 	}
 }

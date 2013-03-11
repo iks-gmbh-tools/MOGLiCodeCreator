@@ -1,6 +1,9 @@
 package com.iksgmbh.utils;
 
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 public class StringUtil {
 
@@ -76,6 +79,11 @@ public class StringUtil {
 
 	public static String removeSuffixByLength(final String s, final int numberOfChars) {
 		return s.substring(0, s.length() - numberOfChars);
+	}
+
+	public static List<String> getLinesFromText(final String text) {
+		final String[] result = StringUtils.splitByWholeSeparator(text, FileUtil.getSystemLineSeparator());
+		return Arrays.asList(result);
 	}
 
 }

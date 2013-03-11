@@ -5,9 +5,10 @@
 	<description>project for starting the application from IDE, for building Release candidates and	for starting the different types of tests</description>
 
 	<parent>
-		<artifactId>parent.plugin</artifactId>
 		<groupId>com.iksgmbh.moglicc</groupId>
+		<artifactId>parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
+		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
 

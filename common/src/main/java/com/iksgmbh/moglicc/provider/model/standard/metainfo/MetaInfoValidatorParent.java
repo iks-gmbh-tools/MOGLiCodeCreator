@@ -72,7 +72,6 @@ public abstract class MetaInfoValidatorParent implements MetaInfoValidator, Meta
 	public int getMetaInfoMatches() {
 		return metaInfoCounter;
 	}
-	
 
 	@Override
 	public String getNameOfValidModel() {
@@ -83,14 +82,35 @@ public abstract class MetaInfoValidatorParent implements MetaInfoValidator, Meta
 		this.nameOfValidModel = nameOfValidModel;
 	}
 
+	public boolean isValidatorValidForHierarchyLevel(final HierarchyLevel currentHierarchyLevel) {
+		if (metaInfoHierarchyLevel != currentHierarchyLevel) {
+			return false; // this validator does not validate MetaInfo elements of this HierarchyLevel
+		}
+		
+		return true;
+	}
+
+	public boolean isValidatorValidForModel(final String nameOfCurrentModel) {
+		if (nameOfValidModel == null)  {
+			return true;  // no model defined -> interpreted as valid for all models
+		}
+
+		if (! nameOfValidModel.equals(nameOfCurrentModel)) {
+			return false; // this validator does not validate MetaInfo elements of this model
+		}
+		
+		return true;
+	}
+
 	
 	/**
 	 * @param metaInfoList list of a single MetaModelObject, that means
 	 *        all elements contains the same {@link HierarchyLevel} and
 	 *        refer to the same model, class or attribute instance
+	 *        
 	 * @return true if no validation error occurred
 	 */
 	@Override
-	public abstract boolean validate(final List<MetaInfo> metaInfoList, final HierarchyLevel hierarchyLevel);
+	public abstract boolean validate(final List<MetaInfo> metaInfoList);
 
 }

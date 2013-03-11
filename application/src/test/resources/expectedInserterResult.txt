@@ -1,8 +1,9 @@
-// Inserter Test
-package com.iksgmbh.test;
-// InsertAbove
-public class BeanFactoryTemplate {
-// startReplace
+// This BeanFactory class is newly created by the VelocityModelBasedInserter
+package com.iksgmbh.test;  // this line was inserted above the insertAbove marker
+/** This is the InsertAbove Marker for the MOGLi Code Creator - Do not modify this line! */
+public class BeanFactory {
+
+/** This is the StartReplace Marker for the MOGLi Code Creator - Do not modify this line! */
 	public static Person getPerson() {;
 		return new Person();
 	}
@@ -19,8 +20,9 @@ public class BeanFactoryTemplate {
 		return new Misc();
 	}
 
-// endReplace
+/** This is the EndReplace Marker for the MOGLi Code Creator - Do not modify this line! */
+
 }
-// InsertBelow
-// end
-// Inserter Test Ende
+/** This is the InsertBelow Marker for the MOGLi Code Creator - Do not modify this line! */
+	public static final int i = 0; // this line was inserted above the insertAbove marker
+//End of file

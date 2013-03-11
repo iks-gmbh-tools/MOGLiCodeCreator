@@ -391,9 +391,9 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 				                                             + FileUtil.getSystemLineSeparator() + 
 				                                             "|MetaInfo| MetaInfoTestName2 |is| mandatory |for| attributes |in| ModelName |.|"
 				                                             + FileUtil.getSystemLineSeparator() + 
-				                                             "|MetaInfo| MetaInfoTestName3 |must occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
+				                                             "|MetaInfo| MetaInfoTestName3 |is valid to occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
 				                                             + FileUtil.getSystemLineSeparator() + 
-				                                             "|MetaInfo| MetaInfoTestName4 |must occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
+				                                             "|MetaInfo| MetaInfoTestName4 |is valid to occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
 
 		// call functionality under test
 		final List<MetaInfoValidator> metaInfoValidatorList = velocityClassBasedGenerator.getMetaInfoValidatorList();
@@ -409,7 +409,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
         final File validatorFile = new File(velocityClassBasedGenerator.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|" 
 				                                             + FileUtil.getSystemLineSeparator() + 
-				                                             "|MetaInfo| MetaInfoTestName4 |must occur| 1-2 |time(s) for| attributes |in| ModelName |if| notExistingConditionFile.txt |is true.|" );
+				                                             "|MetaInfo| MetaInfoTestName4 |is valid to occur| 1-2 |time(s) for| attributes |in| ModelName |if| notExistingConditionFile.txt |is true.|" );
 
 		// call functionality under test
 		try {			
