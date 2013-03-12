@@ -40,6 +40,11 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	private InfrastructureService infrastructure;
 	private IOEncodingHelper encodingHelper;
 	private Model model;
+	private int generationCounter = 0;
+	private int artefactCounter = 0;
+	private StringBuffer generationReport = new StringBuffer(PLUGIN_ID
+                                                             + " has done work for following artefacts:"
+                                                             + FileUtil.getSystemLineSeparator());
 
 	@Override
 	public void setMOGLiInfrastructure(final InfrastructureService infrastructure) {
@@ -56,6 +61,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 
 		final List<String> list = getArtefactList();
 		for (final String artefact : list) {
+			generateArtefactReportHeader(artefact);
 			final File templateDir = new File(infrastructure.getPluginInputDir(), artefact);
 			final List<String> mainTemplates = findMainTemplates(templateDir);
 			for (final String mainTemplate : mainTemplates) {
@@ -65,6 +71,15 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		}
 
 		infrastructure.getPluginLogger().logInfo("Done!");
+	}
+
+	private void generateArtefactReportHeader(final String artefact) {
+		artefactCounter++;
+		generationReport.append(FileUtil.getSystemLineSeparator());
+		generationReport.append("   Reports for artefact '");
+		generationReport.append(artefact);
+		generationReport.append("':");
+		generationReport.append(FileUtil.getSystemLineSeparator());
 	}
 
 	private void applyModelToArtefactTemplate(final String artefact, final File templateDir, final String mainTemplate) throws MOGLiPluginException {
@@ -85,8 +100,38 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 				                                      infrastructure.getPluginLogger()));
 		writeResultIntoPluginOutputDir(result, artefact);
 		writeResultIntoTargetDefinedInTemplate(result);
+		generateReportLine(result);
 		infrastructure.getPluginLogger().logInfo("Generated content for artefact '" + artefact
 				+ "' inserted into " + result.getTargetDir() + "/" + result.getTargetFileName());
+	}
+
+	private void generateReportLine(final VelocityInserterResultData resultData) {
+		generationCounter++;
+		if (resultData.isTargetToBeCreatedNewly()) {
+			generationReport.append("      ");
+			generationReport.append(resultData.getTargetFileName());
+			generationReport.append(" was created in ");
+			generationReport.append(resultData.getTargetDir());
+			generationReport.append(FileUtil.getSystemLineSeparator());
+			return;
+		} else if (resultData.wasExistingTargetPreserved()) {
+			generationReport.append("      ");
+			generationReport.append(resultData.getTargetFileName());
+			generationReport.append(" did already exist and was NOT overwritten in ");
+			generationReport.append(resultData.getTargetDir());
+			generationReport.append(FileUtil.getSystemLineSeparator());
+			return;
+		} else if (resultData.getInsertAboveIndicator() != null) {
+			generationReport.append("      inserted by a above-instruction into ");
+		} else if (resultData.getInsertBelowIndicator() != null) {
+			generationReport.append("      inserted by a below-instruction into ");
+		} else if (resultData.getReplaceStartIndicator() != null) {
+			generationReport.append("      inserted by a replace-instruction into ");
+		}
+		generationReport.append(resultData.getTargetFileName());
+		generationReport.append(" in directory ");
+		generationReport.append(resultData.getTargetDir());
+		generationReport.append(FileUtil.getSystemLineSeparator());
 	}
 
 	private void writeResultIntoPluginOutputDir(final VelocityInserterResultData resultData, final String subDir)
@@ -146,6 +191,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 
 		infrastructure.getPluginLogger().logWarning("Output file already exists and will not be overwritten:\n"
                 + outputFile.getAbsolutePath());
+		resultData.setExistingTargetPreserved(true);
 		return null;
 	}
 
@@ -159,25 +205,25 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		}
 
 		String generatedContent = resultData.getGeneratedContent();
-		final String InsertAboveIndicator = resultData.getInsertAboveIndicator();
-		if (InsertAboveIndicator != null) {
-			generatedContent = InsertAbove(oldContent, generatedContent, InsertAboveIndicator);
+		final String insertAboveIndicator = resultData.getInsertAboveIndicator();
+		if (insertAboveIndicator != null) {
+			generatedContent = InsertAbove(oldContent, generatedContent, insertAboveIndicator);
 			infrastructure.getPluginLogger().logInfo("Generated Content inserted above '"
-		            + InsertAboveIndicator + "' in\n" + outputFile.getAbsolutePath());
+		            + insertAboveIndicator + "' in\n" + outputFile.getAbsolutePath());
 			return generatedContent;
 		}
 
-		final String InsertBelowIndicator = resultData.getInsertBelowIndicator();
-		if (InsertBelowIndicator != null) {
-			generatedContent = InsertBelow(oldContent, generatedContent, InsertBelowIndicator);
+		final String insertBelowIndicator = resultData.getInsertBelowIndicator();
+		if (insertBelowIndicator != null) {
+			generatedContent = InsertBelow(oldContent, generatedContent, insertBelowIndicator);
 			infrastructure.getPluginLogger().logInfo("Generated Content inserted below '"
-					                                 + InsertBelowIndicator + "' in\n" + outputFile.getAbsolutePath());
+					                                 + insertBelowIndicator + "' in\n" + outputFile.getAbsolutePath());
 			return generatedContent;
 		}
 
-		final String ReplaceStartIndicator = resultData.getReplaceStartIndicator();
-		if (ReplaceStartIndicator != null) {
-			generatedContent = replace(oldContent, generatedContent, ReplaceStartIndicator, resultData.getReplaceEndIndicator());
+		final String replaceStartIndicator = resultData.getReplaceStartIndicator();
+		if (replaceStartIndicator != null) {
+			generatedContent = replace(oldContent, generatedContent, replaceStartIndicator, resultData.getReplaceEndIndicator());
 			infrastructure.getPluginLogger().logInfo("Generated Content replaced in\n" + outputFile.getAbsolutePath());
 			return generatedContent;
 		}
@@ -239,11 +285,11 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	}
 
 	private String InsertAbove(final List<String> oldContent, final String contentToInsert,
-			                   final String InsertAboveIndicator) throws MOGLiPluginException {
+			                   final String insertAboveIndicator) throws MOGLiPluginException {
 		final StringBuffer sb = new StringBuffer();
 		boolean indicatorFound = false;
 		for (final String line : oldContent) {
-			if (line.contains(InsertAboveIndicator)) {
+			if (line.contains(insertAboveIndicator)) {
 				sb.append(contentToInsert);
 				sb.append(FileUtil.getSystemLineSeparator());
 				indicatorFound = true;
@@ -252,7 +298,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 			sb.append(FileUtil.getSystemLineSeparator());
 		}
 		if (! indicatorFound) {
-			throw new MOGLiPluginException(TextConstants.TEXT_INSERT_ABOVE_INDICATOR_NOT_FOUND + InsertAboveIndicator);
+			throw new MOGLiPluginException(TextConstants.TEXT_INSERT_ABOVE_INDICATOR_NOT_FOUND + insertAboveIndicator);
 		}
 		return sb.toString();
 	}
@@ -347,6 +393,21 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		helpData.addFile("TemplateFileHeaderInserterAttributes.htm");
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
+	}
+
+	@Override
+	public String getGenerationReport() {
+		return generationReport.toString().trim();
+	}
+
+	@Override
+	public int getNumberOfGenerations() {
+		return generationCounter;
+	}
+
+	@Override
+	public int getNumberOfArtefacts() {
+		return artefactCounter;
 	}
 
 }

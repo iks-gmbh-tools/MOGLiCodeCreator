@@ -17,7 +17,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultData
                                                 implements VelocityGeneratorResultData {
 
-
+	private boolean existingTargetPreserved = false;  // default
 
 	public BuildUpVelocityGeneratorResultData(final GeneratorResultData generatorResultData) {
 		final BuildUpGeneratorResultData buildUpGeneratorResultData = (BuildUpGeneratorResultData) generatorResultData;
@@ -54,7 +54,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	public boolean isTargetToBeCreatedNewly() {
 		final String value = getProperty(KnownGeneratorPropertyNames.CreateNew.name());
 		if (value == null) {
-			return false;
+			return false;  // default
 		}
 		return "true".equals(value.toLowerCase().trim());
 	}
@@ -147,4 +147,11 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		return searchTextInGeneratedContentBetween(PACKAGE, ";");
 	}
 
+	public boolean wasExistingTargetPreserved() {
+		return existingTargetPreserved;
+	}
+
+	public void setExistingTargetPreserved(final boolean existingTargetPreserved) {
+		this.existingTargetPreserved = existingTargetPreserved;
+	}
 }

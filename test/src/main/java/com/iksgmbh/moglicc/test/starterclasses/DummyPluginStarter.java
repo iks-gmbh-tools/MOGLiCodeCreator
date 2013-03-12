@@ -48,10 +48,25 @@ public class DummyPluginStarter implements Generator, MOGLiPlugin {
 	public InfrastructureService getMOGLiInfrastructure() {
 		return infrastructure;
 	}
-	
+
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
+	}
+
+	@Override
+	public String getGenerationReport() {
+		return null;
+	}
+
+	@Override
+	public int getNumberOfGenerations() {
+		return 0;
+	}
+
+	@Override
+	public int getNumberOfArtefacts() {
+		return 0;
 	}
 
 }

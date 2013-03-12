@@ -583,4 +583,131 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		assertEquals("validator number", 4, metaInfoValidatorList.size());
 		assertEquals("condition number", 3, ((ConditionalMetaInfoValidator)metaInfoValidatorList.get(3)).getTotalNumberOfConditions());
 	}
+
+	private void createFakeArtefactDir() throws Exception {
+		final File testArtefactDir = new File(infrastructure.getPluginInputDir(), "/TestArtefact");
+		testArtefactDir.mkdirs();
+		final File testTemplate = new File(testArtefactDir, "Main.tpl");
+		FileUtil.createNewFileWithContent(testTemplate, "dummy content");
+	}
+
+	@Test
+	public void createsReportForNewlyCreatedArtefact() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("Content",
+				targetDir, TARGET_FILE_TXT,
+				KnownGeneratorPropertyNames.CreateNew.name(), "true");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportCreateNew.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
+	@Test
+	public void createsReportForNotOverwrittenArtefact() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
+		new File(targetDir).mkdirs();
+		final File file = new File(applicationRootDir + "/example", TARGET_FILE_TXT);
+		FileUtil.createNewFileWithContent(file, "content");
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				targetDir, TARGET_FILE_TXT,
+				KnownGeneratorPropertyNames.CreateNew.name(), "false");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportNotOverwritten.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
+	@Test
+	public void createsReportForInsertedAboveContent() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("contentToInsert",
+				targetDir, TARGET_FILE_TXT,
+				KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportAboveInsertion.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
+	@Test
+	public void createsReportForInsertedBelowContent() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("contentToInsert",
+				targetDir, TARGET_FILE_TXT,
+				KnownInserterPropertyNames.InsertBelow.name(), "-InsertBelow");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportBelowInsertion.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
+	@Test
+	public void createsReportForReplacedContent() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
+		final BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("contentToInsert",
+				targetDir, TARGET_FILE_TXT,
+				KnownInserterPropertyNames.ReplaceStart.name(), "-ReplaceStart");
+		resultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "-ReplaceEnd");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportReplaceInsertion.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
 }

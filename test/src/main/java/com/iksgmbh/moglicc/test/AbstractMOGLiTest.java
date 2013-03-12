@@ -39,6 +39,7 @@ public abstract class AbstractMOGLiTest {
 	protected static final String RESOURCES_DIR = "src/main/resources/";
 	protected static final String TEST_SUBDIR = TARGET_DIR + "TestDir"; // in target it will be deleted automatically with each clean
 	protected static final String LOGFILE = MOGLiSystemConstants.DIR_LOGS_FILES + "/" + MOGLiSystemConstants.FILENAME_LOG_FILE;
+	protected static final String REPORT_FILE = MOGLiSystemConstants.FILENAME_REPORT_FILE;
 
 
 	// **************************  Instance fields  *********************************

@@ -60,8 +60,8 @@ public class CoreIntTest extends IntTestParent {
 	private FileCollectionData createFileCollectionData() {
 		final MOGLiReleaseBuilder mogliReleaseBuilder = new MOGLiReleaseBuilder();
 		final FileCollectionData fileCollectionData = new FileCollectionData();
-		fileCollectionData.libSubdir = applicationRootDir + "/" + MOGLiSystemConstants.DIR_LIB;
-		fileCollectionData.pluginsSubdir = fileCollectionData.libSubdir + "/" + MOGLiSystemConstants.DIR_PLUGIN;
+		fileCollectionData.libSubdir = MOGLiSystemConstants.DIR_LIB;
+		fileCollectionData.pluginsSubdir = MOGLiSystemConstants.DIR_PLUGIN;
 		fileCollectionData.sourceDir = null;
 		fileCollectionData.releaseDir = new File(applicationRootDir);
 		fileCollectionData.fileListForRootDir = null;
@@ -75,14 +75,30 @@ public class CoreIntTest extends IntTestParent {
 	public void testFinalLogout() {
 		// prepare test
 		initTestRootDir();
-		
+
 		// call functionality under test
 		MOGLiCodeCreator.main(args);
-		
+
 		// verify test result
 		final File logfile = MOGLiFileUtil.getNewFileInstance(LOGFILE);
-		assertFileContainsEntry(logfile, "All 4 plugins executed successfully in <../inttest/target/TestDir> on model 'DemoModel'.");
+		assertFileContainsEntry(logfile, "All 4 plugins executed successfully on model 'DemoModel' in workspace <../inttest/target/TestDir>.");
 	}
+
+	@Test
+	public void createsReportFile() {
+		// prepare test
+		initTestRootDir();
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		final File reportFile = MOGLiFileUtil.getNewFileInstance(REPORT_FILE);
+		assertFileExists(reportFile);
+		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedReport.txt");
+		assertFileEquals(expectedFile , reportFile);
+	}
+
 
 	@Test
 	public void createsEmergencyLogFileIfDefinedWorkspaceDirCannotBeCreated() {
