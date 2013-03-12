@@ -3,12 +3,16 @@ package com.iksgmbh.moglicc.plugin.type.basic;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 
 /**
- * Marker interface for generator plugins.
- * Typically a generator creates whole new files.
- * 
+ * Interface for generator plugins.
+ *
  * @author Reik Oberrath
  * @since 1.0.0
  */
 public interface Generator extends MOGLiPlugin {
 
+	String getGenerationReport();
+
+	int getNumberOfGenerations();
+
+	int getNumberOfArtefacts();
 }

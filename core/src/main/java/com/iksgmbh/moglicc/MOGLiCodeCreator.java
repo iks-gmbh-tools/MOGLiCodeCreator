@@ -9,6 +9,7 @@ import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_TEMP_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_INTRODUCTION_HELPFILE;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_REPORT_FILE;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.WORKSPACE_PROPERTY;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_APPLICATION_TERMINATED;
@@ -33,6 +34,7 @@ import com.iksgmbh.moglicc.helper.PluginExecutor;
 import com.iksgmbh.moglicc.helper.PluginExecutor.PluginExecutionData;
 import com.iksgmbh.moglicc.helper.PluginLoader;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
@@ -107,12 +109,13 @@ public class MOGLiCodeCreator {
 
 	// **************************  Instance fields  *********************************
 
+	private File reportFile;
 	private List<PluginMetaData> pluginMetaDataList;
 	private Properties applicationProperties;
 	private Properties workspaceProperties;
 	private String workspace;
 	private List<MOGLiPlugin> plugins = null;
-	final List<String> logEntriesBeforeLogFileExists = new ArrayList<String>();
+	private List<String> logEntriesBeforeLogFileExists = new ArrayList<String>();
 	private File workspaceDir;
 	private File tempDir;
 	private File inputDir;
@@ -126,6 +129,17 @@ public class MOGLiCodeCreator {
 		readApplicationPropertiesFile();
 		initWorkspace();
 		initApplicationDirectories();
+		initReportFile();
+	}
+
+	private void initReportFile() {
+		reportFile = new File(applicationRootDir, FILENAME_REPORT_FILE);
+		if (reportFile.exists()) {			
+			boolean ok = reportFile.delete();
+			if (! ok) {
+				throw new MOGLiCoreException("Error deleting old reportFile: " + reportFile.getAbsolutePath());
+			}
+		}
 	}
 
 	private void initWorkspace() {
@@ -285,22 +299,96 @@ public class MOGLiCodeCreator {
 			return;
 		}
 
-		logFinalInformation();
+		final String mainResultString = buildMainResultString();
+		createReportFile(mainResultString);
+		logFinalInformation(mainResultString);
 	}
 
+	private int countTotalNumberOfGenerations() {
+		int counter = 0;
+		if (plugins != null && plugins.size() > 0) {
+			final List<Generator> generators = plugins.get(0).getMOGLiInfrastructure().getPluginsOfType(Generator.class);
+			for (final Generator generator : generators) {
+				counter += generator.getNumberOfGenerations();
+			}
+		}
+		return counter;
+	}
 
-	private void logFinalInformation() {
+	private int countTotalNumberOfArtefacts() {
+		int counter = 0;
+		if (plugins != null && plugins.size() > 0) {
+			final List<Generator> generators = plugins.get(0).getMOGLiInfrastructure().getPluginsOfType(Generator.class);
+			for (final Generator generator : generators) {
+				counter += generator.getNumberOfArtefacts();
+			}
+		}
+		return counter;
+	}
+
+	private void createReportFile(final String mainResultString) {
+		if (plugins == null || plugins.size() == 0) {
+			return;
+		}
+
+		final List<Generator> generators = plugins.get(0).getMOGLiInfrastructure().getPluginsOfType(Generator.class);
+		final StringBuffer report = new StringBuffer("*******************************   R E S U L T   ******************************* ");
+
+		report.append(FileUtil.getSystemLineSeparator());
+		report.append(FileUtil.getSystemLineSeparator());
+
+		report.append(mainResultString);
+
+		report.append(FileUtil.getSystemLineSeparator());
+		report.append(FileUtil.getSystemLineSeparator());
+
+		for (final Generator generator : generators) {
+			report.append(generator.getGenerationReport());
+			report.append(FileUtil.getSystemLineSeparator());
+			report.append(FileUtil.getSystemLineSeparator());
+			report.append(FileUtil.getSystemLineSeparator());
+		}
+
+		try {
+			FileUtil.createNewFileWithContent(reportFile, report.toString().trim());
+			MOGLiLogUtil.logInfo("Report successfully file created: " + reportFile.getAbsolutePath());
+		} catch (Exception e) {
+			MOGLiLogUtil.logError("Error creating reportfile: " + e.getMessage());
+		}
+	}
+
+	private void logFinalInformation(final String mainResultString) {
 		MOGLiLogUtil.logInfo("");
-		
+
 		logPluginMetaData(pluginMetaDataList);
-		
-		MOGLiLogUtil.logInfo("");
-		
-		logMainResult();
 
 		MOGLiLogUtil.logInfo("");
-				
+
+		MOGLiLogUtil.logInfo(mainResultString);
+
+		MOGLiLogUtil.logInfo("");
+
 		MOGLiLogUtil.logInfo(TEXT_DONE);
+	}
+
+	private String buildMainResultString() {
+		String toReturn = "";
+		final int numberOfSuccessfullyExecutedPlugins = getNumberOfSuccessfullyExecutedPlugins(pluginMetaDataList);
+		final int numberOfNotExecutedPlugins = getNumberOfNotExecutedPlugins(pluginMetaDataList);
+		final String contextString = " on model '" + getModelName() + "' in workspace <" + workspace + ">.";
+
+		if (numberOfNotExecutedPlugins == 0) {
+			toReturn = "All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully" + contextString;
+		} else {
+			toReturn = numberOfSuccessfullyExecutedPlugins + " plugins executed " + contextString;
+			toReturn += numberOfSuccessfullyExecutedPlugins + " plugins executed successfully." + FileUtil.getSystemLineSeparator();
+			toReturn += numberOfNotExecutedPlugins + " plugins not or erroneously executed!";
+		}
+
+		toReturn += FileUtil.getSystemLineSeparator() + countTotalNumberOfGenerations() + " generations for "
+		            + countTotalNumberOfArtefacts() + " artefacts have been performed.";
+
+		return toReturn;
 	}
 
 	private String getModelName() {
@@ -310,24 +398,10 @@ public class MOGLiCodeCreator {
 			for (final ModelProvider modelProvider : modelProviders) {
 				toReturn += modelProvider.getModelName() + ", ";  // in case their are more than one modelProviders
 			}
-			toReturn = toReturn.substring(0, toReturn.length() - 2); 
+			toReturn = toReturn.substring(0, toReturn.length() - 2);
 		}
-		
+
 		return toReturn.trim();
-	}
-
-	private void logMainResult() {
-		final int numberOfSuccessfullyExecutedPlugins = getNumberOfSuccessfullyExecutedPlugins(pluginMetaDataList);
-		final int numberOfNotExecutedPlugins = getNumberOfNotExecutedPlugins(pluginMetaDataList);
-		final String contextString = " in <" + workspace + "> on model '" + getModelName() + "'.";
-
-		if (numberOfNotExecutedPlugins == 0) {
-			MOGLiLogUtil.logInfo("All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully" + contextString);
-		} else {
-			MOGLiLogUtil.logInfo(numberOfSuccessfullyExecutedPlugins + " plugins executed " + contextString);
-			MOGLiLogUtil.logInfo(numberOfSuccessfullyExecutedPlugins + " plugins executed successfully.");
-			MOGLiLogUtil.logInfo(numberOfNotExecutedPlugins + " plugins not or erroneously executed!");
-		}
 	}
 
 	private PluginExecutionData createPluginExecutionData(List<MOGLiPlugin> plugins) {

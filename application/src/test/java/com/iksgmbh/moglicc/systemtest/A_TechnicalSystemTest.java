@@ -2,6 +2,7 @@ package com.iksgmbh.moglicc.systemtest;
 
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_REPORT_FILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -184,4 +185,18 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 		assertFileContainsEntry(applicationLogfile, "All " + getNumberOfJarFilesToExpectPluginsDir()
 				                                   + " plugins executed successfully");
 	}
+	
+	@Test
+	public void createsReportFile() {
+		// prepare test
+		final File reportFile = new File(testDir, FILENAME_REPORT_FILE);
+		assertFileDoesNotExist(reportFile);
+
+		// call functionality under test
+		executeMogliApplication();
+
+		// verify test result
+		assertFileExists(reportFile);
+	}
+
 }

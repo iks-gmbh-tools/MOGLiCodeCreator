@@ -39,7 +39,7 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 	public List<String> getDependencies() {
 		List<String> toReturn = new ArrayList<String>();
 		toReturn.add("DummyDataProvider");
-		toReturn.add("StandardModelProvider");		
+		toReturn.add("StandardModelProvider");
 		toReturn.add("VelocityEngineProvider");
 		return toReturn;
 	}
@@ -53,7 +53,7 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
 		return metaInfoValidatorList;
 	}
-	
+
 	public void setMetaInfoValidatorList(final List<MetaInfoValidator> metaInfoValidatorList)  {
 		this.metaInfoValidatorList = metaInfoValidatorList;
 	}
@@ -61,11 +61,26 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 	@Override
 	public InfrastructureService getMOGLiInfrastructure() {
 		return infrastructure;
-	}	
-	
+	}
+
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
+	}
+
+	@Override
+	public String getGenerationReport() {
+		return null;
+	}
+
+	@Override
+	public int getNumberOfGenerations() {
+		return 0;
+	}
+
+	@Override
+	public int getNumberOfArtefacts() {
+		return 0;
 	}
 
 }
