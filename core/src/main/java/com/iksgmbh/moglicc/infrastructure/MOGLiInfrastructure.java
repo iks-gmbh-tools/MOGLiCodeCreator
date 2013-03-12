@@ -222,7 +222,7 @@ public class MOGLiInfrastructure implements InfrastructureService {
 		final List<T> toReturn = new ArrayList<T>();
 		final Collection<MOGLiPlugin> plugins = pluginMap.values();
 		for (final MOGLiPlugin plugin : plugins) {
-			final Class<?>[] interfaces = plugin.getClass().getInterfaces();
+			final List<Class<?>> interfaces = collectInterfacesFor(plugin);
 			for (final Class<?> type : interfaces) {
 				if (type.getName().equals(wantedType.getName())) {
 					toReturn.add((T) plugin);
@@ -231,6 +231,27 @@ public class MOGLiInfrastructure implements InfrastructureService {
 			}
 		}
 		return toReturn;
+	}
+
+	protected List<Class<?>> collectInterfacesFor(final MOGLiPlugin plugin) {
+		final List<Class<?>> toReturn = new ArrayList<Class<?>>();
+		final Class<?>[] interfaces = plugin.getClass().getInterfaces();
+		for (final Class<?> interfaceType : interfaces) {
+			toReturn.add(interfaceType);
+			collectInheritedInterfaces(toReturn, interfaceType);
+		}
+		return toReturn;
+	}
+
+	private void collectInheritedInterfaces(final List<Class<?>> toReturn, final Class<?> interfaceType) {
+		final Class<?>[] inhertitedInterfaces = interfaceType.getInterfaces();
+		if (inhertitedInterfaces != null && inhertitedInterfaces.length > 0) {
+			for (final Class<?> inhertitedInterfaceType : inhertitedInterfaces) {
+				toReturn.add(inhertitedInterfaceType);
+				collectInheritedInterfaces(toReturn, inhertitedInterfaceType);
+			}
+		}
+
 	}
 
 }

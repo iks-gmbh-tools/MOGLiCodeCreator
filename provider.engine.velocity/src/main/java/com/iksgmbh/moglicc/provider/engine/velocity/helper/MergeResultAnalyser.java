@@ -15,9 +15,12 @@ import com.iksgmbh.utils.StringUtil;
 public class MergeResultAnalyser {
 
 	public static final String IDENTIFICATOR_WHITESPACE_MARKER = "'";
+	private static final AnnotationParser annotationParser = AnnotationParser.getInstance();
+	private static final String commentSymbolLineIdentifiery = annotationParser.getCommentIdentificator() +
+			                                                   annotationParser.getCommentIdentificator() +
+			                                                   annotationParser.getCommentIdentificator();
 
 	private BuildUpGeneratorResultData velocityResultData;
-	private AnnotationParser annotationParser = AnnotationParser.getInstance();
 	private String artefactType;
 	private boolean headerEndReached = false;
 
@@ -102,6 +105,10 @@ public class MergeResultAnalyser {
 			}
 			velocityResultData.addProperty(annotation.getName(), annotation.getAdditionalInfo());
 		} else if (annotationParser.isCommentLine(line)) {
+			if (line.startsWith(commentSymbolLineIdentifiery)) {
+				// do not remove whole line that consists of separator symbols
+				newLines.add(removeWhitespaceMarker(line));
+			}
 			// ignore this line
 		} else {
 			if (line.trim().length() > 0) {

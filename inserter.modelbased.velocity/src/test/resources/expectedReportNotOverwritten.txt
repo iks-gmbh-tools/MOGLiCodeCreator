@@ -1,0 +1,4 @@
+   VelocityModelBasedInserter has done work for following artefacts:
+
+   Reports for artefact 'TestArtefact':
+      targetFile.txt did already exist and was NOT overwritten in <applicationRootDir>/example

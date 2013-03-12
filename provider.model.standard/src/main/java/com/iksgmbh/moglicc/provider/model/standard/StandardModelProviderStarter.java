@@ -49,6 +49,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	private BuildUpModel buildUpModel;
 
 	private List<MetaInfoValidator> metaInfoValidatorList;
+	final List<String> validationErrorMessages = new ArrayList<String>();
 
 	private Properties pluginProperties;
 
@@ -77,32 +78,44 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	}
 
 	void validateMetaInfos() throws MOGLiPluginException {
+		validationErrorMessages.clear();
 		final List<MetaInfoValidator> metaInfoValidatorList = getAllMetaInfoValidators();
 
-		boolean validationErrorOccurredOnModelLevel = validateModelMetaInfos(metaInfoValidatorList);
-		boolean validationErrorOccurredOnClassLevel = validateClassMetaInfos(metaInfoValidatorList);
-		boolean validationErrorOccurredOnAttributeLevel = validateAttributeMetaInfos(metaInfoValidatorList);
+		validateModelMetaInfos(metaInfoValidatorList);
+		validateClassMetaInfos(metaInfoValidatorList);
+		validateAttributeMetaInfos(metaInfoValidatorList);
 
-		if (validationErrorOccurredOnModelLevel
-			|| validationErrorOccurredOnClassLevel
-			|| validationErrorOccurredOnAttributeLevel) {
-			throw new MetaInfoValidatorException(TEXT_METAINFO_VALIDATION_ERROR_OCCURRED
-					                            + infrastructure.getPluginLogFile().getName());
+		if (validationErrorMessages.size() > 0) {
+			throw new MetaInfoValidatorException(buildValidationErrorLogoutMessage());
 		}
+	}
+
+	private String buildValidationErrorLogoutMessage() {
+		String toReturn = TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator();
+		for (final String message : validationErrorMessages) {
+			toReturn += message + FileUtil.getSystemLineSeparator();
+		}		
+		return toReturn.trim();
 	}
 
 	private boolean validateAttributeMetaInfos(final List<MetaInfoValidator> allMetaInfoValidators) {
 		boolean validationErrorOccurred = false;
 		final List<ClassDescriptor> classDescriptorList = buildUpModel.getClassDescriptorList();
+		
 		for (final ClassDescriptor classDescriptor : classDescriptorList) {
 			final List<AttributeDescriptor> attributeDescriptorList = classDescriptor.getAttributeDescriptorList();
 			for (final AttributeDescriptor attributeDescriptor : attributeDescriptorList) {
 				for (final MetaInfoValidator metaInfoValidator : allMetaInfoValidators) {
-					boolean validationOk = metaInfoValidator.validate(attributeDescriptor.getMetaInfoList(), HierarchyLevel.Attribute);
-					if (! validationOk) {
-						validationErrorOccurred = true;
-						infrastructure.getPluginLogger().logError(metaInfoValidator.getValidationErrorMessage()
-								+ "for attributeDescriptor '" + attributeDescriptor.getName() + "'");
+					if (metaInfoValidator.isValidatorValidForHierarchyLevel(HierarchyLevel.Attribute))  {
+						boolean validationOk = metaInfoValidator.validate(attributeDescriptor.getMetaInfoList());
+						if (! validationOk) {
+							validationErrorOccurred = true;
+							final String errorMessage = metaInfoValidator.getValidationErrorMessage()
+									                    + " for attribute descriptor '" + attributeDescriptor.getName() + "'"
+									                    + getModelString(metaInfoValidator);
+							infrastructure.getPluginLogger().logError(errorMessage);
+							validationErrorMessages.add(errorMessage);
+						}
 					}
 				}
 			}
@@ -110,33 +123,49 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		return validationErrorOccurred;
 	}
 
+	private String getModelString(final MetaInfoValidator metaInfoValidator) {
+		String toReturn = "";
+		if (metaInfoValidator.getNameOfValidModel() != null) {
+			toReturn = " in model '" + metaInfoValidator.getNameOfValidModel() + "'";
+		}
+		return toReturn;
+	}
+
 	private boolean validateClassMetaInfos(final List<MetaInfoValidator> allMetaInfoValidators) {
 		boolean validationErrorOccurred = false;
 		final List<ClassDescriptor> classDescriptorList = buildUpModel.getClassDescriptorList();
 		for (final ClassDescriptor classDescriptor : classDescriptorList) {
 			for (final MetaInfoValidator metaInfoValidator : allMetaInfoValidators) {
-				boolean validationOk = metaInfoValidator.validate(classDescriptor.getMetaInfoList(), HierarchyLevel.Class);
-				if (! validationOk) {
-					validationErrorOccurred = true;
-					infrastructure.getPluginLogger().logError(metaInfoValidator.getValidationErrorMessage()
-							                                  + "for classDescriptor '" + classDescriptor.getSimpleName() + "'");
+				if (metaInfoValidator.isValidatorValidForHierarchyLevel(HierarchyLevel.Class))  {					
+					boolean validationOk = metaInfoValidator.validate(classDescriptor.getMetaInfoList());
+					if (! validationOk) {
+						validationErrorOccurred = true;
+						final String errorMessage = metaInfoValidator.getValidationErrorMessage() + " for class descriptor '" 
+								+ classDescriptor.getSimpleName() + "'"
+								+ getModelString(metaInfoValidator);
+						infrastructure.getPluginLogger().logError(errorMessage);
+						validationErrorMessages.add(errorMessage);		
+					}
 				}
+
 			}
 		}
 		return validationErrorOccurred;
 	}
 
-	private boolean validateModelMetaInfos(final List<MetaInfoValidator> allMetaInfoValidators) {
-		boolean validationErrorOccurred = false;
+	private void validateModelMetaInfos(final List<MetaInfoValidator> allMetaInfoValidators) {
 		for (final MetaInfoValidator metaInfoValidator : allMetaInfoValidators) {
-			boolean validationOk = metaInfoValidator.validate(buildUpModel.getMetaInfoList(), HierarchyLevel.Model);
-			if (! validationOk) {
-				validationErrorOccurred = true;
-				infrastructure.getPluginLogger().logError(metaInfoValidator.getValidationErrorMessage()
-						                                   + "for model '" + buildUpModel.getName() + "'");
+			if (metaInfoValidator.isValidatorValidForHierarchyLevel(HierarchyLevel.Model))  {					
+				boolean validationOk = metaInfoValidator.validate(buildUpModel.getMetaInfoList());
+				if (! validationOk) {
+					final String errorMessage = metaInfoValidator.getValidationErrorMessage() + " for model '" 
+				                                + buildUpModel.getName() + "'"
+				                                + getModelString(metaInfoValidator);
+					infrastructure.getPluginLogger().logError(errorMessage);
+					validationErrorMessages.add(errorMessage);
+				}
 			}
 		}
-		return validationErrorOccurred;
 	}
 
 	public List<MetaInfoValidator> getAllMetaInfoValidators() throws MOGLiPluginException {
@@ -160,8 +189,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 			int counter = 0;
 			final List<MetaInfoValidator> metaInfoValidatorList = metaInfoValidatorVendor.getMetaInfoValidatorList();
 			for (final MetaInfoValidator metaInfoValidator : metaInfoValidatorList) {
-				if (metaInfoValidator.getNameOfValidModel() == null
-					|| metaInfoValidator.getNameOfValidModel().equals(buildUpModel.getName())) {
+				if (metaInfoValidator.isValidatorValidForModel(buildUpModel.getName()))  {
 					toReturn.add(metaInfoValidator);
 					counter++;
 				}
@@ -363,5 +391,13 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	 */
 	void setModelFile(final File file) {
 		modelFile = file;
+	}
+
+	@Override
+	public String getModelName() {
+		if (buildUpModel == null) {
+			return "";
+		}
+		return buildUpModel.getName();
 	}
 }

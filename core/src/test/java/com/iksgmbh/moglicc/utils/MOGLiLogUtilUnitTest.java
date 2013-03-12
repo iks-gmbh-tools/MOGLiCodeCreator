@@ -8,13 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiCodeCreator;
-import com.iksgmbh.moglicc.MOGLiSystemConstants;
 import com.iksgmbh.moglicc.test.CoreTestParent;
 
 public class MOGLiLogUtilUnitTest extends CoreTestParent {
-	
-	public static final String LOGFILE = MOGLiSystemConstants.DIR_LOGS_FILES + "/" + MOGLiSystemConstants.FILENAME_LOG_FILE;
-	
+		
 	@Before
 	public void setup() {
 		super.setup();
@@ -52,7 +49,7 @@ public class MOGLiLogUtilUnitTest extends CoreTestParent {
 
 	
 	private void assertLogfileIsEntry(String expectedLogEntry) {
-		File logfile = MOGLiFileUtil.getNewFileInstance(LOGFILE);
+		final File logfile = MOGLiFileUtil.getNewFileInstance(LOGFILE);
 		final String actualFileContent = MOGLiFileUtil.getFileContent(logfile);
 		assertEquals("Expected Log Entry not found in logfile", expectedLogEntry, actualFileContent);
 	}

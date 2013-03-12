@@ -13,7 +13,7 @@
 #
 # Alternatively, the number of allowed occurrences can be defined by
 #
-# |MetaInfo| <name of MetaInfo> |must occur| <occurrence> |time(s) for| <Hierarchy Level Descriptor> |in| <name of valid model> |.|
+# |MetaInfo| <name of MetaInfo> |is valid to occur| <occurrence> |time(s) for| <Hierarchy Level Descriptor> |in| <name of valid model> |.|
 #
 # Values for <occurrence> are e.g. "0"   (defines an optional Validator)
 #                                  "1"   (defines an mandatory Validator)
@@ -21,11 +21,11 @@
 #
 # In addition, a MetaInfo value can be validated with its value:
 #
-# |MetaInfo| <name of MetaInfo> |with value| <value of MetaInfo> |must occur| <occurrence> |time(s) for| <Hierarchy Level Descriptor> |in| <name of valid model> |.|
+# |MetaInfo| <name of MetaInfo> |with value| <value of MetaInfo> |is valid to occur| <occurrence> |time(s) for| <Hierarchy Level Descriptor> |in| <name of valid model> |.|
 #
 # To define Conditional Validators the following syntax exists:
 #
-# |MetaInfo| <name of MetaInfo> |must occur| <occurrence> |time(s) for| <Hierarchy Level Descriptor> |in| <name of valid model> |if| <name of condition file> |is true.|
+# |MetaInfo| <name of MetaInfo> |is valid to occur| <occurrence> |time(s) for| <Hierarchy Level Descriptor> |in| <name of valid model> |if| <name of condition file> |is true.|
 #
 # A condition file is a separate file (located relatively to its validation file)
 # that contains one or more conditions in one or more condition blocks
@@ -48,7 +48,7 @@
 # because the failing condition shows the irrelevance of this validator.
 #
 
-|MetaInfo| extends     |must occur| 0-1 |time(s) for| classes    |in| DemoModel |.| # optional metainfo. but if present only once is allowed
+|MetaInfo| extends     |is valid to occur| 0-1 |time(s) for| classes    |in| DemoModel |.| # optional metainfo. but if present only once is allowed
 
 |MetaInfo| extends     |is| optional            |for| classes    |in| DemoModel |.|
 |MetaInfo| implements  |is| optional            |for| classes    |in| DemoModel |.|
@@ -57,5 +57,5 @@
 |MetaInfo| MinLength   |is| optional            |for| attributes |in| DemoModel |.|
 |MetaInfo| MaxLength   |is| optional            |for| attributes |in| DemoModel |.|
 
-|MetaInfo| Mandatory   |must occur| 0   |time(s) for| attributes |in| DemoModel |.| # optional - alternatively defined as optional validator
-|MetaInfo| ExampleData |must occur| 1   |time(s) for| attributes |in| DemoModel |.| # must occur exactly once - alternatively defined as mandatory validator
+|MetaInfo| Mandatory   |is valid to occur| any |time(s) for| attributes |in| DemoModel |.| # optional - alternatively defined as optional validator
+|MetaInfo| ExampleData |is valid to occur| 1   |time(s) for| attributes |in| DemoModel |.| # must occur exactly once - alternatively defined as mandatory validator

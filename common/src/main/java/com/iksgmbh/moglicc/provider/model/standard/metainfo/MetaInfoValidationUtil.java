@@ -37,7 +37,7 @@ public class MetaInfoValidationUtil {
 	public static final String FOR_IDENTIFIER = "|for|";
 	public static final String TIMES_FOR_IDENTIFIER = "|time(s) for|";
 	public static final String IN_IDENTIFIER = "|in|";
-	public static final String OCCURS_IDENTIFIER = "|must occur|";
+	public static final String OCCURS_IDENTIFIER = "|is valid to occur|";
 	public static final String IF_IDENTIFIER = "|if|";
 	public static final String TRUE_IDENTIFIER = "|is true.|";
 	public static final String DOT_IDENTIFIER = "|.|";

@@ -75,6 +75,11 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	private InfrastructureService infrastructure;
 	private IOEncodingHelper encodingHelper;
 	private String testDir = "";
+	private int generationCounter = 0;
+	private int artefactCounter;
+	private StringBuffer generationReport = new StringBuffer(PLUGIN_ID
+			                                                 + " has done work for following artefacts:"
+			                                                 + FileUtil.getSystemLineSeparator());
 
 	@Override
 	public PluginType getPluginType() {
@@ -127,7 +132,34 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 				                                      infrastructure.getPluginLogger()));
 		writeFilesIntoPluginOutputDir(resultList, artefact);
 		writeFilesIntoTemplateTargetDir(resultList);
+		generateReportLines(resultList, artefact);
 		infrastructure.getPluginLogger().logInfo(resultList.size() + " files for artefact '" + artefact + "' created!");
+	}
+
+	private void generateReportLines(final List<VelocityGeneratorResultData> resultList, final String artefact) {
+		artefactCounter++;
+		generationReport.append(FileUtil.getSystemLineSeparator());
+		generationReport.append("   Reports for artefact '");
+		generationReport.append(artefact);
+		generationReport.append("':");
+		generationReport.append(FileUtil.getSystemLineSeparator());
+
+		for (final VelocityGeneratorResultData resultData : resultList) {
+			generationCounter++;
+			if (resultData.wasExistingTargetPreserved()) {
+				generationReport.append("      ");
+				generationReport.append(resultData.getTargetFileName());
+				generationReport.append(" did already exist and was NOT overwritten in ");
+				generationReport.append(resultData.getTargetDir());
+				generationReport.append(FileUtil.getSystemLineSeparator());
+			} else {
+				generationReport.append("      ");
+				generationReport.append(resultData.getTargetFileName());
+				generationReport.append(" was created in ");
+				generationReport.append(resultData.getTargetDir());
+				generationReport.append(FileUtil.getSystemLineSeparator());
+			}
+		}
 	}
 
 	private void validate(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException {
@@ -157,6 +189,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 				}
 			} else {
 				infrastructure.getPluginLogger().logWarning("Target file " + outputFile.getAbsolutePath() + " exists and will not overwritten!");
+				resultData.setExistingTargetPreserved(true);
 			}
 		}
 	}
@@ -270,6 +303,16 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		return true;
 	}
 
+	@Override
+	public String getGenerationReport() {
+		return generationReport.toString().trim();
+	}
+
+	@Override
+	public int getNumberOfGenerations() {
+		return generationCounter;
+	}
+
 	/**
 	 * FOR TEST PURPOSE ONLY
 	 */
@@ -282,6 +325,11 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	 */
 	public IOEncodingHelper getEncodingHelper() {
 		return encodingHelper;
+	}
+
+	@Override
+	public int getNumberOfArtefacts() {
+		return artefactCounter;
 	}
 
 }

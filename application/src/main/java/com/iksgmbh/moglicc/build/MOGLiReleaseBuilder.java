@@ -99,6 +99,7 @@ public class MOGLiReleaseBuilder {
 			Properties buildProperties = new Properties();
 			FileInputStream fileInputStream = new FileInputStream(propertiesPath);
 			buildProperties.load(fileInputStream);
+			fileInputStream.close();
 			return buildProperties;
 		} else {
 			throw new FileNotFoundException("Properties File not found: " + propertiesFile.getAbsolutePath());
@@ -118,14 +119,16 @@ public class MOGLiReleaseBuilder {
 			ReleaseFileCollector.doYourJob(createFileCollectionData());
 			buildReleaseZipFile();
 			if (! isTestRun()) copyReleaseToArchive();
+			VersionReplacer.doYourJob(getVersion(VERSION_TYPE.Release), getVersion(VERSION_TYPE.Next), pomFiles);
 		} else {
-			System.out.println(result);
-			System.out.println("###########################################");
+			System.out.println("");
+			System.out.println("###########################################################################");
+			System.out.println("");
+			System.out.println("Restore poms to current snapshot version due to error...");
+			VersionReplacer.doYourJob(getVersion(VERSION_TYPE.Release), getVersion(VERSION_TYPE.Current), pomFiles);
 			System.err.println("Terminated due to Maven Failure!");
 			toReturn = false;
 		}
-		VersionReplacer.doYourJob(getVersion(VERSION_TYPE.Release),
-                                     getVersion(VERSION_TYPE.Next), pomFiles);
 		return toReturn;
 	}
 

@@ -34,7 +34,7 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute);
 
 		// call functionality under test
-		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result);
@@ -49,7 +49,7 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute);
 
 		// call functionality under test
-		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result);
@@ -64,7 +64,7 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute);
 
 		// call functionality under test
-		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertTrue("Validation failed!", result);
@@ -79,7 +79,7 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute);
 
 		// call functionality under test
-		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertFalse("Validation failed!", result);
@@ -93,7 +93,7 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute);
 
 		// call functionality under test
-		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertFalse("Validation failed!", result);
@@ -108,7 +108,7 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 				                                                                           .withHierarchyLevel(HierarchyLevel.Attribute);
 
 		// call functionality under test
-		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList, HierarchyLevel.Attribute);
+		final boolean result = getValidator(metaInfoValidationData).validate(metaInfoList);
 
 		// verify test result
 		assertFalse("Validation failed!", result);
@@ -118,7 +118,7 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 	@Test
 	public void throwsExceptionForMinOccursGreaterThanMaxOccurs() {
 		// prepare test
-		final MetaInfoValidationData metaInfoValidationData = new  MetaInfoValidationData().withMinOccurs(1);
+		final MetaInfoValidationData metaInfoValidationData = new MetaInfoValidationData().withMinOccurs(1);
 
 		// call functionality under test
 		try {
@@ -129,6 +129,22 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 		}
 	}
 
+	@Test
+	public void validatesFalseForMaxOccur0() {
+		// prepare test
+		final MetaInfoValidationData metaInfoValidationData = new MetaInfoValidationData().withMetaInfoName("singleMetaInfo")
+				                                                     .withOccurrence("0").withHierarchyLevel(HierarchyLevel.Attribute);
+		
+		final ConditionalMetaInfoValidator validator = getValidator(metaInfoValidationData);
+
+		// call functionality under test
+		final boolean result = validator.validate(metaInfoList);
+
+		assertFalse("Validation failed!", result);
+		assertEquals("error message", "MetaInfo 'singleMetaInfo' was found too many times (expected: 0, actual: 1)", validator.getValidationErrorMessage());
+
+	}
+	
 	@Test
 	public void throwsExceptionForConditionsWithMinOccurs0() {
 		// prepare test

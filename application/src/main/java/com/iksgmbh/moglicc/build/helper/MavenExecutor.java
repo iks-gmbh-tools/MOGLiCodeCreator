@@ -48,5 +48,12 @@ public class MavenExecutor {
 			this.parentBuildDir = parentBuildDir;
 		}
 	}
+	
+	public static void main(String[] args) {
+		File parentBuildDir = new File("C:/dev/eclipse/workspaces/mogli/parent");
+		MavenData data = new MavenData("clean install", "C:/dev/maven/apache-maven-3.0.4", parentBuildDir );
+		MavenExecutor.doYourJob(data);
+		//new MavenExecutor(data).callMaven();
+	}
 
 }

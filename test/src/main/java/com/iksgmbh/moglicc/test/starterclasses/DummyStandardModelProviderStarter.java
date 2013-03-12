@@ -60,4 +60,9 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 		return false;
 	}
 
+	@Override
+	public String getModelName() {
+		return null;
+	}
+
 }
