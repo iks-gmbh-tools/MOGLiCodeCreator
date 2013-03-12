@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -375,25 +376,25 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		String actualFileContent = MOGLiFileUtil.getFileContent(file);
 		assertStringEquals("file content", "ßäüöÄÜÖ", actualFileContent);
 	}
-	
+
 	@Test
 	public void returnsMetaInfoValidatorList() throws MOGLiPluginException {
 		// prepare test
 		final File conditionFile = new File(velocityClassBasedGenerator.getMOGLiInfrastructure().getPluginInputDir(), "condition.txt");
 		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| The \"other\" MetaInfo Name1 |exists.|"
-													          + FileUtil.getSystemLineSeparator() + 
-													          "|if MetaInfo| The \"other\" MetaInfo Name2 |does not exist.|" 				
-													          + FileUtil.getSystemLineSeparator() + 
+													          + FileUtil.getSystemLineSeparator() +
+													          "|if MetaInfo| The \"other\" MetaInfo Name2 |does not exist.|"
+													          + FileUtil.getSystemLineSeparator() +
 													          "|if MetaInfo| The \"other\" MetaInfo Name3 |with value| my value |does not exist.|" );
-		
+
         final File validatorFile = new File(velocityClassBasedGenerator.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
-		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|" 
-				                                             + FileUtil.getSystemLineSeparator() + 
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|"
+				                                             + FileUtil.getSystemLineSeparator() +
 				                                             "|MetaInfo| MetaInfoTestName2 |is| mandatory |for| attributes |in| ModelName |.|"
-				                                             + FileUtil.getSystemLineSeparator() + 
-				                                             "|MetaInfo| MetaInfoTestName3 |must occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
-				                                             + FileUtil.getSystemLineSeparator() + 
-				                                             "|MetaInfo| MetaInfoTestName4 |must occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
+				                                             + FileUtil.getSystemLineSeparator() +
+				                                             "|MetaInfo| MetaInfoTestName3 |is valid to occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
+				                                             + FileUtil.getSystemLineSeparator() +
+				                                             "|MetaInfo| MetaInfoTestName4 |is valid to occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
 
 		// call functionality under test
 		final List<MetaInfoValidator> metaInfoValidatorList = velocityClassBasedGenerator.getMetaInfoValidatorList();
@@ -407,12 +408,12 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	public void throwsExceptionIfConditionFileWasNotFound() throws MOGLiPluginException {
 		// prepare test
         final File validatorFile = new File(velocityClassBasedGenerator.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
-		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|" 
-				                                             + FileUtil.getSystemLineSeparator() + 
-				                                             "|MetaInfo| MetaInfoTestName4 |must occur| 1-2 |time(s) for| attributes |in| ModelName |if| notExistingConditionFile.txt |is true.|" );
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|"
+				                                             + FileUtil.getSystemLineSeparator() +
+				                                             "|MetaInfo| MetaInfoTestName4 |is valid to occur| 1-2 |time(s) for| attributes |in| ModelName |if| notExistingConditionFile.txt |is true.|" );
 
 		// call functionality under test
-		try {			
+		try {
 			velocityClassBasedGenerator.getMetaInfoValidatorList();
 			fail("Expected exception not thrown!");
 		} catch (MOGLiPluginException e) {
@@ -421,4 +422,25 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		}
 	}
 
+	@Test
+	public void returnsListOfGeneratedArtefact() throws MOGLiPluginException, IOException {
+		// prepare test
+		FileUtil.deleteFiles(applicationTempDir.listFiles());
+		final List<VelocityGeneratorResultData> resultDataList = new ArrayList<VelocityGeneratorResultData>();
+		VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData("targetFile1.txt", "temp", "Content", true);
+		resultDataList.add(resultData);
+		resultData = buildVelocityGeneratorResultData("targetFile2.java", "temp", "Content", false);
+		resultDataList.add(resultData);
+		resultData = buildVelocityGeneratorResultData("targetFile3.java", "temp", "Content", true);
+		resultDataList.add(resultData);
+		velocityEngineProvider.setVelocityGeneratorResultDataList(resultDataList);
+
+		// call functionality under test
+		velocityClassBasedGenerator.doYourJob();
+
+		// verify test result
+		final String report = velocityClassBasedGenerator.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReport.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
 }

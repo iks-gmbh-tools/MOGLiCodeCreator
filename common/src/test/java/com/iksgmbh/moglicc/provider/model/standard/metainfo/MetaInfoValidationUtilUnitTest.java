@@ -358,7 +358,7 @@ public class MetaInfoValidationUtilUnitTest {
 	@Test
 	public void failsToParseMetaInfoValidatorDueToIncorrectTimesForIdentifier() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |must occur| 1 |time(s for| attributes  |in| Model |iff| condition1.txt |is true|";
+		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s for| attributes  |in| Model |iff| condition1.txt |is true|";
 
 		try {
 			// call functionality under test
@@ -367,14 +367,14 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "Cannot parse occurence for MetaInfoValidator <|MetaInfo| Name |must occur| 1 |time(s for| attributes  |in| Model |iff| condition1.txt |is true|>", e.getMessage());
+			assertEquals("Error message", "Cannot parse occurence for MetaInfoValidator <|MetaInfo| Name |is valid to occur| 1 |time(s for| attributes  |in| Model |iff| condition1.txt |is true|>", e.getMessage());
 		}
 	}
 
 	@Test
 	public void failsToParseMetaInfoValidatorDueToIncorrectInIdentifier() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |must occur| 1 |time(s) for| attributes in| Model |iff| condition1.txt |is true|";
+		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes in| Model |iff| condition1.txt |is true|";
 
 		try {
 			// call functionality under test
@@ -383,14 +383,14 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "Cannot parse HierarchyLevel for MetaInfoValidator <|MetaInfo| Name |must occur| 1 |time(s) for| attributes in| Model |iff| condition1.txt |is true|>", e.getMessage());
+			assertEquals("Error message", "Cannot parse HierarchyLevel for MetaInfoValidator <|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes in| Model |iff| condition1.txt |is true|>", e.getMessage());
 		}
 	}
 
 	@Test
 	public void failsToParseMetaInfoValidatorDueToIncorrectConditionIdentifier() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |must occur| 1 |time(s) for| attributes  |in| Model |iff| condition1.txt |is true|";
+		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes  |in| Model |iff| condition1.txt |is true|";
 
 		try {
 			// call functionality under test
@@ -399,14 +399,14 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "Either |if|-Identifier is wrong or MetaInfoValidator without condition does not end with |.|: <|MetaInfo| Name |must occur| 1 |time(s) for| attributes  |in| Model |iff| condition1.txt |is true|>", e.getMessage());
+			assertEquals("Error message", "Either |if|-Identifier is wrong or MetaInfoValidator without condition does not end with |.|: <|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes  |in| Model |iff| condition1.txt |is true|>", e.getMessage());
 		}
 	}
 
 	@Test
 	public void failsToParseMetaInfoValidatorDueToMissingCondition() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |must occur| 1 |time(s) for| attributes  |in| Model |if|  ";
+		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes  |in| Model |if|  ";
 
 		try {
 			// call functionality under test
@@ -415,14 +415,14 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "Condition of MetaInfoValidator must end with |is true.|: <|MetaInfo| Name |must occur| 1 |time(s) for| attributes  |in| Model |if|>", e.getMessage());
+			assertEquals("Error message", "Condition of MetaInfoValidator must end with |is true.|: <|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes  |in| Model |if|>", e.getMessage());
 		}
 	}
 
 	@Test
 	public void returnsMetaInfoValidatorFromLineForConditionalValidatorWithoutConditionFile() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| N a \" m e |must occur| 1 |time(s) for| attributes |in| ModelName |.|";
+		final String inputLine = "|MetaInfo| N a \" m e |is valid to occur| 1 |time(s) for| attributes |in| ModelName |.|";
 
 		// call functionality under test
 		final MetaInfoValidator validator = MetaInfoValidationUtil.parseValidatorLine(inputLine);
@@ -430,7 +430,7 @@ public class MetaInfoValidationUtilUnitTest {
 		// verify test result
 		assertNotNull("Not null expected", validator);
 		assertEquals("MetaInfoName", "N a \" m e", validator.getMetaInfoName());
-		assertEquals("ValidationType", "Conditional", validator.getValidationType().toString());
+		assertEquals("ValidationType", "NumOccur", validator.getValidationType().toString());
 		assertEquals("HierarchyLevel", "Attribute", validator.getMetaInfoHierarchyLevel().toString());
 		assertEquals("nameOfValidModel", "ModelName", validator.getNameOfValidModel());
 
@@ -442,7 +442,7 @@ public class MetaInfoValidationUtilUnitTest {
 	@Test
 	public void returnsMetaInfoValidatorFromLineForConditionalValidatorWithConditionFile() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |must occur| 1 |time(s) for| attributes |in| ModelName |if| test.txt |is true.|";
+		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes |in| ModelName |if| test.txt |is true.|";
 
 		// call functionality under test
 		final MetaInfoValidator validator = MetaInfoValidationUtil.parseValidatorLine(inputLine);
@@ -463,7 +463,7 @@ public class MetaInfoValidationUtilUnitTest {
 	@Test
 	public void failsToParseMetaInfoValidatorDueToMissingDotIdendifier() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |must occur| 1 |time(s) for| attributes  |in| Model ";
+		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes  |in| Model ";
 
 		try {
 			// call functionality under test
@@ -472,14 +472,14 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "Either |if|-Identifier is wrong or MetaInfoValidator without condition does not end with |.|: <|MetaInfo| Name |must occur| 1 |time(s) for| attributes  |in| Model>", e.getMessage());
+			assertEquals("Error message", "Either |if|-Identifier is wrong or MetaInfoValidator without condition does not end with |.|: <|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes  |in| Model>", e.getMessage());
 		}
 	}
 
 	@Test
 	public void failsToParseMetaInfoValidatorDueToMissingTrueSetting() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |must occur| 1 |time(s) for| attributes  |in| Model |if| text.txt";
+		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes  |in| Model |if| text.txt";
 
 		try {
 			// call functionality under test
@@ -488,7 +488,7 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "Condition of MetaInfoValidator must end with |is true.|: <|MetaInfo| Name |must occur| 1 |time(s) for| attributes  |in| Model |if| text.txt>", e.getMessage());
+			assertEquals("Error message", "Condition of MetaInfoValidator must end with |is true.|: <|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes  |in| Model |if| text.txt>", e.getMessage());
 		}
 	}
 
@@ -602,7 +602,7 @@ public class MetaInfoValidationUtilUnitTest {
 	@Test
 	public void returnsErrorWhenMetaInfoNameIsMissing() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| |must occur| 1 |time(s) for| attributes |in| ModelName |.|";
+		final String inputLine = "|MetaInfo| |is valid to occur| 1 |time(s) for| attributes |in| ModelName |.|";
 
 		try {
 			// call functionality under test
@@ -611,14 +611,14 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "No MetaInfoName defined for MetaInfoValidator <|MetaInfo| |must occur| 1 |time(s) for| attributes |in| ModelName |.|>", e.getMessage());
+			assertEquals("Error message", "No MetaInfoName defined for MetaInfoValidator <|MetaInfo| |is valid to occur| 1 |time(s) for| attributes |in| ModelName |.|>", e.getMessage());
 		}
 	}
 
 	@Test
 	public void returnsErrorWhenOccurenceIsMissing() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo|MetaInfoName|must occur||time(s) for| attributes |in| ModelName |.|";
+		final String inputLine = "|MetaInfo|MetaInfoName|is valid to occur||time(s) for| attributes |in| ModelName |.|";
 
 		try {
 			// call functionality under test
@@ -627,14 +627,14 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "No occurence defined for MetaInfoValidator <|MetaInfo|MetaInfoName|must occur||time(s) for| attributes |in| ModelName |.|>", e.getMessage());
+			assertEquals("Error message", "No occurence defined for MetaInfoValidator <|MetaInfo|MetaInfoName|is valid to occur||time(s) for| attributes |in| ModelName |.|>", e.getMessage());
 		}
 	}
 
 	@Test
 	public void returnsErrorWhenHierarchyLevelIsUnkown() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| MetaInfoName |must occur| 1 |time(s) for| attribu |in| ModelName |.|";
+		final String inputLine = "|MetaInfo| MetaInfoName |is valid to occur| 1 |time(s) for| attribu |in| ModelName |.|";
 
 		try {
 			// call functionality under test
@@ -650,7 +650,7 @@ public class MetaInfoValidationUtilUnitTest {
 	@Test
 	public void returnsErrorWhenModelNameIMissing() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| MetaInfoName |must occur| 1 |time(s) for| attributes |in| |.|";
+		final String inputLine = "|MetaInfo| MetaInfoName |is valid to occur| 1 |time(s) for| attributes |in| |.|";
 
 		try {
 			// call functionality under test
@@ -659,7 +659,7 @@ public class MetaInfoValidationUtilUnitTest {
 		} catch (Exception e) {
 
 			// verify test result
-			assertEquals("Error message", "No Model Name defined for MetaInfoValidator <|MetaInfo| MetaInfoName |must occur| 1 |time(s) for| attributes |in| |.|>", e.getMessage());
+			assertEquals("Error message", "No Model Name defined for MetaInfoValidator <|MetaInfo| MetaInfoName |is valid to occur| 1 |time(s) for| attributes |in| |.|>", e.getMessage());
 		}
 	}
 
@@ -746,7 +746,7 @@ public class MetaInfoValidationUtilUnitTest {
 	@Test
 	public void returnsMetaInfoValidatorFromLineForConditionalValidatorWithValueAndConditionFile() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |with value| Value |must occur| 4 |time(s) for| attributes |in| ModelName |if| test.txt |is true.|";
+		final String inputLine = "|MetaInfo| Name |with value| Value |is valid to occur| 4 |time(s) for| attributes |in| ModelName |if| test.txt |is true.|";
 
 		// call functionality under test
 		final MetaInfoValidator validator = MetaInfoValidationUtil.parseValidatorLine(inputLine);
@@ -768,7 +768,7 @@ public class MetaInfoValidationUtilUnitTest {
 	@Test
 	public void returnsMetaInfoValidatorFromLineForConditionalValidatorWithValue() throws MOGLiPluginException {
 		// prepare test
-		final String inputLine = "|MetaInfo| Name |with value| Value |must occur| 3-8 |time(s) for| attributes |in| ModelName |.|";
+		final String inputLine = "|MetaInfo| Name |with value| Value |is valid to occur| 3-8 |time(s) for| attributes |in| ModelName |.|";
 
 		// call functionality under test
 		final MetaInfoValidator validator = MetaInfoValidationUtil.parseValidatorLine(inputLine);
@@ -776,7 +776,7 @@ public class MetaInfoValidationUtilUnitTest {
 		// verify test result
 		assertNotNull("Not null expected", validator);
 		assertEquals("MetaInfoName", "Name", validator.getMetaInfoName());
-		assertEquals("ValidationType", "Conditional", validator.getValidationType().toString());
+		assertEquals("ValidationType", "NumOccur", validator.getValidationType().toString());
 		assertEquals("HierarchyLevel", "Attribute", validator.getMetaInfoHierarchyLevel().toString());
 		assertEquals("nameOfValidModel", "ModelName", validator.getNameOfValidModel());
 

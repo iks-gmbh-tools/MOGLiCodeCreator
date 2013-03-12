@@ -13,5 +13,6 @@ import com.iksgmbh.moglicc.provider.model.standard.Model;
 public interface ModelProvider extends MOGLiPlugin {
 
 	Model getModel() throws MOGLiPluginException;
+	String getModelName();
 
 }

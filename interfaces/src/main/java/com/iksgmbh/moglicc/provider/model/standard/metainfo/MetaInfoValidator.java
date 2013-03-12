@@ -21,7 +21,7 @@ public interface MetaInfoValidator {
 
 	ValidationType getValidationType();
 
-	boolean validate(final List<MetaInfo> metaInfoList, final HierarchyLevel hierarchyLevel);
+	boolean validate(final List<MetaInfo> metaInfoList);
 
 	String getValidationErrorMessage();
 
@@ -37,4 +37,8 @@ public interface MetaInfoValidator {
 	 * @return name of model for which this validator is valid
 	 */
 	String getNameOfValidModel();
+	
+	boolean isValidatorValidForHierarchyLevel(final HierarchyLevel currentHierarchyLevel);
+	boolean isValidatorValidForModel(final String nameOfCurrentModel);
+
 }

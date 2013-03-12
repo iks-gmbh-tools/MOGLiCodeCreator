@@ -60,7 +60,10 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 
 		if (buildReleaseBeforeTesting) {
 			boolean ok = releaseBuilder.doYourJob();
-			if (! ok) System.exit(1);
+			if (! ok) {
+				System.err.println("ERROR building release candidate. No tests executed. JVM terminated.");
+				System.exit(1);
+			}
 		}
 
 		prepareTestDir();
@@ -162,6 +165,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 			testProperties = new Properties();
 			final FileInputStream fileInputStream = new FileInputStream(propertiesPath);
 			testProperties.load(fileInputStream);
+			fileInputStream.close();
 		} else {
 			System.out.println("Properties File not found: " + propertiesPath);
 		}
@@ -183,6 +187,7 @@ public class _AbstractSystemTest extends ApplicationTestParent {
 			buildProperties = new Properties();
 			final FileInputStream fileInputStream = new FileInputStream(propertiesPath);
 			buildProperties.load(fileInputStream);
+			fileInputStream.close();
 		} else {
 			System.out.println("Properties File not found: " + propertiesPath);
 		}

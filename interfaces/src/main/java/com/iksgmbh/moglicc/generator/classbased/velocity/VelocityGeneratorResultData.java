@@ -33,10 +33,19 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	String getTargetFileName();
 
 	/**
-	 * Provides information whether target file has to be overwritten
+	 * Provides information whether target file has to be overwritten if existing
 	 * @return false if target file must remain untouched
 	 */
 	boolean isTargetToBeCreatedNewly();
+
+	/**
+	 * Provides information whether or not the target file has not been overwritten.
+	 * @return false either if target file was not existent (and was newly created)
+	 *               or was overwritten because isTargetToBeCreatedNewly has returned true
+	 */
+	boolean wasExistingTargetPreserved();
+
+	void setExistingTargetPreserved(boolean existingTargetPreserved);
 
 	/**
 	 * For null the underlying template is valid -> per default a template is applied to all models.

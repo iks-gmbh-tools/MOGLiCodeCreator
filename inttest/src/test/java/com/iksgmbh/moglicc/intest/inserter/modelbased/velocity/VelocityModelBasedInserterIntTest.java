@@ -1,6 +1,7 @@
 package com.iksgmbh.moglicc.intest.inserter.modelbased.velocity;
 
 import static org.junit.Assert.assertEquals;
+import static com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityModelBasedInserterStarter.*;
 
 import java.io.File;
 import java.util.List;
@@ -26,19 +27,19 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 
 		// verify test result in plugin directory
 		final InfrastructureService infrastructure = velocityModelBasedInserterStarter.getMOGLiInfrastructure();
-		File file = new File(infrastructure.getPluginOutputDir(), "BeanFactoryClass/BeanFactory.java");
+		File file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
 		assertFileExists(file);
-		file = new File(infrastructure.getPluginOutputDir(), "BeanFactoryInsertAboveTemplate/BeanFactory.java");
+		file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
 		assertFileExists(file);
-		file = new File(infrastructure.getPluginOutputDir(), "BeanFactoryInsertBelowTemplate/BeanFactory.java");
+		file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
 		assertFileExists(file);
-		file = new File(infrastructure.getPluginOutputDir(), "BeanFactoryReplaceTemplate/BeanFactory.java");
+		file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
 		assertFileExists(file);
 				
 		// verify test result in target directory read from template file
 		file = new File(applicationRootDir + "/example", "BeanFactory.java");
 		List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
-		assertEquals("Line number", 26, fileContentAsList.size());
+		assertEquals("Line number", 28, fileContentAsList.size());
 	}
 	
 	@Test

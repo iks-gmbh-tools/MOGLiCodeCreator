@@ -27,7 +27,7 @@ public class OptionalMetaInfoValidator extends MetaInfoValidatorParent {
 	}
 
 	@Override
-	public boolean validate(final List<MetaInfo> metaInfoList, final HierarchyLevel hierarchyLevel) {
+	public boolean validate(final List<MetaInfo> metaInfoList) {
 		for (final MetaInfo metaInfo : metaInfoList) {
 			if (metaInfo.getHierarchyLevel() == metaInfoHierarchyLevel
 				&& metaInfo.getName().equals(metaInfoName)) {

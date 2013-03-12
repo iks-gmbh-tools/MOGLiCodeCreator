@@ -1,0 +1,45 @@
+*******************************   R E S U L T   ******************************* 
+
+All 4 plugins executed successfully on model 'DemoModel' in workspace <../inttest/target/TestDir>.
+24 generations for 6 artefacts have been performed.
+
+VelocityClassBasedGenerator has done work for following artefacts:
+
+   Reports for artefact 'MOGLiJavaBean':
+      Person.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      Member.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      Address.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      Misc.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+
+   Reports for artefact 'MOGLiJavaBeanBuilder':
+      PersonBuilder.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      MemberBuilder.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      AddressBuilder.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      MiscBuilder.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+
+   Reports for artefact 'MOGLiJavaBeanTest':
+      PersonUnitTest.java was created in C:/Temp/MogliCodeCreator/_Demo/src/test/java/<package>
+      MemberUnitTest.java was created in C:/Temp/MogliCodeCreator/_Demo/src/test/java/<package>
+      AddressUnitTest.java was created in C:/Temp/MogliCodeCreator/_Demo/src/test/java/<package>
+      MiscUnitTest.java was created in C:/Temp/MogliCodeCreator/_Demo/src/test/java/<package>
+
+   Reports for artefact 'MOGLiJavaBeanValidator':
+      PersonValidator.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      MemberValidator.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      AddressValidator.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+      MiscValidator.java was created in C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+
+   Reports for artefact 'MOGLiJavaBeanValidatorTest':
+      PersonValidatorUnitTest.java was created in C:/Temp/MogliCodeCreator/_Demo/src/test/java/<package>
+      MemberValidatorUnitTest.java was created in C:/Temp/MogliCodeCreator/_Demo/src/test/java/<package>
+      AddressValidatorUnitTest.java was created in C:/Temp/MogliCodeCreator/_Demo/src/test/java/<package>
+      MiscValidatorUnitTest.java was created in C:/Temp/MogliCodeCreator/_Demo/src/test/java/<package>
+
+
+VelocityModelBasedInserter has done work for following artefacts:
+
+   Reports for artefact 'BeanFactory':
+      BeanFactory.java was created in <applicationRootDir>/example
+      inserted by a above-instruction into BeanFactory.java in directory <applicationRootDir>/example
+      inserted by a below-instruction into BeanFactory.java in directory <applicationRootDir>/example
+      inserted by a replace-instruction into BeanFactory.java in directory <applicationRootDir>/example

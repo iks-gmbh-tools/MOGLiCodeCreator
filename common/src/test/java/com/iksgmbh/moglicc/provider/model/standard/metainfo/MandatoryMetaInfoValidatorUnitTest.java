@@ -21,24 +21,11 @@ public class MandatoryMetaInfoValidatorUnitTest {
 		final List<MetaInfo> metaInfoList = buildMetaInfoList(HierarchyLevel.Model, 2);
 
 		// call functionality under test
-		boolean result = validator.validate(metaInfoList, HierarchyLevel.Model);
+		boolean result = validator.validate(metaInfoList);
 		
 		// verify test result
 		assertTrue("Validation failed!", result);
 		assertEquals("Error message", null, validator.getValidationErrorMessage());
-	}
-
-	@Test
-	public void validatesWithoutErrorBecauseWrongHierarchyLevel() {
-		// prepare test
-		final MandatoryMetaInfoValidator validator = new MandatoryMetaInfoValidator("MetaInfo1", HierarchyLevel.Class);
-		final List<MetaInfo> metaInfoList = buildMetaInfoList(HierarchyLevel.Model, 2);
-
-		// call functionality under test
-		boolean result = validator.validate(metaInfoList, HierarchyLevel.Model);
-		
-		// verify test result
-		assertTrue("Validation failed!", result);
 	}
 	
 	@Test
@@ -48,7 +35,7 @@ public class MandatoryMetaInfoValidatorUnitTest {
 		final List<MetaInfo> metaInfoList = buildMetaInfoList(HierarchyLevel.Model, 2);
 
 		// call functionality under test
-		boolean result = validator.validate(metaInfoList, HierarchyLevel.Model);
+		boolean result = validator.validate(metaInfoList);
 		
 		// verify test result
 		assertFalse("Validation failed!", result);

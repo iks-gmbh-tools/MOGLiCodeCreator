@@ -13,6 +13,7 @@ import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
+import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
@@ -121,7 +122,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| MinOccurs |does not exist.|" );   // false because MinOccurs does exist
 
         final File validatorFile = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
-		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |must occur| 1 |time(s) for| " +
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
 				                                              "classes |in| TestModel |if| condition.txt |is true.|" );  // should fail - Nullable does not exist
 
 		// TEST 1: validation ok - condition is NOT met -> validation of occurrence for Nullable is not performed
@@ -140,7 +141,9 @@ public class StandardModelProviderIntTest extends IntTestParent {
 			fail("Expected exception was not thrown!");
 		} catch (Exception e) {
 			// verify test result
-			assertEquals("Error message", "Error validating MetaInfos. For more information see StandardModelProvider.log", e.getMessage());
+			final String expected = TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator() +
+	                "MetaInfo 'Nullable' was not found for class descriptor 'Testklasse' in model 'TestModel'";
+			assertStringEquals("Error message", expected, e.getMessage());
 		}
 
 
@@ -173,7 +176,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
                                                               "|if MetaInfo| DBLength |exists.|");  // conditions fail - first condition not met
 
         final File validatorFile = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
-		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |must occur| 1 |time(s) for| " +
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
 				                                              "classes |in| TestModel |if| condition.txt |is true.|" );  // should fail - Nullable does not exist
 
 		// TEST 1: validation ok - condition is NOT met -> validation of occurrence for Nullable is not performed
@@ -196,7 +199,9 @@ public class StandardModelProviderIntTest extends IntTestParent {
 			fail("Expected exception was not thrown!");
 		} catch (Exception e) {
 			// verify test result
-			assertEquals("Error message", "Error validating MetaInfos. For more information see StandardModelProvider.log", e.getMessage());
+			final String expected = TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator() +
+	                "MetaInfo 'Nullable' was not found for class descriptor 'Testklasse' in model 'TestModel'";
+			assertStringEquals("Error message", expected, e.getMessage());
 		}
 
 		// TEST 3: validation successful because occurrence is validated successful
@@ -232,7 +237,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		                                                      "|if MetaInfo| DBLength |exists.|");  // conditions fails - both return false
 
         final File validatorFile = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
-		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |must occur| 1 |time(s) for| " +
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
 				                                              "classes |in| TestModel |if| condition.txt |is true.|"); // should fail - Nullable does not exist
 
 
@@ -255,7 +260,9 @@ public class StandardModelProviderIntTest extends IntTestParent {
 			fail("Expected exception was not thrown!");
 		} catch (Exception e) {
 			// verify test result
-			assertEquals("Error message", "Error validating MetaInfos. For more information see StandardModelProvider.log", e.getMessage());
+			final String expected = TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator() +
+	                "MetaInfo 'Nullable' was not found for class descriptor 'Testklasse' in model 'TestModel'";
+			assertStringEquals("Error message", expected, e.getMessage());
 		}
 
 		// TEST 3: validation ok - condition is met and occurence for Nullable is successful validated
@@ -289,7 +296,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| MinOccurs |with value| 0 |exists.|"); // condition fails due to wrong value of MinOccurs
 
         final File validatorFile = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
-		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |with value| true |must occur| 1 |time(s) for| " +
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |with value| true |is valid to occur| 1 |time(s) for| " +
 				                                              "classes |in| TestModel |if| condition.txt |is true.|");  // should fails due to wrong value of Nullable
 
 		// TEST 1: validation ok - condition is NOT met -> validation of occurrence and value for Nullable is not performed
@@ -306,14 +313,15 @@ public class StandardModelProviderIntTest extends IntTestParent {
 												          + FileUtil.getSystemLineSeparator() +
 												          "MetaInfo MinOccurs 0");
 
-		// call functionality under test
 		try {
 			// call functionality under test
 			standardModelProviderStarter.doYourJob();
 			fail("Expected exception was not thrown!");
 		} catch (Exception e) {
 			// verify test result
-			assertEquals("Error message", "Error validating MetaInfos. For more information see StandardModelProvider.log", e.getMessage());
+			final String expected = TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator() +
+	                "MetaInfo 'Nullable' was not found for class descriptor 'Testklasse' in model 'TestModel'";
+			assertStringEquals("Error message", expected, e.getMessage());
 		}
 
 		// TEST 3: validation ok - condition is met and occurence for Nullable is successful validated
@@ -331,4 +339,81 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		// verify test result: no exception
 	}
 
+	@Test
+	public void validatesModelWithErrorBecauseForbiddenMetainfoExist() throws Exception {
+		// prepare test
+		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		
+		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
+				                                          + FileUtil.getSystemLineSeparator() +
+				                                          "class de.Testklasse "
+												          + FileUtil.getSystemLineSeparator() +
+												          "MetaInfo Nullable false");
+
+        final File validatorFile = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+        		                            MetaInfoValidationUtil.FILENAME_VALIDATION);
+        
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |with value| false |is valid to occur| 0 |time(s) for| " +
+				                                              "classes |in| TestModel |.|");  // should fails due to wrong value of Nullable
+
+		try {
+			// call functionality under test
+			standardModelProviderStarter.doYourJob();
+			fail("Expected exception was not thrown!");
+		} catch (Exception e) {
+			// verify test result
+			final String expected = TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator() +
+	                "MetaInfo 'Nullablewith value 'false'' was found too many times (expected: 0, actual: 1) for class descriptor 'Testklasse' in model 'TestModel'";
+			assertStringEquals("Error message", expected, e.getMessage());
+		}
+	}
+
+	@Test
+	public void doesNotValidateBecauseHierarcyLevelMismatch() {
+		// prepare test
+		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		
+		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
+				                                          + FileUtil.getSystemLineSeparator() +
+				                                          "class de.Testklasse ");
+
+        final File validatorFile = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+        		                            MetaInfoValidationUtil.FILENAME_VALIDATION);
+        
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
+				                                              "attributes |in| TestModel |.|");  // should fails due to missing metatinfo
+
+		// call functionality under test
+		try {
+			standardModelProviderStarter.doYourJob();		
+		} catch (Exception e) {
+			fail("No exception expected");
+		}
+	}
+	
+	@Test
+	public void doesNotValidateBecauseModelMismatch() throws Exception {
+		// prepare test
+		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		
+		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
+				                                          + FileUtil.getSystemLineSeparator() +
+				                                          "class de.Testklasse ");
+
+        final File validatorFile = new File(velocityClassBasedGeneratorStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+        		                            MetaInfoValidationUtil.FILENAME_VALIDATION);
+        
+		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
+				                                              "classes |in| NotExistingModel |.|");  // should fails due to missing metatinfo
+
+		// call functionality under test
+		try {
+			standardModelProviderStarter.doYourJob();		
+		} catch (Exception e) {
+			fail("No exception expected");
+		}
+	}	
 }

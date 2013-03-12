@@ -27,8 +27,7 @@ import com.iksgmbh.utils.FileUtil;
 public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInserterTestParent {
 
 	private static final String TARGET_FILE_TXT = "targetFile.txt";
-	private static final String MAIN_TEMPLATE = "BeanFactoryClass.tpl";
-	private static final String ARTEFACT_BEAN_FACTORY = "BeanFactoryClass";
+	private static final String ARTEFACT_BEAN_FACTORY = "BeanFactory";
 
 	private File targetFile;
 	private File generatorPropertiesFile;
@@ -43,30 +42,30 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		targetFile = new File(applicationTempDir, TARGET_FILE_TXT);
 		FileUtil.copyTextFile(sourcefile, targetFile);
 
-		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(),
-	            VelocityModelBasedInserterStarter.PLUGIN_PROPERTIES_FILE);
+		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), VelocityModelBasedInserterStarter.PLUGIN_PROPERTIES_FILE);
 		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
 	}
 
 	@Test
-	public void findsArtefactList() throws MOGLiPluginException {
+	public void findsDefaultArtefactList() throws MOGLiPluginException {
 		// call functionality under test
 		final List<String> artefactList = velocityModelBasedInserter.getArtefactList();
 
 		// verify test result
-		assertEquals("artefact number", 4, artefactList.size());
+		assertEquals("artefact number", 1, artefactList.size());
 	}
 
 	@Test
 	public void throwsExceptionIfMainTemplateIsNotFound() {
 		// prepare test
 		final File artefactDir = new File(infrastructure.getPluginInputDir(), ARTEFACT_BEAN_FACTORY);
-		final File mainTemplateFile = new File(artefactDir, MAIN_TEMPLATE);
-		mainTemplateFile.delete();
+		FileUtil.deleteDirWithContent(artefactDir);
+		assertFileDoesNotExist(artefactDir);
+		artefactDir.mkdirs();
 
 		// call functionality under test
 		try {
-			velocityModelBasedInserter.findMainTemplate(artefactDir);
+			velocityModelBasedInserter.findMainTemplates(artefactDir);
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), TemplateUtil.NO_MAIN_TEMPLATE_FOUND);
 
@@ -76,25 +75,23 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 			return;
 		}
 
+		// cleanup
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+
 		fail("Expected exception not thrown!");
 
 	}
 
 	@Test
-	public void findsMainTemplate() {
+	public void findsDefaultMainTemplates() throws MOGLiPluginException {
 		// prepare test
 		final File artefactDir = new File(infrastructure.getPluginInputDir(), ARTEFACT_BEAN_FACTORY);
 
 		// call functionality under test
-		 String mainTemplate = null;
-		try {
-			mainTemplate = velocityModelBasedInserter.findMainTemplate(artefactDir);
-		} catch (MOGLiPluginException e) {
-			fail(e.getMessage());
-		}
+		 List<String> mainTemplate = velocityModelBasedInserter.findMainTemplates(artefactDir);
 
 		// verify test result
-		assertEquals("Main Template filename", MAIN_TEMPLATE, mainTemplate);
+		assertEquals("Number of Main Templates", 4, mainTemplate.size());
 	}
 
 	@Test
@@ -575,9 +572,9 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 				                                             + FileUtil.getSystemLineSeparator() +
 				                                             "|MetaInfo| MetaInfoTestName2 |is| mandatory |for| attributes |in| ModelName |.|"
 				                                             + FileUtil.getSystemLineSeparator() +
-				                                             "|MetaInfo| MetaInfoTestName3 |must occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
+				                                             "|MetaInfo| MetaInfoTestName3 |is valid to occur| 0-4 |time(s) for| attributes |in| ModelName |.|"
 				                                             + FileUtil.getSystemLineSeparator() +
-				                                             "|MetaInfo| MetaInfoTestName4 |must occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
+				                                             "|MetaInfo| MetaInfoTestName4 |is valid to occur| 1-2 |time(s) for| attributes |in| ModelName |if| condition.txt |is true.|" );
 
 		// call functionality under test
 		final List<MetaInfoValidator> metaInfoValidatorList = velocityModelBasedInserter.getMetaInfoValidatorList();
@@ -586,4 +583,131 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		assertEquals("validator number", 4, metaInfoValidatorList.size());
 		assertEquals("condition number", 3, ((ConditionalMetaInfoValidator)metaInfoValidatorList.get(3)).getTotalNumberOfConditions());
 	}
+
+	private void createFakeArtefactDir() throws Exception {
+		final File testArtefactDir = new File(infrastructure.getPluginInputDir(), "/TestArtefact");
+		testArtefactDir.mkdirs();
+		final File testTemplate = new File(testArtefactDir, "Main.tpl");
+		FileUtil.createNewFileWithContent(testTemplate, "dummy content");
+	}
+
+	@Test
+	public void createsReportForNewlyCreatedArtefact() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("Content",
+				targetDir, TARGET_FILE_TXT,
+				KnownGeneratorPropertyNames.CreateNew.name(), "true");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportCreateNew.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
+	@Test
+	public void createsReportForNotOverwrittenArtefact() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
+		new File(targetDir).mkdirs();
+		final File file = new File(applicationRootDir + "/example", TARGET_FILE_TXT);
+		FileUtil.createNewFileWithContent(file, "content");
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("ContentToInsert",
+				targetDir, TARGET_FILE_TXT,
+				KnownGeneratorPropertyNames.CreateNew.name(), "false");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportNotOverwritten.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
+	@Test
+	public void createsReportForInsertedAboveContent() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("contentToInsert",
+				targetDir, TARGET_FILE_TXT,
+				KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportAboveInsertion.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
+	@Test
+	public void createsReportForInsertedBelowContent() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
+		final VelocityInserterResultData resultData = buildVelocityInserterResultData("contentToInsert",
+				targetDir, TARGET_FILE_TXT,
+				KnownInserterPropertyNames.InsertBelow.name(), "-InsertBelow");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportBelowInsertion.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
+	@Test
+	public void createsReportForReplacedContent() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);
+		createFakeArtefactDir();
+		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
+		final BuildUpVelocityInserterResultData resultData = buildVelocityInserterResultData("contentToInsert",
+				targetDir, TARGET_FILE_TXT,
+				KnownInserterPropertyNames.ReplaceStart.name(), "-ReplaceStart");
+		resultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "-ReplaceEnd");
+		velocityEngineProvider.setVelocityInserterResultData(resultData);  // fake result for the mocked engine plugin
+
+		// call functionality under test
+		velocityModelBasedInserter.doYourJob();
+
+		// clean up
+		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
+
+		// verify test result
+		final String report = velocityModelBasedInserter.getGenerationReport();
+		final File expected = new File(getProjectTestResourcesDir(), "expectedReportReplaceInsertion.txt");
+		assertEquals("report", FileUtil.getFileContent(expected), report);
+	}
+
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationCondition;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationData;
 
@@ -24,9 +23,11 @@ public class ConditionalMetaInfoValidator extends NumOccurMetaInfoValidator {
 	 */
 	private List<List<MetaInfoValidationCondition>> conditionList;
 	private String conditionFilename;
+	
 
 	public ConditionalMetaInfoValidator(final MetaInfoValidationData metaInfoValidationData) {
 		super(metaInfoValidationData);
+		validationType = ValidationType.Conditional;
 
 		conditionList = new ArrayList<List<MetaInfoValidationCondition>>();
 		conditionList.add(metaInfoValidationData.getConditionBlock());
@@ -43,16 +44,11 @@ public class ConditionalMetaInfoValidator extends NumOccurMetaInfoValidator {
 	}
 
 	@Override
-	public boolean validate(final List<MetaInfo> metaInfoList, final HierarchyLevel hierarchyLevel) {
-		if (metaInfoHierarchyLevel != hierarchyLevel) {
-			return true; // this validator does not validate MetaInfo elements of this HierarchyLevel
-		}
-
+	public boolean validate(final List<MetaInfo> metaInfoList) {
 		if (isThereAtleastOneTrueConditionBlock(metaInfoList)) {
 			final int occurences = countOccurences(metaInfoList);
 			final boolean ok = checkOccurrences(occurences);
 			if (! ok) {
-				errorMessage = "Conditions for MetaInfo '" + metaInfoName + "' defined in '" + conditionFilename + "' not met.";
 				return false;
 			}
 		} else {
