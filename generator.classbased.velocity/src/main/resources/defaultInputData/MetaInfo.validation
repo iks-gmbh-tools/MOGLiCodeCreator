@@ -15,9 +15,10 @@
 #
 # |MetaInfo| <name of MetaInfo> |is valid to occur| <occurrence> |time(s) for| <Hierarchy Level Descriptor> |in| <name of valid model> |.|
 #
-# Values for <occurrence> are e.g. "0"   (defines an optional Validator)
-#                                  "1"   (defines an mandatory Validator)
+# Values for <occurrence> are e.g. "0"   (defines a forbidden validator)
+#                                  "1"   (defines an mandatory validator)
 #                                  "0-3" (Minimum and maximum allowed)
+#                                  "any" (defines an optional validator)
 #
 # In addition, a MetaInfo value can be validated with its value:
 #
