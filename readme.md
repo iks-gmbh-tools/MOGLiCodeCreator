@@ -27,7 +27,15 @@ You find the lastest release build under application/releasedBuilds.
 
 License: **All Rights Reserved**
 
-Current version: **1.1.0**
+Current version: **1.2.0**
+
+**Changes to 1.1.0**
+- New Feature: More than one main template possible for the VelocityModelBasedInserter
+- New Feature: Generation of a report file listing all generated artefacts
+- DSL for the MetaInfoValidators improved
+- MetaInfoValidator error messages improved
+- MetaInfoValidator error messages are now written in _MOGLiCC.log
+
 
 **Changes to 1.0.1**
 - New property 'BraceSymbolForMetaInfoValues' for the plugin.properties file of the StandardModelProvider. By replacing the standard symbol Double Quotes <"> by another symbol Double Quotes can be used within names or values of MetaInfos. Detailed Information is available in the default _model.properties file of the StandardModelProvider.

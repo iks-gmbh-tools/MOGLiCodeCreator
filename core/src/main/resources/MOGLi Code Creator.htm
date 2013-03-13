@@ -15,16 +15,16 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <o:DocumentProperties>
   <o:Author>Reik</o:Author>
   <o:LastAuthor>Oberrath, Reik</o:LastAuthor>
-  <o:Revision>14</o:Revision>
+  <o:Revision>15</o:Revision>
   <o:Created>2012-12-05T10:57:00Z</o:Created>
-  <o:LastSaved>2013-02-27T17:40:00Z</o:LastSaved>
-  <o:Pages>4</o:Pages>
-  <o:Words>3253</o:Words>
-  <o:Characters>20501</o:Characters>
+  <o:LastSaved>2013-03-13T17:37:00Z</o:LastSaved>
+  <o:Pages>3</o:Pages>
+  <o:Words>3285</o:Words>
+  <o:Characters>20701</o:Characters>
   <o:Company>WIR</o:Company>
-  <o:Lines>170</o:Lines>
+  <o:Lines>172</o:Lines>
   <o:Paragraphs>47</o:Paragraphs>
-  <o:CharactersWithSpaces>23707</o:CharactersWithSpaces>
+  <o:CharactersWithSpaces>23939</o:CharactersWithSpaces>
   <o:Version>14.00</o:Version>
  </o:DocumentProperties>
  <o:OfficeDocumentSettings>
@@ -769,7 +769,7 @@ EN-GB'> <span class=SpellE>ghtweight</span><o:p></o:p></span></p>
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Current
-version: 1.1.0<o:p></o:p></span></p>
+version: 1.2.0<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1136,19 +1136,19 @@ start, this output will be deleted.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The behaviour
-of Velocity Template Language (VTL) concerning white space is quarrelsome,
-intensively discussed and strict: leading white space is simply removed. This
-is troublesome for formatting purpose. To increase the <span class=SpellE>easeness</span>
-to create well formatted content, the <span class=SpellE>MOGLiCC</span>
-generators apply a little parser after merging model and template. This <span
-class=SpellE>MOGLiCC</span> specific parser removes leading apostrophes
-&lt;’&gt; from each line of the generated content. An apostrophe prevents
-Velocity from removing the whitespace that follows it. With this parser it is
-possible to write both well formatted templates and well formatted generation
-result. Use white space without or before an apostrophe to format only a
-template line. Use white space after an apostrophe to format the generation
-results.<o:p></o:p></span></p>
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The
+behaviour of Velocity Template Language (VTL) concerning white space is
+quarrelsome, intensively discussed and strict: leading white space is simply
+removed. This is troublesome for formatting purpose. To increase the <span
+class=SpellE>easeness</span> to create well formatted content, the <span
+class=SpellE>MOGLiCC</span> generators apply a little parser after merging
+model and template. This <span class=SpellE>MOGLiCC</span> specific parser
+removes leading apostrophes &lt;’&gt; from each line of the generated content.
+An apostrophe prevents Velocity from removing the whitespace that follows it.
+With this parser it is possible to write both well formatted templates and well
+formatted generation result. Use white space without or before an apostrophe to
+format only a template line. Use white space after an apostrophe to format the
+generation results.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1221,14 +1221,18 @@ vs. <span class=SpellE>VelocityModelBasedInserter</span><o:p></o:p></span></b></
 
 <span style='mso-bookmark:c4_4'></span>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>There are
-three differences between these two generators. First, only the inserter can
-insert into existing files, whereas the generator can only create new files. Second,
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>There are four
+differences between these two generators. First, only the inserter can insert
+into existing files, whereas the generator can only create new files. Second,
 the artefact attribute “<span class=SpellE>TargetDir</span>” is mandatory for
 the inserter but not so for the generator. Third, “class based” means, that for
 each class defined in the model file an artefact output file, e.g. a JavaBean,
 is created. “Model based” means that an insertion is made for the whole model
-in only one existing file (or only one artefact output file is created). <o:p></o:p></span></p>
+in only one existing file (or only one artefact output file is created). Fourth,
+for the generator there must exist only one main template, for the inserter
+more than main templates are <span class=SpellE>possible,but</span> they must
+reference the same <span class=SpellE>targetfile</span>, allowing to insert into
+different sections within the target file.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1312,9 +1316,9 @@ article: “<span class=SpellE>fachliche</span> <span class=SpellE>Komponenten</
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The heart
 of the application is the business logic component “core” which actually
 represents a container for <span class=SpellE>MOGLiCC</span> plugins. With each
-application start, a special plugin folder is scanned for jar-files that contain
-a file named “<span class=SpellE>mogli.properties</span>”. From this file a
-fully qualified name of the plugin starter class is read and used to
+application start, a special plugin folder is scanned for jar-files that
+contain a file named “<span class=SpellE>mogli.properties</span>”. From this
+file a fully qualified name of the plugin starter class is read and used to
 instantiate the starter class via reflection. The starter classes of all
 plugins are cast on the common <span class=SpellE>MOGLiCC</span> interface type
 “<span class=SpellE>MOGLiPlugin</span>”. After loading the starter classes, the
@@ -1376,10 +1380,10 @@ with any Velocity code. A generator plugin uses an <span class=SpellE>EngineProv
 by setting a specific <span class=SpellE>EngineData</span> object to the <span
 class=SpellE>EngineProvider</span> and triggers it to start the engine. The <span
 class=SpellE>EngineData</span> gives the <span class=SpellE>EngineProvider</span>
-all information necessary for the generation, i.e. the model and the
-template(s). Having done its job the <span class=SpellE>EngineProvider</span>
-returns a specific <span class=SpellE>ResultData</span> object to the generator
-which contains all information for the generator to create the output files.<o:p></o:p></span></p>
+all information necessary for the generation, i.e. the model and the template(s).
+Having done its job the <span class=SpellE>EngineProvider</span> returns a
+specific <span class=SpellE>ResultData</span> object to the generator which
+contains all information for the generator to create the output files.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1403,8 +1407,8 @@ One rule of the clean code developers is “Test first”. To apply this rule, t
 source code author also followed the Test Driven Development method of “Growing
 Object-Oriented Software, Guided by Tests” by Freeman &amp; Pryce. Thus, the <span
 class=SpellE>MOGLiCC</span> functionality of version 1.1.0 is regularly and
-automatically tested by 336 unit tests (70-90% coverage), 23 integration tests (10-40%
-coverage) and 30 system tests. <o:p></o:p></span></p>
+automatically tested by 336 unit tests (70-90% coverage), 23 integration tests
+(10-40% coverage) and 30 system tests. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1522,10 +1526,10 @@ next? There are two limitations known: <o:p></o:p></span></p>
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>a) Input
-file are read using UTF-8 encoding. To represent symbols which are not represented
-by UTF-8, <span class=SpellE>unicode</span> notation may help. However there is
-currently no possibility to translate Unicode into the <span class=SpellE>OutputEncodingFormat</span>
-defined in the template file.<o:p></o:p></span></p>
+file are read using UTF-8 encoding. To represent symbols which are not
+represented by UTF-8, <span class=SpellE>unicode</span> notation may help.
+However there is currently no possibility to translate Unicode into the <span
+class=SpellE>OutputEncodingFormat</span> defined in the template file.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1586,9 +1590,9 @@ way to define many sets of sample data which are accessible for other plugins.<o
 
 <p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
 14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'>g)<span
-style='mso-tab-count:1'>  </span>New <span class=SpellE>TemplateUtility</span>
-for <span class=SpellE>VelocityEngineData</span> to make the sample data of the
-<span class=SpellE>DataProvider</span> accessible from the template files.<o:p></o:p></span></p>
+style='mso-tab-count:1'>  </span>New <span class=SpellE>TemplateUtility</span> for
+<span class=SpellE>VelocityEngineData</span> to make the sample data of the <span
+class=SpellE>DataProvider</span> accessible from the template files.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:14.2pt;text-indent:-14.2pt;tab-stops:
 14.2pt'><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>

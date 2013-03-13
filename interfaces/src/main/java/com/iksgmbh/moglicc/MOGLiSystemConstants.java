@@ -2,7 +2,7 @@ package com.iksgmbh.moglicc;
 
 public class MOGLiSystemConstants {
 
-	public static final String FILENAME_LOG_FILE = "_MOGLi.log";
+	public static final String FILENAME_LOG_FILE = "_MOGLiCC.log";
 	public static final String FILENAME_REPORT_FILE = "generation.report";
 	public static final String FILENAME_APPLICATION_PROPERTIES = "application.properties";
 	public static final String FILENAME_WORKSPACE_PROPERTIES = "workspace.properties";
