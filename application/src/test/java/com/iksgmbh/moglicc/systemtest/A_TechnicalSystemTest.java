@@ -185,7 +185,7 @@ public class A_TechnicalSystemTest extends _AbstractSystemTest {
 		assertFileContainsEntry(applicationLogfile, "All " + getNumberOfJarFilesToExpectPluginsDir()
 				                                   + " plugins executed successfully");
 	}
-	
+
 	@Test
 	public void createsReportFile() {
 		// prepare test

@@ -109,7 +109,8 @@ public class MOGLiCodeCreator {
 
 	// **************************  Instance fields  *********************************
 
-	private File reportFile;
+	private File applicationReportFile;
+	private File workspaceReportFile;
 	private List<PluginMetaData> pluginMetaDataList;
 	private Properties applicationProperties;
 	private Properties workspaceProperties;
@@ -129,18 +130,25 @@ public class MOGLiCodeCreator {
 		readApplicationPropertiesFile();
 		initWorkspace();
 		initApplicationDirectories();
-		initReportFile();
+		initReportFiles();
 	}
 
-	private void initReportFile() {
-		reportFile = new File(applicationRootDir, FILENAME_REPORT_FILE);
-		if (reportFile.exists()) {			
-			boolean ok = reportFile.delete();
+	private void initReportFiles() {
+		applicationReportFile = new File(applicationRootDir, FILENAME_REPORT_FILE);
+		if (applicationReportFile.exists()) {
+			boolean ok = applicationReportFile.delete();
 			if (! ok) {
-				throw new MOGLiCoreException("Error deleting old reportFile: " + reportFile.getAbsolutePath());
+				throw new MOGLiCoreException("Error deleting old reportFile: " + applicationReportFile.getAbsolutePath());
 			}
 		}
-	}
+
+		workspaceReportFile = new File(workspaceDir, FILENAME_REPORT_FILE);
+		if (workspaceReportFile.exists()) {
+			boolean ok = workspaceReportFile.delete();
+			if (! ok) {
+				throw new MOGLiCoreException("Error deleting old reportFile: " + workspaceReportFile.getAbsolutePath());
+			}
+		}	}
 
 	private void initWorkspace() {
 		initWorkspaceDir();
@@ -300,7 +308,7 @@ public class MOGLiCodeCreator {
 		}
 
 		final String mainResultString = buildMainResultString();
-		createReportFile(mainResultString);
+		createReportFiles(mainResultString);
 		logFinalInformation(mainResultString);
 	}
 
@@ -326,7 +334,7 @@ public class MOGLiCodeCreator {
 		return counter;
 	}
 
-	private void createReportFile(final String mainResultString) {
+	private void createReportFiles(final String mainResultString) {
 		if (plugins == null || plugins.size() == 0) {
 			return;
 		}
@@ -350,8 +358,11 @@ public class MOGLiCodeCreator {
 		}
 
 		try {
-			FileUtil.createNewFileWithContent(reportFile, report.toString().trim());
-			MOGLiLogUtil.logInfo("Report successfully file created: " + reportFile.getAbsolutePath());
+			FileUtil.createNewFileWithContent(applicationReportFile, report.toString().trim());
+			MOGLiLogUtil.logInfo("Report successfully file created in application root: " + applicationReportFile.getAbsolutePath());
+			
+			FileUtil.createNewFileWithContent(workspaceReportFile, report.toString().trim());
+			MOGLiLogUtil.logInfo("Report successfully file created in workspace: " + workspaceReportFile.getAbsolutePath());
 		} catch (Exception e) {
 			MOGLiLogUtil.logError("Error creating reportfile: " + e.getMessage());
 		}

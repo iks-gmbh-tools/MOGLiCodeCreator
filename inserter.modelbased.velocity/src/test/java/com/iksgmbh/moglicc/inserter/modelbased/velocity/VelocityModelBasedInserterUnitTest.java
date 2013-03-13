@@ -79,7 +79,6 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);
 
 		fail("Expected exception not thrown!");
-
 	}
 
 	@Test
@@ -105,6 +104,8 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		// verify test result
 		assertFileExists(applicationInputDir);
 	}
+
+
 
 	@Test
 	public void savesGeneratedContentInPluginOutputDir() throws MOGLiPluginException {

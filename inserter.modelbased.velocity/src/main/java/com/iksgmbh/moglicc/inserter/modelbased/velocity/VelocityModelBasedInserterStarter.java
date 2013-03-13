@@ -40,6 +40,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	private InfrastructureService infrastructure;
 	private IOEncodingHelper encodingHelper;
 	private Model model;
+	private String targetFileOfCurrentArtefact;
 	private int generationCounter = 0;
 	private int artefactCounter = 0;
 	private StringBuffer generationReport = new StringBuffer(PLUGIN_ID
@@ -64,13 +65,30 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 			generateArtefactReportHeader(artefact);
 			final File templateDir = new File(infrastructure.getPluginInputDir(), artefact);
 			final List<String> mainTemplates = findMainTemplates(templateDir);
+			targetFileOfCurrentArtefact = null;
 			for (final String mainTemplate : mainTemplates) {
 				infrastructure.getPluginLogger().logInfo("-");
-				applyModelToArtefactTemplate(artefact, templateDir, mainTemplate);
+				final String targetFileReadFromMainTemplate = applyModelToArtefactTemplate(artefact, templateDir, mainTemplate);
+				validateTargetFileOfCurrentArtefact(artefact, targetFileReadFromMainTemplate);
 			}
 		}
 
 		infrastructure.getPluginLogger().logInfo("Done!");
+	}
+
+	protected void validateTargetFileOfCurrentArtefact(final String artefact,
+			                                           final String targetFileReadFromMainTemplate)
+			                                           throws MOGLiPluginException {
+		if (targetFileReadFromMainTemplate != null) {
+			if (targetFileOfCurrentArtefact == null) {
+				targetFileOfCurrentArtefact = targetFileReadFromMainTemplate; // init for first main template
+			} else {
+				if (! targetFileOfCurrentArtefact.equals(targetFileReadFromMainTemplate)) {
+					throw new MOGLiPluginException("There are main templates for artefact '" + artefact +
+							                       "' that differ in there targetFileName or targetDir!");
+				}
+			}
+		}
 	}
 
 	private void generateArtefactReportHeader(final String artefact) {
@@ -82,7 +100,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		generationReport.append(FileUtil.getSystemLineSeparator());
 	}
 
-	private void applyModelToArtefactTemplate(final String artefact, final File templateDir, final String mainTemplate) throws MOGLiPluginException {
+	private String applyModelToArtefactTemplate(final String artefact, final File templateDir, final String mainTemplate) throws MOGLiPluginException {
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, model, PLUGIN_ID);
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(mainTemplate);
@@ -93,7 +111,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	                + result.getNameOfValidModel() + "' is valid for this artefact, "
 	                + "but not the current model '" + model.getName() + "'.");
 
-			return;
+			return null;
 		}
 		result.validate();
 		encodingHelper = IOEncodingHelper.getInstance(VelocityUtils.getOutputEncodingFormat(result,
@@ -103,6 +121,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		generateReportLine(result);
 		infrastructure.getPluginLogger().logInfo("Generated content for artefact '" + artefact
 				+ "' inserted into " + result.getTargetDir() + "/" + result.getTargetFileName());
+		return result.getTargetDir() + "/" + result.getTargetFileName();
 	}
 
 	private void generateReportLine(final VelocityInserterResultData resultData) {
