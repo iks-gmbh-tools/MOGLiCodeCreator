@@ -1,5 +1,7 @@
 package com.iksgmbh.moglicc.systemtest;
 
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_REPORT_FILE;
+
 import java.io.File;
 
 import org.junit.Test;
@@ -96,6 +98,33 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends _AbstractSyste
 		assertWorkspace(applicationRootDir);
 	}
 
+	@Test
+	public void createsReportFiles() throws Exception {
+		// prepare test
+		final String workspaceDirName =  "workspaces/test";
+		final File applicationPropertiesFile = initApplicationPropertiesFile(
+				MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
+				 + "/" + workspaceDirName);
+		assertFileExists(applicationPropertiesFile);
+		final File workspaceDir = initWorkspaceDir(workspaceDirName);
+
+
+		final File applicationReportFile = new File(testDir, FILENAME_REPORT_FILE);
+		applicationReportFile.delete();
+		assertFileDoesNotExist(applicationReportFile);
+		final File workspaceReportFile = new File(workspaceDir, FILENAME_REPORT_FILE);
+		assertFileDoesNotExist(workspaceReportFile);
+
+		// call functionality under test
+		executeMogliApplication();
+
+		// cleanup
+		applicationPropertiesFile.delete();
+
+		// verify test result
+		assertFileExists(applicationReportFile);
+		assertFileExists(workspaceReportFile);
+	}
 
 	// *************************************************************************************
 	//                       helper methods
@@ -130,6 +159,7 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends _AbstractSyste
 
 	private File initWorkspaceDir(final String workspaceDirName) throws Exception {
 		final File workspaceDir = new File(applicationRootDir, workspaceDirName);
+		FileUtil.deleteDirWithContent(workspaceDir);
 		assertFileDoesNotExist(workspaceDir);
 		return workspaceDir;
 	}

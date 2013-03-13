@@ -1,4 +1,4 @@
-   VelocityModelBasedInserter has done work for following artefacts:
+VelocityModelBasedInserter has done work for following artefacts:
 
    Reports for artefact 'TestArtefact':
       inserted by a below-instruction into targetFile.txt in directory <applicationRootDir>/temp
