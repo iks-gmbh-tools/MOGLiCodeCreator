@@ -24,4 +24,4 @@
 14. In file 'application/src/main/resources/build.properties' adapt the three version settings to new values
 15. In file 'application/src/main/resources/build.properties' set 'testRun' back to 'true'.
     This allows test runs of the release process executed automatically by 'BuildReleaseAndTestSystem.java'.
-16. Commit and tag source code in git and push it to iks gitblit and/or to github remote repositories.
+16. Commit source code in git and push it to iks gitblit remote repository.
