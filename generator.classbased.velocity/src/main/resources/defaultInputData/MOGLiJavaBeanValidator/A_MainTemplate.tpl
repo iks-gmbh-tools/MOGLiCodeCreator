@@ -1,7 +1,7 @@
 @TargetFileName ${classDescriptor.simpleName}Validator.java # Name of output file with extension but without path
-@TargetDir C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+@TargetDir $model.getMetaInfoValueFor("eclipseProjectDir")/$model.getMetaInfoValueFor("projectName")/src/main/java/<package>
 @CreateNew true # creates target dir if not existing and overwrites target file if existing
-@NameOfValidModel DemoModel
+@NameOfValidModel MOGLiCC_JavaBeanModel
 
 package ${classDescriptor.package};
 '
@@ -12,9 +12,9 @@ import java.util.List;
 import com.iksgmbh.moglicc.demo.validator.FieldValidationException;
 import com.iksgmbh.moglicc.demo.validator.FieldValidator;
 import com.iksgmbh.moglicc.demo.validator.JavaBeanValidator;
-import com.iksgmbh.moglicc.demo.validator.MandatoryFieldValidator;
-import com.iksgmbh.moglicc.demo.validator.MaxLengthValidator;
-import com.iksgmbh.moglicc.demo.validator.MinLengthValidator;
+import com.iksgmbh.moglicc.demo.validator.types.MandatoryFieldValidator;
+import com.iksgmbh.moglicc.demo.validator.types.MaxLengthValidator;
+import com.iksgmbh.moglicc.demo.validator.types.MinLengthValidator;
 '
 #parse("commonSubtemplates/B_ImportStatements.tpl")
 '

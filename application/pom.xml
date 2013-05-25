@@ -92,6 +92,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.iksgmbh.moglicc</groupId>
+			<artifactId>generator.modelbased.filestructure</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>cpsuite</groupId>
 			<artifactId>cpsuite</artifactId>
 			<version>1.2.5</version>

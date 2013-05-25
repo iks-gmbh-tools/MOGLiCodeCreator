@@ -1,0 +1,129 @@
+#########################################################################################################
+# This model file illustrates the usage of the MOGLi StandardModelProvider plugin.
+#
+# The Standard Model is defined by the three hierarchy levels 'model', 'class' and 'attribute'.
+# All elements in each level must define a name - the only concretely predefined data.
+# The name of a class must be fully qualified and unique within the model.
+# The name of a attribute must be unique for its class.
+#
+# The data of the elements in each level can be enriched by MetaInfo elements in any number.
+# A MetaInfo elements consists of a non-unique name and a value.
+
+# Information which plugin uses which MetaInfo is presented in a statistics file
+# that is written into the plugin output directory of the StandardModelProvider plugin.
+#
+# The MOGLiCC_JavaBeanModel provides data for the MOGLiCC JavaBean templates. Model data and templates are
+# used to create the MOGLiCC JavaBean artefacts. These are NOT designed for manual modification.
+# In case you want to have same modified, change the templates, the model data or both, and
+# recreate them by autogeneration.
+#
+#########################################################################################################
+
+model MOGLiCC_JavaBeanModel
+  metainfo eclipseProjectDir <applicationRootDir>
+  metainfo projectName MOGLiCC_JavaBeanProject
+
+class com.iksgmbh.moglicc.demo.Person
+
+  attribute Firstname
+    metainfo JavaType String
+    metainfo ExampleData Hans
+    metainfo TestExampleData Martha
+    metainfo MinLength 2
+    metainfo MaxLength 10
+
+  attribute lastname
+    metainfo JavaType String
+    metainfo Mandatory true
+    metainfo ExampleData Mustermann
+    metainfo TestExampleData Musterfrau
+    metainfo MaxLength 10
+
+  attribute address
+    metainfo JavaType Address
+    metainfo ExampleData "new Address()"
+    metainfo Mandatory false
+
+  attribute age
+    metainfo JavaType int
+    metainfo ExampleData 44
+
+
+class com.iksgmbh.moglicc.demo.Member
+  metainfo extends com.iksgmbh.moglicc.demo.Person
+  metainfo implements java.io.Serializable
+
+    attribute membershipNumber
+    metainfo JavaType int
+    metainfo ExampleData 333
+
+
+class com.iksgmbh.moglicc.demo.Address
+  metainfo implements java.io.Serializable
+  metainfo implements java.lang.Cloneable
+
+  attribute country
+    metainfo JavaType String
+    metainfo ExampleData Fantasien
+    metainfo TestExampleData Balkonien
+
+  attribute Postcode
+    metainfo JavaType int
+    metainfo ExampleData 12345
+    metainfo TestExampleData 10101
+
+  attribute city
+    metainfo JavaType String
+    metainfo ExampleData Münzhausen
+
+  attribute Street
+    metainfo JavaType String
+    metainfo ExampleData Münzstr.
+
+  attribute streetNumber
+    metainfo JavaType int
+    metainfo ExampleData 12
+
+
+class com.iksgmbh.moglicc.demo.Misc
+  metainfo extends com.iksgmbh.moglicc.demo.Person
+
+  attribute numberInt
+    metainfo JavaType int
+    metainfo ExampleData 123
+    metainfo TestExampleData 555
+
+  attribute numberLong
+    metainfo JavaType long
+    metainfo ExampleData 123456L
+    metainfo TestExampleData 333333L
+
+  attribute numberFloat
+    metainfo JavaType float
+    metainfo ExampleData 12.34F
+
+  attribute numberDouble
+    metainfo JavaType double
+    metainfo ExampleData 12.34
+
+  attribute numberByte
+    metainfo JavaType byte
+    metainfo ExampleData "(byte) 4"
+
+  attribute id
+    metainfo JavaType char
+    metainfo ExampleData 'a'
+
+  attribute stringArray
+    metainfo JavaType String[]
+    metainfo ExampleData "new String[0]"
+
+  attribute hashSet
+    metainfo JavaType java.util.HashSet<String>
+    metainfo ExampleData "new java.util.HashSet()"
+    
+  attribute ready
+    metainfo JavaType boolean
+    metainfo ExampleData true
+
+    

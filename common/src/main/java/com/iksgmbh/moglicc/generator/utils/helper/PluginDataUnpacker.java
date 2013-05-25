@@ -2,6 +2,7 @@ package com.iksgmbh.moglicc.generator.utils.helper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import com.iksgmbh.moglicc.core.Logger;
@@ -27,40 +28,77 @@ public class PluginDataUnpacker {
 		this.pluginLogger = pluginLogger;
 	}	
 	
-	/**
-	 * Currently the default data is supposed to be a list of directories 
-	 * containing a list of files (no subdirs!)
-	 */
 	private void unpack() throws MOGLiPluginException {
-		final Set<String> artefacts = defaultData.getArtefactList();
-		for (final String artefact : artefacts) {
-			final String[] filenames = defaultData.getFileNamesForArtefact(artefact);
-			if (filenames != null) { // handle directory 
-				createTemplateFiles(artefact, filenames);
-				pluginLogger.logInfo(filenames.length + " template files created for " + artefact);
-			} else { // handle file
-				final String pathToResource = defaultData.getTargetSubDir() + "/" + artefact;
-				final String fileContent = readContentFromFile(pathToResource);
-				if (fileContent == null) {
-					throw new MOGLiPluginException("Error unpacking embedded resource file from jar. " +
-							                       "Cannot find: " + pathToResource);
-				}
-				targetDir.mkdirs();
-				createFile(targetDir, artefact, fileContent);
-				pluginLogger.logInfo(artefact + " created.");
+		// create subdirs
+		final List<String> subdirs = defaultData.getSubdirs();
+		for (final String subdir : subdirs) {
+			new File(targetDir, subdir).mkdirs();
+		}
+
+		// unpack files
+		final Set<String> files = defaultData.getFiles();
+		for (final String file : files) {
+			unpackFile(file, defaultData.getSubdirToFile(file));
+		}
+
+		// unpack flat folders
+		final Set<String> flatFolders = defaultData.getFlatFolders();
+		for (final String flatFolder : flatFolders) {
+			unpackFlatFolder(flatFolder);
+		}
+
+		// unpack root files
+		final List<String> rootInputFiles = defaultData.getRootInputFileList();
+		for (final String rootInputFile : rootInputFiles) {
+			unpackRootFiles(rootInputFile);
+		}
+	}
+
+	private void unpackFile(final String fileName, final String subdir) throws MOGLiPluginException {
+		final File subInputDir;
+		final String path;
+		if ("".equals(subdir)) {
+			subInputDir = targetDir;
+			path = "";
+		} else {
+			subInputDir = new File(targetDir, subdir);
+			path = "/" + subdir;
+		}
+		subInputDir.mkdirs();
+		final String fileContent = readContentFromFile(defaultData.getTargetSubDir() + path + "/" + fileName);
+		createFile(subInputDir, fileName, fileContent);
+	}
+
+	/**
+	 * See readmeClasspathProblem.txt for information why the root file problem exist. 
+	 * @param rootInputFile file to unpack into the root of the plugin input dir
+	 * @throws MOGLiPluginException
+	 */
+	private void unpackRootFiles(final String rootInputFile) throws MOGLiPluginException {
+		final String pathToResource = defaultData.getTargetSubDir() + "/" + defaultData.getSubdirForRootInputFiles() + "/" + rootInputFile;
+		final String fileContent = readContentFromFile(pathToResource);
+		if (fileContent == null) {
+			throw new MOGLiPluginException("Error unpacking embedded resource file from jar. " +
+					                       "Cannot find: " + pathToResource);
+		}
+		createFile(targetDir, rootInputFile, fileContent);
+		pluginLogger.logInfo(rootInputFile + " created.");
+	}
+
+	private void unpackFlatFolder(final String folderName) throws MOGLiPluginException {
+		final String[] filenames = defaultData.getFileNamesForFlatFolder(folderName);
+		if (filenames == null) {
+			throw new MOGLiPluginException("No files defined for flat folder " + folderName);
+		} else {
+			final File subInputDir = new File(targetDir, folderName);
+			subInputDir.mkdirs();
+			for (String filename : filenames) {
+				final String fileContent = readContentFromFile(defaultData.getTargetSubDir() + "/" + folderName + "/" + filename);
+				createFile(subInputDir, filename, fileContent);
 			}
 		}
 	}
 	
-	private void createTemplateFiles(final String subdirName, final String[] filenames) throws MOGLiPluginException {
-		final File subInputDir = new File(targetDir, subdirName);
-		subInputDir.mkdirs();
-		for (String filename : filenames) {
-			final String fileContent = readContentFromFile(defaultData.getTargetSubDir() + "/" + subdirName + "/" + filename);
-			createFile(subInputDir, filename, fileContent);
-		}
-	}
-
 	private void createFile(final File dir, final String filename, final String fileContent) throws MOGLiPluginException {
 		final File file = new File(dir, filename);
 		try {

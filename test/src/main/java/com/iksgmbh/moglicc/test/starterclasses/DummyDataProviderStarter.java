@@ -6,11 +6,8 @@ import java.util.List;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.DataProvider;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 
-public class DummyDataProviderStarter implements DataProvider, MetaInfoValidatorVendor {
+public class DummyDataProviderStarter implements MOGLiPlugin {
 
 	private static final String PLUGIN_ID = "DummyDataProvider";
 	private InfrastructureService infrastructure;
@@ -46,10 +43,6 @@ public class DummyDataProviderStarter implements DataProvider, MetaInfoValidator
 		return false;
 	}
 
-	@Override
-	public List<MetaInfoValidator> getMetaInfoValidatorList() throws MOGLiPluginException {
-		return null;
-	}
 
 	@Override
 	public InfrastructureService getMOGLiInfrastructure() {

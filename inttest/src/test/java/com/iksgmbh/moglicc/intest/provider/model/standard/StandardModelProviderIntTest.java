@@ -45,8 +45,8 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		final List<MetaInfoValidator> allMetaInfoValidators = standardModelProviderStarter.getAllMetaInfoValidators();
 
 		// verify test result
-		assertEquals("Number of MetaInfoValidators", 4, allMetaInfoValidators.size());
-		assertEquals("Number of vendors", 2, countVendors(allMetaInfoValidators));
+		assertEquals("Number of MetaInfoValidators", 6, allMetaInfoValidators.size());
+		assertEquals("Number of vendors", 3, countVendors(allMetaInfoValidators));
 	}
 
 	private int countVendors(final List<MetaInfoValidator> allMetaInfoValidators) {
@@ -78,10 +78,11 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void readsModelFileWithCustomizedBraceSymbolForModelFileParsing() throws MOGLiPluginException {
 		// prepare test
-		setModelFile("ModelFileWithMetaInfosContainingDoubleQoutesInNames.txt");
-		final File modelPropertiesFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
-				                                  StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
-		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "BraceSymbolForModelFileParsing=*");
+		final String newModelFileName = "CustomizedBraceSymbolTestModel.txt";
+		createModelFile("ModelFileWithMetaInfosContainingDoubleQoutesInNames.txt", newModelFileName);
+		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "modelfile=" + newModelFileName +  
+				                                                    FileUtil.getSystemLineSeparator() + 
+				                                                    "BraceSymbolForModelFileParsing=*");
 
 
 		// call functionality under test
@@ -111,7 +112,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesTestModelByRule_MetaInfo_Nullable_must_exist_if_MetaInfo_MinOccurs_does_not_exist() throws Exception {
 		// prepare test
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse"
@@ -163,7 +164,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesTestModelByRule_MetaInfo_Nullable_must_exist_if_MetaInfos_DBType_and_DBLength_exist() throws Exception {
 		// prepare test
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse"
@@ -224,7 +225,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesTestModelByRule_MetaInfo_Nullable_must_exist_if_MetaInfos_DBType_OR_DBLength_exist() throws Exception {
 		// prepare test
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse");
@@ -283,7 +284,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesTestModelByRule_MetaInfo_Nullable_must_exist_with_value_true_if_MetaInfos_MinOccurs_has_value_0() throws Exception {
 		// prepare test
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse "
@@ -343,7 +344,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	public void validatesModelWithErrorBecauseForbiddenMetainfoExist() throws Exception {
 		// prepare test
 		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
-				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
@@ -373,7 +374,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	public void doesNotValidateBecauseHierarcyLevelMismatch() {
 		// prepare test
 		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
-				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
@@ -397,7 +398,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	public void doesNotValidateBecauseModelMismatch() throws Exception {
 		// prepare test
 		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
-				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +

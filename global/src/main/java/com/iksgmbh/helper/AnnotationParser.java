@@ -76,6 +76,19 @@ public class AnnotationParser {
 		}
 		return toReturn;
 	}
+	
+	public String removePartBraceIdentifier(final String s) {
+		if (s == null) return null;
+		String toReturn = s.trim();
+		if (toReturn.startsWith(partBraceIdentifier)) {
+			toReturn = s.substring(partBraceIdentifier.length());
+		}
+		if (toReturn.endsWith(partBraceIdentifier)) {
+			toReturn = toReturn.substring(0, toReturn.length() - partBraceIdentifier.length());
+		}
+		
+		return toReturn;
+	}
 
 	public AnnotationContentParts getAnnotationContentParts(final String line) {
 		try {

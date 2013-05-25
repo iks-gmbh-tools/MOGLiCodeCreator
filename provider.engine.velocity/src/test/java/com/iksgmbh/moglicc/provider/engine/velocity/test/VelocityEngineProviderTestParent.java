@@ -69,6 +69,11 @@ public class VelocityEngineProviderTestParent extends AbstractMOGLiTest {
 		return applicationRootDir;
 	}
 
+	@Override
+	protected String getPluginId() {
+		return VelocityEngineProviderStarter.PLUGIN_ID;
+	}	
+
 	protected InfrastructureService createInfrastructure() {
 		final List<MOGLiPlugin> list = new ArrayList<MOGLiPlugin>();
 		list.add(new DummyGeneratorStarter());

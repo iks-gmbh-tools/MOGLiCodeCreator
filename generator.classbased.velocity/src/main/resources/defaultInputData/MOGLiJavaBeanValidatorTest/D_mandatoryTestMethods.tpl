@@ -22,7 +22,7 @@
 			'		try {
 			'			${classDescriptor.simpleName}Validator.doYourJob(testData);
 			'		} catch (Exception e) {
-			'			assertEquals("error message", "MandatoryFieldValidator: Mandatory field '$attributeName' is empty.", e.getMessage());
+			'			assertEquals("error message", "MandatoryFieldValidator: Mandatory field '$attributeName' has no value.", e.getMessage());
 			'			return;
 			'		}
 			'		fail("Expected exception not thrown!");

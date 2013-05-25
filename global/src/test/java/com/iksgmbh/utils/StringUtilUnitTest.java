@@ -80,5 +80,24 @@ public class StringUtilUnitTest {
 		// verify test result
 		assertEquals("result ", s, result );
 	}
+
+	@Test
+	public void replacesSubstringBetweenString1AndString2() {
+		// prepare test
+		final String s = "AB C DE";
+
+		// call functionality under test
+		final String result1 = StringUtil.replaceBetween(s, "AB", "DE", "3");
+		final String result2 = StringUtil.replaceBetween(s, "X", "D", "3");
+		final String result3 = StringUtil.replaceBetween(s, "B", "X", "3");
+		final String result4 = StringUtil.replaceBetween(s, "D", "B", "3");
+
+		// verify test result
+		assertEquals("result ", "AB3DE", result1 );
+		assertEquals("result ", "AB C DE", result2 );
+		assertEquals("result ", "AB C DE", result3 );
+		assertEquals("result ", "AB C DE", result4 );
+	}
+
 	
 }

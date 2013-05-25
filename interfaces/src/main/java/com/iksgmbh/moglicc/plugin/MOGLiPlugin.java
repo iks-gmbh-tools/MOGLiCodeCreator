@@ -17,6 +17,7 @@ public interface MOGLiPlugin {
 	String DEFAULT_DATA_DIR = "defaultInputData";
 	String HELP_DATA_DIR = "helpData";
 	String FILENAME_PLUGIN_JAR_PROPERTIES = "Mogli.properties";
+	String ARTEFACT_PROPERTIES_HELP_FILE = "ArtefactProperties.htm";
 	
 	enum PluginType { GENERATOR, MODEL_PROVIDER, DATA_PROVIDER, ENGINE_PROVIDER};
 

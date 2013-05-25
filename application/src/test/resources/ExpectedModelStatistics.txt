@@ -1,4 +1,4 @@
-Model Name: DemoModel
+Model Name: MOGLiCC_JavaBeanModel
 Number of class descriptions in model file: 4
 Number of known MetaInfoValidator vendor plugins: 1
 

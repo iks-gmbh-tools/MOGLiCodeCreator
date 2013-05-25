@@ -32,7 +32,7 @@ public class StandardModelProviderTestParent extends AbstractMOGLiTest {
 			initForFirstUnitTest();
 			pluginInputDir.mkdirs();
 		}
-		modelTextfile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		modelTextfile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		modelTextfile.delete();
 		final List<MOGLiPlugin> emptyImmutableList = ImmutableUtil.getEmptyImmutableListOf(null);
 		final InfrastructureInitData initInfrastructureData = 
@@ -44,6 +44,11 @@ public class StandardModelProviderTestParent extends AbstractMOGLiTest {
 	protected String getProjectRootDir() {
 		return PROJECT_ROOT_DIR;
 	}
+
+	@Override
+	protected String getPluginId() {
+		return StandardModelProviderStarter.PLUGIN_ID;
+	}	
 
 	@Override
 	protected String initTestApplicationRootDir() {

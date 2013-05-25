@@ -28,6 +28,6 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		// verify test result
 		assertEquals("Number of plugins", 1, generatorPlugins.size());
 		assertEquals("Number of plugins", 0, emptyPluginList.size());
-		assertEquals("Number of plugins", 2, validatorVendorPlugins.size());
+		assertEquals("Number of plugins", 1, validatorVendorPlugins.size());
 	}
 }

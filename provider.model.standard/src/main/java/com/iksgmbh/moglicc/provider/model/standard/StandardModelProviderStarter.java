@@ -38,11 +38,13 @@ import com.iksgmbh.utils.ImmutableUtil;
 
 public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin {
 
+
 	public static final String PLUGIN_ID = "StandardModelProvider";
 
 	public static final String PLUGIN_PROPERTIES_FILE = "_model.properties";
 	public static final String FILENAME_STATISTICS_FILE = "ModelStatistics.txt";
-	public static final String FILENAME_STANDARD_MODEL_TEXTFILE = "DemoModel.txt";
+	public static final String FILENAME_STANDARD_MODEL_FILE = "MOGLiCC_JavaBeanModel.txt";
+	private static final String FILENAME_NEW_PLUGIN_MODEL_FILE = "MOGLiCC_NewPluginModel.txt";
 
 	private InfrastructureService infrastructure;
 	private File modelFile;
@@ -233,10 +235,9 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 			throw new MOGLiPluginException(TEXT_PARSE_ERROR_FOUND
 					+ e.getParserErrors());
 		}
-
-		infrastructure.getPluginLogger().logInfo(
-				buildUpModel.getSize() + " classes read from "
-						+ modelFile.getAbsolutePath());
+		
+		infrastructure.getPluginLogger().logInfo("Model file: " + modelFile.getAbsolutePath());
+		infrastructure.getPluginLogger().logInfo(buildUpModel.getSize() + " classes read from model file.");
 
 		return buildUpModel;
 	}
@@ -361,10 +362,10 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	@Override
 	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackDefaultInputData");
-		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
-		defaultData.addFile(FILENAME_STANDARD_MODEL_TEXTFILE);
+		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR, PLUGIN_ID);
 		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
-		defaultData.addFile("MOGLiCC_NewPluginModel.txt");
+		defaultData.addFile(FILENAME_STANDARD_MODEL_FILE);
+		defaultData.addFile(FILENAME_NEW_PLUGIN_MODEL_FILE);
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
 	}
@@ -377,7 +378,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
-		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR);
+		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR, PLUGIN_ID);
 		helpData.addFile("AttributeDescriptor.htm");
 		helpData.addFile("ClassDescriptor.htm");
 		helpData.addFile("Model.htm");

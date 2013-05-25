@@ -18,9 +18,14 @@ public class FolderContentBasedTextFileLineInserter {
 	private String fileExtension;
 	private String lineMarkerToInsertAfter;
 	private List<String> errorList = new ArrayList<String>();
-	
+	private IOEncodingHelper encodingHelper = IOEncodingHelper.STANDARD;
+
 	public FolderContentBasedTextFileLineInserter(final File rootDir, final List<String> toIgnore) {
 		folderContent = new FolderContent(rootDir, toIgnore);
+	}
+
+	public FolderContentBasedTextFileLineInserter(final FolderContent folderContent) {
+		this.folderContent = folderContent;
 	}
 
 	void setFileExtension(final String fileExtension) {
@@ -31,10 +36,14 @@ public class FolderContentBasedTextFileLineInserter {
 		this.lineMarkerToInsertAfter = lineMarkerToInsertAfter;
 	}
 
+	public void setEncodingHelper(IOEncodingHelper encodingHelper) {
+		this.encodingHelper = encodingHelper;
+	}
+
 	public void insert(final String text) {
 		checkPreconditions();
 		
-		final List<File> filesWithExtensions = folderContent.getFilesWithExtensions(fileExtension);
+		final List<File> filesWithExtensions = folderContent.getFilesWithEndingPattern(fileExtension);
 		for (final File file : filesWithExtensions) {
 			insert(text, file);
 		}
@@ -78,7 +87,7 @@ public class FolderContentBasedTextFileLineInserter {
 		
 		if (matches > 0) {
 			try {
-				FileUtil.createNewFileWithContent(file, newContent);
+				FileUtil.createNewFileWithContent(encodingHelper, file, newContent);
 			} catch (Exception e) {
 				errorList.add("Error writing " + file.getAbsolutePath());
 				return;
@@ -86,4 +95,9 @@ public class FolderContentBasedTextFileLineInserter {
 			System.out.println(matches + " insertions made in " + file.getAbsolutePath());
 		}
 	}
+	
+	public FolderContent getFolderContent() {
+		return folderContent;
+	}
+
 }

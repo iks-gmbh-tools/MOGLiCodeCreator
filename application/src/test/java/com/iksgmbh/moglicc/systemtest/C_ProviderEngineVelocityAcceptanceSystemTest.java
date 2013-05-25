@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineProviderStarter;
 import com.iksgmbh.utils.FileUtil;
 
-public class C_ProviderEngineVelocityAcceptanceSystemTest  extends _AbstractSystemTest {
+public class C_ProviderEngineVelocityAcceptanceSystemTest  extends __AbstractSystemTest {
 	
 	public static final String ENGINE_PLUGIN_ID = VelocityEngineProviderStarter.PLUGIN_ID;
 

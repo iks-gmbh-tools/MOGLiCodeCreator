@@ -65,4 +65,9 @@ public class ModelDummy implements Model {
 		return null;
 	}
 
+	@Override
+	public boolean isValueAvailable(final String metaInfoValue) {
+		return false;
+	}
+
 }

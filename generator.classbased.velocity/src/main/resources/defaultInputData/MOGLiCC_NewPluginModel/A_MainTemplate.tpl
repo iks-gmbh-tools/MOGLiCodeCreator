@@ -1,5 +1,5 @@
 @TargetFileName ${classDescriptor.simpleName}.java # Name of output file with extension but without path
-@TargetDir $model.getMetaInfoValueFor("eclipseWorkspaceProject")/src/main/java/<package>
+@TargetDir $model.getMetaInfoValueFor("eclipseProjectDir")/$model.getMetaInfoValueFor("projectName")/src/main/java/<package>
 @NameOfValidModel MOGLiCC_NewPluginModel
 @CreateNew true # creates target dir if not existing and overwrites target file if existing
 
@@ -17,9 +17,13 @@ import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.*;
 import com.iksgmbh.utils.ImmutableUtil;
 import com.iksgmbh.moglicc.generator.utils.helper.*;
+import com.iksgmbh.utils.FileUtil;
 '
 
-#parse("C_ClassDefinitionLine.tpl")
+#parse("B_ClassDefinitionLine.tpl")
+
+#parse("C_generatorVariables.tpl")
+
 
 '
 '	public static final String PLUGIN_ID = "$classDescriptor.getMetaInfoValueFor("pluginID")";
@@ -59,11 +63,15 @@ import com.iksgmbh.moglicc.generator.utils.helper.*;
 '	}
 '
 '
-'	List<String> getArtefactList() throws MOGLiPluginException {
-'		final File generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
-'		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
-'	}
-'
+
+	#if ($classDescriptor.getMetaInfoValueFor("pluginType") == "GENERATOR")
+	'	List<String> getArtefactList() throws MOGLiPluginException {
+	'		final File generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
+	'		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
+	'	}
+	'
+	#end
+
 '	String findMainTemplate(final File templateDir) throws MOGLiPluginException {
 '		return TemplateUtil.findMainTemplate(templateDir, MAIN_TEMPLATE_IDENTIFIER);
 '	}
@@ -103,6 +111,8 @@ import com.iksgmbh.moglicc.generator.utils.helper.*;
 #parse("G_getModel.tpl")
 
 #parse("H_engineMethods.tpl")
+
+#parse("I_generatorMethods.tpl")
 
 '
 }

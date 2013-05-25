@@ -14,8 +14,9 @@
 		'		try {
 		'			${classDescriptor.simpleName}Validator.doYourJob(testData);
 		'		} catch (Exception e) {
-		'			assertEquals("error message", "MinLengthValidator: Content of field '$attributeName' too short: <"
-		'                                          + testData.get${AttributeName}() + ">", e.getMessage());
+		'			assertEquals("error message", "MinLengthValidator: Minimum length for field '$attributeName' (2)"   
+		'										   + " not reached: "
+		'                                          + testData.get${AttributeName}(), e.getMessage());
 		'			return;
 		'		}
 		'		fail("Expected exception not thrown!");

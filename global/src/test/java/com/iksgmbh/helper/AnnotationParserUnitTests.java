@@ -108,4 +108,21 @@ public class AnnotationParserUnitTests {
 		assertEquals("Annotation Name", "\"a b c\"", result.getAdditionalInfo());
 	}
 
+	@Test
+	public void removesPartBraceIdentifier() {
+		// prepare test
+		final String line = "@\"Name of Annotation\" \"a b c\"";
+		final AnnotationParser annotationParser = AnnotationParser.getInstance();
+		final Annotation annotation = annotationParser.doYourJob(line);
+		final String additionalInfo = annotation.getAdditionalInfo();
+		assertEquals("additionalInfo", "\"a b c\"", additionalInfo);
+
+		// call functionality under test
+		final String result = annotationParser.removePartBraceIdentifier(additionalInfo);
+		
+		// verify test result
+		assertEquals("Annotation Name", "a b c", result);
+	}
+
+		
 }

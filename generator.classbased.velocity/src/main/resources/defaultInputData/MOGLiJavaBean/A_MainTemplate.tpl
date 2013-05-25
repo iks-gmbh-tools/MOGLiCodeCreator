@@ -1,7 +1,7 @@
 @TargetFileName ${classDescriptor.simpleName}.java # Name of output file with extension but without path
-@TargetDir C:/Temp/MogliCodeCreator/_Demo/src/main/java/<package>
+@TargetDir $model.getMetaInfoValueFor("eclipseProjectDir")/$model.getMetaInfoValueFor("projectName")/src/main/java/<package>
 @CreateNew true # creates target dir if not existing and overwrites target file if existing
-@NameOfValidModel DemoModel
+@NameOfValidModel MOGLiCC_JavaBeanModel
 
 package ${classDescriptor.package};
 '

@@ -92,4 +92,12 @@ public abstract class MetaModelObject implements MetaInfoSupport {
 		return getCommaSeparatedListAsStringFromStringBuffer(sb);
 	}
 
+	@Override
+	public boolean isValueAvailable(final String metaInfoValue) {
+		if (metaInfoValue == null) {
+			return false;
+		}
+		return ! (metaInfoValue.startsWith(META_INFO_NOT_FOUND_START) && metaInfoValue.endsWith(META_INFO_NOT_FOUND_END));
+	}
+
 }

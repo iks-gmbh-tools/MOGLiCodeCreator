@@ -53,7 +53,8 @@ public class MOGLiReleaseBuilder {
 	public static final List<String> PLUGIN_MODULES = ImmutableUtil.getImmutableListOf(
 			                          "provider.model.standard", "provider.engine.velocity",
 			                          "inserter.modelbased.velocity",
-			                          "generator.classbased.velocity");  // optional modules, but relevant for release
+			                          "generator.classbased.velocity",
+			                          "generator.modelbased.filestructure");  // optional modules, but relevant for release
 	public static final List<String> DEVELOPMENT_MODULES = ImmutableUtil.getImmutableListOf(
 			                          PARENT_MODULE, "application", "test", "parent.plugin",
 			                          "inttest");  // only necassary for the development infrastructure

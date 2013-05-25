@@ -1,3 +1,3 @@
 Validator Mandatory JavaType Attribute ModelA
-Validator Optional commentNote Class DemoModel
+Validator Optional commentNote Class MOGLiCC_JavaBeanModel
 Validator Optional commentNote Class

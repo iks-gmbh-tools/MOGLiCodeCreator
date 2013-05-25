@@ -100,7 +100,7 @@ public class StatisticsFileCreator {
 
 	private void appendPluginInformation(final StringBuffer sb) {
 		final HashMap<String, HashSet<String>> metaInfoNamesForPluginIds = model.getMetaInfoNamesForPluginIds();
-		sb.append("Number of known MetaInfoValidator vendor plugins: ").append(metaInfoNamesForPluginIds.size());
+		sb.append("Number of vendor plugins defining MetaInfoValidators: ").append(metaInfoNamesForPluginIds.size());
 		appendUsageInfo(sb, metaInfoNamesForPluginIds);
 	}
 

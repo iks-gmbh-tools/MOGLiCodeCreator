@@ -10,7 +10,7 @@ import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
-public class D_StandardModelProviderAcceptanceSystemTest extends _AbstractSystemTest {
+public class D_StandardModelProviderAcceptanceSystemTest extends __AbstractSystemTest {
 	
 	private static final String PROVIDER_PLUGIN_ID = StandardModelProviderStarter.PLUGIN_ID;
 
@@ -28,7 +28,7 @@ public class D_StandardModelProviderAcceptanceSystemTest extends _AbstractSystem
 		executeMogliApplication();
 		
 		// verify test result
-		final File modelFile = new File(modelDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE); 
+		final File modelFile = new File(modelDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE); 
 		assertFileExists(modelFile);
 		String fileContent = MOGLiFileUtil.getFileContent(modelFile);
 		assertFileContainsEntry(modelFile, fileContent);
@@ -60,7 +60,7 @@ public class D_StandardModelProviderAcceptanceSystemTest extends _AbstractSystem
 		
 		// verify test result
 		final File statisticsFile = new File(applicationOutputDir, PROVIDER_PLUGIN_ID 
-				                                        + "/" + StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
+				                              + "/" + StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		assertFileExists(statisticsFile);
 		final File expectedFile = getTestFile("ExpectedModelStatistics.txt");
 		assertFileEquals(expectedFile, statisticsFile);

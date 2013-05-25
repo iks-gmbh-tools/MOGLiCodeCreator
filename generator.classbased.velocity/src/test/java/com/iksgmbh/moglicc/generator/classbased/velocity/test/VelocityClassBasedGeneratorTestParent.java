@@ -40,6 +40,11 @@ public class VelocityClassBasedGeneratorTestParent extends AbstractMOGLiTest {
 	}
 	
 	@Override
+	protected String getPluginId() {
+		return VelocityClassBasedGeneratorStarter.PLUGIN_ID;
+	}	
+	
+	@Override
 	public void setup() {
 		super.setup();
 		
@@ -55,42 +60,9 @@ public class VelocityClassBasedGeneratorTestParent extends AbstractMOGLiTest {
 			applicationTempDir.mkdirs();
 		}
 
-		createInputTestFilesIfNotExisting();
+		initPluginInputDirWithDefaultDataIfNotExisting();
 	}
 	
-	private void fail(String string) {
-	}
-
-	protected void createInputTestFilesIfNotExisting() {
-		if (! generatorPluginInputDir.exists()) {
-			final List<File> artefactList = getArtefactList();
-			for (final File artefactDir : artefactList) {
-				copyTemplatesFrom(artefactDir);
-			}
-		}
-	}
-	
-	private void copyTemplatesFrom(final File artefactDir) {
-		final File targetDir = new File(generatorPluginInputDir, artefactDir.getName());
-		targetDir.mkdirs();
-		
-		final File[] templateFiles = artefactDir.listFiles();
-		for (int i = 0; i < templateFiles.length; i++) {
-			FileUtil.copyTextFile(templateFiles[i], targetDir.getAbsolutePath());
-		}
-	}
-
-	private List<File> getArtefactList() {
-		final List<File> toReturn = new ArrayList<File>();
-		final File defaultDataDir = new File(getProjectResourcesDir(), MOGLiPlugin.DEFAULT_DATA_DIR);
-		final File[] files = defaultDataDir.listFiles();
-		for (final File dir : files) {
-			if (dir.isDirectory()) {
-				toReturn.add(dir);
-			}
-		}
-		return toReturn;
-	}
 	
 	protected InfrastructureService createInfrastructure() {
 		final List<MOGLiPlugin> list = new ArrayList<MOGLiPlugin>();
@@ -99,7 +71,7 @@ public class VelocityClassBasedGeneratorTestParent extends AbstractMOGLiTest {
 			velocityEngineProvider = (DummyVelocityEngineProviderStarter) MockDataBuilder.getVelocityEngineProvider();
 			list.add((MOGLiPlugin) velocityEngineProvider);
 		} catch (MOGLiPluginException e) {
-			fail(e.getMessage());
+			org.junit.Assert.fail(e.getMessage());
 		}
 		final InfrastructureInitData infrastructureInitData = 
 			     createInfrastructureInitData(applicationProperties, list, VelocityClassBasedGeneratorStarter.PLUGIN_ID);

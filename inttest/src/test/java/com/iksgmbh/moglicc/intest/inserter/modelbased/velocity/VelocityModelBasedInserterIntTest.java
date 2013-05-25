@@ -57,7 +57,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
 		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName ${classDescriptor.simpleName}.txt" + 
 														FileUtil.getSystemLineSeparator() +
-														"@TargetDir <applicationRootDir>/example" +FileUtil.getSystemLineSeparator() +
+														"@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" +FileUtil.getSystemLineSeparator() +
 														"@NameOfValidModel na" + FileUtil.getSystemLineSeparator() + 
 				                                        "${classDescriptor.simpleName}");
 
@@ -72,9 +72,9 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 		// prepare follow up test
 		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName ${classDescriptor.simpleName}.txt" +
 				FileUtil.getSystemLineSeparator() +
-				"@TargetDir <applicationRootDir>/example" +
+				"@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" +
 				FileUtil.getSystemLineSeparator() +
-                "@NameOfValidModel DemoModel" + FileUtil.getSystemLineSeparator() + 
+                "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() + 
                 "${classDescriptor.simpleName}");
 
 		// call functionality under test

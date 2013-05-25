@@ -131,9 +131,9 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		
 		// verify test result
 		assertFileExists(pluginInputDir);
-		final File modelFile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_TEXTFILE);
+		final File modelFile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		assertFileExists(modelFile);
-		assertFileContainsEntry(modelFile, "model DemoModel");
+		assertFileContainsEntry(modelFile, "model MOGLiCC_JavaBeanModel");
 	}
 	
 	@Test

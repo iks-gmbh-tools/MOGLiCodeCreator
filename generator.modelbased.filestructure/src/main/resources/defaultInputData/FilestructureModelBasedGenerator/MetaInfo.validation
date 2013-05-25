@@ -1,0 +1,10 @@
+# This file the is the place to define MetaInfoValidators for all MetoInfos used by the VelocityModelBasedInserter.
+# These validators are executed by the StandardModelProvider to validate the MetaInfos
+# used in its model file and to build a statistics file on the MetaInfo usage.
+# The statistics file is useful to find MetaInfoValidators or MetaInfos
+# that are not (any more) in use.
+#
+# For information how to define MetaInfoValidators, see MetaInfo.validation of the VelocityClassBasedGenerator.
+#
+|MetaInfo| eclipseProjectDir |is| optional |for| models |in| MOGLiCC_JavaBeanModel |.|
+|MetaInfo| projectName |is valid to occur| 0-1 |time(s) for| model |in| MOGLiCC_JavaBeanModel |.| 

@@ -11,7 +11,6 @@ import com.iksgmbh.moglicc.PluginMetaData;
 import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
 import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.test.starterclasses.DummyDataProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyStandardModelProviderStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyVelocityEngineProviderStarter;
@@ -30,7 +29,7 @@ public class CoreTestParent extends AbstractMOGLiTest {
 			isFirstTest = false;
 			initForFirstUnitTest();
 		}
-		initPluginSubdir();
+		initPluginLibSubdir();
 		createMogliLogFile();
 		MOGLiLogUtil.setCoreLogfile(applicationLogfile);
 	}
@@ -45,6 +44,11 @@ public class CoreTestParent extends AbstractMOGLiTest {
 		final String applicationRootDir = PROJECT_ROOT_DIR + TEST_SUBDIR;
 		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
+	}
+
+	@Override
+	protected String getPluginId() {
+		return null;  // no specific plugin is tested here
 	}
 
 	protected void assertPluginData(List<PluginMetaData> pluginMetaDataList, String pluginName, PluginStatus status,
@@ -85,13 +89,11 @@ public class CoreTestParent extends AbstractMOGLiTest {
 	protected List<MOGLiPlugin> getPluginListForTest() {
 		final DummyGeneratorStarter generator = new DummyGeneratorStarter();
 		final DummyStandardModelProviderStarter modelProvider = new DummyStandardModelProviderStarter();
-		final DummyDataProviderStarter dataProvider = new DummyDataProviderStarter();
 		final DummyVelocityEngineProviderStarter engineProvider = new DummyVelocityEngineProviderStarter();
 
 		final List<MOGLiPlugin> plugins = new ArrayList<MOGLiPlugin>();
 		plugins.add(generator);
 		plugins.add(modelProvider);
-		plugins.add(dataProvider);
 		plugins.add(engineProvider);
 		return plugins;
 	}
