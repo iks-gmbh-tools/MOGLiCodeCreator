@@ -1,9 +1,9 @@
-Model Name: SpaceTestModel
+Model Name: CustomizedBraceSymbolTestModel
 Number of class descriptions in model file: 1
-Number of known MetaInfoValidator vendor plugins: 0
+Number of vendor plugins defining MetaInfoValidators: 0
 
 WARNING:
-Following MetaInfos defined in 'DemoModel.txt' are unused:
+Following MetaInfos defined in 'CustomizedBraceSymbolTestModel.txt' are unused:
 'comment "note"' in ClassLevel
 'Java """ Type' in AttributeLevel
 'comment " note' in ModelLevel

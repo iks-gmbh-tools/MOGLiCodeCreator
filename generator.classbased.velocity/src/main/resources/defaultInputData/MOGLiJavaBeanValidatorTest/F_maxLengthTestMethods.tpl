@@ -14,8 +14,8 @@
 		'		try {
 		'			${classDescriptor.simpleName}Validator.doYourJob(testData);
 		'		} catch (Exception e) {
-		'			assertEquals("error message", "MaxLengthValidator: Content of field '$attributeName' too long: <"
-		'                                          + testData.get${AttributeName}() + ">", e.getMessage());
+		'			assertEquals("error message", "MaxLengthValidator: Max Length for field '$attributeName' (10) exceeded: "
+		'                                          + testData.get${AttributeName}().length(), e.getMessage());
 		'			return;
 		'		}
 		'		fail("Expected exception not thrown!");
@@ -24,3 +24,4 @@
 	#end
 	
 #end
+

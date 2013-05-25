@@ -27,22 +27,6 @@ public class MOGLiCCPluginModelIntTest extends IntTestParent {
 		assertFileEquals(expectedFile, file);
 	}
 
-	@Test
-	public void createsNewMOGLiCCDataProviderPlugin() throws MOGLiPluginException {
-		// prepare test
-		setModelFile("MOGLiCCPlugin/MOGLiCC_NewDataProviderPluginModel.txt");
-		standardModelProviderStarter.doYourJob();
-
-		// call functionality under test
-		velocityClassBasedGeneratorStarter.doYourJob();
-
-		// verify test result
-		final InfrastructureService infrastructure = velocityClassBasedGeneratorStarter.getMOGLiInfrastructure();
-		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_NewPluginModel/NewDataProviderStarter.java");
-		assertFileExists(file);
-		final File expectedFile = new File(getProjectTestResourcesDir(), "MOGLiCCPlugin/ExpectedNewDataProviderStarter.java");
-		assertFileEquals(expectedFile, file);
-	}
 
 	@Test
 	public void createsNewMOGLiCCEngineProviderPlugin() throws MOGLiPluginException {

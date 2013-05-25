@@ -127,6 +127,11 @@ public class FileUtil {
 		createNewFileWithContent(file, transformStringListToString(content));
 	}
 
+	public static void createNewFileWithContent(final IOEncodingHelper encodingHelper, 
+			                                    final File file, final List<String> content) throws Exception {
+		createNewFileWithContent(encodingHelper, file, transformStringListToString(content));
+	}
+
 	protected static void createNewFile(final File file) throws IOException {
 		boolean exists = file.exists();
 		if (exists) {
@@ -349,6 +354,9 @@ public class FileUtil {
 	public static String readTextResourceContentFromClassPath(final Class<?> clazz,
 			                                                  final String pathToResource) throws IOException {
 		final InputStream resource = clazz.getClassLoader().getResourceAsStream(pathToResource);
+		if (resource == null) {
+			throw new RuntimeException("Cannot find resource '" + pathToResource + "'");
+		}
 		final int pos = pathToResource.lastIndexOf('.');
 		final String filename = pathToResource.substring(pos);
 		return FileUtil.getFileContent(resource, filename);

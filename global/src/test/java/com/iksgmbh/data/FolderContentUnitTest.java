@@ -24,7 +24,7 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfFolders() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
@@ -38,7 +38,7 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfAllFiles() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
@@ -52,7 +52,7 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfAllFilesWithoutSubSubFolder() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final List<String> ignoreList = ImmutableUtil.getImmutableListOf(SUB_SUB_FOLDER);
@@ -67,7 +67,7 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfAllFilesWithoutSubFolder2() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final List<String> ignoreList = ImmutableUtil.getImmutableListOf(SUB_FOLDER2);
@@ -82,12 +82,12 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfJavaFilesWithoutSubFolder1And2() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final List<String> ignoreList = ImmutableUtil.getImmutableListOf(SUB_FOLDER1, SUB_FOLDER2);
 		final FolderContent folderContent = new FolderContent(mainTestFolder, ignoreList);
-		final List<File> result = folderContent.getFilesWithExtensions("java");
+		final List<File> result = folderContent.getFilesWithEndingPattern("java");
 		
 		// verify test result
 		assertNotNull("Not null expected", result);
@@ -97,7 +97,7 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberFoldersWithoutSubFolder1And2() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final List<String> ignoreList = ImmutableUtil.getImmutableListOf(SUB_FOLDER1, SUB_FOLDER2);
@@ -112,11 +112,11 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfJavaFiles() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
-		final List<File> result = folderContent.getFilesWithExtensions("java");
+		final List<File> result = folderContent.getFilesWithEndingPattern("java");
 		
 		// verify test result
 		assertNotNull("Not null expected", result);
@@ -126,11 +126,11 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfTxtFiles() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
-		final List<File> result = folderContent.getFilesWithExtensions("txt");
+		final List<File> result = folderContent.getFilesWithEndingPattern("txt");
 		
 		// verify test result
 		assertNotNull("Not null expected", result);
@@ -140,11 +140,11 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfIniFiles() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
-		final List<File> result = folderContent.getFilesWithExtensions("ini");
+		final List<File> result = folderContent.getFilesWithEndingPattern("ini");
 		
 		// verify test result
 		assertNotNull("Not null expected", result);
@@ -154,11 +154,11 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfXmlFiles() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
-		final List<File> result = folderContent.getFilesWithExtensions("xml");
+		final List<File> result = folderContent.getFilesWithEndingPattern("xml");
 		
 		// verify test result
 		assertNotNull("Not null expected", result);
@@ -168,11 +168,11 @@ public class FolderContentUnitTest {
 	@Test
 	public void returnsNumberOfPropertiesFiles() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 
 		// call functionality under test
 		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
-		final List<File> result = folderContent.getFilesWithExtensions("properties");
+		final List<File> result = folderContent.getFilesWithEndingPattern("properties");
 		
 		// verify test result
 		assertNotNull("Not null expected", result);

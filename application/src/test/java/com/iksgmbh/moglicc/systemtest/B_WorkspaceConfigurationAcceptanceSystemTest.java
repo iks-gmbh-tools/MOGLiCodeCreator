@@ -7,20 +7,24 @@ import java.io.File;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
-import com.iksgmbh.moglicc.MOGLiTextConstants;
-import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
+import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityModelBasedInserterStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.CmdUtil;
 import com.iksgmbh.utils.FileUtil;
 
-public class B_WorkspaceConfigurationAcceptanceSystemTest extends _AbstractSystemTest {
+public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSystemTest {
 
 	@Test
 	public void doesNotExecuteDeactivatedPlugin() throws Exception {
 		// prepare test
 		final File workspacePropertiesFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
-		MOGLiFileUtil.createNewFileWithContent(workspacePropertiesFile, "com.iksgmbh.moglicc.provider.model.standard="
-				                                                        + MOGLiTextConstants.TEXT_ACTIVATED_PLUGIN_PROPERTY);
+		final String sep = FileUtil.getSystemLineSeparator();
+		MOGLiFileUtil.createNewFileWithContent(workspacePropertiesFile, 
+				                              "com.iksgmbh.moglicc.generator.modelbased.filestructure=activated" + sep +
+				                              "com.iksgmbh.moglicc.generator.classbased.velocity=activated"+ sep +
+				                              "com.iksgmbh.moglicc.inserter.modelbased.velocity=deactivated"+ sep +
+				                              "com.iksgmbh.moglicc.provider.engine.velocity=activated" + sep +
+				                              "com.iksgmbh.moglicc.provider.model.standard=activated");
 
 		// call functionality under test
 		executeMogliApplication();
@@ -29,9 +33,9 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends _AbstractSyste
 		workspacePropertiesFile.delete();
 
 		// verify test result
-		assertChildrenNumberInDirectory(applicationOutputDir, 1);
-		final File pluginOutputDir = new File(applicationOutputDir, StandardModelProviderStarter.PLUGIN_ID);
-		assertFileExists(pluginOutputDir);
+		assertChildrenNumberInDirectory(applicationOutputDir, 3);
+		final File pluginOutputDir = new File(applicationOutputDir, VelocityModelBasedInserterStarter.PLUGIN_ID);
+		assertFileDoesNotExist(pluginOutputDir);
 	}
 
 	@Test

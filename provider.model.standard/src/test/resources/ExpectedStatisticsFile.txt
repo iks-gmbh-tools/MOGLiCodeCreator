@@ -1,6 +1,6 @@
 Model Name: DefaultModel
 Number of class descriptions in model file: 4
-Number of known MetaInfoValidator vendor plugins: 2
+Number of vendor plugins defining MetaInfoValidators: 2
 
 Plugin 'DummyGenerator1' uses the following MetaInfo elements:
 'extends' in Class level

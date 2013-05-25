@@ -252,7 +252,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
-		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR);
+		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR, PLUGIN_ID);
 		helpData.addFile("_TemplateUtilities.htm");
 		helpData.addFile("TemplateStringUtility.htm");
 		helpData.addFile("TemplateJavaUtility.htm");

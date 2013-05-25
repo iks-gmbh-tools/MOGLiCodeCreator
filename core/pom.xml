@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>core</artifactId>
 	<name>MOGLiCC Core Module</name>
-	<description>Implements the kernel of MOGLiCC application</description>
+	<description>Implements the kernel of MOGLiCC application, which is the plugin framework for finding, loading, validating and executing MOGLiCC plugins and providing the MOGLiCC infrastructure to the plugins (functionalitiy such as logging or finding other plugins).</description>
 	
 	<parent>
 		<artifactId>parent</artifactId>

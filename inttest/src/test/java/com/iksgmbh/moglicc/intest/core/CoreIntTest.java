@@ -81,7 +81,7 @@ public class CoreIntTest extends IntTestParent {
 
 		// verify test result
 		final File logfile = MOGLiFileUtil.getNewFileInstance(LOGFILE);
-		assertFileContainsEntry(logfile, "All 4 plugins executed successfully on model 'DemoModel' in workspace <../inttest/target/TestDir>.");
+		assertFileContainsEntry(logfile, "All 5 plugins executed successfully on model 'MOGLiCC_JavaBeanModel' in workspace <../inttest/target/TestDir>.");
 	}
 
 	@Test

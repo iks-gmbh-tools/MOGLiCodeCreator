@@ -17,6 +17,7 @@
 		<module>../provider.engine.velocity</module>
 		<module>../generator.classbased.velocity</module>
 		<module>../inserter.modelbased.velocity</module>
+		<module>../generator.modelbased.filestructure</module>
 	</modules>
 	
 	<dependencies>

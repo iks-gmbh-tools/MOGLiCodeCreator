@@ -14,7 +14,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
-import com.iksgmbh.moglicc.generator.utils.VelocityUtils;
+import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.type.Inserter;
@@ -71,6 +71,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 				final String targetFileReadFromMainTemplate = applyModelToArtefactTemplate(artefact, templateDir, mainTemplate);
 				validateTargetFileOfCurrentArtefact(artefact, targetFileReadFromMainTemplate);
 			}
+			infrastructure.getPluginLogger().logInfo("Doing my job...");
 		}
 
 		infrastructure.getPluginLogger().logInfo("Done!");
@@ -107,14 +108,14 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 
 		final VelocityInserterResultData result = insert(engineData);
 		if (! ModelValidationGeneratorUtil.validateModel(result.getNameOfValidModel(), model.getName())) {
-			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' not generated, because only model '"
-	                + result.getNameOfValidModel() + "' is valid for this artefact, "
-	                + "but not the current model '" + model.getName() + "'.");
+			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '" 
+                                                    + result.getNameOfValidModel() + "' as valid model.");
+			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + model.getName() + "'.");
 
 			return null;
 		}
 		result.validate();
-		encodingHelper = IOEncodingHelper.getInstance(VelocityUtils.getOutputEncodingFormat(result,
+		encodingHelper = IOEncodingHelper.getInstance(EncodingUtils.getValidOutputEncodingFormat(result.getOutputEncodingFormat(),
 				                                      infrastructure.getPluginLogger()));
 		writeResultIntoPluginOutputDir(result, artefact);
 		writeResultIntoTargetDefinedInTemplate(result);
@@ -351,12 +352,14 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		infrastructure.getPluginLogger().logInfo("initDefaultInputData");
 
 
-		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR);
+		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR, PLUGIN_ID);
+
 		final String[] templates = {"BeanFactoryClassMain.tpl",               "BeanFactoryReplaceTemplateMain.tpl",
 				                    "BeanFactoryInsertAboveTemplateMain.tpl", "BeanFactoryInsertBelowTemplateMain.tpl"};
-		defaultData.addDirectory(BEAN_FACTORY_DIR, templates);
-		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
-		defaultData.addFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
+		defaultData.addFlatFolder(BEAN_FACTORY_DIR, templates);
+
+		defaultData.addRootInputFile(PLUGIN_PROPERTIES_FILE);
+		defaultData.addRootInputFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
 
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
@@ -408,8 +411,8 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
-		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR);
-		helpData.addFile("TemplateFileHeaderInserterAttributes.htm");
+		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR, PLUGIN_ID);
+		helpData.addFile(ARTEFACT_PROPERTIES_HELP_FILE);
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
 	}

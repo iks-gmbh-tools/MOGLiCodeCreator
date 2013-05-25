@@ -22,17 +22,19 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.iksgmbh.helper.FolderContentBasedFolderDuplicator;
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.ImmutableUtil;
 
 public abstract class AbstractMOGLiTest {
 
 	// *****************************  Constants  ************************************
 
 	private static final String PROJECT_ROOT_DIR = "../test/";
-	//private static final String MAVEN_INSTALL_DIR = "D:/Reik/dev/Maven/apache-maven-2.2.1";
+	private static final List<String> FILES_TO_IGNORE = ImmutableUtil.getImmutableListOf(".git");
 
 	protected static final String TARGET_DIR = "target/";
 	protected static final String TEST_RESOURCES_DIR = "src/test/resources/";
@@ -62,6 +64,7 @@ public abstract class AbstractMOGLiTest {
 	// **************************  Abstract Methods  *********************************
 
 	abstract protected String getProjectRootDir();
+	abstract protected String getPluginId();
 	abstract protected String initTestApplicationRootDir();
 
 
@@ -83,7 +86,7 @@ public abstract class AbstractMOGLiTest {
 	protected void initForFirstUnitTest() {
 		initApplicationTestDir();
 		initProperties();
-		initPluginSubdir();
+		initPluginLibSubdir();
 		createMogliLogFile();
 	}
 
@@ -145,8 +148,51 @@ public abstract class AbstractMOGLiTest {
 		FileUtil.deleteDirWithContent(applicationRootDir);
 		applicationRootDir.mkdirs();
 	}
+	
+	protected void initPluginInputDirWithDefaultDataIfNotExisting() {
+		final String pluginID = getPluginId(); 
+		if (pluginID != null) {
+			final File pluginInputDir = new File(applicationInputDir, pluginID);
+			if (! pluginInputDir.exists()) {
+				final File defaultDataDir = new File(getProjectResourcesDir(), MOGLiPlugin.DEFAULT_DATA_DIR);
+				final FolderContentBasedFolderDuplicator folderDuplicator = new FolderContentBasedFolderDuplicator(defaultDataDir, FILES_TO_IGNORE);
+				folderDuplicator.duplicateTo(pluginInputDir);
+			}
+			moveRootInputFiles(pluginInputDir, pluginID);
+		}
+	}
 
-	protected void initPluginSubdir() {
+	/**
+	 * moves RootInputFiles from plugin specific subdir to the root dir of input files (e.g. pluginInputDir)
+	 * @param pluginInputDir
+	 * @param pluginID
+	 */
+	private void moveRootInputFiles(final File pluginInputDir, final String pluginID) {
+		final File rootInputFileDir = new File(pluginInputDir, pluginID);
+		if (rootInputFileDir.exists()) {
+			final List<File> rootInputFiles = getFileListIn(rootInputFileDir);
+			for (final File rootInputFile : rootInputFiles) {
+				if (! rootInputFile.getName().equals("readmeClasspathProblem.txt")) { // do not move docu file					
+					FileUtil.copyBinaryFile(rootInputFile, pluginInputDir);
+				}
+			}
+			FileUtil.deleteDirWithContent(rootInputFileDir);
+		}
+		
+	}
+	
+	private List<File> getFileListIn(final File dir) {
+		final List<File> toReturn = new ArrayList<File>();
+		final File[] files = dir.listFiles();
+		for (final File file : files) {
+			if (file.isFile()) {
+				toReturn.add(file);
+			}
+		}
+		return toReturn;
+	}
+	
+	protected void initPluginLibSubdir() {
 		final File plugindir = new File(applicationRootDir, DIR_LIB_PLUGIN);
 		FileUtil.deleteDirWithContent(plugindir);
 		if (! plugindir.exists()) {

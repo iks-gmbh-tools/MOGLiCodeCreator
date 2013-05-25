@@ -1,0 +1,1 @@
+The MOGLiCC **generator.modelbased.filestructure** project provides the functionality to generator a structure of folders and files.

@@ -40,7 +40,7 @@ public class StringUtil {
 		return Character.isLowerCase(s.charAt(0));
 	}
 	
-	public static String firstToUpperCase(String string) {
+	public static String firstToUpperCase(final String string) {
 		if (string == null) {
 			return null;
 		}
@@ -48,6 +48,16 @@ public class StringUtil {
 			return "";
 		}
 		return string.substring(0, 1).toUpperCase() + string.substring(1);
+	}
+
+	public static String firstToLowerCase(final String string) {
+		if (string == null) {
+			return null;
+		}
+		if ("".equals(string)) {
+			return "";
+		}
+		return string.substring(0, 1).toLowerCase() + string.substring(1);
 	}
 
 	public static String concat(final List<String> list) {
@@ -84,6 +94,33 @@ public class StringUtil {
 	public static List<String> getLinesFromText(final String text) {
 		final String[] result = StringUtils.splitByWholeSeparator(text, FileUtil.getSystemLineSeparator());
 		return Arrays.asList(result);
+	}
+
+	public static String buildTextFromLines(final List<String> lines) {
+		final StringBuffer sb = new StringBuffer();
+		for (final String line : lines) {
+			sb.append(line);
+			sb.append(FileUtil.getSystemLineSeparator());
+		}
+		return sb.toString().trim();
+	}
+
+	public static String replaceBetween(final String s, final String replaceStart, final String replaceEnd, final String replacement) {
+		final String toReplace = substringBetween(s, replaceStart, replaceEnd);
+		if (toReplace == null) {
+			return s;
+		}
+		return s.replace(toReplace, replacement);
+	}
+
+	public static String substringBetween(final String s, final String replaceStart, final String replaceEnd) {
+		final int pos1 = s.indexOf(replaceStart) + replaceStart.length();
+		final int pos2 = s.indexOf(replaceEnd);
+		if (pos1 == 0 || pos2 == -1 || pos1 >= pos2) {
+			return null;
+		}
+		final String toReplace = s.substring(pos1, pos2);
+		return toReplace;
 	}
 
 }

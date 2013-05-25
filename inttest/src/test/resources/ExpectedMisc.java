@@ -12,7 +12,6 @@ import com.iksgmbh.moglicc.demo.Person;
 public class Misc extends Person
 {
 	// instance fields
-	private boolean ready;
 	private int numberInt;
 	private long numberLong;
 	private float numberFloat;
@@ -21,13 +20,9 @@ public class Misc extends Person
 	private char id;
 	private String[] stringArray;
 	private HashSet<String> hashSet;
+	private boolean ready;
 
 	// ===============  setter methods  ===============
-
-	public void setReady(final boolean ready)
-	{
-		this.ready = ready;
-	}
 
 	public void setNumberInt(final int numberInt)
 	{
@@ -69,12 +64,12 @@ public class Misc extends Person
 		this.hashSet = hashSet;
 	}
 
-	// ===============  getter methods  ===============
-
-	public boolean getReady()
+	public void setReady(final boolean ready)
 	{
-		return ready;
+		this.ready = ready;
 	}
+
+	// ===============  getter methods  ===============
 
 	public int getNumberInt()
 	{
@@ -116,21 +111,26 @@ public class Misc extends Person
 		return hashSet;
 	}
 
+	public boolean getReady()
+	{
+		return ready;
+	}
+
 	// ===============  additional Javabean methods  ===============
 
 	@Override
 	public String toString()
 	{
 		return "Misc ["
-				+ "ready = " + ready
-				+ "numberInt = " + numberInt
-				+ "numberLong = " + numberLong
-				+ "numberFloat = " + numberFloat
-				+ "numberDouble = " + numberDouble
-				+ "numberByte = " + numberByte
-				+ "id = " + id
-				+ "stringArray = " + Arrays.toString(stringArray)
-				+ "hashSet = " + hashSet
+				+ "numberInt = " + numberInt + ", "
+				+ "numberLong = " + numberLong + ", "
+				+ "numberFloat = " + numberFloat + ", "
+				+ "numberDouble = " + numberDouble + ", "
+				+ "numberByte = " + numberByte + ", "
+				+ "id = " + id + ", "
+				+ "stringArray = " + Arrays.toString(stringArray) + ", "
+				+ "hashSet = " + hashSet + ", "
+				+ "ready = " + ready + ""
 				+ "]";
 	}
 
@@ -145,8 +145,6 @@ public class Misc extends Person
 
 		final Misc other = (Misc) obj;
 
-		if (ready != other.ready)
-			return false;
 		if (numberInt != other.numberInt)
 			return false;
 		if (numberLong != other.numberLong)
@@ -170,6 +168,8 @@ public class Misc extends Person
 			if (! hashSet.equals(other.hashSet))
 				   return false;
 		}
+		if (ready != other.ready)
+			return false;
 		return true;
 	}
 
@@ -178,7 +178,6 @@ public class Misc extends Person
 		final int prime = 31;
 		int result = 1;
 
- 		result = prime * result + (ready ? 1231 : 1237);
 		result = prime * result + numberInt;
  		result = prime * result + (int) (numberLong ^ (numberLong >>> 32));
  		result = prime * result + Float.floatToIntBits(numberFloat);
@@ -188,6 +187,7 @@ public class Misc extends Person
 		result = prime * result + id;
 		result = prime * result + Arrays.hashCode(stringArray);
                result = prime * result + ((hashSet == null) ? 0 : 697516148);
+ 		result = prime * result + (ready ? 1231 : 1237);
 
 		return result;
 	}

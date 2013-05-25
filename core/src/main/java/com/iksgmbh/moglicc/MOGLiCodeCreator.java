@@ -97,7 +97,6 @@ public class MOGLiCodeCreator {
 
 	private static void setArgumentParameters(String[] args) {
 		if (args.length > 0) {
-			// setApplicationRootDir(args[0]); argument is application root
 			workspaceDirArgument = args[0];
 		}
 	}

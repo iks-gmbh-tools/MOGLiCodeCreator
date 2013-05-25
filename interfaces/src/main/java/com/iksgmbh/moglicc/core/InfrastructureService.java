@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.DataProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
@@ -69,7 +68,6 @@ public interface InfrastructureService {
 	File getApplicationRootDir();
 	
 	ModelProvider getModelProvider(String id);
-	DataProvider getDataProvider(String id);
 	EngineProvider getEngineProvider(String id);
 	Generator getGenerator(String id);
 

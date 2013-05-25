@@ -75,4 +75,8 @@ public class ClassDescriptorDummy implements ClassDescriptor {
 		return null;
 	}
 
+	@Override
+	public boolean isValueAvailable(final String metaInfoValue) {
+		return false;
+	}
 }

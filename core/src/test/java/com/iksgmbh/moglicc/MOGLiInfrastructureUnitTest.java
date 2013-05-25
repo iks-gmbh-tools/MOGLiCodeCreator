@@ -18,7 +18,6 @@ import org.junit.Test;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.DataProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
@@ -185,20 +184,6 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		assertNotNull("Not null expected", modelProvider);
 	}
 
-	@Test
-	public void returnsDataProvider() {
-		// prepare test
-		infrastructureInitData.idOfThePluginToThisInfrastructure = PLUGIN_TEST_ID;
-		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
-
-		// call functionality under test
-		DataProvider dataProvider = infrastructure.getDataProvider("null");
-
-		// verify test result
-		assertNull("Null expected", dataProvider);
-		dataProvider = infrastructure.getDataProvider("DummyDataProvider");
-		assertNotNull("Not null expected", dataProvider);
-	}
 
 	@Test
 	public void returnsEngineProvider() {

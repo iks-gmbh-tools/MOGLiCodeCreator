@@ -1,6 +1,10 @@
 package com.iksgmbh.test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 import com.iksgmbh.utils.FileUtil;
 
@@ -29,8 +33,9 @@ public class FolderContentTestUtility {
 
 	public static File mainTestFolder = new File(TEST_MAIN_FOLDER);
 
-	public static File createTestFolder() throws Exception {
+	public static File initTestFolder() throws Exception {
 		final File mainTestFolder = new File(TEST_MAIN_FOLDER);
+		FileUtil.deleteDirWithContent(mainTestFolder);
 		mainTestFolder.mkdirs();
 
 		File file = new File(mainTestFolder, FILE1_TXT);
@@ -62,5 +67,13 @@ public class FolderContentTestUtility {
 		FileUtil.createNewFileWithContent(file, FILE_ORIG_CONTENT);
 
 		return mainTestFolder;
+	}
+	
+	public static void assertFileContent(final String expectedContent, final List<File> files) throws IOException {
+		for (final File file : files) {
+			final String actualContent = FileUtil.getFileContent(file);
+			assertEquals("file content",  FileUtil.getSystemLineSeparator() + expectedContent + FileUtil.getSystemLineSeparator(), 
+					                      FileUtil.getSystemLineSeparator() + actualContent + FileUtil.getSystemLineSeparator());
+		}
 	}
 }

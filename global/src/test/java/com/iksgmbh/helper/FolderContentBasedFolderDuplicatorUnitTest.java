@@ -28,7 +28,7 @@ public class FolderContentBasedFolderDuplicatorUnitTest {
 	@Test
 	public void duplicatesSourceFolder() throws Exception {
 		// prepare test
-		createTestFolder();
+		initTestFolder();
 		assertFalse("Folder does already exist:\n" + targetTestFolder.getAbsolutePath(), targetTestFolder.exists());
 		
 		// call functionality under test

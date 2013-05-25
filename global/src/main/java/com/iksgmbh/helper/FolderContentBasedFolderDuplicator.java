@@ -14,13 +14,18 @@ import com.iksgmbh.utils.FileUtil;
 public class FolderContentBasedFolderDuplicator {
 
 	private FolderContent folderContent;
+
 	final int lengthOfAbsolutePathOfSourceDir;
 
 	public FolderContentBasedFolderDuplicator(final File sourceDir, final List<String> toIgnore) {
 		this.lengthOfAbsolutePathOfSourceDir = sourceDir.getAbsolutePath().length();
 		folderContent = new FolderContent(sourceDir, toIgnore);
 	}
-	
+
+	public FolderContent getFolderContent() {
+		return folderContent;
+	}
+
 	public void duplicateTo(final File targetDir) {
 		final List<File> folders = folderContent.getFolders();
 		createTargetDirectories(targetDir, folders);
@@ -42,7 +47,12 @@ public class FolderContentBasedFolderDuplicator {
 		for (final File folder : folders) {
 			final String nameWithoutOldPath = cutOldPath(folder);
 			final File newFolder = new File(targetDir.getAbsolutePath(), nameWithoutOldPath);
-			newFolder.mkdirs();
+			if (! newFolder.exists()) {
+				boolean created = newFolder.mkdirs();
+				if (! created) {				
+					System.err.println("Could not create " + newFolder.getAbsolutePath());
+				}
+			}
 		}
 	}
 

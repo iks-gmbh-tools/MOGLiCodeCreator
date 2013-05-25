@@ -24,4 +24,9 @@ public class ApplicationTestParent extends AbstractMOGLiTest {
 		return applicationRootDir;
 	}
 
+	@Override
+	protected String getPluginId() {
+		return null;  // no specific plugin is tested here
+	}
+
 }

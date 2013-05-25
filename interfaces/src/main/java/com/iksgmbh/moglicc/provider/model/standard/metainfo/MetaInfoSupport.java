@@ -9,7 +9,9 @@ import java.util.List;
  */
 public interface MetaInfoSupport {
 
-	String META_INFO_NOT_FOUND = "!MetaInfo FOR '#' NOT FOUND!";
+	String META_INFO_NOT_FOUND_START = "!MetaInfo FOR";
+	String META_INFO_NOT_FOUND_END = "NOT FOUND!";
+	String META_INFO_NOT_FOUND = META_INFO_NOT_FOUND_START + " '#' " + META_INFO_NOT_FOUND_END;
 
 	/**
 	 * @param metaInfoName
@@ -54,4 +56,10 @@ public interface MetaInfoSupport {
 	 */
 	boolean doesHaveAnyMetaInfosWithName(String metaInfoName);
 
+	/**
+	 * @param metaInfoValue
+	 * @return true if the value does not contain META_INFO_NOT_FOUND
+	 * @since 1.3.0
+	 */
+	boolean isValueAvailable(String metaInfoValue);	
 }

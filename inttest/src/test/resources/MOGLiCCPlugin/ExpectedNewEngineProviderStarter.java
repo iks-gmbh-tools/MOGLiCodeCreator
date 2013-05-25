@@ -12,6 +12,7 @@ import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.*;
 import com.iksgmbh.utils.ImmutableUtil;
 import com.iksgmbh.moglicc.generator.utils.helper.*;
+import com.iksgmbh.utils.FileUtil;
 
 /**
 * Raw draft of the starter class of the MyEngineProvider plugin.
@@ -40,11 +41,6 @@ public class NewEngineProviderStarter implements EngineProvider {
 		// engine providers have nothing to do here (see startEngine)
 	}
 
-
-	List<String> getArtefactList() throws MOGLiPluginException {
-		final File generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
-		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
-	}
 
 	String findMainTemplate(final File templateDir) throws MOGLiPluginException {
 		return TemplateUtil.findMainTemplate(templateDir, MAIN_TEMPLATE_IDENTIFIER);

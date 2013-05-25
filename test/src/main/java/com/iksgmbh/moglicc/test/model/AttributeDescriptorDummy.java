@@ -60,4 +60,9 @@ public class AttributeDescriptorDummy implements AttributeDescriptor {
 		return null;
 	}
 
+	@Override
+	public boolean isValueAvailable(String metaInfoValue) {
+		return false;
+	}
+
 }

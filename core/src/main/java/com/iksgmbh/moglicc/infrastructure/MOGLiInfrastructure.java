@@ -13,7 +13,6 @@ import com.iksgmbh.moglicc.core.Logger;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.DataProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
 import com.iksgmbh.moglicc.plugin.type.basic.Generator;
 import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
@@ -83,16 +82,6 @@ public class MOGLiInfrastructure implements InfrastructureService {
 		 if (plugin != null &&
 			 MOGLiPlugin.PluginType.MODEL_PROVIDER == plugin.getPluginType()) {
 			 return (ModelProvider) plugin;
-		 }
-		 return null;
-	}
-
-	@Override
-	public DataProvider getDataProvider(String id) {
-		 MOGLiPlugin plugin = pluginMap.get(id);
-		 if (plugin != null &&
-			 MOGLiPlugin.PluginType.DATA_PROVIDER == plugin.getPluginType()) {
-			 return (DataProvider) plugin;
 		 }
 		 return null;
 	}

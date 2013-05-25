@@ -8,10 +8,12 @@
 # Known values for pluginDependency: MODEL_PROVIDER_ID, ENGINE_PROVIDER_ID
 ####################################################################################
 model MOGLiCC_NewPluginModel
-  metainfo eclipseWorkspaceProject D:/temp/mogli
+  metainfo eclipseProjectDir <applicationRootDir>
+  metainfo projectName MOGLiCC_NewPluginProject
+  metainfo projectDescription Just a generator for demo and test purpose
 
-class com.iksgmbh.moglicc.generator.classbased.velocity.NewGeneratorStarter
-    metainfo pluginID MyGenerator
+class com.iksgmbh.moglicc.generator.classbased.test.MyTestGeneratorStarter
+    metainfo pluginID MyTestGenerator
 	metainfo pluginType GENERATOR
 	metainfo pluginDependency MODEL_PROVIDER_ID
 	metainfo pluginDependency ENGINE_PROVIDER_ID

@@ -73,14 +73,17 @@ public class FolderContent {
 	}
 
 	/**
+	 * Searches for files that match the endingPattern.
+	 * @param endingPattern last characters of the filename. May include only ending, 
+	 *        ending part of filename or path to the file. If null, all files are returned.
 	 * @return all files of all subFolders and rootDir with the given file extension
 	 */
-	public List<File> getFilesWithExtensions(final String extension) {
+	public List<File> getFilesWithEndingPattern(final String endingPattern) {
 		final List<File> toReturn = new ArrayList<File>();
 		for (final File dir : directories) {
 			final List<File> list = content.get(dir);
 			for (final File file : list) {
-				if (extension == null || file.getName().endsWith("." + extension)) {
+				if (endingPattern == null || file.getAbsolutePath().endsWith(endingPattern)) {
 					toReturn.add(file);
 				}
 			}
@@ -103,7 +106,7 @@ public class FolderContent {
 	 * @return all files of all subFolders and rootDir
 	 */
 	public List<File> getFiles() {
-		return getFilesWithExtensions(null);
+		return getFilesWithEndingPattern(null);
 	}
 
 	public List<File> getFilesFor(final File folder) {

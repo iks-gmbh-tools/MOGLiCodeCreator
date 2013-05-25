@@ -2,7 +2,6 @@ package com.iksgmbh.moglicc.provider.model.standard.metainfo;
 
 import java.util.List;
 
-import com.iksgmbh.moglicc.generator.utils.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 /**
  * Validation results in always true. 
