@@ -34,8 +34,8 @@ public class FolderContentBasedFileRenamerUnitTest {
 		assertEquals("number files", 0, oldFiles.size());
 		final List<File> newFiles = folderContent.getFilesWithEndingPattern("file1Renamed.txt");
 		assertEquals("number files", 1, newFiles.size());
-		assertEquals("Renaming result", "'file1.txt' renamed to 'file1Renamed.txt' in " +
-				                      "..\\global\\target\\sourceTestFolder", renaming.getRenamingResults().get(0));
+		assertEquals("Renaming result", "File 'file1.txt' renamed to 'file1Renamed.txt' in directory '" +
+				                      "..\\global\\target\\sourceTestFolder'", renaming.getRenamingResults().get(0));
 	}	
 
 	@Test
@@ -89,8 +89,8 @@ public class FolderContentBasedFileRenamerUnitTest {
 		assertEquals("number files", 1, oldFiles.size());
 		final List<File> newFiles = folderContent.getFilesWithEndingPattern(newFileName);
 		assertEquals("number files", 1, newFiles.size());
-		assertEquals("Renaming result", "'file.txt' renamed to 'file.txt2' in " 
-                                        + "..\\global\\target\\sourceTestFolder\\subFolder2\\subSubFolder", renaming.getRenamingResults().get(0));
+		assertEquals("Renaming result", "File 'file.txt' renamed to 'file.txt2' in directory '" 
+                                        + "..\\global\\target\\sourceTestFolder\\subFolder2\\subSubFolder'", renaming.getRenamingResults().get(0));
 	}
 	
 	@Test

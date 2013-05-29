@@ -8,11 +8,11 @@ import com.iksgmbh.data.FolderContent;
 
 /**
  * Renames files that match a given filename within the defined folder.
- * 
+ *
  * @author Reik Oberrath
  */
 public class FolderContentBasedFileRenamer {
-	
+
 	private FolderContent folderContent;
 	private List<String> errorList = new ArrayList<String>();
 
@@ -39,18 +39,19 @@ public class FolderContentBasedFileRenamer {
 		return errorList;
 	}
 
-	public void doYourJob(final RenamingData renaming) 
+	public void doYourJob(final RenamingData renaming)
 	{
-		if (renaming.oldName.equals(renaming.newName))  {
+		if (renaming.getOldName().equals(renaming.getNewName()))  {
 			errorList.add("File '" + renaming.getOldName() + "' is not renamed to a new name!");
 		} else {
-			final List<File> filesWithExtensions = folderContent.getFilesWithEndingPattern(renaming.oldName);
+			final List<File> filesWithExtensions = folderContent.getFilesWithEndingPattern(renaming.getOldName());
 			for (final File oldFile : filesWithExtensions) {
 				try {
-					final File newFile = new File(oldFile.getParentFile(), renaming.newName);
+					final File newFile = new File(oldFile.getParentFile(), renaming.getNewName());
 					final boolean renamed = oldFile.renameTo(newFile);
 					if (renamed) {
-						renaming.renamingResults.add("'" + oldFile.getName() + "' renamed to '" + newFile.getName() + "' in " + oldFile.getParent());
+						renaming.getRenamingResults().add("File '" + oldFile.getName() + "' renamed to '" + newFile.getName()
+								                      + "' in directory '" + oldFile.getParent() + "'");
 					} else {
 						errorList.add("Could not rename " + oldFile.getName() + " to " + newFile.getName() + " in " + oldFile.getParent());
 					}

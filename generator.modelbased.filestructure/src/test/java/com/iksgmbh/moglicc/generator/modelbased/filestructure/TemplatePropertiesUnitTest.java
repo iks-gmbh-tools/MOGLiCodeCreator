@@ -16,7 +16,7 @@ import com.iksgmbh.moglicc.generator.modelbased.filestructure.test.FileStructure
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.utils.FileUtil;
 
-public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTestParent {
+public class TemplatePropertiesUnitTest extends FileStructureModelBasedGeneratorTestParent {
 	
 	@Test
 	public void readsTemplatePropertiesFromFile() throws MOGLiPluginException {
@@ -26,7 +26,7 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 
 		// call functionality under test
 		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, 
-				                                                             new DummyLogger(), getNewPluginModelDummyModel());
+				                                                             new DummyLogger(), getNewPluginModelDummyModel(), null);
 
 		// verify test result
 		assertEquals("root name", METAINFO_MODEL_TARGETDIR, templateProperties.getRootName());
@@ -51,7 +51,7 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 
 		try {
 			// call functionality under test
-			new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getDummyModel(null));
+			new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getDummyModel(null), null);
 			fail("Expected exception not thrown");
 		} catch (Exception e) {
 			// verify test result
@@ -67,7 +67,7 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 
 		try {
 			// call functionality under test
-			new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getDummyModel(null));
+			new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getDummyModel(null), null);
 			fail("Expected exception not thrown");
 		} catch (Exception e) {
 			// verify test result
@@ -84,7 +84,8 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 		FileUtil.createNewFileWithContent(artefactPropertiesFile, "@RootName TargetDir");
 
 		// call functionality under test
-		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getDummyModel(null));
+		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, new DummyLogger(), 
+				                                                             getDummyModel(null), null);
 		
 		// verify test result
 		assertEquals("root name", "TargetDir", templateProperties.getRootName());
@@ -97,7 +98,8 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 		FileUtil.createNewFileWithContent(artefactPropertiesFile, "@RootName ${ModelMetaInfo=eclipseProjectDir}");
 
 		// call functionality under test
-		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getNewPluginModelDummyModel());
+		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, new DummyLogger(), 
+				                                                             getNewPluginModelDummyModel(), null);
 		
 		// verify test result
 		assertEquals("root name", MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER, templateProperties.getRootName());
@@ -112,7 +114,8 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 		                                                          "@ReplaceIn file x y");
 
 		// call functionality under test
-		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getNewPluginModelDummyModel());
+		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, new DummyLogger(), 
+				                                                             getNewPluginModelDummyModel(), null);
 		
 		// verify test result
 		assertEquals("Number replacements", 1, templateProperties.getReplacements().size());
@@ -128,7 +131,7 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 
 		try {
 			// call functionality under test
-			new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getNewPluginModelDummyModel());
+			new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getNewPluginModelDummyModel(), null);
 			fail("Expected exception was not thrown!");
 		} catch (Exception e) {
 			// verify test result
@@ -146,7 +149,7 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 
 		try {
 			// call functionality under test
-			new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getNewPluginModelDummyModel());	
+			new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getNewPluginModelDummyModel(), null);	
 			fail("Expected exception was not thrown!");
 		} catch (Exception e) {
 			// verify test result
@@ -163,7 +166,8 @@ public class TemplatePropertiesTest extends FileStructureModelBasedGeneratorTest
 		                                                          "@RenameFile  name1  name2 ");
 
 		// call functionality under test
-		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, new DummyLogger(), getNewPluginModelDummyModel());
+		final TemplateProperties templateProperties = new TemplateProperties(artefactPropertiesFile, new DummyLogger(), 
+				                                                             getNewPluginModelDummyModel(), null);
 		
 		// verify test result
 		assertEquals("Number replacements", 1, templateProperties.getFileRenamings().size());

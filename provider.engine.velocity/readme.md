@@ -1,1 +1,1 @@
-The MOGLiCC **provider.engine.velocity** project provides the Velocity Engine plus some TemplateUtilities to be used by generator plugins and their templates.
+The MOGLiCC **provider.engine.velocity** project provides the Velocity Engine plus some TemplateUtilities to be used by the velocity generator plugins and their templates. The VelocityEngineProvider does not depend on other plugins.

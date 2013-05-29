@@ -9,7 +9,7 @@ import com.iksgmbh.utils.FileUtil;
 
 public class TemplateUtil {
 	
-	public static final String NO_MAIN_TEMPLATE_FOUND = "No main template found in ";
+	public static final String NO_MAIN_TEMPLATE_FOUND = "File to read artefact properties from not found: ";
 
 	/**
 	 * Expects a directory with exactly one main template.

@@ -15,7 +15,6 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.modelbased.filestructure.test.FileStructureModelBasedGeneratorTestParent;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
-import com.iksgmbh.utils.StringUtil;
 
 public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModelBasedGeneratorTestParent {
 
@@ -41,10 +40,10 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
 	@Test
 	public void copiesFilesToOutputDir() throws MOGLiPluginException {
 		// prepare test
-		final File targetDir = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_JavaBeanProject"); 
+		final File targetDir = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_JavaBeanProject");
 		FileUtil.deleteDirWithContent(targetDir);
 		assertFileDoesNotExist(targetDir);
-		
+
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
 
@@ -57,11 +56,11 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
 
 		final File targetPomFile = new File(targetDir, "pom.xml");
 		final File srcDir = new File(targetDir, "src");
-		
+
 		assertFileExists(targetPomFile);
 		assertFileExists(srcDir);
 		assertChildrenNumberInDirectory(srcDir, 2);
-		
+
 		final File artefactPropertiesFile = new File(targetDir, FilestructureModelBasedGeneratorStarter.FILENAME_ARTEFACT_PROPERTIES);
 		assertFileDoesNotExist(artefactPropertiesFile);
 	}
@@ -69,10 +68,10 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
 	@Test
 	public void doesReplacementsInPluginOutputDir() throws MOGLiPluginException {
 		// prepare test
-		final File targetDir = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_JavaBeanProject"); 
+		final File targetDir = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_JavaBeanProject");
 		FileUtil.deleteDirWithContent(targetDir);
 		assertFileDoesNotExist(targetDir);
-		
+
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
 
@@ -90,10 +89,10 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
 	public void createsTargetDirDefinedAsProperty() throws MOGLiPluginException {
 		// prepare test
 		FileUtil.deleteDirWithContent(applicationOutputDir);
-		final File targetDir = new File(applicationRootDir, METAINFO_MODEL_TARGETDIR); 
+		final File targetDir = new File(applicationRootDir, METAINFO_MODEL_TARGETDIR);
 		FileUtil.deleteDirWithContent(targetDir);
 		assertFileDoesNotExist(targetDir);
-		
+
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
 
@@ -101,39 +100,73 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
 		assertFolderStructure(targetDir);
 		assertDirContent(targetDir);
 	}
-	
+
 	@Test
 	public void createsGenerationReport() throws MOGLiPluginException {
 		// prepare test
 		FileUtil.deleteDirWithContent(applicationOutputDir);
-		
+
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
 
 		// verify test result
 		final String generationReport = cutLocalFilePath(fileStructureGenerator.getGenerationReport());
 		assertTrue("unexpected generation report", generationReport.startsWith("FilestructureModelBasedGenerator has done work for following artefacts:"));
+		assertStringContains(generationReport, "1 artefact(s) have been generated and 29 generation event(s) have been performed.");
 	}
-
-	private String cutLocalFilePath(final String generationReport) {
-		return StringUtil.replaceBetween(generationReport, "in: ", "..\\", ".");
-	}
-
 
 	@Test
-	public void throwsExceptionForMissingRootName() throws Exception {
+	public void doesNotOverwriteExistingFilesInTargetDirAndcreatesCorrespondingGenerationReport() throws Exception {
 		// prepare test
-		final File propertiesFile = new File(infrastructure.getPluginInputDir(), "MOGLiCC_JavaBeanProject/" + FilestructureModelBasedGeneratorStarter.FILENAME_ARTEFACT_PROPERTIES);
-		FileUtil.createNewFileWithContent(propertiesFile, "@TargetDir test");
+		FileUtil.deleteDirWithContent(applicationOutputDir);
+		final File targetDir = new File(applicationRootDir, "ModelTargetTestDir");
+		FileUtil.deleteDirWithContent(targetDir);
+		targetDir.mkdirs();
+		final File pomFile = new File(targetDir, "pom.xml");
+		pomFile.createNewFile();
 
-		try {
-			// call functionality under test
-			fileStructureGenerator.doYourJob();
-			fail("Expected exception not thrown");
-		} catch (Exception e) {
-			// verify test result
-			assertStringEquals("error message", "Mandatory property is not defined: RootName", e.getMessage());
-		}
+		final File propertiesFile = new File(infrastructure.getPluginInputDir(), "MOGLiCC_JavaBeanProject/" + FilestructureModelBasedGeneratorStarter.FILENAME_ARTEFACT_PROPERTIES);
+		FileUtil.createNewFileWithContent(propertiesFile, "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
+				                                          "@RootName ${ModelMetaInfo=projectName}" + FileUtil.getSystemLineSeparator() +
+				                                          "@TargetDir ${ModelMetaInfo=eclipseProjectDir}" + FileUtil.getSystemLineSeparator() +
+				                                          "@CreateNew false" + FileUtil.getSystemLineSeparator() +
+				                                          "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
+				                                          "@exclude .git");
+
+
+		// call functionality under test
+		fileStructureGenerator.doYourJob();
+
+		// cleanup
+		FileUtil.deleteDirWithContent(fileStructureGenerator.getMOGLiInfrastructure().getPluginInputDir());
+
+		// verify test result
+		final String generationReport = cutLocalFilePath(fileStructureGenerator.getGenerationReport());
+		assertTrue("unexpected generation report", generationReport.startsWith("FilestructureModelBasedGenerator has done work for following artefacts:"));
+		assertStringContains(generationReport, "pom.xml  (file existed already in the targetDir and was preserved - " +
+				                               "the generated file is available in the plugin's output dir)");
+		assertStringContains(generationReport, "src\\main\\java\\com\\iksgmbh\\moglicc\\demo\\main\\main.java"
+		                                        + FileUtil.getSystemLineSeparator());  // this file was not existing
+	}
+
+	@Test
+	public void usesArtefactNameForMissingRootName() throws Exception {
+		// prepare test
+		FileUtil.deleteDirWithContent(infrastructure.getPluginOutputDir());
+		final String artefactName = "TestArtefact";
+		final File inputDir = new File(infrastructure.getPluginInputDir(), artefactName);
+		inputDir.mkdirs();
+		final File propertiesFile = new File(inputDir, FilestructureModelBasedGeneratorStarter.FILENAME_ARTEFACT_PROPERTIES);
+		propertiesFile.createNewFile();
+
+		// call functionality under test
+		fileStructureGenerator.doYourJob();
+
+		// cleanup
+		FileUtil.deleteDirWithContent(infrastructure.getPluginInputDir());
+
+		// verify test result
+		assertStringEquals("rootname", artefactName, fileStructureGenerator.getTemplateProperties().getRootName());
 	}
 
 	@Test
@@ -143,7 +176,7 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
 
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
-		
+
 		// verify test result
 		final TemplateProperties templateProperties = fileStructureGenerator.getTemplateProperties();
 		assertStringEquals("target dir", MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER, templateProperties.getTargetDir());
@@ -156,7 +189,7 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
 
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
-		
+
 		// verify test result
 		final TemplateProperties templateProperties = fileStructureGenerator.getTemplateProperties();
 		assertEquals("create new", false, templateProperties.isCreateNew());
@@ -179,18 +212,18 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
                 "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@RenameFile RenamingTestFile.txt RenamingTestFile2.txt");
 		assertFileExists(artefactPropertiesFile);
-		
+
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
 
 		// verify test result
 		final File artefactOutputDir = new File(infrastructure.getPluginOutputDir(), "RenamingTestArtefact/subfolder");
-		final File fileBeforeRenaming = new File(artefactOutputDir, "RenamingTestFile.txt"); 
+		final File fileBeforeRenaming = new File(artefactOutputDir, "RenamingTestFile.txt");
 		assertFileDoesNotExist(fileBeforeRenaming);
-		final File fileAfterRenaming = new File(artefactOutputDir, "RenamingTestFile2.txt"); 
+		final File fileAfterRenaming = new File(artefactOutputDir, "RenamingTestFile2.txt");
 		assertFileExists(fileAfterRenaming);
 	}
-	
+
 	@Test
 	public void doesLineReplacementInFileBeforeRenamingUsingOriginalFilename() throws Exception {
 		// prepare test
@@ -200,15 +233,15 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
                 "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@RenameFile RenamingTestFile.txt RenamingTestFile2.txt" + FileUtil.getSystemLineSeparator() +
     			"@ReplaceIn RenamingTestFile.txt <replaceMe> REPLACED");
-		
+
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
 
 		// verify test result
 		final File artefactOutputDir = new File(infrastructure.getPluginOutputDir(), "RenamingTestArtefact/subfolder");
-		final File resultFile = new File(artefactOutputDir, "RenamingTestFile2.txt"); 
+		final File resultFile = new File(artefactOutputDir, "RenamingTestFile2.txt");
 		final String fileContent = FileUtil.getFileContent(resultFile);
-		assertEquals("File content", "REPLACED", fileContent);		
+		assertEquals("File content", "REPLACED", fileContent);
 	}
 
 	@Test
@@ -220,15 +253,15 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
                 "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@RenameFile RenamingTestFile.txt RenamingTestFile2.txt" + FileUtil.getSystemLineSeparator() +
     			"@ReplaceIn RenamingTestFile2.txt <replaceMe> REPLACED");
-		
+
 		// call functionality under test
 		fileStructureGenerator.doYourJob();
 
 		// verify test result
 		final File artefactOutputDir = new File(infrastructure.getPluginOutputDir(), "RenamingTestArtefact/subfolder");
-		final File resultFile = new File(artefactOutputDir, "RenamingTestFile2.txt"); 
+		final File resultFile = new File(artefactOutputDir, "RenamingTestFile2.txt");
 		final String fileContent = FileUtil.getFileContent(resultFile);
-		assertEquals("File content", "REPLACED", fileContent);		
+		assertEquals("File content", "REPLACED", fileContent);
 	}
 
 	@Test
@@ -239,8 +272,8 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
                 "@TargetDir <applicationRootDir>" + FileUtil.getSystemLineSeparator() +
                 "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@RenameFile RenamingTestFile.txt RenamingTestFile.txt");
-		
-		try {			
+
+		try {
 			// call functionality under test
 			fileStructureGenerator.doYourJob();
 			fail("Expected exception was not thrown!");
@@ -250,7 +283,7 @@ public class FileStructureModelBasedGeneratorUnitTest extends FileStructureModel
 					                      + "File 'RenamingTestFile.txt' is not renamed to a new name!", e.getMessage());
 		}
 	}
-	
+
 	private File prepareArtefact() throws Exception {
 		FileUtil.deleteDirWithContent(infrastructure.getPluginInputDir());
 		FileUtil.deleteDirWithContent(infrastructure.getPluginOutputDir());

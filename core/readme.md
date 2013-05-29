@@ -1,1 +1,1 @@
-The MOGLiCC **core** project implements the kernel of MOGLiCC application, which is the plugin framework for finding, loading, validating and executing MOGLiCC plugins and providing the MOGLiCC infrastructure to the plugins (functionalitiy such as logging or finding other plugins).
+The MOGLiCC **core** project implements the kernel of MOGLiCC application, i. e. a plugin container that searchs, loads, validates and executes the plugins.

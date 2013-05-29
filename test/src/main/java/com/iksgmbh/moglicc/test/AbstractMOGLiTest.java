@@ -28,6 +28,7 @@ import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
+import com.iksgmbh.utils.StringUtil;
 
 public abstract class AbstractMOGLiTest {
 
@@ -148,9 +149,9 @@ public abstract class AbstractMOGLiTest {
 		FileUtil.deleteDirWithContent(applicationRootDir);
 		applicationRootDir.mkdirs();
 	}
-	
+
 	protected void initPluginInputDirWithDefaultDataIfNotExisting() {
-		final String pluginID = getPluginId(); 
+		final String pluginID = getPluginId();
 		if (pluginID != null) {
 			final File pluginInputDir = new File(applicationInputDir, pluginID);
 			if (! pluginInputDir.exists()) {
@@ -172,15 +173,15 @@ public abstract class AbstractMOGLiTest {
 		if (rootInputFileDir.exists()) {
 			final List<File> rootInputFiles = getFileListIn(rootInputFileDir);
 			for (final File rootInputFile : rootInputFiles) {
-				if (! rootInputFile.getName().equals("readmeClasspathProblem.txt")) { // do not move docu file					
+				if (! rootInputFile.getName().equals("readmeClasspathProblem.txt")) { // do not move docu file
 					FileUtil.copyBinaryFile(rootInputFile, pluginInputDir);
 				}
 			}
 			FileUtil.deleteDirWithContent(rootInputFileDir);
 		}
-		
+
 	}
-	
+
 	private List<File> getFileListIn(final File dir) {
 		final List<File> toReturn = new ArrayList<File>();
 		final File[] files = dir.listFiles();
@@ -191,7 +192,7 @@ public abstract class AbstractMOGLiTest {
 		}
 		return toReturn;
 	}
-	
+
 	protected void initPluginLibSubdir() {
 		final File plugindir = new File(applicationRootDir, DIR_LIB_PLUGIN);
 		FileUtil.deleteDirWithContent(plugindir);
@@ -345,7 +346,7 @@ public abstract class AbstractMOGLiTest {
 		try {
 			final List<String> expectedFileContent = cutTrailingEmptyLines(FileUtil.getFileContentAsList(expectedFile));
 			final List<String> actualFileContent = cutTrailingEmptyLines(FileUtil.getFileContentAsList(actualFile));
-			if (expectedFileContent.size() != actualFileContent.size()) {
+			if (expectedFileContent.size() == actualFileContent.size()) {
 				System.out.println("----------------------------------------------------");
 				System.out.println("expectedFileContent:");
 				for (int i = 0; i < expectedFileContent.size(); i++) {
@@ -360,7 +361,8 @@ public abstract class AbstractMOGLiTest {
 			}
 			assertEquals("Number lines in file", expectedFileContent.size(), actualFileContent.size());
 			for (int i = 0; i < expectedFileContent.size(); i++) {
-				assertStringEquals((i+1) + ". line of file", expectedFileContent.get(i), actualFileContent.get(i));
+				assertStringEquals((i+1) + ". line of file", expectedFileContent.get(i).trim(), 
+						                                     cutLocalFilePath(actualFileContent.get(i)));
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Error comparing files", e);
@@ -390,5 +392,10 @@ public abstract class AbstractMOGLiTest {
 		assertFileExists(file);
 		return file;
 	}
+
+	protected String cutLocalFilePath(final String line) {
+		return StringUtil.replaceBetween(line, "in: ", "..\\", ".").trim();
+	}
+
 
 }
