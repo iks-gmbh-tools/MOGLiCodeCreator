@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.iksgmbh.helper.FolderContentBasedTextFileLineReplacer.ReplacementData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 
-public class ReplacementDataParserTest {
+public class ReplacementDataParserUnitTest {
 
 	@Test
 	public void parsesReplacementLine() throws MOGLiPluginException {

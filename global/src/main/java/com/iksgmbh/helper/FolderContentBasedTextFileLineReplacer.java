@@ -11,11 +11,11 @@ import com.iksgmbh.utils.FileUtil;
 
 /**
  * Replaces lines or part of them in each file that match the file pattern within the defined folder.
- * 
+ *
  * @author Reik Oberrath
  */
 public class FolderContentBasedTextFileLineReplacer {
-	
+
 	private FolderContent folderContent;
 	private List<String> errorList = new ArrayList<String>();
 
@@ -47,12 +47,12 @@ public class FolderContentBasedTextFileLineReplacer {
 		}
 	}
 
-	public void doYourJob(final ReplacementData replacementData) 
-	{	
-		if (replacementData.replacementPerformed) {
+	public void doYourJob(final ReplacementData replacementData)
+	{
+		if (replacementData.wasReplacementPerformed()) {
 			return;
 		}
-		
+
 		final List<File> filesWithExtensions = folderContent.getFilesWithEndingPattern(replacementData.getFileEndingPattern());
 		for (final File file : filesWithExtensions) {
 			try {
@@ -60,7 +60,7 @@ public class FolderContentBasedTextFileLineReplacer {
 				final List<String> result = replace(fileContent, replacementData.getOldString(), replacementData.getNewString());
 				FileUtil.createNewFileWithContent(encodingHelper, file, result);
 				replacementData.addMatchingFile(file);
-				replacementData.replacementPerformed = true;
+				replacementData.setReplacementPerformed(true);
 			} catch (Exception e) {
 				errorList.add(e.getMessage());
 			}
@@ -97,6 +97,14 @@ public class FolderContentBasedTextFileLineReplacer {
 			return fileEndingPattern;
 		}
 
+		public boolean wasReplacementPerformed() {
+			return replacementPerformed;
+		}
+
+		public void setReplacementPerformed(final boolean replacementPerformed) {
+			this.replacementPerformed = replacementPerformed ;
+		}
+
 		public String getNewString() {
 			return newString;
 		}
@@ -104,11 +112,11 @@ public class FolderContentBasedTextFileLineReplacer {
 		public String getOldString() {
 			return oldString;
 		}
-		
+
 		public void addMatchingFile(final File f) {
 			matchingFiles.add(f);
 		}
-		
+
 		public List<File> getMatchingFiles() {
 			return matchingFiles;
 		}

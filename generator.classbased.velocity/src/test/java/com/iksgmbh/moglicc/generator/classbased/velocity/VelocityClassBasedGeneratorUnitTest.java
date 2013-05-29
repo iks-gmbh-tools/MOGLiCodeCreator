@@ -1,11 +1,13 @@
 package com.iksgmbh.moglicc.generator.classbased.velocity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
@@ -22,6 +24,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.FileUtil.FileCreationStatus;
 
 public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGeneratorTestParent {
 
@@ -369,7 +372,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		resultList.add(resultData);
 
 		// call functionality under test
-		velocityClassBasedGenerator.writeFilesIntoTemplateTargetDir(resultList);
+		velocityClassBasedGenerator.writeFilesIntoTargetDirReadFromTemplateFile(resultList);
 
 		// verify test result
 		final File file = new File(applicationRootDir + "/example", "Umlaute.txt");
@@ -443,4 +446,33 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		final File expected = new File(getProjectTestResourcesDir(), "expectedReport.txt");
 		assertEquals("report", FileUtil.getFileContent(expected), report);
 	}
+	
+	@Test
+	public void doesNotOverwriteExistingFilesInTargetDirAndcreatesCorrespondingGenerationReport() throws Exception {
+		// prepare test
+		final String artefactName = "testArtefact";
+		final File artefactDir = new File(infrastructure.getPluginInputDir(), artefactName);
+		artefactDir.mkdirs();
+		assertFileExists(artefactDir);
+		final File templateFile = new File(artefactDir, "main.tpl");
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "content of template is not relevant here");
+		final String targetFileName = "targetFile.txt";
+		final File targetDir = new File(applicationRootDir, artefactName);
+		FileUtil.deleteDirWithContent(targetDir);
+		targetDir.mkdirs();
+		final File targetFile = new File(targetDir, artefactName);
+		targetFile.createNewFile();
+		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, artefactName,
+				"TargetFileContent", false);
+		prepareResultData(resultData);
+
+		// call functionality under test
+		velocityClassBasedGenerator.doYourJob();
+
+		// verify test result
+		final String generationReport = velocityClassBasedGenerator.getGenerationReport();
+		assertTrue("unexpected generation result", generationReport.contains("targetFile.txt did already exist and was NOT overwritten in testArtefact"));
+	}
+
+	final HashMap<String, FileCreationStatus> result = new HashMap<String, FileCreationStatus>();
 }

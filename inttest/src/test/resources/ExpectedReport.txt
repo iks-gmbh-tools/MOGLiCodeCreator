@@ -1,4 +1,4 @@
-*******************************   R E S U L T   ******************************* 
+*******************************   R E S U L T   *******************************
 
 All 5 plugins executed successfully on model 'MOGLiCC_JavaBeanModel' in workspace <../inttest/target/TestDir>.
 53 generations for 7 artefacts have been performed.
@@ -42,9 +42,9 @@ FilestructureModelBasedGenerator has done work for following artefacts:
 
    Reports for artefact 'MOGLiCC_JavaBeanProject':
 
-		File structure artefact generated in: C:\dev\eclipse\workspaces\mogli\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
+		File structure artefact generated in: ...\inttest\target\TestDir\MOGLiCC_JavaBeanProject
 
-		created subdirectories: 
+		Created subdirectories:
 			src
 			main
 			java
@@ -60,33 +60,26 @@ FilestructureModelBasedGenerator has done work for following artefacts:
 			java
 			resources
 
-		Created files: 
+		Created files:
 			pom.xml
-			main.java
-			FieldValidationException.java
-			FieldValidationResult.java
-			FieldValidator.java
-			JavaBeanValidator.java
-			MandatoryFieldValidator.java
-			MaxLengthValidator.java
-			MinLengthValidator.java
+			src\main\java\com\iksgmbh\moglicc\demo\main\MOGLiCC_JavaBeanProjectClassOverviewPrinter.java
+			src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationException.java
+			src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationResult.java
+			src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidator.java
+			src\main\java\com\iksgmbh\moglicc\demo\validator\JavaBeanValidator.java
+			src\main\java\com\iksgmbh\moglicc\demo\validator\types\MandatoryFieldValidator.java
+			src\main\java\com\iksgmbh\moglicc\demo\validator\types\MaxLengthValidator.java
+			src\main\java\com\iksgmbh\moglicc\demo\validator\types\MinLengthValidator.java
 
-		'<mavenGroupId>' replaced by 'com.iksgmbh.moglicc' in:
-			pom.xml
+		Performed replacements:
+			Placeholder '<mavenGroupId>' replaced by 'com.iksgmbh.moglicc' in file 'pom.xml'
+			Placeholder '<mavenArtefactId>' replaced by 'MOGLiCC_JavaBeanProject' in file 'pom.xml'
+			Placeholder '<mavenProjectName>' replaced by 'MOGLiJavaBean Artifacts' in file 'pom.xml'
+			Placeholder '<mavenProjectDescription>' replaced by 'An example project to demonstrate both, the file structure generator and the artifacts of the MOGLiJavaBeanGroup' in file 'pom.xml'
+			Placeholder 'class Main' replaced by 'class MOGLiCC_JavaBeanProjectClassOverviewPrinter' in file 'main.java'
 
-		'<mavenArtefactId>' replaced by 'MOGLiCC_JavaBeanProject' in:
-			pom.xml
-
-		'<mavenProjectName>' replaced by 'MOGLiJavaBean Artifacts' in:
-			pom.xml
-
-		'<mavenProjectDescription>' replaced by 'An example project to demonstrate both, the file structure generator and the artifacts of the MOGLiJavaBeanGroup' in:
-			pom.xml
-
-		'class Main' replaced by 'class MOGLiCC_JavaBeanProjectClassOverviewPrinter' in:
-			main.java
-
-		'main.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in ..\inttest\target\TestDir\output\FilestructureModelBasedGenerator\MOGLiCC_JavaBeanProject\src\main\java\com\iksgmbh\moglicc\demo\main
+		Performed file renamings:
+			File 'main.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '..\inttest\target\TestDir\output\FilestructureModelBasedGenerator\MOGLiCC_JavaBeanProject\src\main\java\com\iksgmbh\moglicc\demo\main'
 
 
 VelocityModelBasedInserter has done work for following artefacts:

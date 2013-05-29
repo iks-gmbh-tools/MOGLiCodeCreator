@@ -1,6 +1,8 @@
 package com.iksgmbh.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -39,7 +41,7 @@ public class StringUtil {
 	public static boolean startsWithLowerCase(final String s) {
 		return Character.isLowerCase(s.charAt(0));
 	}
-	
+
 	public static String firstToUpperCase(final String string) {
 		if (string == null) {
 			return null;
@@ -79,7 +81,7 @@ public class StringUtil {
 		}
 		return s;
 	}
-	
+
 	public static String removeSuffixIfExisting(final String s, final String suffix) {
 		if (s.endsWith(suffix)) {
 			return s.substring(0, s.indexOf(suffix));
@@ -114,13 +116,18 @@ public class StringUtil {
 	}
 
 	public static String substringBetween(final String s, final String replaceStart, final String replaceEnd) {
-		final int pos1 = s.indexOf(replaceStart) + replaceStart.length();
+		final int pos1 = s.indexOf(replaceStart);
 		final int pos2 = s.indexOf(replaceEnd);
-		if (pos1 == 0 || pos2 == -1 || pos1 >= pos2) {
+		if (pos1 == -1 || pos2 == -1 || pos1 >= pos2) {
 			return null;
 		}
-		final String toReplace = s.substring(pos1, pos2);
+		final String toReplace = s.substring(pos1 + replaceStart.length(), pos2);
 		return toReplace;
 	}
 
+	public static <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c) {
+	  final List<T> list = new ArrayList<T>(c);
+	  java.util.Collections.sort(list);
+	  return list;
+	}
 }

@@ -1,1 +1,1 @@
-The MOGLiCC **provider.model.standard** project provides the standard implementation for the MetaModel defined in the interfaces project.
+The MOGLiCC **provider.model.standard** project provides the standard implementation for the MetaModel defined in the interfaces project. The StandardModelProvider does not depend on other plugins.

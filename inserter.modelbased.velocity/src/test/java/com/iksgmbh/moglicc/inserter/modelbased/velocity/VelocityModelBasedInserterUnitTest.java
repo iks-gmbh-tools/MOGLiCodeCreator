@@ -508,7 +508,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		try {
 			velocityModelBasedInserter.doYourJob();
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), "No main template found");
+			assertStringContains(e.getMessage(), TemplateUtil.NO_MAIN_TEMPLATE_FOUND);
 			return;
 		}
 		fail("Expected exception not thrown!");
@@ -527,7 +527,7 @@ public class VelocityModelBasedInserterUnitTest extends VelocityModelBasedInsert
 		try {
 			velocityModelBasedInserter.doYourJob();
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), "No main template found");
+			assertStringContains(e.getMessage(), TemplateUtil.NO_MAIN_TEMPLATE_FOUND);
 			return;
 		}
 		fail("Expected exception not thrown!");

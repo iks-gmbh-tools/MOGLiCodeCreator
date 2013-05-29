@@ -15,6 +15,7 @@ import com.iksgmbh.helper.IOEncodingHelper;
 
 public class FileUtil {
 
+	public enum FileCreationStatus {NOT_EXISTING_FILE_CREATED, EXISTING_FILE_OVERWRITTEN, EXISTING_FILE_PRESERVED};
 
 	public static String getFileContent(final InputStream inputStream, final String filename) throws IOException {
 		final BufferedReader br = IOEncodingHelper.STANDARD.getBufferedReader(inputStream);

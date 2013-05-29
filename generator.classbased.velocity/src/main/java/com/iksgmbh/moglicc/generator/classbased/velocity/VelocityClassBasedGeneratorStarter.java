@@ -130,7 +130,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		encodingHelper = IOEncodingHelper.getInstance(EncodingUtils.getValidOutputEncodingFormat(resultList.get(0).getOutputEncodingFormat(),
 				                                      infrastructure.getPluginLogger()));
 		writeFilesIntoPluginOutputDir(resultList, artefact);
-		writeFilesIntoTemplateTargetDir(resultList);
+		writeFilesIntoTargetDirReadFromTemplateFile(resultList);
 		generateReportLines(resultList, artefact);
 		infrastructure.getPluginLogger().logInfo(resultList.size() + " files for artefact '" + artefact + "' created!");
 	}
@@ -172,7 +172,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
 	}
 
-	void writeFilesIntoTemplateTargetDir(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException {
+	void writeFilesIntoTargetDirReadFromTemplateFile(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException {
 		for (final VelocityGeneratorResultData resultData : resultList) {
 			final File outputFile = resultData.getTargetFile(infrastructure.getApplicationRootDir().getAbsolutePath(),
 					                                             getTestPathPrefix(true));

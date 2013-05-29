@@ -46,10 +46,12 @@ public class TemplateProperties {
 	private List<RenamingData> renamings = new ArrayList<RenamingData>();
 
 
-	TemplateProperties(final File templateFile, final Logger logger, final Model model) throws MOGLiPluginException {
+	TemplateProperties(final File templateFile, final Logger logger, 
+			           final Model model, final String artefact) throws MOGLiPluginException {
 		this.templateFile = templateFile;
 		this.logger = logger;
 		this.model = model;
+		this.rootName = artefact;  // set as default
 		parseTemplateFile();
 	}
 

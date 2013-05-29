@@ -14,12 +14,6 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>3.0</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.iksgmbh</groupId>
 			<artifactId>global</artifactId>
 			<version>${project.version}</version>
@@ -39,6 +33,21 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.0</version>
+		</dependency>
+
+	    <dependency>
+	    	<!-- On some systems this library is needed.
+	    	     In case of need unit tests using easymock will fail
+	    	     do to a ClassNotFoundException -->
+      		<groupId>cglib</groupId>
+      		<artifactId>cglib</artifactId>
+      		<version>2.1_3</version>
+    	</dependency>
 
 	</dependencies>
 
