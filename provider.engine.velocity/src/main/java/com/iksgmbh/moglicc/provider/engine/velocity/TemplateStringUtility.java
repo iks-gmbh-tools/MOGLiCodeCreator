@@ -1,5 +1,7 @@
 package com.iksgmbh.moglicc.provider.engine.velocity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class TemplateStringUtility {
 
 	/**
 	 * First letter to lower: "Lower" -> "lower"
-	 */	
+	 */
 	public static String firstToLowerCase(String string) {
 		if (string == null) {
 			return null;
@@ -83,9 +85,26 @@ public class TemplateStringUtility {
 		}
 		return sb.toString();
 	}
-	
+
 	public static String getNowAsTimeStamp() {
 		return "" + new Date().getTime();
+	}
+
+	public static String getNowAsFormattedString(final String dateFormat) {
+		return getDateAsFormattedString(new Date(), dateFormat);
+	}
+
+	/**
+	 * @param dateFormat as String to instanciate a SimpleDateFormat object, e.g. "yyyy.MM.dd HHmm"
+	 * @return formatted date string e.g. "2013.06.06 1202"
+	 */
+	public static String getDateAsFormattedString(final Date date, final String dateFormat) {
+		final DateFormat fmt = new SimpleDateFormat( dateFormat );
+		return fmt.format(date);
+	}
+
+	public static String replaceAllIn(final String containerString, final String toReplace, final String replacement) {
+		return StringUtils.replace(containerString, toReplace, replacement);
 	}
 
 }

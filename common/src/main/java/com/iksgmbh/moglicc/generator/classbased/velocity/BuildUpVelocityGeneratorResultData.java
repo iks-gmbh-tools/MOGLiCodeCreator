@@ -36,6 +36,12 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 
 	@Override
+	public boolean skipGeneration() {
+		final String value = getProperty(KnownGeneratorPropertyNames.SkipGeneration.name());
+		return doesStringRepresentBooleanTrue(value) || doesStringRepresentBooleanNotFalse(value);
+	}
+
+	@Override
 	public String getNameOfValidModel() {
 		return getProperty(KnownGeneratorPropertyNames.NameOfValidModel.name());
 	}
@@ -53,10 +59,21 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	@Override
 	public boolean isTargetToBeCreatedNewly() {
 		final String value = getProperty(KnownGeneratorPropertyNames.CreateNew.name());
+		return doesStringRepresentBooleanTrue(value);
+	}
+
+	private boolean doesStringRepresentBooleanTrue(final String value) {
 		if (value == null) {
 			return false;  // default
 		}
 		return "true".equals(value.toLowerCase().trim());
+	}
+
+	private boolean doesStringRepresentBooleanNotFalse(final String value) {
+		if (value == null) {
+			return false;  // default
+		}
+		return "not false".equals(value.toLowerCase().trim());
 	}
 
 	@Override

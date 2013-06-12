@@ -358,10 +358,12 @@ public class MOGLiCodeCreator {
 
 		try {
 			FileUtil.createNewFileWithContent(applicationReportFile, report.toString().trim());
-			MOGLiLogUtil.logInfo("Report successfully file created in application root: " + applicationReportFile.getAbsolutePath());
-			
-			FileUtil.createNewFileWithContent(workspaceReportFile, report.toString().trim());
-			MOGLiLogUtil.logInfo("Report successfully file created in workspace: " + workspaceReportFile.getAbsolutePath());
+			MOGLiLogUtil.logInfo("Report file created in application root: " + applicationReportFile.getAbsolutePath());
+		
+			if (! applicationReportFile.getAbsolutePath().equals(workspaceReportFile.getAbsolutePath())) {
+				FileUtil.createNewFileWithContent(workspaceReportFile, report.toString().trim());
+				MOGLiLogUtil.logInfo("Report file created in workspace: " + workspaceReportFile.getAbsolutePath());
+			}
 		} catch (Exception e) {
 			MOGLiLogUtil.logError("Error creating reportfile: " + e.getMessage());
 		}
@@ -385,14 +387,14 @@ public class MOGLiCodeCreator {
 		String toReturn = "";
 		final int numberOfSuccessfullyExecutedPlugins = getNumberOfSuccessfullyExecutedPlugins(pluginMetaDataList);
 		final int numberOfNotExecutedPlugins = getNumberOfNotExecutedPlugins(pluginMetaDataList);
-		final String contextString = " on model '" + getModelName() + "' in workspace <" + workspace + ">.";
+		final String contextString = "on model '" + getModelName() + "' in workspace <" + workspace + ">.";
 
 		if (numberOfNotExecutedPlugins == 0) {
-			toReturn = "All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully" + contextString;
+			toReturn = "All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully " + contextString;
 		} else {
-			toReturn = numberOfSuccessfullyExecutedPlugins + " plugins executed " + contextString;
-			toReturn += numberOfSuccessfullyExecutedPlugins + " plugins executed successfully." + FileUtil.getSystemLineSeparator();
-			toReturn += numberOfNotExecutedPlugins + " plugins not or erroneously executed!";
+			toReturn = numberOfSuccessfullyExecutedPlugins + " plugin(s) executed successfully " + contextString;
+			toReturn += FileUtil.getSystemLineSeparator();
+			toReturn += numberOfNotExecutedPlugins + " plugin(s) not or erroneously executed!";
 		}
 
 		toReturn += FileUtil.getSystemLineSeparator() + countTotalNumberOfGenerations() + " generations for "
@@ -425,10 +427,12 @@ public class MOGLiCodeCreator {
 		if (pluginMetaDataList.size() == 0) {
 			return;
 		}
+		MOGLiLogUtil.logInfo("-----");
 		MOGLiLogUtil.logInfo(TEXT_PLUGINS_FOUND);
 		for (PluginMetaData pluginMetaData : pluginMetaDataList) {
 			MOGLiLogUtil.logInfo(pluginMetaData.toString());
 		}
+		MOGLiLogUtil.logInfo("-----");
 	}
 
 

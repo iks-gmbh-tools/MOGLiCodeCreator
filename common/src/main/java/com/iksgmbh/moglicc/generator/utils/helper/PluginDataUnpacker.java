@@ -19,6 +19,7 @@ public class PluginDataUnpacker {
 			                     final File targetDir, 
 			                     final Logger pluginLogger) throws MOGLiPluginException {
 		final PluginDataUnpacker defaultDataUnpacker = new PluginDataUnpacker(defaultData, targetDir, pluginLogger);
+		targetDir.mkdirs();
 		defaultDataUnpacker.unpack();
 	}
 	

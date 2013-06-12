@@ -4,7 +4,7 @@
 # The statistics file is useful to find MetaInfoValidators or MetaInfos
 # that are not (any more) in use.
 #
-# Syntax:
+# Syntax ( |-Symbols are part of the key words ! ):
 #
 # |MetaInfo| <name of MetaInfo> |is| <Validation Type> |for| <Hierarchy Level Descriptor> |in| <name of valid model> |.|
 #

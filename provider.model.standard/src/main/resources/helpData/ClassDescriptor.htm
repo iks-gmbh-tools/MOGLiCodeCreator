@@ -14,15 +14,15 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <o:DocumentProperties>
   <o:Author>Oberrath, Reik</o:Author>
   <o:LastAuthor>Oberrath, Reik</o:LastAuthor>
-  <o:Revision>5</o:Revision>
+  <o:Revision>6</o:Revision>
   <o:Created>2012-12-03T15:47:00Z</o:Created>
-  <o:LastSaved>2012-12-14T09:57:00Z</o:LastSaved>
+  <o:LastSaved>2013-06-12T08:17:00Z</o:LastSaved>
   <o:Pages>2</o:Pages>
-  <o:Words>274</o:Words>
-  <o:Characters>1727</o:Characters>
-  <o:Lines>14</o:Lines>
-  <o:Paragraphs>3</o:Paragraphs>
-  <o:CharactersWithSpaces>1998</o:CharactersWithSpaces>
+  <o:Words>289</o:Words>
+  <o:Characters>1909</o:Characters>
+  <o:Lines>45</o:Lines>
+  <o:Paragraphs>19</o:Paragraphs>
+  <o:CharactersWithSpaces>2179</o:CharactersWithSpaces>
   <o:Version>14.00</o:Version>
  </o:DocumentProperties>
  <o:OfficeDocumentSettings>
@@ -366,6 +366,12 @@ href="ClassDescriptor-Dateien/colorschememapping.xml">
 	mso-bidi-font-family:"Times New Roman";
 	mso-bidi-theme-font:minor-bidi;
 	mso-fareast-language:EN-US;}
+span.spelle
+	{mso-style-name:spelle;
+	mso-style-unhide:no;}
+span.grame
+	{mso-style-name:grame;
+	mso-style-unhide:no;}
 span.SpellE
 	{mso-style-name:"";
 	mso-spl-e:yes;}
@@ -438,17 +444,17 @@ div.WordSection1
 lang=EN-US style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>ClassDescriptor</span></b></span><span
 lang=EN-US style='mso-ansi-language:EN-US'> since 1.0.0<o:p></o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Method <span
-class=GramE>List <span style='mso-spacerun:yes'> </span><b style='mso-bidi-font-weight:
-normal'><span style='font-size:12.0pt;line-height:115%'>v1.1.0</span></b></span></span><span
-lang=EN-US style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'> <span
-style='mso-spacerun:yes'> </span></span><span lang=EN-US style='mso-ansi-language:
-EN-US'><o:p></o:p></span></p>
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Method
+List<span style='mso-spacerun:yes'>  </span></span><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:12.0pt;line-height:115%;mso-ansi-language:
+EN-US'>v1.3.0</span></b><span lang=EN-US style='font-size:12.0pt;line-height:
+115%;mso-ansi-language:EN-US'><span style='mso-spacerun:yes'>  </span></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
 <p class=MsoNormal><span class=SpellE><span class=GramE><span lang=EN-US
-style='mso-ansi-language:EN-US'>java.lang.String</span></span></span><span
+style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>java.lang.String</span></span></span><span
 lang=EN-US style='mso-ansi-language:EN-US'> </span><span class=SpellE><b
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
 mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>getSimpleName</span></b></span><span
@@ -460,10 +466,11 @@ lang=EN-US style='mso-ansi-language:EN-US'>()<o:p></o:p></span></p>
 EN-US'>simple</span></span><span lang=EN-US style='mso-ansi-language:EN-US'>
 name of class read from model file<o:p></o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
+<p class=MsoNormal><span lang=EN-US style='font-size:12.0pt;line-height:115%;
+mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
 <p class=MsoNormal><span class=SpellE><span class=GramE><span lang=EN-US
-style='mso-ansi-language:EN-US'>java.lang.String</span></span></span><span
+style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>java.lang.String</span></span></span><span
 lang=EN-US style='mso-ansi-language:EN-US'> </span><span class=SpellE><b
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
 mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>getPackage</span></b></span><span
@@ -472,13 +479,13 @@ lang=EN-US style='mso-ansi-language:EN-US'>()<o:p></o:p></span></p>
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Returns:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span class=GramE><span lang=EN-US style='mso-ansi-language:
-EN-US'>package</span></span><span lang=EN-US style='mso-ansi-language:EN-US'> to
-which class belongs<o:p></o:p></span></p>
+EN-US'>package</span></span><span lang=EN-US style='mso-ansi-language:EN-US'>
+to which class belongs<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
 <p class=MsoNormal><span class=SpellE><span class=GramE><span lang=EN-US
-style='mso-ansi-language:EN-US'>java.lang.String</span></span></span><span
+style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>java.lang.String</span></span></span><span
 lang=EN-US style='mso-ansi-language:EN-US'> </span><span class=SpellE><b
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
 mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>getFullyQualifiedName</span></b></span><span
@@ -492,12 +499,13 @@ qualified of class read from model file<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
-<p class=MsoNormal><span class=SpellE><span lang=EN-US style='mso-ansi-language:
-EN-US'>java.util.List</span></span><span lang=EN-US style='mso-ansi-language:
-EN-US'>&lt;<span class=SpellE>AttributeDescriptor</span>&gt; </span><span
-class=SpellE><span class=GramE><b style='mso-bidi-font-weight:normal'><span
-lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-mso-ansi-language:EN-US'>getAttributeDescriptorList</span></b></span></span><span
+<p class=MsoNormal><span class=SpellE><span lang=EN-US style='font-size:12.0pt;
+line-height:115%;mso-ansi-language:EN-US'>java.util.List</span></span><span
+lang=EN-US style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>&lt;<span
+class=SpellE>AttributeDescriptor</span>&gt;</span><span lang=EN-US
+style='mso-ansi-language:EN-US'> </span><span class=SpellE><span class=GramE><b
+style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
+mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>getAttributeDescriptorList</span></b></span></span><span
 class=GramE><span lang=EN-US style='mso-ansi-language:EN-US'>()</span></span><span
 lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
 
@@ -511,15 +519,16 @@ file<o:p></o:p></span></p>
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
 <p class=MsoNormal><span class=SpellE><span class=GramE><span lang=EN-US
-style='mso-ansi-language:EN-US'>java.lang.String</span></span></span><span
+style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>java.lang.String</span></span></span><span
 lang=EN-US style='mso-ansi-language:EN-US'> </span><span class=SpellE><b
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
 mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>getMetaInfoValueFor</span></b></span><span
-lang=EN-US style='mso-ansi-language:EN-US'>(<span class=SpellE>java.lang.String</span>
-</span><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
-lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-mso-ansi-language:EN-US'>metaInfoName</span></b></span><span lang=EN-US
-style='mso-ansi-language:EN-US'>)<o:p></o:p></span></p>
+lang=EN-US style='mso-ansi-language:EN-US'>(<span class=SpellE>java.lang.<b
+style='mso-bidi-font-weight:normal'>String</b></span> </span><span
+class=SpellE><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:
+EN-US'>metaInfoName</span></b></span><span lang=EN-US style='mso-ansi-language:
+EN-US'>)<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Returns:<o:p></o:p></span></p>
 
@@ -529,17 +538,19 @@ EN-US'>value</span></span><span lang=EN-US style='mso-ansi-language:EN-US'> for
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
-<p class=MsoNormal><span class=SpellE><span lang=EN-US style='mso-ansi-language:
-EN-US'>java.util.List</span></span><span lang=EN-US style='mso-ansi-language:
-EN-US'>&lt;<span class=SpellE>java.lang.String</span>&gt; </span><span
-class=SpellE><span class=GramE><b style='mso-bidi-font-weight:normal'><span
-lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-mso-ansi-language:EN-US'>getAllMetaInfoValuesFor</span></b></span></span><span
-class=GramE><span lang=EN-US style='mso-ansi-language:EN-US'>(</span></span><span
-class=SpellE><span lang=EN-US style='mso-ansi-language:EN-US'>java.lang.String</span></span><span
-lang=EN-US style='mso-ansi-language:EN-US'> </span><span class=SpellE><b
+<p class=MsoNormal><span class=SpellE><span lang=EN-US style='font-size:12.0pt;
+line-height:115%;mso-ansi-language:EN-US'>java.util.List</span></span><span
+lang=EN-US style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>&lt;<span
+class=SpellE>java.lang.String</span>&gt;</span><span lang=EN-US
+style='mso-ansi-language:EN-US'> </span><span class=SpellE><span class=GramE><b
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
-mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>metaInfoName</span></b></span><span
+mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>getAllMetaInfoValuesFor</span></b></span></span><span
+class=GramE><span lang=EN-US style='mso-ansi-language:EN-US'>(</span></span><span
+class=SpellE><span lang=EN-US style='mso-ansi-language:EN-US'>java.lang.<b
+style='mso-bidi-font-weight:normal'>String</b></span></span><span lang=EN-US
+style='mso-ansi-language:EN-US'> </span><span class=SpellE><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;
+line-height:115%;mso-ansi-language:EN-US'>metaInfoName</span></b></span><span
 lang=EN-US style='mso-ansi-language:EN-US'>)<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Returns:<o:p></o:p></span></p>
@@ -549,14 +560,15 @@ values for <span class=SpellE>MetaInfo</span> elements with <span class=SpellE>m
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
-<p class=MsoNormal><span class=SpellE><span lang=EN-US style='mso-ansi-language:
-EN-US'>java.util.List</span></span><span lang=EN-US style='mso-ansi-language:
-EN-US'>&lt;<span class=SpellE>MetaInfo</span>&gt; </span><span class=SpellE><span
-class=GramE><b style='mso-bidi-font-weight:normal'><span lang=EN-US
-style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:
-EN-US'>getMetaInfoList</span></b></span></span><span class=GramE><span
-lang=EN-US style='mso-ansi-language:EN-US'>()</span></span><span lang=EN-US
-style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span lang=EN-US style='font-size:12.0pt;
+line-height:115%;mso-ansi-language:EN-US'>java.util.List</span></span><span
+lang=EN-US style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>&lt;<span
+class=SpellE>MetaInfo</span>&gt;</span><span lang=EN-US style='mso-ansi-language:
+EN-US'> </span><span class=SpellE><span class=GramE><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;
+line-height:115%;mso-ansi-language:EN-US'>getMetaInfoList</span></b></span></span><span
+class=GramE><span lang=EN-US style='mso-ansi-language:EN-US'>()</span></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Returns:<o:p></o:p></span></p>
 
@@ -565,14 +577,15 @@ class=SpellE>MetaInfo</span> elements of the current hierarchy level<o:p></o:p><
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
-<p class=MsoNormal><span class=SpellE><span lang=EN-US style='mso-ansi-language:
-EN-US'>java.util.List</span></span><span lang=EN-US style='mso-ansi-language:
-EN-US'>&lt;<span class=SpellE>MetaInfo</span>&gt; </span><span class=SpellE><span
-class=GramE><b style='mso-bidi-font-weight:normal'><span lang=EN-US
-style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:
-EN-US'>getAllMetaInfos</span></b></span></span><span class=GramE><span
-lang=EN-US style='mso-ansi-language:EN-US'>()</span></span><span lang=EN-US
-style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span lang=EN-US style='font-size:12.0pt;
+line-height:115%;mso-ansi-language:EN-US'>java.util.List</span></span><span
+lang=EN-US style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>&lt;<span
+class=SpellE>MetaInfo</span>&gt;</span><span lang=EN-US style='mso-ansi-language:
+EN-US'> </span><span class=SpellE><span class=GramE><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;
+line-height:115%;mso-ansi-language:EN-US'>getAllMetaInfos</span></b></span></span><span
+class=GramE><span lang=EN-US style='mso-ansi-language:EN-US'>()</span></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Returns:<o:p></o:p></span></p>
 
@@ -583,18 +596,19 @@ levels<o:p></o:p></span></p>
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
 <p class=MsoNormal><span class=SpellE><span class=GramE><span lang=EN-US
-style='mso-ansi-language:EN-US'>boolean</span></span></span><span lang=EN-US
-style='mso-ansi-language:EN-US'> </span><span class=SpellE><b style='mso-bidi-font-weight:
-normal'><span lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;
-line-height:115%;mso-ansi-language:EN-US'>doesHaveMetaInfo</span></b></span><span
-lang=EN-US style='mso-ansi-language:EN-US'>(<span class=SpellE>java.lang.String</span>
-</span><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
-lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-mso-ansi-language:EN-US'>metaInfoName</span></b></span><span lang=EN-US
-style='mso-ansi-language:EN-US'>, <span class=SpellE>java.lang.String</span> </span><b
+style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>boolean</span></span></span><span
+lang=EN-US style='mso-ansi-language:EN-US'> </span><span class=SpellE><b
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
-mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>value</span></b><span
-lang=EN-US style='mso-ansi-language:EN-US'>)<o:p></o:p></span></p>
+mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>doesHaveMetaInfo</span></b></span><span
+lang=EN-US style='mso-ansi-language:EN-US'>(<span class=SpellE>java.lang.<b
+style='mso-bidi-font-weight:normal'>String</b></span> </span><span
+class=SpellE><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:
+EN-US'>metaInfoName</span></b></span><span lang=EN-US style='mso-ansi-language:
+EN-US'>, <span class=SpellE>java.lang.<b style='mso-bidi-font-weight:normal'>String</b></span>
+</span><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:
+EN-US'>value</span></b><span lang=EN-US style='mso-ansi-language:EN-US'>)<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Returns:<o:p></o:p></span></p>
 
@@ -606,15 +620,16 @@ class=SpellE>metaInfoName</span> and value<o:p></o:p></span></p>
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
 <p class=MsoNormal><span class=SpellE><span class=GramE><span lang=EN-US
-style='mso-ansi-language:EN-US'>boolean</span></span></span><span lang=EN-US
-style='mso-ansi-language:EN-US'> </span><span class=SpellE><b style='mso-bidi-font-weight:
-normal'><span lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;
-line-height:115%;mso-ansi-language:EN-US'>doesHaveAnyMetaInfosWithName</span></b></span><span
-lang=EN-US style='mso-ansi-language:EN-US'>(<span class=SpellE>java.lang.String</span>
-</span><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
-lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-mso-ansi-language:EN-US'>metaInfoName</span></b></span><span lang=EN-US
-style='mso-ansi-language:EN-US'>)<o:p></o:p></span></p>
+style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>boolean</span></span></span><span
+lang=EN-US style='mso-ansi-language:EN-US'> </span><span class=SpellE><b
+style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
+mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>doesHaveAnyMetaInfosWithName</span></b></span><span
+lang=EN-US style='mso-ansi-language:EN-US'>(<span class=SpellE>java.lang.<b
+style='mso-bidi-font-weight:normal'>String</b></span> </span><span
+class=SpellE><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:
+EN-US'>metaInfoName</span></b></span><span lang=EN-US style='mso-ansi-language:
+EN-US'>)<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Returns:<o:p></o:p></span></p>
 
@@ -625,20 +640,20 @@ element with <span class=SpellE>metaInfoName</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
 
-<p class=MsoNormal><span class=GramE><span lang=EN-US style='mso-ansi-language:
-EN-US'>since</span></span><span lang=EN-US style='mso-ansi-language:EN-US'>
-v1.1.0<o:p></o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>String </span><span
-class=SpellE><span class=GramE><b style='mso-bidi-font-weight:normal'><span
-lang=EN-US style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-mso-ansi-language:EN-US'>getCommaSeparatedListOfAllMetaInfoValuesFor</span></b></span></span><span
-class=GramE><span lang=EN-US style='mso-ansi-language:EN-US'>(</span></span><span
-class=SpellE><span lang=EN-US style='mso-ansi-language:EN-US'>java.lang.String</span></span><span
+<p class=MsoNormal><span class=SpellE><span class=GramE><span lang=EN-US
+style='font-size:12.0pt;line-height:115%;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'>java.lang.</span><span lang=EN-US style='font-size:
+12.0pt;line-height:115%;mso-ansi-language:EN-US'>String</span></span></span><span
 lang=EN-US style='mso-ansi-language:EN-US'> </span><span class=SpellE><b
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt;
-mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>metaInfoName</span></b></span><span
-lang=EN-US style='mso-ansi-language:EN-US'>) <o:p></o:p></span></p>
+mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:EN-US'>getCommaSeparatedListOfAllMetaInfoValuesFor</span></b></span><span
+lang=EN-US style='mso-ansi-language:EN-US'>(<span class=SpellE>java.lang.<b
+style='mso-bidi-font-weight:normal'>String</b></span> </span><span
+class=SpellE><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='font-size:14.0pt;mso-bidi-font-size:11.0pt;line-height:115%;mso-ansi-language:
+EN-US'>metaInfoName</span></b></span><span lang=EN-US style='mso-ansi-language:
+EN-US'>) <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Returns:<o:p></o:p></span></p>
 
@@ -646,7 +661,74 @@ lang=EN-US style='mso-ansi-language:EN-US'>) <o:p></o:p></span></p>
 containing the comma separated list of values for <span class=SpellE>MetaInfo</span>
 elements with <span class=SpellE>metaInfoName</span><o:p></o:p></span></p>
 
+<p class=MsoNormal><span class=GramE><span lang=EN-US style='mso-ansi-language:
+EN-US'>since</span></span><span lang=EN-US style='mso-ansi-language:EN-US'>
+v1.1.0<o:p></o:p></span></p>
+
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>________________________________________<o:p></o:p></span></p>
+
+<p class=MsoNormal><span class=SpellE><span class=GramE><span lang=EN-US
+style='font-size:12.0pt;line-height:115%;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'>java.lang.String</span></span></span><span lang=EN-US
+style='font-size:12.0pt;line-height:115%;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'> </span><span class=SpellE><b><span lang=EN-US
+style='font-size:14.0pt;line-height:115%;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'>isValueAvailable</span></b></span><span lang=EN-US
+style='font-size:12.0pt;line-height:115%;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'>(<span class=SpellE>java.lang.<b style='mso-bidi-font-weight:
+normal'><span style='font-size:11.0pt;line-height:115%;font-family:"Calibri","sans-serif";
+mso-ascii-theme-font:minor-latin;mso-fareast-font-family:Calibri;mso-fareast-theme-font:
+minor-latin;mso-hansi-theme-font:minor-latin;mso-bidi-font-family:"Times New Roman";
+mso-bidi-theme-font:minor-bidi;color:windowtext;mso-fareast-language:EN-US'>String</span></b></span><b
+style='mso-bidi-font-weight:normal'> </b></span><span class=SpellE><b><span
+lang=EN-US style='font-size:14.0pt;line-height:115%;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'>metaInfoValue</span></b></span><span lang=EN-US
+style='font-size:12.0pt;line-height:115%;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'>) </span><span lang=EN-US style='font-size:12.0pt;
+line-height:115%;font-family:"Times New Roman","serif";mso-fareast-font-family:
+"Times New Roman";mso-ansi-language:EN-US;mso-fareast-language:DE'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+line-height:normal'><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'>Returns:</span><span lang=EN-US style='font-size:12.0pt;
+font-family:"Times New Roman","serif";mso-fareast-font-family:"Times New Roman";
+mso-ansi-language:EN-US;mso-fareast-language:DE'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+line-height:normal'><span class=GramE><span lang=EN-US style='font-size:12.0pt;
+font-family:"Times New Roman","serif";mso-fareast-font-family:"Times New Roman";
+color:black;mso-ansi-language:EN-US;mso-fareast-language:DE'>false</span></span><span
+lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'> <span class=SpellE>metaInfoValue</span> represents “!
+<span class=SpellE>Metainfo</span> not <span class=GramE>found !”</span></span><span
+lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";mso-ansi-language:EN-US;mso-fareast-language:
+DE'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+line-height:normal'><span class=GramE><span lang=EN-US style='font-size:12.0pt;
+font-family:"Times New Roman","serif";mso-fareast-font-family:"Times New Roman";
+color:black;mso-ansi-language:EN-US;mso-fareast-language:DE'>since</span></span><span
+lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'> v1.3.0 </span><span style='font-size:12.0pt;
+font-family:"Times New Roman","serif";mso-fareast-font-family:"Times New Roman";
+mso-fareast-language:DE'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+line-height:normal'><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman","serif";
+mso-fareast-font-family:"Times New Roman";color:black;mso-ansi-language:EN-US;
+mso-fareast-language:DE'>________________________________________</span><span
+style='font-size:12.0pt;font-family:"Times New Roman","serif";mso-fareast-font-family:
+"Times New Roman";mso-fareast-language:DE'><o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
 

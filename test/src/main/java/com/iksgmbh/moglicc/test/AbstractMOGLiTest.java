@@ -248,6 +248,13 @@ public abstract class AbstractMOGLiTest {
 				+ "\nString <" + s + ">", expectedSubstringFound);
 	}
 
+	public void assertStringDoesNotContain(final String s, final String substring) {
+		final boolean unexpectedSubstringFound = s.contains(substring);
+		assertFalse("Expected substring was found in String."
+				+ "\nSubstring <" + substring + ">"
+				+ "\nString <" + s + ">", unexpectedSubstringFound);
+	}
+
 	public void assertFileContainsEntry(final File file, final String expectedEntry) {
 		final String actualFileContent = TestUtil.getFileContent(file);
 		final boolean expectedEntryFound = actualFileContent.contains(expectedEntry);

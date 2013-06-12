@@ -21,13 +21,13 @@ import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 import com.iksgmbh.utils.FileUtil;
 
 public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTest {
-	
+
 	public static final String PROJECT_ROOT_DIR = "../generator.modelbased.filestructure/";
 	public static final String METAINFO_MODEL_TARGETDIR = "ModelTargetTestDir";
-	private static final String METAINFO_MODEL_PROJECT_DESCRIPTION = "Description of project";	
-	
+	private static final String METAINFO_MODEL_PROJECT_DESCRIPTION = "Description of project";
+
 	private static boolean isFirstTime = true;
-	
+
 	protected File generatorPluginInputDir;
 	protected FilestructureModelBasedGeneratorStarter fileStructureGenerator;
 	protected InfrastructureService infrastructure;
@@ -43,7 +43,7 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 		MOGLiCodeCreator.setApplicationRootDir(applicationRootDir);
 		return applicationRootDir;
 	}
-	
+
 	@Override
 	protected String getPluginId() {
 		return FilestructureModelBasedGeneratorStarter.PLUGIN_ID;
@@ -52,12 +52,12 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 	@Override
 	public void setup() {
 		super.setup();
-		
+
 		infrastructure = createInfrastructure();
 		fileStructureGenerator = new FilestructureModelBasedGeneratorStarter();
 		fileStructureGenerator.setMOGLiInfrastructure(infrastructure);
 		generatorPluginInputDir = new File(applicationInputDir, FilestructureModelBasedGeneratorStarter.PLUGIN_ID);
-		
+
 		if (isFirstTime) {
 			isFirstTime = false;
 			FileUtil.deleteDirWithContent(generatorPluginInputDir);
@@ -67,17 +67,17 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 		initPluginInputDirWithDefaultDataIfNotExisting();
 	}
 
-	
+
 	protected InfrastructureService createInfrastructure() {
 		final List<MOGLiPlugin> list = new ArrayList<MOGLiPlugin>();
 
-		final InfrastructureInitData infrastructureInitData = 
+		final InfrastructureInitData infrastructureInitData =
 			   createInfrastructureInitData(applicationProperties, list, FilestructureModelBasedGeneratorStarter.PLUGIN_ID);
-		
+
 		addPluginList(infrastructureInitData);
 		return new MOGLiInfrastructure(infrastructureInitData);
 	}
-	
+
 	private void addPluginList(InfrastructureInitData infrastructureInitData) {
 		final List<MOGLiPlugin> list = new ArrayList<MOGLiPlugin>();
 		list.add((MOGLiPlugin) getDummyModelProvider("MOGLiCC_JavaBeanModel", getStandardModelMetaInfos()));
@@ -91,14 +91,14 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 		modelMetaInfos.put("projectDescription", METAINFO_MODEL_PROJECT_DESCRIPTION);
 		return modelMetaInfos;
 	}
-	
+
 	protected InfrastructureService createInfrastructure(final File inputDir) {
-		final InfrastructureInitData infrastructureInitData = new InfrastructureInitData(applicationRootDir, 
-				applicationLogDir, applicationOutputDir, applicationTempDir, inputDir, applicationHelpDir, 
+		final InfrastructureInitData infrastructureInitData = new InfrastructureInitData(applicationRootDir,
+				applicationLogDir, applicationOutputDir, applicationTempDir, inputDir, applicationHelpDir,
 				applicationProperties);
-		
+
 		addPluginList(infrastructureInitData);
-		
+
 		infrastructureInitData.idOfThePluginToThisInfrastructure = FilestructureModelBasedGeneratorStarter.PLUGIN_ID;
 		return new MOGLiInfrastructure(infrastructureInitData);
 	}
@@ -110,7 +110,7 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 	class DummyModelProvider implements ModelProvider {
 
 		private Model model;
-		
+
 		public DummyModelProvider(final String modelName, final HashMap<String, String> modelMetaInfos) {
 			 model = getDummyModel(modelName, modelMetaInfos);
 		}
@@ -155,7 +155,7 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 		}
 
 		@Override
-		public Model getModel() throws MOGLiPluginException {
+		public Model getModel(String pluginId) throws MOGLiPluginException {
 			return model;
 		}
 
@@ -163,9 +163,9 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 		public String getModelName() {
 			return null;
 		}
-		
+
 	}
-	
+
 	protected Model getDummyModel(final String modelName, final HashMap<String, String> modelMetaInfos) {
 		return new DummyModel(modelName, modelMetaInfos);
 	}
@@ -236,7 +236,7 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 		public String getName() {
 			return modelName;
 		}
-		
+
 		@Override
 		public boolean isValueAvailable(final String metaInfoValue) {
 			if (metaInfoValue == null) {
@@ -244,7 +244,7 @@ public class FileStructureModelBasedGeneratorTestParent extends AbstractMOGLiTes
 			}
 			return ! (metaInfoValue.startsWith(META_INFO_NOT_FOUND_START) && metaInfoValue.endsWith(META_INFO_NOT_FOUND_END));
 		}
-		
+
 	}
 
 }

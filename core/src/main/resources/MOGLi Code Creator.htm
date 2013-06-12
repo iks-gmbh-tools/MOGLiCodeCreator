@@ -18,9 +18,9 @@ xmlns:ns1="http://schemas.microsoft.com/office/2004/12/omml">
  <o:DocumentProperties>
   <o:Author>Reik</o:Author>
   <o:LastAuthor>Oberratr</o:LastAuthor>
-  <o:Revision>26</o:Revision>
+  <o:Revision>29</o:Revision>
   <o:Created>2012-12-05T10:57:00Z</o:Created>
-  <o:LastSaved>2013-05-28T13:07:00Z</o:LastSaved>
+  <o:LastSaved>2013-06-07T13:05:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
   <o:Words>3757</o:Words>
   <o:Characters>23670</o:Characters>
@@ -520,7 +520,7 @@ table.MsoTableGrid
 <link rel=colorSchemeMapping
 href="MOGLi%20Code%20Creator-Dateien/colorschememapping.xml">
 <!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="6146"/>
+ <o:shapedefaults v:ext="edit" spidmax="9218"/>
 </xml><![endif]--><!--[if gte mso 9]><xml>
  <o:shapelayout v:ext="edit">
   <o:idmap v:ext="edit" data="1"/>
@@ -549,8 +549,8 @@ written in Java but made to generate more than only Java code.<o:p></o:p></span>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>MOGLi stands
-for the following attributes:<o:p></o:p></span></p>
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>MOGLi
+stands for the following attributes:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -671,8 +671,9 @@ EN-GB'>1. Why is MOGLiCC lightweight?<o:p></o:p></span></b></a></p>
 
 <span style='mso-bookmark:c1'></span>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>There are several
-aspects that illustrate the lightweight character of the MOGLi Code Creator: <o:p></o:p></span></p>
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>There are
+several aspects that illustrate the lightweight character of the MOGLi Code
+Creator: <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l3 level1 lfo4;
 tab-stops:list 36.0pt'><![if !supportLists]><span lang=EN-GB style='mso-ansi-language:
@@ -839,11 +840,12 @@ from the jar source files. The most important directories are “input” and
 subdirectories named after the plugin the data belongs to. The same is true for
 the output dir, but in addition old output files are deleted on every
 application start. The input directory together with the corresponding output
-directory can be organized in different workspaces. The “application.properties”
-file allows you to move the default workspace directory – the application root
-directory – to an arbitrary file system folder. In this way, you can manage
-code generation for different projects. For more information how to configure a
-workspace directory read the default application properties file.<o:p></o:p></span></p>
+directory can be organized in different workspaces. The
+“application.properties” file allows you to move the default workspace
+directory – the application root directory – to an arbitrary file system
+folder. In this way, you can manage code generation for different projects. For
+more information how to configure a workspace directory read the default
+application properties file.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -893,10 +895,10 @@ the model, a class or a single attribute. From the template file, these
 MetaInfos are addressable. Hence, model file and template must match very well
 to have reasonable output. The best way to understand this model is to have a
 look at the default model file “MOGLiCC_JavaBeanModel.txt”. It contains both a
-description of the model definition DSL and an example, the
-MOGLiCC_JavaBeanModel, how the model DSL is used. If this file has been deleted
-in your current workspace, define a new workspace in the application property
-file. Having executed the application with the new workspace, the
+description of the model definition DSL and an example, the MOGLiCC_JavaBeanModel,
+how the model DSL is used. If this file has been deleted in your current
+workspace, define a new workspace in the application property file. Having
+executed the application with the new workspace, the
 “MOGLiCC_JavaBeanModel.txt” file will be available there again.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -1070,11 +1072,10 @@ target directory.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Each
 artefact is named by the subdirectory containing its input data. For the
-VelocityClassBasedGenerator and the VelocityModelBasedInserter a main template
-must be defined if more than one template file exist. A main template has
-syllable “<st1:place w:st="on">Main</st1:place>” within its name. Other
-templates may serve as subtemplates used by the main template or by another
-subtemplate. <o:p></o:p></span></p>
+VelocityClassBasedGenerator and the VelocityModelBasedInserter a main template must
+be defined if more than one template file exist. A main template has syllable “<st1:place
+w:st="on">Main</st1:place>” within its name. Other templates may serve as
+subtemplates used by the main template or by another subtemplate. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1147,13 +1148,12 @@ EN-GB'>4.3 The MetaInfo Validation Feature<o:p></o:p></span></b></a></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>The
 advantage of the MOGLiCC Standard Model is its simpleness, its disadvantage the
-large number of MetaInfo elements and the danger to lose the overview which
-MetaInfo element is really being used. This is one reason for the MetaInfo
-Validation Feature. A second reason is the importance specific MetaInfo
-elements can have, for instance, without a MetaInfo element “JavaType” it would
-not be possible to build a JavaBean artefact with a reasonable content. It
-would be good to assure that for all classes in the model a java type is
-defined.<o:p></o:p></span></p>
+large number of MetaInfo elements and the danger to lose the overview which MetaInfo
+element is really being used. This is one reason for the MetaInfo Validation
+Feature. A second reason is the importance specific MetaInfo elements can have,
+for instance, without a MetaInfo element “JavaType” it would not be possible to
+build a JavaBean artefact with a reasonable content. It would be good to assure
+that for all classes in the model a java type is defined.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Therefore
 the existing generator plugins implement the interface MetaInfoValidatorVendor
@@ -1163,9 +1163,9 @@ in the plugin input directory of the generator plugin. For more information how
 to define MetaInfoValidators, see the default MetaInfo validation file. The
 StandardModelProvider collects all of these MetaInfoValidators and uses this
 information for two purposes: 1. to throw an exception if a mandatory MetaInfo
-element is missing and 2. to create a statistics file that informs which
-MetaInfo element is used in which context and that warns if a MetaInfo element
-or a MetaInfo Validator is unused. You find this statistics file in the plugin
+element is missing and 2. to create a statistics file that informs which MetaInfo
+element is used in which context and that warns if a MetaInfo element or a
+MetaInfo Validator is unused. You find this statistics file in the plugin
 output directory of the StandardModelProvider.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -1221,17 +1221,17 @@ name=c5>Example case: The MOGLiCC JavaBean Group </a><o:p></o:p></span></b></p>
 probably most typical example for code generation is to create simple data
 classes, in Java, JavaBeans. Therefore, MOGLiCC comes with a set of default
 templates for generating a number of artefacts that closely belong together:
-The MOGLiCC JavaBean Group. This group of artefacts consists of a JavaBean class,
-a builder class for easy creation of JavaBean instances with example data, a
-validator class to check a JavaBean instance for valid data and two JUnit test
-classes to demonstrate that the generated code is runnable and works without
-errors. <o:p></o:p></span></p>
+The MOGLiCC JavaBean Group. This group of artefacts consists of a JavaBean
+class, a builder class for easy creation of JavaBean instances with example
+data, a validator class to check a JavaBean instance for valid data and two
+JUnit test classes to demonstrate that the generated code is runnable and works
+without errors. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Because these
-JavaBean Group artefacts need to be created for each class within the model,
-the templates are default input files of the VelocityClassBasedGenerator
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Because
+these JavaBean Group artefacts need to be created for each class within the
+model, the templates are default input files of the VelocityClassBasedGenerator
 plugin. If you do not like defining your own model, you can use the default
 model file “MOGLiCC_JavaBeanModel.txt” which describes a few arbitrary objects
 just for illustration purpose. After starting the MOGLiCC application you find
@@ -1318,11 +1318,11 @@ the first time.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>There are
 four basic MOGLiCC plugin types. 1. ModelProvider, 2. EngineProvider, 3.
-Generator and 4. DataProvider.<span style='mso-spacerun:yes'>  </span>The
-StandardModelProvider is of course a ModelProvider; VelocityEngineProvider an
-EngineProvider; VelocityClassBasedGenerator and VelocityModelBasedInserter are
-Generators. “Inserter” is a subtype of a “Generator”. A DataProvider is
-currently not yet implemented.<o:p></o:p></span></p>
+Generator and 4. DataProvider.<span style='mso-spacerun:yes'>  </span>The StandardModelProvider
+is of course a ModelProvider; VelocityEngineProvider an EngineProvider;
+VelocityClassBasedGenerator and VelocityModelBasedInserter are Generators.
+“Inserter” is a subtype of a “Generator”. A DataProvider is currently not yet
+implemented.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
@@ -1358,7 +1358,7 @@ One rule of the clean code developers is “Test first”. To apply this rule, t
 source code author also followed the Test Driven Development method of “Growing
 Object-Oriented Software, Guided by Tests” by Freeman &amp; Pryce. Thus, the
 MOGLiCC functionality of the current version is automatically and regularly
-tested by 368 unit tests (70-90% coverage), 34 integration tests (10-40%
+tested by 375 unit tests (70-90% coverage), 40 integration tests (10-40%
 coverage) and 40 system tests. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
@@ -1375,8 +1375,8 @@ EN-GB'>8. What is the generation result of the MOGLi Code Creator?<o:p></o:p></s
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Each
-generator has its own type of result:<o:p></o:p></span></p>
+<p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>Each generator
+has its own type of result:<o:p></o:p></span></p>
 
 <table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
  style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
@@ -1406,8 +1406,8 @@ generator has its own type of result:<o:p></o:p></span></p>
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
-  <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>one or more
-  lines within an existing file<o:p></o:p></span></p>
+  <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'>one or
+  more lines within an existing file<o:p></o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:2;mso-yfti-lastrow:yes'>
@@ -1478,8 +1478,8 @@ file are needed to be generated) the number of repetitions must be very high to
 benefit from autogeneration. Is the complexity high (many lines in many
 different files) the benefit starts at least with the third “parallel
 component” (the second repetition). If you foresee sufficient complexity and
-repetitions of parallel functionality, start using autogenerating with the
-first repetition.<o:p></o:p></span></p>
+repetitions of parallel functionality, start using autogenerating with the first
+repetition.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-left:18.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo8;
 tab-stops:list 18.0pt 36.0pt'><![if !supportLists]><span lang=EN-GB

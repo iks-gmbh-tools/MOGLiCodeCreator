@@ -1,6 +1,7 @@
 package com.iksgmbh.moglicc.provider.engine.velocity;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,10 @@ import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.helper.MergeResultAnalyser;
+import com.iksgmbh.moglicc.provider.engine.velocity.helper.VelocityBugCorrector;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
+import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
 public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, ModelBasedEngineProvider {
@@ -80,6 +83,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		final BuildUpGeneratorResultData buildUpGeneratorResultData;
 		try {
 			buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(mergeResult, getVelocityEngineData().getArtefactType());
+			VelocityBugCorrector.doYourJob(buildUpGeneratorResultData, getMainTemplateFileContentAsList());
 		} catch (MOGLiPluginException e) {
 			infrastructure.getPluginLogger().logError(e.getMessage());
 			throw e;
@@ -92,6 +96,15 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		return buildUpGeneratorResultData;
 	}
 
+	private List<String> getMainTemplateFileContentAsList() throws MOGLiPluginException {
+		final File f = new File(velocityEngineData.getTemplateDir(), velocityEngineData.getMainTemplateSimpleFileName());		
+		try {
+			return FileUtil.getFileContentAsList(f);
+		} catch (IOException e) {
+			throw new MOGLiPluginException("Error reading " + f.getAbsolutePath(), e);
+		}
+	}
+
 	@Override
 	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("startEngineEachClassIntoSeparateTargetFiles called");
@@ -102,12 +115,13 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 			final ClassDescriptor clDescr = (ClassDescriptor) model.getClassDescriptorList().get(i);
 			final VelocityContext context = getVelocityContextWith(clDescr, model);
 			final String mergeResult = mergeTemplateWith(context);
-			final BuildUpGeneratorResultData velocityResultData = MergeResultAnalyser.doYourJob(mergeResult,
+			final BuildUpGeneratorResultData buildUpGeneratorResultData = MergeResultAnalyser.doYourJob(mergeResult,
 					                                                 getVelocityEngineData().getArtefactType());
+			VelocityBugCorrector.doYourJob(buildUpGeneratorResultData, getMainTemplateFileContentAsList());
 	        infrastructure.getPluginLogger().logInfo("GeneratorResultData created for merging class '"
 	        		 + clDescr.getSimpleName() + "' with template '"
 	        		 + velocityEngineData.getMainTemplateSimpleFileName() + "'");
-	        toReturn.add(velocityResultData);
+	        toReturn.add(buildUpGeneratorResultData);
 		}
 		infrastructure.getPluginLogger().logInfo("-----");
 		return toReturn;

@@ -27,12 +27,11 @@ import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter;
 import com.iksgmbh.moglicc.test.starterclasses.DummyGeneratorStarter2;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
-import com.iksgmbh.utils.StringUtil;
 
 public class StandardModelProviderUnitTest extends StandardModelProviderTestParent {
-	
+
 	final private StandardModelProviderStarter modelProvider = new StandardModelProviderStarter();
-	
+
 	@Before
 	public void setup() {
 		super.setup();
@@ -42,23 +41,23 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		infrastructure.getPluginInputDir().mkdirs();
 		final File propertiesFile = new File(infrastructure.getPluginInputDir(), StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE );
 		try {
-			FileUtil.createNewFileWithContent(propertiesFile, "");			
+			FileUtil.createNewFileWithContent(propertiesFile, "");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	protected void setModelFile(String filename) {
 		final String source = getProjectTestResourcesDir() + "modelFiles/" + filename;
 		FileUtil.copyBinaryFile(source, modelTextfile.getAbsolutePath());
-		
+
 		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, getPluginListForValidatorTest(), StandardModelProviderStarter.PLUGIN_ID));
 		modelProvider.setMOGLiInfrastructure(infrastructure);
 	}
-	
+
 	// **************************  Test Methods  *********************************
-	
+
 	@Test
 	public void handlesMissingModelFile() throws MOGLiPluginException {
 		try {
@@ -68,14 +67,14 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		} catch (MOGLiPluginException e) {
 			// verify test result
 			assertStringContains(e.getMessage(), TextConstants.TEXT_NO_MODELFILE_FOUND);
-		}		
+		}
 	}
-	
+
 	@Test
 	public void handlesEmptyModelFile() throws MOGLiPluginException{
 		// prepare test
 		setModelFile("emptyModelFile.txt");
-		
+
 		try {
 			// call functionality under test
 			modelProvider.buildModel();
@@ -83,24 +82,24 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		} catch (MOGLiPluginException e) {
 			// verify test result
 			assertStringContains(e.getMessage(), "Unexpected empty file");
-		}		
+		}
 	}
-	
+
 	@Test
 	public void buildsModel() throws MOGLiPluginException{
 		// prepare test
 		setModelFile("simpelModelFile.txt");
 		modelProvider.readPluginProperties();
-		
+
 		// call functionality under test
 		Model model = modelProvider.buildModel();
-		
+
 		// verify test result
 		assertNotNull(model);
 		assertEquals("Unexpected number of classes!", 2, model.getClassDescriptorList().size());
 		assertStringEquals("Unexpected class name!", "TestklasseA", model.getClassDescriptorList().get(0).getSimpleName());
 	}
-	
+
 	@Test
 	public void buildsModelFromFileDefinedInPluginPropertiesFile() throws Exception{
 		// prepare test
@@ -110,15 +109,15 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		final File propertiesFile = new File(infrastructure.getPluginInputDir(), StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE );
 		FileUtil.createNewFileWithContent(propertiesFile, "modelfile=simpelModelFile.txt");
 		modelProvider.readPluginProperties();
-		
+
 		// call functionality under test
 		Model model = modelProvider.buildModel();
-		
+
 		// verify test result
 		assertNotNull(model);
 		assertEquals("Model name", "SimpelTestModel", model.getName());
 	}
-	
+
 	@Test
 	public void unpacksInputDefaultData() throws MOGLiPluginException {
 		// prepare test
@@ -128,18 +127,18 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 
 		// call functionality under test
 		modelProvider.unpackDefaultInputData();
-		
+
 		// verify test result
 		assertFileExists(pluginInputDir);
 		final File modelFile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		assertFileExists(modelFile);
 		assertFileContainsEntry(modelFile, "model MOGLiCC_JavaBeanModel");
 	}
-	
+
 	@Test
 	public void createsStatisticsFileWithoutUnusedElements() throws MOGLiPluginException, IOException {
 		// prepare test
-		final File outputDir = new File(MOGLiCodeCreator.getApplicationRootDir() + "/" 
+		final File outputDir = new File(MOGLiCodeCreator.getApplicationRootDir() + "/"
 				                       + DIR_OUTPUT_FILES + "/" + StandardModelProviderStarter.PLUGIN_ID);
 		FileUtil.deleteDirWithContent(outputDir);
 		assertFileDoesNotExist(outputDir);
@@ -147,10 +146,10 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, getPluginListForStatisticsFileTest(), StandardModelProviderStarter.PLUGIN_ID));
 		modelProvider.setMOGLiInfrastructure(infrastructure);
-		
+
 		// call functionality under test
 		modelProvider.doYourJob();
-		
+
 		// verify test result
 		final File statisticsFile = new File(outputDir, StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedStatisticsFile.txt");
@@ -161,7 +160,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	@Test
 	public void createsStatisticsFileWithUnusedMetaInfoAndValidatorElements() throws MOGLiPluginException, IOException {
 		// prepare test
-		final File outputDir = new File(MOGLiCodeCreator.getApplicationRootDir() + "/" 
+		final File outputDir = new File(MOGLiCodeCreator.getApplicationRootDir() + "/"
 				                       + DIR_OUTPUT_FILES + "/" + StandardModelProviderStarter.PLUGIN_ID);
 		FileUtil.deleteDirWithContent(outputDir);
 		assertFileDoesNotExist(outputDir);
@@ -172,10 +171,10 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, pluginList, StandardModelProviderStarter.PLUGIN_ID));
 		modelProvider.setMOGLiInfrastructure(infrastructure);
-		
+
 		// call functionality under test
 		modelProvider.doYourJob();
-		
+
 		// verify test result
 		final File statisticsFile = new File(outputDir, StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedStatisticsFileWithUnusedElements.txt");
@@ -183,7 +182,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		assertFileEquals(expectedFile, statisticsFile);
 	}
 
-	
+
 	private MOGLiPlugin createGeneratorWithUnusedMetaInfoValidators() {
 		final DummyGeneratorStarter2 dummyGeneratorStarter2 = new DummyGeneratorStarter2();
 		final List<MetaInfoValidator> metaInfoValidatorList = new ArrayList<MetaInfoValidator>();
@@ -196,7 +195,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		optionalMetaInfoValidator = new OptionalMetaInfoValidator("xyz", HierarchyLevel.Class);
 		optionalMetaInfoValidator.setVendorPluginId("DummyGenerator3");
 		metaInfoValidatorList.add(optionalMetaInfoValidator);
-		
+
 		optionalMetaInfoValidator = new OptionalMetaInfoValidator("xyz", HierarchyLevel.Attribute);
 		optionalMetaInfoValidator.setVendorPluginId("DummyGenerator3");
 		metaInfoValidatorList.add(optionalMetaInfoValidator);
@@ -204,87 +203,28 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	}
 
 	@Test
-	public void throwsExceptionFor_MissingMandatoryModel_MetaInfo() {
+	public void writesWarningLogLineForAllMissingMandatoryMetaInfos() throws Exception {
 		// prepare test
-		setModelFile("MetaInfoValidatorTest_MissingMandatoryModel_MetaInfo.txt");
-		
-		// call functionality under test
-		try {
-			modelProvider.doYourJob();
-		} catch (MOGLiPluginException e) {
-			final String expected = TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator() +
-	                "MetaInfo 'modelMetaInfoMandatory' was not found for model 'MetaInfoValidatorTestModel'";
-			assertStringEquals("Error message", expected, e.getMessage());
-			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'modelMetaInfoMandatory' was not found for model 'MetaInfoValidatorTestModel'");
-			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
-			return;
-		}
-		fail("Expected exception not thrown!");
-	}
+		setModelFile("MetaInfoValidatorTest_SixMissingMandatory_MetaInfo.txt");
 
-	@Test
-	public void throwsExceptionFor_MissingMandatoryClass_MetaInfo() {
-		// prepare test
-		setModelFile("MetaInfoValidatorTest_MissingMandatoryClass_MetaInfo.txt");
-		
 		// call functionality under test
-		try {
-			modelProvider.doYourJob();
-		} catch (MOGLiPluginException e) {
-			final String expected = TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator() +
-					                "MetaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseA'";
-			assertStringEquals("Error message", expected, e.getMessage());
-			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseA'");
-			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
-			return;
-		}
-		fail("Expected exception not thrown!");
-	}
+		modelProvider.doYourJob();
 
-	@Test
-	public void throwsExceptionFor_MissingMandatoryAttribute_MetaInfo() {
-		// prepare test
-		setModelFile("MetaInfoValidatorTest_MissingMandatoryAttribute_MetaInfo.txt");
-		
-		// call functionality under test
-		try {
-			modelProvider.doYourJob();
-		} catch (MOGLiPluginException e) {
-			final String expected = TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator() +
-	                "MetaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A2'";
-			assertStringEquals("Error message", expected, e.getMessage());
-			assertFileContainsEntry(infrastructure.getPluginLogFile(), 
-					                "ERROR: MetaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A2'");
-			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 1);
-			return;
-		}
-		fail("Expected exception not thrown!");
-	}
-	
-	@Test
-	public void writesErrorLogLineForAllMissingMandatoryMetaInfos() {
-		// prepare test
-		setModelFile("MetaInfoValidatorTest_AllMissingMandatory_MetaInfo.txt");
-		
-		// call functionality under test
-		try {
-			modelProvider.doYourJob();
-		} catch (MOGLiPluginException e) {
-			final List<String> linesFromText = StringUtil.getLinesFromText(e.getMessage());
-			assertEquals("Error number", 6, linesFromText.size() - 1);
-			assertFileContainsEntryNTimes(infrastructure.getPluginLogFile(), "ERROR: MetaInfo", 6);
-			return;
-		}
-		fail("Expected exception not thrown!");
+		// verify test result
+		final String fileContent = FileUtil.getFileContent(modelProvider.getMOGLiInfrastructure().getPluginLogFile());
+		assertStringContains(fileContent, "Warning: MetaInfo 'modelMetaInfoMandatory' was not found for model 'MetaInfoValidatorTestModel'");
+		assertStringContains(fileContent, "Warning: MetaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseA'");
+		assertStringContains(fileContent, "Warning: MetaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseB'");
+		assertStringContains(fileContent, "Warning: MetaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A1'");
+		assertStringContains(fileContent, "Warning: MetaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A2'");
+		assertStringContains(fileContent, "Warning: MetaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'B1'");
 	}
 
 	@Test
 	public void validatesMetaInfosSuccessfully() throws MOGLiPluginException {
 		// prepare test
 		setModelFile("MetaInfoValidatorTest_Success.txt");
-		
+
 		// call functionality under test
 		modelProvider.doYourJob();
 	}
@@ -296,16 +236,16 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		dummyGeneratorStarter.setMetaInfoValidatorList(metaInfoValidatorList);
 		toReturn.add(dummyGeneratorStarter);
 
-		MandatoryMetaInfoValidator metaInfoValidator = new MandatoryMetaInfoValidator("modelMetaInfoMandatory", 
+		MandatoryMetaInfoValidator metaInfoValidator = new MandatoryMetaInfoValidator("modelMetaInfoMandatory",
 				                                                                      HierarchyLevel.Model);
 		metaInfoValidatorList.add(metaInfoValidator);
-		
+
 		metaInfoValidator = new MandatoryMetaInfoValidator("classMetaInfoMandatory", HierarchyLevel.Class);
 		metaInfoValidatorList.add(metaInfoValidator);
 
 		metaInfoValidator = new MandatoryMetaInfoValidator("attributeMetaInfoMandatory", HierarchyLevel.Attribute);
 		metaInfoValidatorList.add(metaInfoValidator);
-		
+
 		return toReturn;
 	}
 
@@ -323,14 +263,14 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		optionalMetaInfoValidator = new OptionalMetaInfoValidator("extends", HierarchyLevel.Class);
 		optionalMetaInfoValidator.setVendorPluginId("DummyGenerator1");
 		metaInfoValidatorList.add(optionalMetaInfoValidator);
-		
+
 		MandatoryMetaInfoValidator mandatoryMetaInfoValidator = new MandatoryMetaInfoValidator("JavaType", HierarchyLevel.Attribute);
 		mandatoryMetaInfoValidator.setVendorPluginId("DummyGenerator2");
 		metaInfoValidatorList.add(mandatoryMetaInfoValidator);
-		
+
 		return toReturn;
 	}
-	
+
 	@Test
 	public void readsModelFileNameFromPropertiesFile() throws Exception {
 		// prepare test
@@ -347,9 +287,9 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 
 		// call functionality under test
 		modelProvider.doYourJob();
-		
+
 		// verify test result
-		final Model model = modelProvider.getModel();
+		final Model model = modelProvider.getModel(null);
 		assertStringEquals("model name", "TestModel2", model.getName());
 	}
 
@@ -359,7 +299,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel3.txt");
-	
+
 		// call functionality under test
 		try {
 			modelProvider.doYourJob();
@@ -369,7 +309,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		}
 		fail("Expected exception not thrown!");
 	}
-	
+
 	@Test
 	public void readsUmlauteFromModelFile() throws MOGLiPluginException {
 		// prepare test
@@ -381,10 +321,10 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		MOGLiFileUtil.createNewFileWithContent(testModelFile, "ßüäöÜÄÖ");
 		assertFileExists(testModelFile);
 		modelProvider.setModelFile(testModelFile);
-		
+
 		// call functionality under test
 		final String actualFileContent = modelProvider.readModelFileContent().get(0);
-		
+
 		// verify test result
 		assertStringEquals("file content", "ßüäöÜÄÖ", actualFileContent);
 
@@ -400,23 +340,69 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		FileUtil.createNewFileWithContent(testModelFile, "model TestModel" + FileUtil.getSystemLineSeparator() +
                                                          "metainfo " + testMetaInfoName + " " +
                                                          testBraceSymbol + testMetaInfoValue + testBraceSymbol +
-                                                         FileUtil.getSystemLineSeparator() + 
+                                                         FileUtil.getSystemLineSeparator() +
                                                          "class com.iksgmbh.moglicc.demo.Person1");
 
 		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
 				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt"
-				                                              + FileUtil.getSystemLineSeparator() 
-				                                              + TextConstants.BRACE_SYMBOL_PROPERTY 
+				                                              + FileUtil.getSystemLineSeparator()
+				                                              + TextConstants.BRACE_SYMBOL_PROPERTY
 				                                              + "=" + testBraceSymbol);
 		assertChildrenNumberInDirectory(infrastructure.getPluginInputDir(), 2);
 
 		// call functionality under test
 		modelProvider.doYourJob();
+
+		// verify test result
+		final Model model = modelProvider.getModel(null);
+		assertStringEquals("model name", testMetaInfoValue, model.getMetaInfoValueFor(testMetaInfoName));
+	}
+
+	@Test
+	public void createsLogEntryWhenCallingGetModelOnAInvalidModelFile() throws Exception {
+		// prepare test
+		infrastructure = new MOGLiInfrastructure(createInfrastructureInitData(
+				null,
+				getPluginListWithDummyGeneratorContainingMandatoryValidatorForNotExistingMetaInfo(),
+				StandardModelProviderStarter.PLUGIN_ID));
+		modelProvider.setMOGLiInfrastructure(infrastructure);
+
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "TestModel.txt");
+		FileUtil.createNewFileWithContent(testModelFile, "model TestModel" + FileUtil.getSystemLineSeparator() +
+                                                         "class com.iksgmbh.moglicc.demo.Person1");
+		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
+				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt");
+		assertChildrenNumberInDirectory(infrastructure.getPluginInputDir(), 2);
+		final File logFile = modelProvider.getMOGLiInfrastructure().getPluginLogFile();
+		final String expected = "Model breaks 1 MetaInfoValidator settings!";
+		assertFileDoesNotContainEntry(logFile, expected);
+
+		// call functionality under test
+		try {
+			modelProvider.doYourJob();
+			modelProvider.getModel(null);
+		} catch (Exception e) {
+			// ignore it
+		}
 		
 		// verify test result
-		final Model model = modelProvider.getModel();
-		assertStringEquals("model name", testMetaInfoValue, model.getMetaInfoValueFor(testMetaInfoName));
+		assertFileContainsEntry(logFile, expected);
+	}
+
+	private List<MOGLiPlugin> getPluginListWithDummyGeneratorContainingMandatoryValidatorForNotExistingMetaInfo() {
+		final List<MOGLiPlugin> toReturn = new ArrayList<MOGLiPlugin>();
+		final DummyGeneratorStarter dummyGeneratorStarter = new DummyGeneratorStarter();
+		final List<MetaInfoValidator> metaInfoValidatorList = new ArrayList<MetaInfoValidator>();
+		dummyGeneratorStarter.setMetaInfoValidatorList(metaInfoValidatorList);
+		toReturn.add(dummyGeneratorStarter);
+
+		final MandatoryMetaInfoValidator mandatoryMetaInfoValidator = new MandatoryMetaInfoValidator("NotExistingMetaInfo", HierarchyLevel.Model);
+		mandatoryMetaInfoValidator.setVendorPluginId("DummyGenerator");
+		metaInfoValidatorList.add(mandatoryMetaInfoValidator);
+
+		return toReturn;
 	}
 
 }

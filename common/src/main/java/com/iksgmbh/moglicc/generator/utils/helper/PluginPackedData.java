@@ -84,7 +84,7 @@ public class PluginPackedData {
 		files.put(filename, "");
 	}
 
-	public void addRootInputFile(final String filename) {
+	public void addRootFile(final String filename) {
 		rootInputFiles.add(filename);
 	}
 

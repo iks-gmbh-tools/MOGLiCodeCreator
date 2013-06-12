@@ -12,9 +12,9 @@ import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
+import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
-import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.type.Inserter;
@@ -57,7 +57,7 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
 		encodingHelper = null;
 
-		model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel();
+		model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel(PLUGIN_ID);
 		infrastructure.getPluginLogger().logInfo("Model '" + model.getName() + "' retrieved from " + MODEL_PROVIDER_ID);
 
 		final List<String> list = getArtefactList();
@@ -108,13 +108,20 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 
 		final VelocityInserterResultData result = insert(engineData);
 		if (! ModelValidationGeneratorUtil.validateModel(result.getNameOfValidModel(), model.getName())) {
-			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '" 
+			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '"
                                                     + result.getNameOfValidModel() + "' as valid model.");
 			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + model.getName() + "'.");
 
 			return null;
 		}
 		result.validate();
+
+		if (result.skipGeneration()) {
+			infrastructure.getPluginLogger().logInfo("Generation of file '" + result.getTargetFileName()
+							                         + "' was skipped as configured for artefact " + artefact + ".");
+			return null;
+		}
+
 		encodingHelper = IOEncodingHelper.getInstance(EncodingUtils.getValidOutputEncodingFormat(result.getOutputEncodingFormat(),
 				                                      infrastructure.getPluginLogger()));
 		writeResultIntoPluginOutputDir(result, artefact);
@@ -358,8 +365,8 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 				                    "BeanFactoryInsertAboveTemplateMain.tpl", "BeanFactoryInsertBelowTemplateMain.tpl"};
 		defaultData.addFlatFolder(BEAN_FACTORY_DIR, templates);
 
-		defaultData.addRootInputFile(PLUGIN_PROPERTIES_FILE);
-		defaultData.addRootInputFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
+		defaultData.addRootFile(PLUGIN_PROPERTIES_FILE);
+		defaultData.addRootFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
 
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
@@ -412,7 +419,9 @@ public class VelocityModelBasedInserterStarter implements Inserter, MetaInfoVali
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR, PLUGIN_ID);
-		helpData.addFile(ARTEFACT_PROPERTIES_HELP_FILE);
+
+		helpData.addRootFile(ARTEFACT_PROPERTIES_HELP_FILE);
+
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
 	}

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
@@ -14,6 +15,7 @@ import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
 import com.iksgmbh.moglicc.intest.IntTestParent;
+import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
@@ -55,11 +57,12 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 				artefactName);
 		artefactTemplateDir.mkdirs();
 		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
-		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName ${classDescriptor.simpleName}.txt" + 
+		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName Test.txt" + 
 														FileUtil.getSystemLineSeparator() +
-														"@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" +FileUtil.getSystemLineSeparator() +
-														"@NameOfValidModel na" + FileUtil.getSystemLineSeparator() + 
-				                                        "${classDescriptor.simpleName}");
+														"@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" +
+														FileUtil.getSystemLineSeparator() +
+                                                        "@NameOfValidModel NotExistingModel" + FileUtil.getSystemLineSeparator() + 
+				                                        "Test");
 
 		// call functionality under test
 		velocityModelBasedInserterStarter.doYourJob();
@@ -70,12 +73,12 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 		assertFileDoesNotExist(artefactTargetDir);
 		
 		// prepare follow up test
-		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName ${classDescriptor.simpleName}.txt" +
-				FileUtil.getSystemLineSeparator() +
-				"@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" +
-				FileUtil.getSystemLineSeparator() +
-                "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() + 
-                "${classDescriptor.simpleName}");
+		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName Test.txt" +
+				                                        FileUtil.getSystemLineSeparator() +
+				                                        "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" +
+				                                        FileUtil.getSystemLineSeparator() +
+                                                        "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() + 
+                                                        "Test");
 
 		// call functionality under test
 		velocityModelBasedInserterStarter.doYourJob();
@@ -140,6 +143,7 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 
 			fail("Expected exception not thrown!");
 		} catch (MOGLiPluginException e) {
+			// verify test result
 			assertStringEquals("error message", "There are main templates for artefact 'TestArtifact' " +
 					                            "that differ in there targetFileName or targetDir!", e.getMessage());
 
@@ -147,6 +151,129 @@ public class VelocityModelBasedInserterIntTest extends IntTestParent {
 			FileUtil.deleteDirWithContent(targetDir1);
 			FileUtil.deleteDirWithContent(targetDir2);
 		}
+	}
+
+	@Test
+	public void parsesTemplateFileWithTargetNameLeadingNonAsciiChars() throws Exception {
+		// prepare test
+		final String artefactName = "TestArtefact";
+		standardModelProviderStarter.doYourJob();
+		velocityEngineProviderStarter.doYourJob();
+		final File artefactTemplateDir = new File(velocityModelBasedInserterStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+				artefactName);
+		artefactTemplateDir.mkdirs();
+		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
+		final File sourceFile = new File(getProjectTestResourcesDir(), "InserterTemplateWithTargetNameLeadingNonAsciiChars.tpl");
+		System.out.println(sourceFile.getAbsolutePath());
+		FileUtil.copyBinaryFile(sourceFile, testTemplate);
+
+		// call functionality under test
+		velocityModelBasedInserterStarter.doYourJob();
+		
+		//  verify test result by no exception thrown
+	}
+	
+	
+	@Test
+	public void skipsTargetFileCreationWhenConfiguredSoInTemplateProperties()
+			throws MOGLiPluginException, IOException 
+	{
+		// prepare test
+		final String modelName = "SkipTestModel";
+		final String targetFileName = "config.xml";
+
+		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator() 
+				+ "  metainfo includesDB false"
+				+ FileUtil.getSystemLineSeparator() + "class de.Test1";
+		prepareModelFile(modelName, modelFileContent);
+
+		final String templateFileContent = "@CreateNew true"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetFileName " + targetFileName
+				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetDir "
+				+ MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
+				+ "/example"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@SkipGeneration  NOT $model.getMetaInfoValueFor(\"includesDB\")";
+		prepareTemplateFile(templateFileContent);
+
+		final File resultFile = new File(applicationRootDir, "example/" + targetFileName);
+		resultFile.delete();
+		assertFileDoesNotExist(resultFile);
+
+		
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityModelBasedInserterStarter.doYourJob();
+
+		// verify test result
+		assertFileDoesNotExist(resultFile);
+	}
+	 
+	private void prepareModelFile(final String modelName, final String modelFileContent) throws MOGLiPluginException, IOException 
+	{
+		final File defaultModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+				                               StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
+		defaultModelFile.delete();
+		assertFileDoesNotExist(defaultModelFile);
+		final File testPropertiesFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		testPropertiesFile.delete();
+		assertFileDoesNotExist(testPropertiesFile); // asserts preparation is correct
+		final File testModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), modelName
+				                            + ".txt");
+		MOGLiFileUtil.createNewFileWithContent(testModelFile, modelFileContent);
+		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "modelfile=" + modelName + ".txt");
+		assertFileExists(testModelFile); // asserts preparation is correct
+	}
+
+	 
+	private void prepareTemplateFile(final String templateFileContent) throws MOGLiPluginException, IOException 
+	{
+		File inputDir = velocityModelBasedInserterStarter.getMOGLiInfrastructure().getPluginInputDir();
+		FileUtil.deleteDirWithContent(inputDir);
+		assertFileDoesNotExist(inputDir);
+		inputDir = new File(inputDir, "Test");
+		inputDir.mkdirs();
+		final File templateFile = new File(inputDir, "SkipTest.tpl");
+		MOGLiFileUtil.createNewFileWithContent(templateFile, templateFileContent);
+		assertFileExists(templateFile);  // asserts preparation is correct
+	}
+
+	
+	@Test
+	public void correctsVelocityBug_fileExtensionOfTargetFileNameWasCut() throws Exception {
+		// prepare test
+		final String modelName = "SkipTestModel";
+
+		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator() 
+				+ "  metainfo includesDB true"
+				+ FileUtil.getSystemLineSeparator() + "class de.Test1";
+		prepareModelFile(modelName, modelFileContent);
+
+		final String templateFileContent = "@CreateNew true"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetFileName " + "test_$model.getSize()_filename.java # any comment"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetDir "
+				+ MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
+				+ "/example"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@SkipGeneration  NOT $model.getMetaInfoValueFor(\"includesDB\")";
+		prepareTemplateFile(templateFileContent);
+
+		final File resultFile = new File(applicationRootDir, "example/test_1_filename.java");
+		resultFile.delete();
+		assertFileDoesNotExist(resultFile);
+
+		
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityModelBasedInserterStarter.doYourJob();
+
+		// verify test result
+		assertFileExists(resultFile);
 	}
 
 }

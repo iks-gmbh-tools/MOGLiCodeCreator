@@ -26,7 +26,7 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	public static final String TEXT_TARGET_FILE_IS_A_DIRECTORY = "Defined target file is no file";
 	public static final String TEXT_PACKAGE_NOT_FOUND = "'" + PACKAGE + "' not found in generated content!";
 
-	enum KnownGeneratorPropertyNames { TargetDir, TargetFileName, CreateNew, NameOfValidModel, OutputEncodingFormat };
+	enum KnownGeneratorPropertyNames { TargetDir, TargetFileName, CreateNew, NameOfValidModel, OutputEncodingFormat, SkipGeneration };
 
 	String getTargetDir();
 
@@ -37,6 +37,13 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	 * @return false if target file must remain untouched
 	 */
 	boolean isTargetToBeCreatedNewly();
+	
+	/**
+	 * Provides information whether the code supposed to create has to be ignored for generation
+	 * @return false if creation of target file is suppressed
+	 */
+	boolean skipGeneration();
+
 
 	/**
 	 * Provides information whether or not the target file has not been overwritten.
