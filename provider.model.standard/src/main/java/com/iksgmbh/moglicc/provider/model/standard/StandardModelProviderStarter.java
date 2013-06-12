@@ -2,7 +2,7 @@ package com.iksgmbh.moglicc.provider.model.standard;
 
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.BRACE_SYMBOL_PROPERTY;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.MODELFILE_PROPERTY;
-import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_METAINFO_VALIDATION_ERROR_OCCURRED;
+import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_MODEL_BREAKS_METAINFO_VALIDATORS;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_MODEL_NOT_EXISTS;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_NO_MODELFILE_DEFINED_IN_PROPERTIES_FILE;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.TEXT_NO_MODELFILE_FOUND;
@@ -15,14 +15,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
 import com.iksgmbh.helper.AnnotationParser;
 import com.iksgmbh.moglicc.core.InfrastructureService;
-
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.exceptions.MetaInfoValidatorException;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
@@ -51,7 +50,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	private BuildUpModel buildUpModel;
 
 	private List<MetaInfoValidator> metaInfoValidatorList;
-	final List<String> validationErrorMessages = new ArrayList<String>();
+	final HashMap<String, List<String>> validationErrorMessages = new HashMap<String, List<String>>();  // message list per plugin
 
 	private Properties pluginProperties;
 
@@ -88,22 +87,16 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		validateAttributeMetaInfos(metaInfoValidatorList);
 
 		if (validationErrorMessages.size() > 0) {
-			throw new MetaInfoValidatorException(buildValidationErrorLogoutMessage());
+			infrastructure.getPluginLogger().logInfo("Model breaks "
+					+ validationErrorMessages.size() + " MetaInfoValidator settings!");
 		}
-	}
-
-	private String buildValidationErrorLogoutMessage() {
-		String toReturn = TEXT_METAINFO_VALIDATION_ERROR_OCCURRED + FileUtil.getSystemLineSeparator();
-		for (final String message : validationErrorMessages) {
-			toReturn += message + FileUtil.getSystemLineSeparator();
-		}		
-		return toReturn.trim();
+		infrastructure.getPluginLogger().logInfo("Model is valid corresponding the MetaInfoValidators!");
 	}
 
 	private boolean validateAttributeMetaInfos(final List<MetaInfoValidator> allMetaInfoValidators) {
 		boolean validationErrorOccurred = false;
 		final List<ClassDescriptor> classDescriptorList = buildUpModel.getClassDescriptorList();
-		
+
 		for (final ClassDescriptor classDescriptor : classDescriptorList) {
 			final List<AttributeDescriptor> attributeDescriptorList = classDescriptor.getAttributeDescriptorList();
 			for (final AttributeDescriptor attributeDescriptor : attributeDescriptorList) {
@@ -115,14 +108,23 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 							final String errorMessage = metaInfoValidator.getValidationErrorMessage()
 									                    + " for attribute descriptor '" + attributeDescriptor.getName() + "'"
 									                    + getModelString(metaInfoValidator);
-							infrastructure.getPluginLogger().logError(errorMessage);
-							validationErrorMessages.add(errorMessage);
+							infrastructure.getPluginLogger().logWarning(errorMessage);
+							addValidationErrorMessage(metaInfoValidator.getVendorPluginId(), errorMessage);
 						}
 					}
 				}
 			}
 		}
 		return validationErrorOccurred;
+	}
+
+	private void addValidationErrorMessage(final String pluginID, final String message) {
+		List<String> list = validationErrorMessages.get(pluginID);
+		if (list == null) {
+			list = new ArrayList<String>();
+			validationErrorMessages.put(pluginID, list);
+		}
+		list.add(message);
 	}
 
 	private String getModelString(final MetaInfoValidator metaInfoValidator) {
@@ -138,15 +140,15 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		final List<ClassDescriptor> classDescriptorList = buildUpModel.getClassDescriptorList();
 		for (final ClassDescriptor classDescriptor : classDescriptorList) {
 			for (final MetaInfoValidator metaInfoValidator : allMetaInfoValidators) {
-				if (metaInfoValidator.isValidatorValidForHierarchyLevel(HierarchyLevel.Class))  {					
+				if (metaInfoValidator.isValidatorValidForHierarchyLevel(HierarchyLevel.Class))  {
 					boolean validationOk = metaInfoValidator.validate(classDescriptor.getMetaInfoList());
 					if (! validationOk) {
 						validationErrorOccurred = true;
-						final String errorMessage = metaInfoValidator.getValidationErrorMessage() + " for class descriptor '" 
+						final String errorMessage = metaInfoValidator.getValidationErrorMessage() + " for class descriptor '"
 								+ classDescriptor.getSimpleName() + "'"
 								+ getModelString(metaInfoValidator);
-						infrastructure.getPluginLogger().logError(errorMessage);
-						validationErrorMessages.add(errorMessage);		
+						infrastructure.getPluginLogger().logWarning(errorMessage);
+						addValidationErrorMessage(metaInfoValidator.getVendorPluginId(), errorMessage);
 					}
 				}
 
@@ -157,14 +159,14 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 
 	private void validateModelMetaInfos(final List<MetaInfoValidator> allMetaInfoValidators) {
 		for (final MetaInfoValidator metaInfoValidator : allMetaInfoValidators) {
-			if (metaInfoValidator.isValidatorValidForHierarchyLevel(HierarchyLevel.Model))  {					
+			if (metaInfoValidator.isValidatorValidForHierarchyLevel(HierarchyLevel.Model))  {
 				boolean validationOk = metaInfoValidator.validate(buildUpModel.getMetaInfoList());
 				if (! validationOk) {
-					final String errorMessage = metaInfoValidator.getValidationErrorMessage() + " for model '" 
+					final String errorMessage = metaInfoValidator.getValidationErrorMessage() + " for model '"
 				                                + buildUpModel.getName() + "'"
 				                                + getModelString(metaInfoValidator);
-					infrastructure.getPluginLogger().logError(errorMessage);
-					validationErrorMessages.add(errorMessage);
+					infrastructure.getPluginLogger().logWarning(errorMessage);
+					addValidationErrorMessage(metaInfoValidator.getVendorPluginId(), errorMessage);
 				}
 			}
 		}
@@ -215,9 +217,15 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	}
 
 	@Override
-	public Model getModel() throws MOGLiPluginException {
+	public Model getModel(final String pluginId) throws MOGLiPluginException {
 		if (buildUpModel == null) {
 			throw new MOGLiPluginException(TEXT_NO_MODEL_FILE_LOADED);
+		}
+
+		final List<String> errorListForTheCallingPlugin = validationErrorMessages.get(pluginId);
+
+		if (errorListForTheCallingPlugin != null) {
+			throw new MOGLiPluginException(TEXT_MODEL_BREAKS_METAINFO_VALIDATORS);
 		}
 		return buildUpModel;
 	}
@@ -228,6 +236,8 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 
 		final List<String> fileContentAsList = readModelFileContent();
 	    final String braceSymbol = getMetaInfoBraceSymbol();
+		infrastructure.getPluginLogger().logInfo("Brace symbol used: " + braceSymbol);
+
 
 		try {
 			buildUpModel = ModelParser.doYourJob(fileContentAsList, braceSymbol);
@@ -235,7 +245,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 			throw new MOGLiPluginException(TEXT_PARSE_ERROR_FOUND
 					+ e.getParserErrors());
 		}
-		
+
 		infrastructure.getPluginLogger().logInfo("Model file: " + modelFile.getAbsolutePath());
 		infrastructure.getPluginLogger().logInfo(buildUpModel.getSize() + " classes read from model file.");
 
@@ -263,6 +273,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 			throw new MOGLiPluginException("Could not read file: "
 					+ modelFile, e);
 		}
+		infrastructure.getPluginLogger().logInfo("Model file has been read!");
 		return fileContentAsList;
 	}
 
@@ -282,6 +293,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 			throw new MOGLiPluginException("Unexpected empty file: "
 					+ modelFile.getAbsolutePath());
 		}
+		infrastructure.getPluginLogger().logInfo("Model file found!");
 	}
 
 	File getModelFile() throws MOGLiPluginException {
@@ -297,11 +309,17 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 
 		if (pluginProperties != null) {
 			toReturn = pluginProperties.getProperty(MODELFILE_PROPERTY);
+			if (toReturn == null) {
+				infrastructure.getPluginLogger().logInfo("Model file name read from property file: " + toReturn);
+			}
 		}
 
 		if (toReturn == null) {
 			infrastructure.getPluginLogger().logWarning(TEXT_NO_MODELFILE_DEFINED_IN_PROPERTIES_FILE);
 			toReturn = readModelFileNameFromFileSystem();
+			if (toReturn == null) {
+				infrastructure.getPluginLogger().logInfo("Model file name found in input directory: " + toReturn);
+			}
 		}
 
 		if (toReturn == null) {
@@ -333,15 +351,13 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		if (pluginProperties == null) {
 			final File propertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
 			if (propertiesFile.exists()) {
+				infrastructure.getPluginLogger().logInfo("Property file '" + PLUGIN_PROPERTIES_FILE +  "' found.");
 				FileInputStream fileInputStream = null;
 				try {
 					fileInputStream = new FileInputStream(propertiesFile);
 					pluginProperties = new Properties();
 					pluginProperties.load(fileInputStream);
-
-
-
-
+					infrastructure.getPluginLogger().logInfo("Property file '" + PLUGIN_PROPERTIES_FILE +  "' read.");
 				} catch (IOException e) {
 					infrastructure.getPluginLogger().logError(TEXT_PROPERTIES_FILE_NOT_LOADED + e.getMessage());
 				} finally {
@@ -400,5 +416,9 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 			return "";
 		}
 		return buildUpModel.getName();
+	}
+
+	public BuildUpModel getUnvalidatedModel() {
+		return buildUpModel;
 	}
 }

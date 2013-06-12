@@ -41,7 +41,7 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 	}
 
 	@Override
-	public Model getModel() {
+	public Model getModel(String pluginId) {
 		return MockDataBuilder.buildStandardModel();
 	}
 
@@ -54,7 +54,7 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 	public InfrastructureService getMOGLiInfrastructure() {
 		return infrastructure;
 	}
-	
+
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;

@@ -82,7 +82,7 @@ public class FilestructureModelBasedGeneratorStarter implements Generator, MetaI
 	public void doYourJob() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
 
-		model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel();
+		model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel(PLUGIN_ID);
 
 		final List<String> artefactList = getArtefactList();
 		for (final String artefact : artefactList) {
@@ -297,8 +297,8 @@ public class FilestructureModelBasedGeneratorStarter implements Generator, MetaI
 		defaultData.addSubDir(MOGLICC_NEW_PLUGIN_PROJECT + "/src/test/java");
 		defaultData.addSubDir(MOGLICC_NEW_PLUGIN_PROJECT + "/src/test/resources");
 
-		defaultData.addRootInputFile(PLUGIN_PROPERTIES_FILE);
-		defaultData.addRootInputFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
+		defaultData.addRootFile(PLUGIN_PROPERTIES_FILE);
+		defaultData.addRootFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
 
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
@@ -329,7 +329,7 @@ public class FilestructureModelBasedGeneratorStarter implements Generator, MetaI
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR, PLUGIN_ID);
 
-		helpData.addFile(ARTEFACT_PROPERTIES_HELP_FILE);
+		helpData.addRootFile(ARTEFACT_PROPERTIES_HELP_FILE);
 
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;

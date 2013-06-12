@@ -100,6 +100,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
 		plugin.setMOGLiInfrastructure(infrastructure);
 		plugin.unpackDefaultInputData();
+		plugin.unpackPluginHelpFiles();
 		return infrastructure;
 	}
 

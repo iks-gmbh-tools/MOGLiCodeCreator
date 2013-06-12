@@ -1,0 +1,13 @@
+﻿
+model TestModel
+  metainfo eclipseProjectDir <applicationRootDir>
+  metainfo projectName MOGLiCC_JavaBeanProject
+
+class com.iksgmbh.moglicc.demo.Person
+
+  attribute Firstname
+    metainfo JavaType String
+    metainfo ExampleData Hans
+    metainfo TestExampleData Martha
+    metainfo MinLength 2
+    metainfo MaxLength 10

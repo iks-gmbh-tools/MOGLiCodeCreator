@@ -1,5 +1,7 @@
 package com.iksgmbh.moglicc.provider.model.standard.parser;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
 import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpMetaInfo;
@@ -18,9 +20,13 @@ public class MetaInfoParser extends AnnotationParser {
 	
 	public BuildUpMetaInfo parse(String line) {
 		final Annotation annotation = super.doYourJob(line);
+		if (StringUtils.isEmpty(annotation.getName())) {
+			throw new IllegalArgumentException(TextConstants.MISSING_NAME);
+		}
 		if (annotation.getName().startsWith(ERROR)) {
 			throw new IllegalArgumentException(annotation.getName());
 		}		
+		
 		if (annotation.getAdditionalInfo() == null) {
 			throw new IllegalArgumentException(TextConstants.MISSING_VALUE);
 		}

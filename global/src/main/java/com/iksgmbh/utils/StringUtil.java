@@ -130,4 +130,38 @@ public class StringUtil {
 	  java.util.Collections.sort(list);
 	  return list;
 	}
+
+	public static String cutUnwantedLeadingControlChars(final String line) {
+		if (line.trim().length() == 0) {
+			return line;
+		}
+
+		String toReturn = line;
+		while ((int)toReturn.charAt(0) == 65279) {
+			toReturn = toReturn.substring(1);
+			if (toReturn.length() == 0) {
+				return "";
+			}
+		}
+		return toReturn;
+	}
+
+	public static String getStringFromStringListThatContainsSubstring(final List<String> list, final String substring) {
+		for (final String s : list) {
+			if (s.contains(substring)) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	public static int getIndexForElementThatContainsSubstring(final List<String> list, final String substring) {
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).contains(substring)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 }

@@ -99,5 +99,39 @@ public class StringUtilUnitTest {
 		assertEquals("result ", "AB C DE", result4 );
 	}
 
-	
+	@Test
+	public void getsStringFromStringListThatContainsSubstring() {
+		// prepare test
+		final String expectedResult = "blurb 132 blub"; 
+		final List<String> list = new ArrayList<String>();
+		list.add("bubu 123 bubu");
+		list.add(expectedResult);
+		list.add("blarb 312 bulb");
+		
+		// call functionality under test
+		final String result1 = StringUtil.getStringFromStringListThatContainsSubstring(list, "132");
+		final String result2 = StringUtil.getStringFromStringListThatContainsSubstring(list, "xy");
+		
+		// verify test result
+		assertEquals("result ", expectedResult, result1 );
+		assertEquals("result ", null, result2 );
+	}
+
+	@Test
+	public void getsIndexForElementThatContainsSubstring() {
+		// prepare test
+		final List<String> list = new ArrayList<String>();
+		list.add("bubu 123 bubu");
+		list.add("blurb 132 blub");
+		list.add("blarb 312 bulb");
+		
+		// call functionality under test
+		final int result1 = StringUtil.getIndexForElementThatContainsSubstring(list, "132");
+		final int result2 = StringUtil.getIndexForElementThatContainsSubstring(list, "xy");
+		
+		// verify test result
+		assertEquals("result ", 1, result1 );
+		assertEquals("result ", -1, result2 );
+	}
+
 }

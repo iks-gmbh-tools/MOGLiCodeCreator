@@ -115,7 +115,7 @@ public class MetaInfoValidationUtil {
 			return null; // ignore this line
 		}
 
-		line = line.trim();
+		line = StringUtil.cutUnwantedLeadingControlChars(line).trim();
 		if (annotationParserClassic.hasCorrectPrefix(line)) {
 			final Annotation annotation = annotationParserClassic.doYourJob(line);
 			final MetaInfoValidatorParent metaInfoValidator = createValidatorInstanceClassic(annotation);

@@ -29,6 +29,7 @@ import com.iksgmbh.utils.ImmutableUtil;
  */
 public class PluginExecutor {
 
+	private static final String LOG_FILE_LINE_SEPARATOR = "-----";
 	private HashMap<String, PluginMetaData> pluginMetaDataHashMap;
 	private InfrastructureInitData infrastructureInitData;
 	private List<PluginMetaData> pluginMetaDataListForNotExecutedPlugins;
@@ -57,6 +58,7 @@ public class PluginExecutor {
 						DependencyResolver.doYourJob(pluginExecutionData.pluginsToExecute,
 													 pluginExecutionData.pluginMetaDataList);
 		pluginExecutor.executePlugins(sortedPluginsToExecute);
+		MOGLiLogUtil.logInfo(LOG_FILE_LINE_SEPARATOR);
 		return pluginExecutor.sortPluginMetaDataListByExecutionOrder(sortedPluginsToExecute);
 	}
 
@@ -112,7 +114,7 @@ public class PluginExecutor {
 	}
 	
 	private void unpackPluginData(final List<MOGLiPlugin> sortedPluginsToExecute) {
-		MOGLiLogUtil.logInfo("---");
+		MOGLiLogUtil.logInfo(LOG_FILE_LINE_SEPARATOR);
 		MOGLiLogUtil.logInfo("Unpacking Plugin Data...");
 		int counter = 0;
 		for (final MOGLiPlugin plugin : sortedPluginsToExecute) {
@@ -145,7 +147,7 @@ public class PluginExecutor {
 
 	protected void letPluginsDoTheirJob(
 		final List<MOGLiPlugin> sortedPluginsToExecute) {
-		MOGLiLogUtil.logInfo("---");
+		MOGLiLogUtil.logInfo(LOG_FILE_LINE_SEPARATOR);
 		MOGLiLogUtil.logInfo("Executing Plugins...");
 		int counter = 0;
 		for (MOGLiPlugin plugin : sortedPluginsToExecute) {
@@ -160,6 +162,7 @@ public class PluginExecutor {
 				MOGLiLogUtil.logInfo(plugin.getId() + " Done!");
 			} catch (MOGLiPluginException e) {
 				infoMessage = e.getPluginErrorMessage();
+				plugin.getMOGLiInfrastructure().getPluginLogger().logError(infoMessage);
 			} catch (Throwable t) {
 				final Throwable rootCause = ExceptionUtils.getRootCause(t);
 				if (rootCause == null) {

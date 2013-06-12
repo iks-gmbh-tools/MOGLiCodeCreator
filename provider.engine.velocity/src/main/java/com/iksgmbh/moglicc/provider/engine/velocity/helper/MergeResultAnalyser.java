@@ -16,9 +16,9 @@ public class MergeResultAnalyser {
 
 	public static final String IDENTIFICATOR_WHITESPACE_MARKER = "'";
 	private static final AnnotationParser annotationParser = AnnotationParser.getInstance();
-	private static final String commentSymbolLineIdentifiery = annotationParser.getCommentIdentificator() +
-			                                                   annotationParser.getCommentIdentificator() +
-			                                                   annotationParser.getCommentIdentificator();
+	private static final String commentSymbolLineIdentifier = annotationParser.getCommentIdentificator() +
+			                                                  annotationParser.getCommentIdentificator() +
+			                                                  annotationParser.getCommentIdentificator();
 
 	private BuildUpGeneratorResultData velocityResultData;
 	private String artefactType;
@@ -105,14 +105,16 @@ public class MergeResultAnalyser {
 			}
 			velocityResultData.addProperty(annotation.getName(), annotation.getAdditionalInfo());
 		} else if (annotationParser.isCommentLine(line)) {
-			if (line.startsWith(commentSymbolLineIdentifiery)) {
+			if (line.startsWith(commentSymbolLineIdentifier)) {
 				// do not remove whole line that consists of separator symbols
 				newLines.add(removeWhitespaceMarker(line));
 			}
 			// ignore this line
 		} else {
 			if (line.trim().length() > 0) {
-				newLines.add(removeWhitespaceMarker(line));
+				String s = removeWhitespaceMarker(line);
+				s = StringUtil.cutUnwantedLeadingControlChars(s);
+				newLines.add(s);
 				headerEndReached = true;
 			}
 		}

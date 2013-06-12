@@ -19,18 +19,19 @@ import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpClassDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpMetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpModel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
+import com.iksgmbh.utils.StringUtil;
 
 public class ModelParser {
-	
+
 	private static final String COMMENT_PREFIX = "#";
 
 	private final List<String> errorList = new ArrayList<String>();
-	
+
 	private final ModelNameParser modelNameParser = new ModelNameParser();
 	private final ClassDescriptorParser classDescriptorParser = new ClassDescriptorParser();
 	private final AttributeDescriptorParser attributeDescriptorParser = new AttributeDescriptorParser();
 	private final MetaInfoParser metaInfoParser;
-	
+
 	private BuildUpModel buildUpModel;
 	private BuildUpClassDescriptor buildUpClassDescriptor;
 	private BuildUpAttributeDescriptor buildUpAttributeDescriptor;
@@ -44,7 +45,7 @@ public class ModelParser {
 		metaInfoParser = new MetaInfoParser(AnnotationParser.DEFAULT_PART_BRACE_IDENTIFIER);
 	}
 
-	public static BuildUpModel doYourJob(final List<String> fileContentAsList,    
+	public static BuildUpModel doYourJob(final List<String> fileContentAsList,
 			                             final String braceSymbol) throws ModelParserException {
 		final ModelParser modelParser = new ModelParser(braceSymbol);
 		return modelParser.parse(fileContentAsList);
@@ -54,11 +55,11 @@ public class ModelParser {
 		int lineCounter = 0;
 		for (String line : fileContentAsList) {
 			lineCounter++;
-			line = line.trim();
+			line = StringUtil.cutUnwantedLeadingControlChars(line).trim();
 			if (line.length() == 0 || line.startsWith(COMMENT_PREFIX)) {
 				continue;
 			}
-			
+
 			if (metaInfoParser.hasCorrectPrefix(line)) {
 				parseMetaInfoLine(lineCounter, line);
 			} else if (attributeDescriptorParser.hasCorrectPrefix(line)) {
@@ -82,10 +83,10 @@ public class ModelParser {
 			try {
 				buildUpMetaInfo = metaInfoParser.parse(line);
 			} catch (Exception e) {
-				errorList.add(TextConstants.MISSING_NAME + " in line " + lineCounter + ": " + e.getMessage());
+				errorList.add("Problem in line " + lineCounter + ": " + e.getMessage());
 				return;
 			}
-			if (buildUpAttributeDescriptor != null) {		
+			if (buildUpAttributeDescriptor != null) {
 				buildUpMetaInfo.setLevel(MetaInfo.HierarchyLevel.Attribute);
 				buildUpAttributeDescriptor.addMetaInfo(buildUpMetaInfo);
 			} else if (buildUpClassDescriptor != null) {
@@ -143,7 +144,7 @@ public class ModelParser {
 
 	private void parseModelLine(final int lineCounter, final String line) {
 		final String modelName = modelNameParser.parse(line);
-		if (buildUpModel != null) {			
+		if (buildUpModel != null) {
 			errorList.add(DUPLICATE_MODEL_IDENTIFIER + " in line " + lineCounter + "!");
 		} else {
 			try {

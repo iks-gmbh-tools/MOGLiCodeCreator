@@ -6,13 +6,13 @@ import com.iksgmbh.moglicc.provider.model.standard.Model;
 
 /**
  * Interface for other plugins to use the modelProvider's functionality.
- * 
+ *
  * @author Reik Oberrath
  * @since 1.0.0
  */
 public interface ModelProvider extends MOGLiPlugin {
 
-	Model getModel() throws MOGLiPluginException;
+	Model getModel(String pluginId) throws MOGLiPluginException;
 	String getModelName();
 
 }

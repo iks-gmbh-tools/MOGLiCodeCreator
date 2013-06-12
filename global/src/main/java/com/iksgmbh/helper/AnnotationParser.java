@@ -1,6 +1,7 @@
 package com.iksgmbh.helper;
 
 import com.iksgmbh.data.Annotation;
+import com.iksgmbh.utils.StringUtil;
 
 /**
  * Creates a Annotation Object from a text line.
@@ -62,8 +63,15 @@ public class AnnotationParser {
 	 * @return true if first
 	 */
 	public boolean hasCorrectPrefix(final String line) {
+		final String lineLowerCase = StringUtil.cutUnwantedLeadingControlChars(line).trim().toLowerCase();
+
+		if (lineLowerCase == null) {
+			return false;
+		}
+
 		// a prefix may have leading or trailing spaces !
-		return line.trim().toLowerCase().startsWith(annotationPrefixIdentificator.trim().toLowerCase());
+		final String prefix = annotationPrefixIdentificator.trim().toLowerCase();
+		return lineLowerCase.startsWith(prefix);
 	}
 
 	public Annotation doYourJob(String line) {
@@ -76,7 +84,7 @@ public class AnnotationParser {
 		}
 		return toReturn;
 	}
-	
+
 	public String removePartBraceIdentifier(final String s) {
 		if (s == null) return null;
 		String toReturn = s.trim();
@@ -86,7 +94,7 @@ public class AnnotationParser {
 		if (toReturn.endsWith(partBraceIdentifier)) {
 			toReturn = toReturn.substring(0, toReturn.length() - partBraceIdentifier.length());
 		}
-		
+
 		return toReturn;
 	}
 
@@ -138,8 +146,9 @@ public class AnnotationParser {
 	}
 
 	protected String cutPrefix(String line) {
+		line = StringUtil.cutUnwantedLeadingControlChars(line).trim();
 		// a prefix may have leading or trailing spaces
-		line = line.trim().substring(annotationPrefixIdentificator.trim().length()).trim();
+		line = line.substring(annotationPrefixIdentificator.trim().length()).trim();
 		final int pos = line.indexOf(commentIdentificator);
 		if (pos == -1) {
 			return line;

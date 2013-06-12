@@ -27,7 +27,7 @@ public class StatisticsFileCreator {
 	public StatisticsFileCreator(final StandardModelProviderStarter modelProvider) throws MOGLiPluginException {
 		this.modelProvider = modelProvider;
 		infrastructure = modelProvider.getInfrastructure();
-		model = (BuildUpModel) modelProvider.getModel();
+		model = (BuildUpModel) modelProvider.getUnvalidatedModel();
 	}
 	
 	private void createStatisticsFile()	throws MOGLiPluginException {

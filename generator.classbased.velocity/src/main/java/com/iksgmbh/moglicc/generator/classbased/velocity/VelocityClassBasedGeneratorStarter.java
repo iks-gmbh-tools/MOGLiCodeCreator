@@ -29,6 +29,7 @@ import com.iksgmbh.utils.ImmutableUtil;
 
 public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoValidatorVendor {
 
+	private static final String LOGFILE_LINE_SEPARATOR = "-----";
 	public static final String PLUGIN_ID = "VelocityClassBasedGenerator";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 	public static final String ENGINE_PROVIDER_ID = "VelocityEngineProvider";
@@ -43,12 +44,13 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	public static final String ARTEFACT_JAVABEAN_VALIDATOR_TEST = "MOGLiJavaBeanValidatorTest";
 	public static final String ARTEFACT_MOGLICC_NEW_PLUGIN = "MOGLiCC_NewPluginModel";
 
-	final static String[] javabeanTemplates = {"A_MainTemplate.tpl", "E_Variables.tpl",
-		    "G_GetterMethods.tpl", "F_SetterMethods.tpl", "C_ClassDefinitionLine.tpl",
-			"D_Serializable.tpl", "H_toStringMethod.tpl", "J_hashCodeMethod.tpl",
-			"I_equalsMethod.tpl", "I1_equalsArrayTypes.tpl", "I2_equalsPrimitiveTypes.tpl",
-			"I3_equalsStandardTypes.tpl", "J_hashCodeMethod.tpl", "J2_hashCodePrimitiveTypes.tpl",
-			"K_cloneMethod.tpl", "K1_cloneArrayType.tpl", "K2_cloneCollectionType.tpl",
+	final static String[] javabeanTemplates = {
+		    "A_MainTemplate.tpl",         "E_Variables.tpl",
+		    "G_GetterMethods.tpl",        "F_SetterMethods.tpl",     "C_ClassDefinitionLine.tpl",
+			"D_Serializable.tpl",         "H_toStringMethod.tpl",    "J_hashCodeMethod.tpl",
+			"I_equalsMethod.tpl",         "I1_equalsArrayTypes.tpl", "I2_equalsPrimitiveTypes.tpl",
+			"I3_equalsStandardTypes.tpl", "J_hashCodeMethod.tpl",    "J2_hashCodePrimitiveTypes.tpl",
+			"K_cloneMethod.tpl",          "K1_cloneArrayType.tpl",   "K2_cloneCollectionType.tpl",
 			"K3_cloneStandardType.tpl"};
 
 	final static String[] javabeanTestTemplates = {"A_MainTemplate.tpl", "C_setupMethod.tpl",
@@ -105,13 +107,14 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
 		encodingHelper = null;
 
-		final Model model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel();
+		final Model model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel(PLUGIN_ID);
 		infrastructure.getPluginLogger().logInfo("Model '" + model.getName() + "' retrieved from " + MODEL_PROVIDER_ID);
+		infrastructure.getPluginLogger().logInfo(LOGFILE_LINE_SEPARATOR);
 
 		final List<String> list = getArtefactList();
 		for (final String artefact : list) {
 			applyModelToArtefactTemplates(model, artefact);
-			infrastructure.getPluginLogger().logInfo("---");
+			infrastructure.getPluginLogger().logInfo(LOGFILE_LINE_SEPARATOR);
 		}
 
 		infrastructure.getPluginLogger().logInfo("Done!");
@@ -120,19 +123,38 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	private void applyModelToArtefactTemplates(final Model model, final String artefact) throws MOGLiPluginException {
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, model, PLUGIN_ID);
 		final List<VelocityGeneratorResultData> resultList = generate(engineData);
+
 		if (! ModelValidationGeneratorUtil.validateModel(resultList.get(0).getNameOfValidModel(), model.getName())) {
-			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '" + resultList.get(0).getNameOfValidModel() 
+			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '" + resultList.get(0).getNameOfValidModel()
 					                                 + "' as valid model.");
 			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + model.getName() + "'.");
 			return;
 		}
+
 		validate(resultList);
+		final List<VelocityGeneratorResultData> artefactsToCreate = removeSkippedClassesFromList(resultList, artefact);
+
 		encodingHelper = IOEncodingHelper.getInstance(EncodingUtils.getValidOutputEncodingFormat(resultList.get(0).getOutputEncodingFormat(),
 				                                      infrastructure.getPluginLogger()));
-		writeFilesIntoPluginOutputDir(resultList, artefact);
-		writeFilesIntoTargetDirReadFromTemplateFile(resultList);
-		generateReportLines(resultList, artefact);
-		infrastructure.getPluginLogger().logInfo(resultList.size() + " files for artefact '" + artefact + "' created!");
+		writeFilesIntoPluginOutputDir(artefactsToCreate, artefact);
+		writeFilesIntoTargetDirReadFromTemplateFile(artefactsToCreate);
+		generateReportLines(artefactsToCreate, artefact);
+		infrastructure.getPluginLogger().logInfo(artefactsToCreate.size() + " files for artefact '" + artefact + "' created!");
+	}
+
+	private List<VelocityGeneratorResultData> removeSkippedClassesFromList(final List<VelocityGeneratorResultData> resultList,
+			                                                               final String artefact)
+    {
+		final List<VelocityGeneratorResultData> toReturn = new ArrayList<VelocityGeneratorResultData>();
+		for (final VelocityGeneratorResultData resultData : resultList) {
+			if (resultData.skipGeneration()) {
+				infrastructure.getPluginLogger().logInfo("Generation of file '" + resultData.getTargetFileName()
+						                                  + "' was skipped as configured for artefact " + artefact + ".");
+			} else {
+				toReturn.add(resultData);
+			}
+		}
+		return toReturn;
 	}
 
 	private void generateReportLines(final List<VelocityGeneratorResultData> resultList, final String artefact) {
@@ -198,6 +220,9 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		final File targetdir = new File(infrastructure.getPluginOutputDir(), subDir);
 		targetdir.mkdirs();
 		for (final VelocityGeneratorResultData resultData : resultList) {
+			if (resultData.getTargetDir() == null) {
+
+			}
 			final File outputFile = new File(targetdir, resultData.getTargetFileName());
 			try {
 				FileUtil.createNewFileWithContent(encodingHelper, outputFile, resultData.getGeneratedContent());
@@ -240,7 +265,7 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	@Override
 	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("initDefaultInputData");
-		
+
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR, PLUGIN_ID);
 
 		defaultData.addFlatFolder(ARTEFACT_COMMON, javabeanCommonSubtempates);
@@ -250,9 +275,9 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_VALIDATOR, javabeanValidatorTemplates);
 		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_VALIDATOR_TEST, javabeanValidatorTestTemplates);
 		defaultData.addFlatFolder(ARTEFACT_MOGLICC_NEW_PLUGIN, MOGLiCCNewPluginSubtempates);
-		
-		defaultData.addRootInputFile(PLUGIN_PROPERTIES_FILE);
-		defaultData.addRootInputFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
+
+		defaultData.addRootFile(PLUGIN_PROPERTIES_FILE);
+		defaultData.addRootFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
 
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
@@ -301,7 +326,9 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR, PLUGIN_ID);
-		helpData.addFile(ARTEFACT_PROPERTIES_HELP_FILE);
+
+		helpData.addRootFile(ARTEFACT_PROPERTIES_HELP_FILE);
+
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
 	}
@@ -311,9 +338,9 @@ public class VelocityClassBasedGeneratorStarter implements Generator, MetaInfoVa
 		final StringBuffer toReturn = new StringBuffer(PLUGIN_ID
 		        + " has done work for following artefacts:"
 		        + FileUtil.getSystemLineSeparator());
-		
+
 		toReturn.append(generationReport);
-		
+
 		return toReturn.toString().trim();
 	}
 
