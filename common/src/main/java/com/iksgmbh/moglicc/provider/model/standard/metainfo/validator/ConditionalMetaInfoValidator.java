@@ -23,24 +23,14 @@ public class ConditionalMetaInfoValidator extends NumOccurMetaInfoValidator {
 	 */
 	private List<List<MetaInfoValidationCondition>> conditionList;
 	private String conditionFilename;
-	
+
 
 	public ConditionalMetaInfoValidator(final MetaInfoValidationData metaInfoValidationData) {
 		super(metaInfoValidationData);
 		validationType = ValidationType.Conditional;
-
 		conditionList = new ArrayList<List<MetaInfoValidationCondition>>();
-		conditionList.add(metaInfoValidationData.getConditionBlock());
-
-		if (getTotalNumberOfConditions() > 0 && maxOccurs < 1) {
-			throw new IllegalArgumentException("Error: conditions make sense only for maxOccurs > 0");
-		}
-
+		conditionList.add(metaInfoValidationData.getConditionBlock());     // this is relevant for test purpose
 		this.conditionFilename = metaInfoValidationData.getConditionFilename();
-
-		if (conditionFilename != null && maxOccurs < 1) {
-			throw new IllegalArgumentException("Error: conditions make no sense for maxOccurs=0");
-		}
 	}
 
 	@Override

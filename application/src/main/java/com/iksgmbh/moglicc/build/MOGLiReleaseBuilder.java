@@ -52,9 +52,9 @@ public class MOGLiReleaseBuilder {
 			                          "global", "common", "core", "interfaces");  // basic mandatory modules for release
 	public static final List<String> PLUGIN_MODULES = ImmutableUtil.getImmutableListOf(
 			                          "provider.model.standard", "provider.engine.velocity",
-			                          "inserter.modelbased.velocity",
-			                          "generator.classbased.velocity",
-			                          "generator.modelbased.filestructure");  // optional modules, but relevant for release
+			                          "lineinserter.modelbased.velocity",
+			                          "filemaker.classbased.velocity",
+			                          "treebuilder.modelbased.velocity");  // optional modules, but relevant for release
 	public static final List<String> DEVELOPMENT_MODULES = ImmutableUtil.getImmutableListOf(
 			                          PARENT_MODULE, "application", "test", "parent.plugin",
 			                          "inttest");  // only necassary for the development infrastructure
@@ -135,7 +135,7 @@ public class MOGLiReleaseBuilder {
 
 	private boolean isTestRun() {
 		final String property = (String) buildProperties.get("testRun");
-		return property != null &&  property.equalsIgnoreCase("true");
+		return property != null  &&  property.trim().equalsIgnoreCase("true");
 	}
 
 	protected void copyReleaseToArchive() {

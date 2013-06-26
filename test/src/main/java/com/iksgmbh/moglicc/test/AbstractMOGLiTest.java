@@ -37,6 +37,8 @@ public abstract class AbstractMOGLiTest {
 	private static final String PROJECT_ROOT_DIR = "../test/";
 	private static final List<String> FILES_TO_IGNORE = ImmutableUtil.getImmutableListOf(".git");
 
+	protected static final String SYSTEM_LINE_SEPARATOR = System.getProperty("line.separator");
+
 	protected static final String TARGET_DIR = "target/";
 	protected static final String TEST_RESOURCES_DIR = "src/test/resources/";
 	protected static final String RESOURCES_DIR = "src/main/resources/";
@@ -258,6 +260,9 @@ public abstract class AbstractMOGLiTest {
 	public void assertFileContainsEntry(final File file, final String expectedEntry) {
 		final String actualFileContent = TestUtil.getFileContent(file);
 		final boolean expectedEntryFound = actualFileContent.contains(expectedEntry);
+		if (! expectedEntryFound) {
+			System.out.println("Actual File Content:" + SYSTEM_LINE_SEPARATOR + actualFileContent);
+		}
 		assertTrue("Expected Entry not found in file: " + expectedEntry
 				+ "\nFile: " + file.getAbsolutePath(), expectedEntryFound);
 	}
@@ -353,27 +358,40 @@ public abstract class AbstractMOGLiTest {
 		try {
 			final List<String> expectedFileContent = cutTrailingEmptyLines(FileUtil.getFileContentAsList(expectedFile));
 			final List<String> actualFileContent = cutTrailingEmptyLines(FileUtil.getFileContentAsList(actualFile));
-			if (expectedFileContent.size() == actualFileContent.size()) {
-				System.out.println("----------------------------------------------------");
-				System.out.println("expectedFileContent:");
-				for (int i = 0; i < expectedFileContent.size(); i++) {
-					System.out.println(expectedFileContent.get(i));
-				}
-				System.out.println("----------------------------------------------------");
-				System.out.println("actualFileContent:");
-				for (int i = 0; i < actualFileContent.size(); i++) {
-					System.out.println(actualFileContent.get(i));
-				}
-				System.out.println("----------------------------------------------------");
+
+			if (expectedFileContent.size() != actualFileContent.size()) {
+				logoutFileContents(expectedFileContent, actualFileContent);
 			}
 			assertEquals("Number lines in file", expectedFileContent.size(), actualFileContent.size());
-			for (int i = 0; i < expectedFileContent.size(); i++) {
-				assertStringEquals((i+1) + ". line of file", expectedFileContent.get(i).trim(), 
-						                                     cutLocalFilePath(actualFileContent.get(i)));
+
+			for (int i = 0; i < expectedFileContent.size(); i++)
+			{
+				final String expectedLine = cutLocalFilePath(expectedFileContent.get(i).trim());
+				final String actualLine = cutLocalFilePath(actualFileContent.get(i));
+
+				if (! expectedLine.equals(actualLine)) {
+					logoutFileContents(expectedFileContent, actualFileContent);
+				}
+
+				assertStringEquals((i+1) + ". line of file", expectedLine, actualLine);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Error comparing files", e);
 		}
+	}
+
+	private void logoutFileContents(final List<String> expectedFileContent, final List<String> actualFileContent) {
+		System.out.println("----------------------------------------------------");
+		System.out.println("expectedFileContent:");
+		for (int i = 0; i < expectedFileContent.size(); i++) {
+			System.out.println(expectedFileContent.get(i));
+		}
+		System.out.println("----------------------------------------------------");
+		System.out.println("actualFileContent:");
+		for (int i = 0; i < actualFileContent.size(); i++) {
+			System.out.println(actualFileContent.get(i));
+		}
+		System.out.println("----------------------------------------------------");
 	}
 
 	private List<String> cutTrailingEmptyLines(final List<String> fileContent) {

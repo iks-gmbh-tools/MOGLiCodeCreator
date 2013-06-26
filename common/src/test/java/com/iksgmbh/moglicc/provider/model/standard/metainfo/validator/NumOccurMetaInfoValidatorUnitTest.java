@@ -14,7 +14,6 @@ import org.junit.Test;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoDummy;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationCondition;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationData;
 
 
@@ -141,25 +140,9 @@ public class NumOccurMetaInfoValidatorUnitTest  {
 		final boolean result = validator.validate(metaInfoList);
 
 		assertFalse("Validation failed!", result);
-		assertEquals("error message", "MetaInfo 'singleMetaInfo' was found too many times (expected: 0, actual: 1)", validator.getValidationErrorMessage());
-
+		assertEquals("error message", "MetaInfo 'singleMetaInfo' was found too many times (expected: 0, actual: 1)", 
+				      validator.getValidationErrorMessage());
 	}
-	
-	@Test
-	public void throwsExceptionForConditionsWithMinOccurs0() {
-		// prepare test
-		final MetaInfoValidationData metaInfoValidationData = new MetaInfoValidationData().withOccurrence("0")
-																.addCondition(new MetaInfoValidationCondition("MetaInfo"));
-
-		// call functionality under test
-		try {
-			new ConditionalMetaInfoValidator(metaInfoValidationData);
-			fail("Expected exception was not thrown!");
-		} catch (IllegalArgumentException e) {
-			assertEquals("Error message", "Error: conditions make sense only for maxOccurs > 0", e.getMessage());
-		}
-	}
-
 
 	protected List<MetaInfo> createMetaInfoTestStandardList() {
 		final List<MetaInfo> metaInfoList = new ArrayList<MetaInfo>();

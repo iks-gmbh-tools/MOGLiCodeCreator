@@ -13,24 +13,24 @@ import com.iksgmbh.utils.FileUtil;
 /**
  * Helfer, um den Namespace von Eclipse-Projekten in einem Workspace zu ändern, z.B.
  * von "de.creditreform.aaa.orbis.client.rcp" in "de.iks.orbis.client".
- * 
- * Dafür sind drei unterschiedliche Dinge zu tun: 
- * 1. Die Namen der Projektverzeichnisse müssen geändert werden. 
- * 2. Die Package-Struktur innerhalb des src-Verzeichnisses muss geändert werden. 
+ *
+ * Dafür sind drei unterschiedliche Dinge zu tun:
+ * 1. Die Namen der Projektverzeichnisse müssen geändert werden.
+ * 2. Die Package-Struktur innerhalb des src-Verzeichnisses muss geändert werden.
  * 3. In allen Dateien, die in ihrem Namen oder ihren Inhalt den Namespace enthalten,
  * 	  muss dieser geändert werden.
- * 
- * Hinweise: 
+ *
+ * Hinweise:
  * 1. Es wird grundsätzlich immer der ganze Workspace ersetzt.
- * 2. Die Bezeichnung des Namespace beginnt immer mit der obersten Ebene z.B. de oder com. 
- * 3. Die Bezeichnung des Namespace hört immer auf der "untersten Ebene" auf. 
+ * 2. Die Bezeichnung des Namespace beginnt immer mit der obersten Ebene z.B. de oder com.
+ * 3. Die Bezeichnung des Namespace hört immer auf der "untersten Ebene" auf.
  * 4. Die unterste Ebene des Namespaces endet auf dem letzten gemeinsamen Abschnitt der Projektnamen, z.B. client oder rcp.
  * 5. In der Verzeichnis-Hierarchie gibt es auf der oben genannten "untersten Ebene" des Namespaces noch
- *    keine Dateien, sondern erst in tieferen Verzeichnis-Ebenen. 
+ *    keine Dateien, sondern erst in tieferen Verzeichnis-Ebenen.
  * 6. Existiert das Verzeichnis des Ziel-Workspaces nicht, wird es erzeugt.
- * 7. Ist das Verzeichnis des Ziel-Workspaces nicht leer, wird kann es automatisch geleert werden (siehe initTarget).
- * 8. Der Quell-Workspace wird grunds�tzlich nicht ver�ndert!
- * 
+ * 7. Ist das Verzeichnis des Ziel-Workspaces nicht leer, wird es automatisch geleert werden (siehe initTarget).
+ * 8. Der Quell-Workspace wird grundsaetzlich nicht veraendert!
+ *
  * @author OberratR
  */
 public class NameSpaceReplacer {
@@ -39,8 +39,9 @@ public class NameSpaceReplacer {
 	private static final String sourceNamespace = "de.iks_gmbh.automobile";
 	private static final String targetNamespace = "com.iksgmbh.moglicc";
 	private static final String[] directoriesToIgnore = { "target", ".git" };
-	private static final String[] filesToParse = { ".xml", ".txt", ".java", ".properties", ".mf", 
-		".exsd", ".product", ".project" };
+	private static final String[] filesToParse = { ".xml", ".txt", ".java",
+		                                           ".properties", ".mf",
+		                                           ".exsd", ".product", ".project" };
 
 
 	public static void main(String[] args) {
@@ -55,20 +56,20 @@ public class NameSpaceReplacer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static String getWorkspaceDir(final String[] args) {
 		if (args == null || args.length < 1) {
 			return defaultWorkspaceDir;
 		}
 		return args[0];
 	}
-	
-	
+
+
 	private String sourcePackageStructure;
 	private String targetPackageStructure;
 
-	
-	public void replaceWorkspace(final String workspaceDir) throws Exception {		
+
+	public void replaceWorkspace(final String workspaceDir) throws Exception {
 		System.out.println("");
 		sourcePackageStructure  = sourceNamespace.replace('.', '\\');
 		targetPackageStructure  = targetNamespace.replace('.', '\\');
@@ -96,7 +97,7 @@ public class NameSpaceReplacer {
 			replaceJavaDirectory(dir);
 			return;
 		}
-		
+
 		if (! isDirectoryToIgnore(dir.getName())) {
 			final File[] children = dir.listFiles();
 			if (children != null) {
@@ -115,17 +116,17 @@ public class NameSpaceReplacer {
 	private void replaceJavaDirectory(File sourceDir) throws Exception {
 		assert(sourceDir.exists());
 		final File targetDir;
-		
+
 		if (isSourceDirectory(sourceDir)) {
 			System.out.println("Package-Struktur des Verzeichnisses '" + sourceDir + "' wird " +
 					           "ge�ndert von <" + sourcePackageStructure + "> auf <" + targetPackageStructure + ">.");
 		}
-		
+
 		final String targetPath = sourceDir.getAbsolutePath().replace(sourcePackageStructure, targetPackageStructure);
 		targetDir = new File(targetPath);
-		
+
 		FileUtil.deleteDirWithContent(targetDir);
-		
+
 		final File[] children = sourceDir.listFiles();
 		for (int i = 0; i < children.length; i++) {
 			if (children[i].isDirectory()) {
@@ -135,7 +136,7 @@ public class NameSpaceReplacer {
 			}
 		}
 	}
-	
+
 	private boolean isSourceDirectory(final File sourceDir) {
 		return sourceDir.getAbsolutePath().endsWith(sourcePackageStructure);
 	}
@@ -143,7 +144,7 @@ public class NameSpaceReplacer {
 	private void replaceFile(final File sourceFile) throws Exception {
 		replaceFile(sourceFile, sourceFile.getParentFile());
 	}
-	
+
 	private void replaceFile(final File sourceFile, final File targetDir) throws Exception {
 		assert (sourceFile.isFile());
 
@@ -151,7 +152,7 @@ public class NameSpaceReplacer {
 			final ArrayList<String> targetFileContent = replaceContent(sourceFile);
 
 			sourceFile.delete();
-			
+
 			targetDir.mkdirs();
 			final File targetFile = new File(targetDir, sourceFile.getName());
 			if (!targetFile.createNewFile())
@@ -176,7 +177,7 @@ public class NameSpaceReplacer {
 		String replacedLine = null;
 		int numMatches = 0;
 
-		while (line != null) 
+		while (line != null)
 		{
 			int pos = line.indexOf(sourceNamespace);
 			if (pos > -1) {
@@ -195,13 +196,13 @@ public class NameSpaceReplacer {
 			}
 			line = reader.readLine();
 		}
-				 
+
 		reader.close();
-		
+
 		if (numMatches > 0) {
 			System.out.println("In der Datei " + file.getAbsoluteFile() + " gab es " + numMatches + " Ersetzungen.");
 		}
-		
+
 		return targetFileContent;
 	}
 

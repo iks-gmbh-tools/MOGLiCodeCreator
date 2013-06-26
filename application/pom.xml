@@ -79,21 +79,21 @@
 
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
-			<artifactId>inserter.modelbased.velocity</artifactId>
+			<artifactId>lineinserter.modelbased.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
-			<artifactId>generator.classbased.velocity</artifactId>
+			<artifactId>filemaker.classbased.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
-			<artifactId>generator.modelbased.filestructure</artifactId>
+			<artifactId>treebuilder.modelbased.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

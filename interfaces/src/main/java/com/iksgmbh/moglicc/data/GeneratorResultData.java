@@ -1,5 +1,7 @@
 package com.iksgmbh.moglicc.data;
 
+import java.util.List;
+
 /**
  * Return object for EngineProvider.
  * 
@@ -22,5 +24,16 @@ public interface GeneratorResultData {
 	 * @return value of the key
 	 */
 	String getProperty(String key);
+	
+	
+	/**
+	 * In contrast to getProperty, a list of corresponding values is returned.
+	 * Used when keys exist for which more than one values are defined
+	 * (e.g. key 'RenameFile' for TreeBuilder 'artefact.properties' file) 
+	 * 
+	 * @param key
+	 * @return list of value to a key
+	 */
+	List<String> getAllPropertyValues(String key);
 
 }

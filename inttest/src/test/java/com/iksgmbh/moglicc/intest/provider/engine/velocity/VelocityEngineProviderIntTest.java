@@ -26,7 +26,7 @@ public class VelocityEngineProviderIntTest extends IntTestParent {
 	public void usesMetaInfoSupportMethod_DoesHaveAnyMetaInfosWithName() throws MOGLiPluginException, IOException {
 		// prepare test
 		final VelocityEngineData engineData = MockDataBuilder.buildVelocityEngineDataMock(buildModel(), 
-				velocityClassBasedGeneratorStarter.getId(), "artefact",
+				velocityClassBasedFileMakerStarter.getId(), "artefact",
 				"DoesHaveAnyMetaInfosWithName_TestTemplate.tpl", new File(getProjectTestResourcesDir()));
 		velocityEngineProviderStarter.setEngineData(engineData);		
 		

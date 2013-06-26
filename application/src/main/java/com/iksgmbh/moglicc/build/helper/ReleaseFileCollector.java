@@ -54,6 +54,7 @@ public class ReleaseFileCollector {
 				FileUtil.copyTextFile(file, fileData.releaseDir.getAbsolutePath());
 			} else {
 				throw new MOGLiCoreException("File does not exist: " + file.getAbsolutePath());
+
 			}
 		}
 	}
@@ -77,24 +78,35 @@ public class ReleaseFileCollector {
 
 	void copyCoreJarFiles() {
 		for (int i = 0; i < fileData.jarsOfCoreComponents.length; i++) {
-			final File file = fileData.jarsOfCoreComponents[i];
-			if (file.exists()) {
-				FileUtil.copyBinaryFile(file.getAbsolutePath(), libDir.getAbsolutePath());
-			} else {
-				throw new MOGLiCoreException("File does not exist: " + file.getAbsolutePath());
+			File file = fileData.jarsOfCoreComponents[i];
+			if (! file.exists()) {
+				file = new File(cutSnapshot(file.getAbsolutePath()));
+				if (! file.exists()) {
+					throwMissingJarFileException(file);
+				}
 			}
+			FileUtil.copyBinaryFile(file.getAbsolutePath(), libDir.getAbsolutePath());
 		}
 	}
-	
+
+	protected void throwMissingJarFileException(final File file) {
+		throw new MOGLiCoreException("File does not exist: " 
+				                     + FileUtil.getSystemLineSeparator()
+				                     + file.getAbsolutePath()
+                                     + FileUtil.getSystemLineSeparator()
+                                     + "Call 'maven install' on parent project!");
+	}
 	
 	void copyPluginJarFiles() {
 		for (int i = 0; i < fileData.jarsOfPlugins.length; i++) {
-			final File file = fileData.jarsOfPlugins[i];
-			if (file.exists()) {
-				FileUtil.copyBinaryFile(file.getAbsolutePath(), pluginDir.getAbsolutePath());
-			} else {
-				throw new MOGLiCoreException("File does not exist: " + file.getAbsolutePath());
+			File file = fileData.jarsOfPlugins[i];
+			if (! file.exists()) {
+				file = new File(cutSnapshot(file.getAbsolutePath()));
+				if (! file.exists()) {
+					throwMissingJarFileException(file);
+				}
 			}
+			FileUtil.copyBinaryFile(file.getAbsolutePath(), pluginDir.getAbsolutePath());
 		}
 	}
 
@@ -104,10 +116,13 @@ public class ReleaseFileCollector {
 			if (file.exists()) {
 				FileUtil.copyBinaryFile(file.getAbsolutePath(), libDir.getAbsolutePath());
 			} else {
-				throw new MOGLiCoreException("File does not exist: " + file.getAbsolutePath());
+				throwMissingJarFileException(file);
 			}
 		}
 	}
-
+	
+	private String cutSnapshot(final String filename)  {
+		return filename.replace("-SNAPSHOT", "");
+	}
 
 }

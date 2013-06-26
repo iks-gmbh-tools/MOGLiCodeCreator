@@ -1,0 +1,36 @@
+VelocityClassBasedFileMaker has done work for following artefacts:
+
+   Reports for artefact 'commonSubtemplates':
+      targetFile1.txt was created in temp
+      targetFile2.java was created in temp
+      targetFile3.java was created in temp
+
+   Reports for artefact 'MOGLiCC_NewPluginModel':
+      targetFile1.txt was created in temp
+      targetFile2.java did already exist and was NOT overwritten in temp
+      targetFile3.java was created in temp
+
+   Reports for artefact 'MOGLiJavaBean':
+      targetFile1.txt was created in temp
+      targetFile2.java did already exist and was NOT overwritten in temp
+      targetFile3.java was created in temp
+
+   Reports for artefact 'MOGLiJavaBeanBuilder':
+      targetFile1.txt was created in temp
+      targetFile2.java did already exist and was NOT overwritten in temp
+      targetFile3.java was created in temp
+
+   Reports for artefact 'MOGLiJavaBeanTest':
+      targetFile1.txt was created in temp
+      targetFile2.java did already exist and was NOT overwritten in temp
+      targetFile3.java was created in temp
+
+   Reports for artefact 'MOGLiJavaBeanValidator':
+      targetFile1.txt was created in temp
+      targetFile2.java did already exist and was NOT overwritten in temp
+      targetFile3.java was created in temp
+
+   Reports for artefact 'MOGLiJavaBeanValidatorTest':
+      targetFile1.txt was created in temp
+      targetFile2.java did already exist and was NOT overwritten in temp
+      targetFile3.java was created in temp

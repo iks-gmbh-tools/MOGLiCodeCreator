@@ -29,15 +29,27 @@ public class MandatoryMetaInfoValidator extends MetaInfoValidatorParent {
 	}
 
 	@Override
-	public boolean validate(final List<MetaInfo> metaInfoList) {
+	public boolean validate(List<MetaInfo> metaInfoList) {
+		metaInfoList = filterForHierarchyLevel(metaInfoList);
+		int counter = 0;
+		
 		for (final MetaInfo metaInfo : metaInfoList) {
-			if (metaInfoName.equals(metaInfo.getName())) {
+			if (metaInfo.getName().equals(metaInfoName)) {
 				count(metaInfo);
-				return true; 
+				counter++;
 			}
 		}
-		errorMessage = "MetaInfo '" + metaInfoName + "' was not found"; 
-		return false;
+
+		if (counter == 0) {
+			errorMessage = "Mandatory metaInfo '" + metaInfoName + "' was not found"; 
+			return false;
+			
+		}
+		if (counter > 1) {
+			errorMessage = "Mandatory metaInfo '" + metaInfoName + "' must occur no more than once"; 
+			return false;  
+		}
+		return true;		
 	}
 
 }

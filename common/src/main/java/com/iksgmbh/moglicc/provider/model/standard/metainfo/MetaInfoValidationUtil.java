@@ -45,7 +45,8 @@ public class MetaInfoValidationUtil {
 
 	private static final Class<?>[] constructorTypesClassic = {String.class, HierarchyLevel.class, String.class};
 	private static final Class<?>[] constructorTypesConditional = {MetaInfoValidationData.class};
-	private static final AnnotationParser annotationParserClassic = AnnotationParser.getInstance(VALIDATOR_IDENTIFIER + " ");	private static final MetaInfoValidationCondition newBlockIndentifier = new MetaInfoValidationCondition();
+	private static final AnnotationParser annotationParserClassic = AnnotationParser.getInstance(VALIDATOR_IDENTIFIER + " ");
+	private static final MetaInfoValidationCondition newBlockIndentifier = new MetaInfoValidationCondition();
 
 	public static List<MetaInfoValidator> getMetaInfoValidatorList(final File inputFile, final String vendorPluginId) throws MOGLiPluginException {
 		final List<MetaInfoValidator> toReturn = new ArrayList<MetaInfoValidator>();

@@ -27,7 +27,15 @@ You find the lastest release build under application/releasedBuilds.
 
 License: **All Rights Reserved**
 
-Current version: **1.2.0**
+Current version: **1.3.0**
+
+**Changes to 1.2.0**
+- ModelBasedFilestructureGenerator introduced to generate whole folders containing files and subfolders
+- responsibility for throwing metainfo validation exception moved from model provider to generators
+- generator property "skipGeneration" introduced
+- TemplateStringUtils has additional methods available
+- Error messages improved
+- help files corrected
 
 **Changes to 1.1.0**
 - New Feature: More than one main template possible for the VelocityModelBasedInserter

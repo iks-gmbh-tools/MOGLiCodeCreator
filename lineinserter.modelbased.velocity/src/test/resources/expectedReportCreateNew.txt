@@ -1,0 +1,4 @@
+VelocityModelBasedLineInserter has done work for following artefacts:
+
+   Reports for artefact 'TestArtefact':
+      targetFile.txt was created in <applicationRootDir>/example

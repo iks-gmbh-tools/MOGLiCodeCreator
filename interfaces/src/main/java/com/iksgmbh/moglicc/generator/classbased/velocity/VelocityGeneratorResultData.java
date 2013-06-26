@@ -88,6 +88,11 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	/**
 	 * @throws MOGLiPluginException if conflicting or missing settings exist
 	 */
-	void validate() throws MOGLiPluginException;
+	void validatePropertyKeys(String artefact) throws MOGLiPluginException;
+
+	/**
+	 * @throws MOGLiPluginException if conflicting or missing settings exist
+	 */
+	void validatePropertyForMissingMetaInfoValues(String artefact) throws MOGLiPluginException;
 
 }

@@ -12,24 +12,24 @@ import java.util.ArrayList;
 /**
  * Helfer, um den Namespace von Eclipse-Projekten in einem Workspace zu ändern, z.B.
  * von "de.creditreform.aaa.orbis.client.rcp" in "de.iks.orbis.client".
- * 
- * Dafür sind drei unterschiedliche Dinge zu tun: 
- * 1. Die Namen der Projektverzeichnisse müssen geändert werden. 
- * 2. Die Package-Struktur innerhalb des src-Verzeichnisses muss geändert werden. 
+ *
+ * Dafür sind drei unterschiedliche Dinge zu tun:
+ * 1. Die Namen der Projektverzeichnisse müssen geändert werden.
+ * 2. Die Package-Struktur innerhalb des src-Verzeichnisses muss geändert werden.
  * 3. In allen Dateien, die in ihrem Namen oder ihren Inhalt den Namespace enthalten,
  * 	  muss dieser geändert werden.
- * 
- * Hinweise: 
+ *
+ * Hinweise:
  * 1. Es wird grundsätzlich immer der ganze Workspace ersetzt.
- * 2. Die Bezeichnung des Namespace beginnt immer mit der obersten Ebene z.B. de oder com. 
- * 3. Die Bezeichnung des Namespace hört immer auf der "untersten Ebene" auf. 
+ * 2. Die Bezeichnung des Namespace beginnt immer mit der obersten Ebene z.B. de oder com.
+ * 3. Die Bezeichnung des Namespace hört immer auf der "untersten Ebene" auf.
  * 4. Die unterste Ebene des Namespaces endet auf dem letzten gemeinsamen Abschnitt der Projektnamen, z.B. client oder rcp.
  * 5. In der Verzeichnis-Hierarchie gibt es auf der oben genannten "untersten Ebene" des Namespaces noch
- *    keine Dateien, sondern erst in tieferen Verzeichnis-Ebenen. 
+ *    keine Dateien, sondern erst in tieferen Verzeichnis-Ebenen.
  * 6. Existiert das Verzeichnis des Ziel-Workspaces nicht, wird es erzeugt.
- * 7. Ist das Verzeichnis des Ziel-Workspaces nicht leer, wird kann es automatisch geleert werden (siehe initTarget).
- * 8. Der Quell-Workspace wird grunds�tzlich nicht ver�ndert!
- * 
+ * 7. Ist das Verzeichnis des Ziel-Workspaces nicht leer, wird es automatisch geleert werden (siehe initTarget).
+ * 8. Der Quell-Workspace wird grundsaetzlich nicht veraendert!
+ *
  * @author OberratR
  */
 public class NameSpaceReplacingWorkspaceDuplicator {
@@ -40,8 +40,9 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 	private static final String targetNamespace = "com.iksgmbh.moglicc";
 	private static final String srcDir = "src";
 	private static final String[] directoriesToIgnore = { "target" };
-	private static final String[] filesToParse = { ".xml", ".txt", ".java", ".properties", ".mf", 
-		".exsd", ".product", ".project" };
+	private static final String[] filesToParse = { ".xml", ".txt", ".java",
+		                                           ".properties", ".mf",
+		                                           ".exsd", ".product", ".project" };
 
 
 	public static void main(String[] args) {
@@ -57,16 +58,16 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static String getTargetWorkspaceDir(final String[] args) {
 		if (args == null || args.length < 1) {
 			return defaultTargetWorkspaceDir;
 		}
-		
+
 		if (args.length == 1) {
 			return args[0];
 		}
-		
+
 		return args[1];
 	}
 
@@ -74,7 +75,7 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 		if (args == null || args.length < 1) {
 			return defaultSourceWorkspaceDir;
 		}
-	
+
 		return args[0];
 	}
 
@@ -116,7 +117,7 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 					"Verzeichnis konnte nicht erstellt werden: "
 							+ targetDir.getAbsolutePath());
 		}
-		
+
 		if (! isDirectoryToIgnore(name)) {
 			replaceDirectoryContent(sourceDir, targetDir);
 		} else {
@@ -129,7 +130,7 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 		String targetPackageStructure  = targetNamespace.replace('.', '/');
 		sourceDir = new File(sourceDir.getAbsoluteFile() + "/" + sourcePackageStructure);
 		assert(sourceDir.exists());
-		
+
 		File targetDir = new File(targetDirPath + "/" + srcDir + "/" + targetPackageStructure);
 		boolean ok = targetDir.mkdirs();
 		if (!ok) {
@@ -137,7 +138,7 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 							+ targetDir.getAbsolutePath());
 		}
 		System.out.println("Package-Struktur im " + srcDir + "-Verzeichnis ge�ndert von <" + sourcePackageStructure + "> auf <" + targetPackageStructure + ">.");
-		
+
 		File[] children = sourceDir.listFiles();
 		for (int i = 0; i < children.length; i++) {
 			replaceDirectory(children[i], targetDir.getAbsolutePath());
@@ -207,7 +208,7 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 		String replacedLine = null;
 		int numMatches = 0;
 
-		while (line != null) 
+		while (line != null)
 		{
 			int pos = line.indexOf(sourceNamespace);
 			if (pos > -1) {
@@ -226,17 +227,17 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 			}
 			line = reader.readLine();
 		}
-				 
+
 		reader.close();
 		if (numMatches > 0) {
 			System.out.println("In der Datei " + targetFile.getAbsoluteFile() + " gab es " + numMatches + " Ersetzungen.");
 		}
-		
+
 		if (!targetFile.createNewFile())
 		{
 			throw new RuntimeException("folgende Datei kann nicht erzeugt werden: " + targetFile.getAbsoluteFile());
 		}
-	
+
 		PrintWriter writer = new PrintWriter(targetFile);
 		for (int i = 0; i < targetFileContent.size(); i++) {
 			writer.println(targetFileContent.get(i));
@@ -301,12 +302,12 @@ public class NameSpaceReplacingWorkspaceDuplicator {
 					boolean ok = files[i].delete(); // Datei l�schen
 					if (!ok) {
 						throw new Exception(
-								"Datei konnte nicht gel�scht werden: "
+								"Datei konnte nicht geloescht werden: "
 										+ files[i].getAbsolutePath());
 					}
 				}
 			}
-			dir.delete(); // Ordner l�schen
+			dir.delete();
 		}
 	}
 }

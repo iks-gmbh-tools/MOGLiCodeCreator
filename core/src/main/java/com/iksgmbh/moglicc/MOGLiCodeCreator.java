@@ -428,9 +428,12 @@ public class MOGLiCodeCreator {
 			return;
 		}
 		MOGLiLogUtil.logInfo("-----");
+		MOGLiLogUtil.logInfo(".");
 		MOGLiLogUtil.logInfo(TEXT_PLUGINS_FOUND);
+		MOGLiLogUtil.logInfo(".");
 		for (PluginMetaData pluginMetaData : pluginMetaDataList) {
 			MOGLiLogUtil.logInfo(pluginMetaData.toString());
+			MOGLiLogUtil.logInfo(".");
 		}
 		MOGLiLogUtil.logInfo("-----");
 	}
