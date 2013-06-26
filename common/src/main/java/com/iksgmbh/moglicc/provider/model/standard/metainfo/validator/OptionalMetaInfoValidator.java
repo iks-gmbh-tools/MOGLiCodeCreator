@@ -30,10 +30,17 @@ public class OptionalMetaInfoValidator extends MetaInfoValidatorParent {
 
 	@Override
 	public boolean validate(final List<MetaInfo> metaInfoList) {
+		int counter = 0; // t
 		for (final MetaInfo metaInfo : metaInfoList) {
-			if (metaInfo.getName().equals(metaInfoName)) {
+			if (metaInfo.getHierarchyLevel() == metaInfoHierarchyLevel
+				&& metaInfo.getName().equals(metaInfoName)) {
 				count(metaInfo);
+				counter++;
 			}
+		}
+		if (counter > 1) {
+			errorMessage = "Optional metaInfo '" + metaInfoName + "' must occur no more than once"; 
+			return false;  
 		}
 		return true;
 	}

@@ -153,23 +153,6 @@ public class ModelParserUnitTest extends StandardModelProviderTestParent {
 	}
 
 	@Test
-	public void throwsExceptionIfNoClassIsFound() throws ModelParserException {
-		// prepare test
-		final List<String> fileContentAsList = getFileContent(MODEL_IDENTIFIER + " Test",
-				                                              ATTRIBUTE_IDENTIFIER + " Attribute");
-		
-		// call functionality under test
-		try {
-			modelParser.parse(fileContentAsList);
-		} catch (ModelParserException e) {
-			assertStringContains(e.getParserErrors(), TextConstants.EMPTY_CLASS_LIST);
-			assertStringContains(e.getParserErrors(), TextConstants.ATTRIBUTE_WITHOUT_CLASS);
-			return;
-		}
-		fail("Expected exception not thrown!");
-	}
-
-	@Test
 	public void throwsExceptionForUnrelatedMetaInfo() throws ModelParserException {
 		// prepare test
 		final List<String> fileContentAsList = getFileContent(META_INFO_IDENTIFIER + " MetaInfoName value  ");

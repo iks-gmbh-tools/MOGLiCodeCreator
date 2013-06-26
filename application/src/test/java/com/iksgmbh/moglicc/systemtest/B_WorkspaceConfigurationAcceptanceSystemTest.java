@@ -7,7 +7,7 @@ import java.io.File;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
-import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityModelBasedInserterStarter;
+import com.iksgmbh.moglicc.lineinserter.modelbased.velocity.VelocityModelBasedLineInserterStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.CmdUtil;
 import com.iksgmbh.utils.FileUtil;
@@ -19,10 +19,10 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 		// prepare test
 		final File workspacePropertiesFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
 		final String sep = FileUtil.getSystemLineSeparator();
-		MOGLiFileUtil.createNewFileWithContent(workspacePropertiesFile, 
-				                              "com.iksgmbh.moglicc.generator.modelbased.filestructure=activated" + sep +
-				                              "com.iksgmbh.moglicc.generator.classbased.velocity=activated"+ sep +
-				                              "com.iksgmbh.moglicc.inserter.modelbased.velocity=deactivated"+ sep +
+		MOGLiFileUtil.createNewFileWithContent(workspacePropertiesFile,
+				                              "com.iksgmbh.moglicc.treebuilder.modelbased.velocity=activated" + sep +
+				                              "com.iksgmbh.moglicc.filemaker.classbased.velocity=activated"+ sep +
+				                              "com.iksgmbh.moglicc.lineinserter.modelbased.velocity=deactivated"+ sep +
 				                              "com.iksgmbh.moglicc.provider.engine.velocity=activated" + sep +
 				                              "com.iksgmbh.moglicc.provider.model.standard=activated");
 
@@ -34,7 +34,7 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 
 		// verify test result
 		assertChildrenNumberInDirectory(applicationOutputDir, 3);
-		final File pluginOutputDir = new File(applicationOutputDir, VelocityModelBasedInserterStarter.PLUGIN_ID);
+		final File pluginOutputDir = new File(applicationOutputDir, VelocityModelBasedLineInserterStarter.PLUGIN_ID);
 		assertFileDoesNotExist(pluginOutputDir);
 	}
 

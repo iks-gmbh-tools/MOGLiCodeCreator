@@ -1,5 +1,6 @@
 package com.iksgmbh.moglicc.provider.model.standard.metainfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
@@ -102,6 +103,15 @@ public abstract class MetaInfoValidatorParent implements MetaInfoValidator, Meta
 		return true;
 	}
 
+	protected List<MetaInfo> filterForHierarchyLevel(final List<MetaInfo> metaInfoList) {
+		final List<MetaInfo> toReturn = new ArrayList<MetaInfo>();
+		for (final MetaInfo metaInfo : metaInfoList) {
+			if (metaInfo.getHierarchyLevel() == metaInfoHierarchyLevel) {
+				toReturn.add(metaInfo);
+			}
+		}
+		return toReturn;
+	}
 	
 	/**
 	 * @param metaInfoList list of a single MetaModelObject, that means

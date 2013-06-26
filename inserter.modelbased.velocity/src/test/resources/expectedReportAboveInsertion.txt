@@ -1,4 +1,0 @@
-VelocityModelBasedInserter has done work for following artefacts:
-
-   Reports for artefact 'TestArtefact':
-      inserted by a above-instruction into targetFile.txt in directory <applicationRootDir>/temp

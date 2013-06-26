@@ -2,7 +2,7 @@ Model Name: SpaceTestModel
 Number of class descriptions in model file: 1
 Number of vendor plugins defining MetaInfoValidators: 1
 
-Plugin 'VelocityClassBasedGenerator' uses the following MetaInfo elements:
+Plugin 'VelocityClassBasedFileMaker' uses the following MetaInfo elements:
 'Java Type' in Attribute level
 'comment note' in Class level
 

@@ -124,7 +124,7 @@ public class MetaDataLoader {
 		for (PluginMetaData pluginMetaData : pluginMetaDataList) {
 			if (pluginMetaData.isStatusOK()) {
 				final String jarName = FileUtil.removeFileExtension(pluginMetaData.getJarName());
-				final String basicJarName = StringUtil.removeSuffixIfExisting(jarName, "-" + MOGLiCodeCreator.VERSION);
+				final String basicJarName = removeVersionFromFilename(jarName);
 				final String activationProperty = workspaceProperties.getProperty(basicJarName);
 
 				if (activationProperty == null) {
@@ -142,6 +142,15 @@ public class MetaDataLoader {
 				// no need to consider
 			}
 		}
+	}
+
+	private String removeVersionFromFilename(final String jarName) {
+		String versionSuffix =  "-" + MOGLiCodeCreator.VERSION;
+		if (! jarName.contains(versionSuffix)) {
+			versionSuffix = versionSuffix.replace("-SNAPSHOT", "");
+		}
+
+		return StringUtil.removeSuffixIfExisting(jarName, versionSuffix);
 	}
 
 }

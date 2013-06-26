@@ -98,7 +98,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validate();
+			velocityInserterResultData.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION);
 			return;
@@ -123,7 +123,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validate();
+			velocityInserterResultData.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION);
 			return;
@@ -141,7 +141,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validate();
+			velocityInserterResultData.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_INSERT_CONFIGURATION);
 			return;
@@ -160,7 +160,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validate();
+			velocityInserterResultData.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION);
 			return;
@@ -180,7 +180,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validate();
+			velocityInserterResultData.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION);
 			return;
@@ -199,7 +199,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validate();
+			velocityInserterResultData.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;
@@ -217,7 +217,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validate();
+			velocityInserterResultData.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;
@@ -236,7 +236,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validate();
+			velocityInserterResultData.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
 			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;

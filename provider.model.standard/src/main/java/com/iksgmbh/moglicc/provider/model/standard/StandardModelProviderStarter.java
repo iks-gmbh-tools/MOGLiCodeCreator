@@ -80,7 +80,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 
 	void validateMetaInfos() throws MOGLiPluginException {
 		validationErrorMessages.clear();
-		final List<MetaInfoValidator> metaInfoValidatorList = getAllMetaInfoValidators();
+		collectMetaInfoValidatorsFromVendors();
 
 		validateModelMetaInfos(metaInfoValidatorList);
 		validateClassMetaInfos(metaInfoValidatorList);
@@ -173,13 +173,10 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	}
 
 	public List<MetaInfoValidator> getAllMetaInfoValidators() throws MOGLiPluginException {
-		if (metaInfoValidatorList == null) {
-			metaInfoValidatorList = collectMetaInfoValidatorsFromVendors();
-		}
 		return metaInfoValidatorList;
 	}
 
-	private List<MetaInfoValidator> collectMetaInfoValidatorsFromVendors() throws MOGLiPluginException {
+	private void collectMetaInfoValidatorsFromVendors() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Collecting MetaInfoValidators from vendors: ");
 		final List<MetaInfoValidator> toReturn = new ArrayList<MetaInfoValidator>();
 		final List<MetaInfoValidatorVendor> vendors = infrastructure.getPluginsOfType(MetaInfoValidatorVendor.class);
@@ -202,7 +199,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 					" providing " + counter + " MetaInfoValidators to model '" + buildUpModel.getName() + "'.");
 		}
 
-		return toReturn;
+		metaInfoValidatorList = toReturn;
 	}
 
 

@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.iksgmbh.helper.FolderContentBasedFolderDuplicator;
 import com.iksgmbh.moglicc.MOGLiCodeCreator;
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
 import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
@@ -26,6 +27,32 @@ public class CoreIntTest extends IntTestParent {
 	@Before
 	public void setup() {
 		super.setup();
+	}
+	
+	/** 
+	 * NOTE: This method represents no regular integration test!
+	 *       It is used to debug a problem with production data!
+	 *  */
+	//@Test  // comment this line out when building a MOGLiCC release
+	public void runWithExternalInputData() {
+		// prepare test
+		initTestRootDir();
+		copyExternalInputDataIntoMOGLiCCWorkspace("C:/dev/sources/_mogli13/workspaces/_TEST");
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// no verifying
+	}
+
+	private void copyExternalInputDataIntoMOGLiCCWorkspace(final String parentDirOfInputFolder) {
+		final File inputFolder = new File(parentDirOfInputFolder, "input");
+		if (! inputFolder.exists()) {
+			throw new RuntimeException("Input folder does not exist: " + inputFolder.getAbsolutePath());
+		}
+		final FolderContentBasedFolderDuplicator folderDuplicator = new FolderContentBasedFolderDuplicator(inputFolder, null);
+		folderDuplicator.duplicateTo(applicationInputDir, true);
+		
 	}
 
 	private void initTestRootDir() {

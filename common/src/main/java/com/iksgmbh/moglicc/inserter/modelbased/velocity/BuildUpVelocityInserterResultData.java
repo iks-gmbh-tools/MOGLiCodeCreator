@@ -87,7 +87,7 @@ public class BuildUpVelocityInserterResultData extends BuildUpVelocityGeneratorR
 	}
 
 	@Override
-	public void validate() throws MOGLiPluginException {
+	public void validatePropertyKeys(final String artefact) throws MOGLiPluginException {
 		if (getReplaceEndIndicator() == null && getReplaceStartIndicator() != null) {
 			validationErrors.add(MISSING_REPLACE_CONFIGURATION);
 		}
@@ -115,7 +115,7 @@ public class BuildUpVelocityInserterResultData extends BuildUpVelocityGeneratorR
 		if (getTargetDir() == null) {
 			validationErrors.add(NO_TARGET_DIR);
 		}
-		super.validate();
+		super.validatePropertyKeys(artefact);
 	}
 
 }

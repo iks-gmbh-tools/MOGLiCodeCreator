@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoSupport;
+import com.iksgmbh.utils.StringUtil;
 
 public abstract class MetaModelObject implements MetaInfoSupport {
 
@@ -16,8 +17,10 @@ public abstract class MetaModelObject implements MetaInfoSupport {
 
 	@Override
 	public String getMetaInfoValueFor(final String metaInfoName) {
-		for (final MetaInfo element : metaInfoList) {
-			if (element.getName().equals(metaInfoName)) {
+		final String convertedNameToSearch = StringUtil.firstToLowerCase(metaInfoName);
+		for (MetaInfo element : metaInfoList) {
+			final String elementName = StringUtil.firstToLowerCase(element.getName());
+			if (elementName.equals(convertedNameToSearch)) {  // ignore case of first letter
 				return element.getValue();
 			}
 		}

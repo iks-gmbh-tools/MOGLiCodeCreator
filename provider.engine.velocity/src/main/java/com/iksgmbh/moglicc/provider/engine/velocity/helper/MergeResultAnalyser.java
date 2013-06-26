@@ -90,7 +90,8 @@ public class MergeResultAnalyser {
 		return StringUtil.concat(newLines);
 	}
 
-	protected void parseLine(final List<String> newLines, final String line, final int lineNo) throws MOGLiPluginException {
+	protected void parseLine(final List<String> newLines, String line, final int lineNo) throws MOGLiPluginException {
+		line = StringUtil.cutUnwantedLeadingControlChars(line);
 		if (! headerEndReached && annotationParser.hasCorrectPrefix(line)) {
 			final Annotation annotation = annotationParser.doYourJob(line);
 			if (annotation.getName() == null) {
@@ -113,7 +114,6 @@ public class MergeResultAnalyser {
 		} else {
 			if (line.trim().length() > 0) {
 				String s = removeWhitespaceMarker(line);
-				s = StringUtil.cutUnwantedLeadingControlChars(s);
 				newLines.add(s);
 				headerEndReached = true;
 			}

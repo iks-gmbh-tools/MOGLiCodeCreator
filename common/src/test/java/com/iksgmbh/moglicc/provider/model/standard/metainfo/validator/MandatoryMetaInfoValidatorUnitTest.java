@@ -32,10 +32,11 @@ public class MandatoryMetaInfoValidatorUnitTest {
 	}
 
 	@Test
-	public void validatesWithoutErrorBecauseWrongHierarchyLevel() {
+	public void validatesWithoutErrorBecauseWrongHierarchyLevel() { // TODO macht das sinn?
 		// prepare test
-		final MandatoryMetaInfoValidator validator = new MandatoryMetaInfoValidator("MetaInfo1", HierarchyLevel.Class);
-		final List<MetaInfo> metaInfoList = buildMetaInfoList(HierarchyLevel.Model, 2);
+		final OptionalMetaInfoValidator validator = new OptionalMetaInfoValidator("MetaInfo0", HierarchyLevel.Model);
+		final List<MetaInfo> metaInfoList = buildMetaInfoList(HierarchyLevel.Class, 1);
+		metaInfoList.add(metaInfoList.get(0));
 
 		// call functionality under test
 		boolean result = validator.validate(metaInfoList);
@@ -55,7 +56,7 @@ public class MandatoryMetaInfoValidatorUnitTest {
 		
 		// verify test result
 		assertFalse("Validation failed!", result);
-		assertEquals("Error message", "MetaInfo 'MetaInfoX' was not found", validator.getValidationErrorMessage());
+		assertEquals("Error message", "Mandatory metaInfo 'MetaInfoX' was not found", validator.getValidationErrorMessage());
 	}
 
 	

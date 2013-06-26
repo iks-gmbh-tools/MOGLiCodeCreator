@@ -2,7 +2,6 @@ package com.iksgmbh.moglicc.provider.model.standard.parser;
 
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.ATTRIBUTE_WITHOUT_CLASS;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.DUPLICATE_MODEL_IDENTIFIER;
-import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.EMPTY_CLASS_LIST;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.INVALID_INFORMATION;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.MODEL_IDENTIFIER_NOT_FOUND;
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.UNRELATED_METAINFO;
@@ -158,11 +157,8 @@ public class ModelParser {
 	private void checkForErrors() throws ModelParserException {
 		if (buildUpModel == null) {
 			errorList.add(MODEL_IDENTIFIER_NOT_FOUND);
-		} else {
-			if (buildUpModel.getClassDescriptorList().isEmpty()) {
-				errorList.add(EMPTY_CLASS_LIST);
-			}
-		}
+		} 
+		
 		if (errorList.size() > 0) {
 			throw new ModelParserException(errorList);
 		}

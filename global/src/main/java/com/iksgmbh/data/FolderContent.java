@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.iksgmbh.utils.FileUtil;
+
 /**
  * Data object to access files and subfolders of a given rootDir.
  *  
@@ -13,15 +15,15 @@ import java.util.List;
 public class FolderContent {
 	
 	private File rootDir;
-	private List<String> toIgnore;
+	private List<String> filesToIgnore;
 	private List<File> directories = new ArrayList<File>();
 	private HashMap<File, List<File>> content = new HashMap<File, List<File>>();
 	
 	/**
 	 * @param rootDir
-	 * @param toIgnore names of files and subFolders to ignore (must equals exactly)
+	 * @param filesToIgnore names of files and subFolders to ignore (must equals exactly)
 	 */
-	public FolderContent(final File rootDir, final List<String> toIgnore) {
+	public FolderContent(final File rootDir, final List<String> filesToIgnore) {
 		if (rootDir == null) {
 			throw new RuntimeException("Argument 'mainDir' not set!");
 		}
@@ -31,12 +33,18 @@ public class FolderContent {
 		
 		this.rootDir = rootDir;
 		
-		if (toIgnore == null) {
-			this.toIgnore = new ArrayList<String>();
+		if (filesToIgnore == null) {
+			this.filesToIgnore = new ArrayList<String>();
 		} else {
-			this.toIgnore = toIgnore;
+			this.filesToIgnore = filesToIgnore;
 		}
 		
+		analyseContent(this.rootDir);
+	}
+	
+	public void refresh() {
+		directories.clear();
+		content.clear();
 		analyseContent(this.rootDir);
 	}
 
@@ -64,7 +72,7 @@ public class FolderContent {
 	}
 
 	protected boolean isFileToIgnore(final File file) {
-		for (final String ignore : toIgnore) {
+		for (final String ignore : filesToIgnore) {
 			if (file.getName().equals(ignore)) {
 				return true;
 			}
@@ -111,6 +119,36 @@ public class FolderContent {
 
 	public List<File> getFilesFor(final File folder) {
 		return content.get(folder);
+	}
+
+	public File getFolder(String pathEnding) 
+	{
+		pathEnding = pathEnding.replace('/', '\\');
+		final List<File> matches = new ArrayList<File>();
+		
+		for (final File dir : directories) {
+			if (dir.getAbsolutePath().endsWith(pathEnding)) {
+				matches.add(dir);
+			}
+		}
+		
+		if (matches.size() == 0) {
+			return null;
+		}
+		
+		if (matches.size() > 1) {
+			String errorMessage = "Ambiguous path ending: " + matches.size() + " matches for '" + pathEnding + "':";
+			for (File file : matches) {
+				errorMessage += FileUtil.getSystemLineSeparator() + file.getAbsolutePath();
+			}
+			throw new RuntimeException(errorMessage);
+		}
+		
+		return matches.get(0);
+	}
+
+	public List<String> getFilesToIgnore() {
+		return filesToIgnore;
 	}
 
 }

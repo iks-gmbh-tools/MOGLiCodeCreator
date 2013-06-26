@@ -49,6 +49,7 @@ public class VelocityBugCorrector {
 		}
 		
 		// override with corrected value
+		buildUpGeneratorResultData.getPropertyMap().get(targetFileNameId.toLowerCase()).clear();  // clean old value
 		buildUpGeneratorResultData.addProperty(targetFileNameId, targetFileName + fileExtension);
 	}
 	

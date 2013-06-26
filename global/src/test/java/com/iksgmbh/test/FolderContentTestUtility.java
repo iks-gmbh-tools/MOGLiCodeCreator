@@ -30,6 +30,7 @@ public class FolderContentTestUtility {
 	public static final String LINE_BREAK = FileUtil.getSystemLineSeparator();
 	public static final String FILE_ORIG_CONTENT = "A" + LINE_BREAK + "  C";
 
+	public static final String SUB_FOLDER3 = "subFolder3";
 
 	public static File mainTestFolder = new File(TEST_MAIN_FOLDER);
 

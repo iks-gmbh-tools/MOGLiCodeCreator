@@ -1,12 +1,15 @@
 package com.iksgmbh.moglicc.generator.classbased.velocity;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoSupport;
+import com.iksgmbh.utils.FileUtil;
 
 /**
  * Object to build a data structure with information needed to create a result file
@@ -15,13 +18,16 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
  * @since 1.0.0
  */
 public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultData
-                                                implements VelocityGeneratorResultData {
+                                                implements VelocityGeneratorResultData 
+{
+
+	public static final String META_INFO_NOT_FOUND = "MetaInfo unkown to the model: ";
 
 	private boolean existingTargetPreserved = false;  // default
 
 	public BuildUpVelocityGeneratorResultData(final GeneratorResultData generatorResultData) {
 		final BuildUpGeneratorResultData buildUpGeneratorResultData = (BuildUpGeneratorResultData) generatorResultData;
-		properties = buildUpGeneratorResultData.getProperties();
+		propertyMap = buildUpGeneratorResultData.getPropertyMap();
 		generatedContent = buildUpGeneratorResultData.getGeneratedContent();
 	}
 
@@ -77,12 +83,41 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 
 	@Override
-	public void validate() throws MOGLiPluginException {
+	public void validatePropertyKeys(final String artefact) throws MOGLiPluginException {
 		if (getTargetFileName() == null) {
 			validationErrors.add(NO_TARGET_FILE_NAME);
 		}
-		super.validate();
+		
+		super.validatePropertyKeys(artefact);
 	}
+	
+	@Override
+	public void validatePropertyForMissingMetaInfoValues(final String artefact) throws MOGLiPluginException {
+		checkForMissingMetaInfos();
+		
+		if (validationErrors.size() > 0) {
+			throw new MOGLiPluginException(buildErrorString(artefact));
+		}
+	}
+
+	
+	private void checkForMissingMetaInfos() {
+		final List<String> allPropertiesValues = getAllPropertiesValues();
+		for (final String value : allPropertiesValues) {
+			if (! isValueAvailable(value)) {
+				validationErrors.add(META_INFO_NOT_FOUND + value);
+			}
+		}
+	}
+
+	private boolean isValueAvailable(final String metaInfoValue) {
+		if (metaInfoValue == null) {
+			return false;
+		}
+		return ! (metaInfoValue.startsWith(MetaInfoSupport.META_INFO_NOT_FOUND_START) 
+				  && metaInfoValue.endsWith(MetaInfoSupport.META_INFO_NOT_FOUND_END));
+	}
+
 
 	@Override
 	public File getTargetDirAsFile(final String applicationRootDir, final String pathAdaption)
@@ -104,10 +139,12 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 			return;
 		}
 		if (! targetDirAsFile.exists()) {
-			throw new MOGLiPluginException(TEXT_TARGET_DIR_NOT_FOUND + "\n" + targetDirAsFile.getAbsolutePath());
+			throw new MOGLiPluginException(TEXT_TARGET_DIR_NOT_FOUND + FileUtil.getSystemLineSeparator() 
+					                      + targetDirAsFile.getAbsolutePath());
 		}
 		if (! targetDirAsFile.isDirectory()) {
-			throw new MOGLiPluginException(TEXT_TARGET_DIR_IS_A_FILE + "\n" + targetDirAsFile.getAbsolutePath());
+			throw new MOGLiPluginException(TEXT_TARGET_DIR_IS_A_FILE + FileUtil.getSystemLineSeparator()
+					                       + targetDirAsFile.getAbsolutePath());
 		}
 	}
 

@@ -1,9 +1,15 @@
 package com.iksgmbh.data;
 
-import static com.iksgmbh.test.FolderContentTestUtility.*;
-
+import static com.iksgmbh.test.FolderContentTestUtility.SUB_FOLDER1;
+import static com.iksgmbh.test.FolderContentTestUtility.SUB_FOLDER2;
+import static com.iksgmbh.test.FolderContentTestUtility.SUB_SUB_FOLDER;
+import static com.iksgmbh.test.FolderContentTestUtility.initTestFolder;
+import static com.iksgmbh.test.FolderContentTestUtility.mainTestFolder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.List;
@@ -179,4 +185,61 @@ public class FolderContentUnitTest {
 		assertEquals("size of result list", 1, result.size());
 	}
 
+	@Test
+	public void returnsFolderForFileName() throws Exception {
+		// prepare test
+		initTestFolder();
+		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
+
+		// call functionality under test
+		final File result = folderContent.getFolder(SUB_FOLDER1);
+		
+		// verify test result
+		assertNotNull("Not null expected", result);
+	}
+
+	@Test
+	public void returnsFolderForPathEnding() throws Exception {
+		// prepare test
+		initTestFolder();
+		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
+
+		// call functionality under test
+		final File result = folderContent.getFolder(SUB_FOLDER2 + "/" + SUB_SUB_FOLDER);
+		
+		// verify test result
+		assertNotNull("Not null expected", result);
+	}
+	
+	@Test
+	public void returnsNullForNotExistingFolder() throws Exception {
+		// prepare test
+		initTestFolder();
+		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
+
+		// call functionality under test
+		final File result = folderContent.getFolder("NOT_EXISTONG");
+		
+		// verify test result
+		assertNull(result);
+	}
+
+	@Test
+	public void throwsExceptionForAmbiguousFolderName() throws Exception {
+		// prepare test
+		initTestFolder();
+		final File newSubFolder = new File(mainTestFolder, SUB_FOLDER1 + "/" + SUB_FOLDER2);
+		newSubFolder.mkdirs();
+		final FolderContent folderContent = new FolderContent(mainTestFolder, null);
+
+		// call functionality under test
+		try {
+			folderContent.getFolder(SUB_FOLDER2);
+			fail("Expected exception was not thrown!");
+		} catch (Exception e) {
+			// verify test result
+			System.err.println(e.getMessage());
+			assertTrue(e.getMessage().contains("Ambiguous path ending: 2 matches for 'subFolder2'"));			
+		}
+	}
 }

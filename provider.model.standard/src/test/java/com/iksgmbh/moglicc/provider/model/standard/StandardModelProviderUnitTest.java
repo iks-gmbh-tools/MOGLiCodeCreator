@@ -212,12 +212,12 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 
 		// verify test result
 		final String fileContent = FileUtil.getFileContent(modelProvider.getMOGLiInfrastructure().getPluginLogFile());
-		assertStringContains(fileContent, "Warning: MetaInfo 'modelMetaInfoMandatory' was not found for model 'MetaInfoValidatorTestModel'");
-		assertStringContains(fileContent, "Warning: MetaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseA'");
-		assertStringContains(fileContent, "Warning: MetaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseB'");
-		assertStringContains(fileContent, "Warning: MetaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A1'");
-		assertStringContains(fileContent, "Warning: MetaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A2'");
-		assertStringContains(fileContent, "Warning: MetaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'B1'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'modelMetaInfoMandatory' was not found for model 'MetaInfoValidatorTestModel'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseA'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseB'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A1'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A2'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'B1'");
 	}
 
 	@Test
@@ -403,6 +403,21 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		metaInfoValidatorList.add(mandatoryMetaInfoValidator);
 
 		return toReturn;
+	}
+
+	@Test
+	public void readsModelFileWithoutAnyClassDefinition() throws Exception {
+		// prepare test
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "TestModel.txt");
+		FileUtil.createNewFileWithContent(testModelFile, "model TestModel");
+		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
+				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt");
+
+		// call functionality under test
+		modelProvider.doYourJob();
+
+		// verify test result -> no Exception 
 	}
 
 }
