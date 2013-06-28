@@ -17,7 +17,7 @@ import com.iksgmbh.utils.StringUtil;
 public class ArtefactProperties {
 
 	private String artefact;
-	
+
 	// properties
 	private String rootName;
 	private String targetDir = MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER;  // default value
@@ -25,6 +25,7 @@ public class ArtefactProperties {
 	private String excludeString;
 	private String outputEncodingFormat;
 	private boolean createNew = false;
+	private boolean cleanTarget = false;
 	private List<ReplacementData> replacements = new ArrayList<ReplacementData>();
 	private List<RenamingData> renamings = new ArrayList<RenamingData>();
 
@@ -40,7 +41,7 @@ public class ArtefactProperties {
 		}
 	}
 
-	private void parseVelocityResult(final VelocityTreeBuilderResultData velocityResult) throws MOGLiPluginException 
+	private void parseVelocityResult(final VelocityTreeBuilderResultData velocityResult) throws MOGLiPluginException
 	{
 		final List<String> keys = velocityResult.getAllKeys();
 		for (final String key : keys) {
@@ -50,7 +51,7 @@ public class ArtefactProperties {
 			}
 		}
 	}
-	
+
 	private void parseProperty(final String key, final String value) throws MOGLiPluginException
 	{
 		if (KnownGeneratorPropertyNames.TargetDir.name().equalsIgnoreCase(key)) {
@@ -61,6 +62,8 @@ public class ArtefactProperties {
 			nameOfValidModel = value;
 		} else if (KnownGeneratorPropertyNames.CreateNew.name().equalsIgnoreCase(key)) {
 			createNew = value.toLowerCase().equals("true");
+		} else if (KnownTreeBuilderPropertyNames.CleanTarget.name().equalsIgnoreCase(key)) {
+			cleanTarget = value.toLowerCase().equals("true");
 		} else if (KnownGeneratorPropertyNames.OutputEncodingFormat.name().equalsIgnoreCase(key)) {
 			outputEncodingFormat = value;
 		} else if (KnownTreeBuilderPropertyNames.Exclude.name().equalsIgnoreCase(key)) {
@@ -84,6 +87,10 @@ public class ArtefactProperties {
 		return createNew;
 	}
 
+	public boolean isTargetToBeCleaned() {
+		return cleanTarget;
+	}
+
 	public String getNameOfValidModel() {
 		return nameOfValidModel;
 	}
@@ -97,7 +104,7 @@ public class ArtefactProperties {
 		toReturn.addAll(Arrays.asList(array));
 		return toReturn;
 	}
-	
+
 	public List<ReplacementData> getReplacements() {
 		return replacements;
 	}

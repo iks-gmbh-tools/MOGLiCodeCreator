@@ -28,7 +28,7 @@ public class DummyPluginStarter implements Generator, MOGLiPlugin {
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(final InfrastructureService infrastructure) {
+	public void setInfrastructure(final InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -45,7 +45,7 @@ public class DummyPluginStarter implements Generator, MOGLiPlugin {
 	}
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
 

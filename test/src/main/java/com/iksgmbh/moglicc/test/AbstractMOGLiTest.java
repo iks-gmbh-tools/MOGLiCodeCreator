@@ -261,7 +261,7 @@ public abstract class AbstractMOGLiTest {
 		final String actualFileContent = TestUtil.getFileContent(file);
 		final boolean expectedEntryFound = actualFileContent.contains(expectedEntry);
 		if (! expectedEntryFound) {
-			System.out.println("Actual File Content:" + SYSTEM_LINE_SEPARATOR + actualFileContent);
+			System.err.println("Actual File Content:" + SYSTEM_LINE_SEPARATOR + actualFileContent);
 		}
 		assertTrue("Expected Entry not found in file: " + expectedEntry
 				+ "\nFile: " + file.getAbsolutePath(), expectedEntryFound);
@@ -381,17 +381,17 @@ public abstract class AbstractMOGLiTest {
 	}
 
 	private void logoutFileContents(final List<String> expectedFileContent, final List<String> actualFileContent) {
-		System.out.println("----------------------------------------------------");
+		System.out.println("######################################################################");
 		System.out.println("expectedFileContent:");
 		for (int i = 0; i < expectedFileContent.size(); i++) {
 			System.out.println(expectedFileContent.get(i));
 		}
-		System.out.println("----------------------------------------------------");
+		System.out.println("######################################################################");
 		System.out.println("actualFileContent:");
 		for (int i = 0; i < actualFileContent.size(); i++) {
 			System.out.println(actualFileContent.get(i));
 		}
-		System.out.println("----------------------------------------------------");
+		System.out.println("######################################################################");
 	}
 
 	private List<String> cutTrailingEmptyLines(final List<String> fileContent) {

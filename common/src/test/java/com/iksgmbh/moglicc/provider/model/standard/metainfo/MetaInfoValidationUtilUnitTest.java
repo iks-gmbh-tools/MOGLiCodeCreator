@@ -1,8 +1,10 @@
 package com.iksgmbh.moglicc.provider.model.standard.metainfo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -440,7 +442,7 @@ public class MetaInfoValidationUtilUnitTest {
 	}
 
 	@Test
-	public void returnsMetaInfoValidatorFromLineForConditionalValidatorWithConditionFile() throws MOGLiPluginException {
+	public void returnsMetaInfoValidatorFromLineForConditionalTrueValidatorWithConditionFile() throws MOGLiPluginException {
 		// prepare test
 		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes |in| ModelName |if| test.txt |is true.|";
 
@@ -458,6 +460,7 @@ public class MetaInfoValidationUtilUnitTest {
 		assertEquals("MaxOccurs", 1, conditionalMetaInfoValidator.getMaxOccurs());
 		assertEquals("MinOccurs", 1, conditionalMetaInfoValidator.getMinOccurs());
 		assertEquals("ConditionFilename", "test.txt", conditionalMetaInfoValidator.getConditionFilename());
+		assertTrue(conditionalMetaInfoValidator.mustConditionsBeTrue());
 	}
 
 	@Test
@@ -785,6 +788,29 @@ public class MetaInfoValidationUtilUnitTest {
 		assertEquals("MaxOccurs", 8, numOccurMetaInfoValidator.getMaxOccurs());
 		assertEquals("MinOccurs", 3, numOccurMetaInfoValidator.getMinOccurs());
 	}
+
+	@Test
+	public void returnsMetaInfoValidatorFromLineForConditionalFalseValidatorWithConditionFile() throws MOGLiPluginException {
+		// prepare test
+		final String inputLine = "|MetaInfo| Name |is valid to occur| 1 |time(s) for| attributes |in| ModelName |if| test.txt |is false.|";
+
+		// call functionality under test
+		final MetaInfoValidator validator = MetaInfoValidationUtil.parseValidatorLine(inputLine);
+
+		// verify test result
+		assertNotNull("Not null expected", validator);
+		assertEquals("MetaInfoName", "Name", validator.getMetaInfoName());
+		assertEquals("ValidationType", "Conditional", validator.getValidationType().toString());
+		assertEquals("HierarchyLevel", "Attribute", validator.getMetaInfoHierarchyLevel().toString());
+		assertEquals("nameOfValidModel", "ModelName", validator.getNameOfValidModel());
+
+		ConditionalMetaInfoValidator conditionalMetaInfoValidator = (ConditionalMetaInfoValidator) validator;
+		assertEquals("MaxOccurs", 1, conditionalMetaInfoValidator.getMaxOccurs());
+		assertEquals("MinOccurs", 1, conditionalMetaInfoValidator.getMinOccurs());
+		assertEquals("ConditionFilename", "test.txt", conditionalMetaInfoValidator.getConditionFilename());
+		assertFalse(conditionalMetaInfoValidator.mustConditionsBeTrue());
+	}
+
 }
 
 

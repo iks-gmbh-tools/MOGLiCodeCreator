@@ -57,7 +57,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
+	public void setInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -259,7 +259,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	}
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
 

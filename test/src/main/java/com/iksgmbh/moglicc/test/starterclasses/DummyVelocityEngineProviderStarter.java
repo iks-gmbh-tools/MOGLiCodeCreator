@@ -7,7 +7,6 @@ import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
-import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
@@ -15,18 +14,18 @@ import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
 public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvider, ModelBasedEngineProvider {
 
 	private static final String PLUGIN_ID = "VelocityEngineProvider";
-	
+
 	private InfrastructureService infrastructure;
 
 	private List<VelocityGeneratorResultData> velocityGeneratorResultDataList;
-	private VelocityInserterResultData velocityInserterResultData;
+	private VelocityGeneratorResultData velocityResultData;
 
 	public void setVelocityGeneratorResultDataList(List<VelocityGeneratorResultData> velocityGeneratorResultDataList) {
 		this.velocityGeneratorResultDataList = velocityGeneratorResultDataList;
 	}
 
-	public void setVelocityInserterResultData(VelocityInserterResultData velocityInserterResultData) {
-		this.velocityInserterResultData = velocityInserterResultData;
+	public void setVelocityGeneratorResultData(VelocityGeneratorResultData velocityResultData) {
+		this.velocityResultData = velocityResultData;
 	}
 
 	public String getId() {
@@ -44,7 +43,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
+	public void setInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -55,7 +54,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 		toReturn.add("StandardModelProvider");
 		return toReturn;
 	}
-	
+
 	@Override
 	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		return false;
@@ -72,23 +71,23 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 
 	@Override
 	public GeneratorResultData startEngineWithModel() throws MOGLiPluginException {
-		return velocityInserterResultData;
+		return velocityResultData;
 	}
 
 	@Override
 	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException {
 		final List<GeneratorResultData> toReturn = new ArrayList<GeneratorResultData>();
 		for (final GeneratorResultData resultData : velocityGeneratorResultDataList) {
-			toReturn.add(resultData); 
+			toReturn.add(resultData);
 		}
 		return toReturn;
 	}
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
-	
+
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;

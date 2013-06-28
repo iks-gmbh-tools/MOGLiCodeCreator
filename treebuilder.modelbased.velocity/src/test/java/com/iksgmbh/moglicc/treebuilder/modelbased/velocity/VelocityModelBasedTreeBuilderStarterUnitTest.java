@@ -17,7 +17,6 @@ import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResult
 import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.data.ArtefactProperties;
 import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.data.VelocityTreeBuilderResultData;
 import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.data.VelocityTreeBuilderResultData.KnownTreeBuilderPropertyNames;
-import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.test.VelocityModelBasedTreeBuilderTestParent;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
@@ -27,16 +26,16 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 	private static final String RENAMING_TEST_ARTEFACT = "RenamingTestArtefact";
 	private static final String RENAMING_TEST_TARGETDIR = "renametest";
 	private static final String RESET_ALL_PROPERTIES = "ALL";
-	
+
 	private File generatorPropertiesFile;
 	private VelocityTreeBuilderResultData velocityResultData;
-	
+
 	@Override
 	@Before
 	public void setup() {
 		super.setup();
 		buildStandardVelocityResultData();
-		
+
 		velocityEngineProviderDummy.setResultData(velocityResultData);
 		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), VelocityModelBasedTreeBuilderStarter.PLUGIN_PROPERTIES_FILE);
 		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
@@ -44,11 +43,11 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 
 	private void buildStandardVelocityResultData() {
 		velocityResultData = new VelocityTreeBuilderResultData(new BuildUpGeneratorResultData());
-		
+
 		velocityResultData.addProperty(KnownGeneratorPropertyNames.TargetDir.name(), "<applicationRootDir>");
 
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RootName.name(), METAINFO_MODEL_TARGETDIR);
-		
+
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml <mavenGroupId> com.iksgmbh.moglicc");
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml <mavenArtefactId> ModelTargetTestDir");
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml <mavenProjectName> MOGLiJavaBean Artifacts");
@@ -99,7 +98,7 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 		final File targetDir = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_JavaBeanProject");
 		FileUtil.deleteDirWithContent(targetDir);
 		assertFileDoesNotExist(targetDir);
-		
+
 		// call functionality under test
 		treeBuilderGenerator.doYourJob();
 
@@ -129,26 +128,6 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 		assertDirContent(targetDir);
 	}
 
-
-	@Test
-	public void createsGenerationReport() throws MOGLiPluginException {
-		// prepare test
-		FileUtil.deleteDirWithContent(applicationOutputDir);
-		final File notNeededArtefact = new File(treeBuilderGenerator.getMOGLiInfrastructure().getPluginInputDir(), "MOGLiCC_NewPluginProject");
-		FileUtil.deleteDirWithContent(notNeededArtefact);
-		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RenameFile.name(), "pom.xml pom2.xml");
-		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RenameDir.name(), "validator validator2");
-
-		
-		// call functionality under test
-		treeBuilderGenerator.doYourJob();
-
-		// verify test result
-		final String generationReport = cutLocalFilePath(treeBuilderGenerator.getGenerationReport());
-		assertTrue("unexpected generation report", generationReport.startsWith("VelocityModelBasedTreeBuilder has done work for following artefacts:"));
-		assertStringContains(generationReport, "1 artefact(s) have been generated and 30 generation event(s) have been performed.");
-	}
-
 	@Test
 	public void doesNotOverwriteExistingFilesInTargetDirAndcreatesCorrespondingGenerationReport() throws Exception {
 		// prepare test
@@ -161,8 +140,8 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 
 		final File propertiesFile = new File(infrastructure.getPluginInputDir(), "MOGLiCC_JavaBeanProject/" + VelocityModelBasedTreeBuilderStarter.FILENAME_ARTEFACT_PROPERTIES);
 		FileUtil.createNewFileWithContent(propertiesFile, "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
-				                                          "@RootName ${ModelMetaInfo=projectName}" + FileUtil.getSystemLineSeparator() +
-				                                          "@TargetDir ${ModelMetaInfo=eclipseProjectDir}" + FileUtil.getSystemLineSeparator() +
+				                                          "@RootName $model.getMetaInfoValueFor(projectName)" + FileUtil.getSystemLineSeparator() +
+				                                          "@TargetDir $model.getMetaInfoValueFor(eclipseProjectDir)" + FileUtil.getSystemLineSeparator() +
 				                                          "@CreateNew false" + FileUtil.getSystemLineSeparator() +
 				                                          "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
 				                                          "@exclude .git");
@@ -172,7 +151,7 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 		treeBuilderGenerator.doYourJob();
 
 		// cleanup
-		FileUtil.deleteDirWithContent(treeBuilderGenerator.getMOGLiInfrastructure().getPluginInputDir());
+		FileUtil.deleteDirWithContent(treeBuilderGenerator.getInfrastructure().getPluginInputDir());
 
 		// verify test result
 		final String generationReport = cutLocalFilePath(treeBuilderGenerator.getGenerationReport());
@@ -204,14 +183,14 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 		assertStringEquals("rootname", artefactName, treeBuilderGenerator.getArtefactProperties().getRootName());
 	}
 
-	private void resetVelocityResultData(final String propertyToReset) 
+	private void resetVelocityResultData(final String propertyToReset)
 	{
 		if (RESET_ALL_PROPERTIES.equals(propertyToReset)) {
 			velocityResultData.getPropertyMap().clear();
 		} else {
 			final List<String> values = velocityResultData.getPropertyMap().get(propertyToReset.toLowerCase());
 			values.clear();
-		}		
+		}
 	}
 
 	@Test
@@ -330,13 +309,13 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 		final File artefactPropertiesFile = new File(artefactDir, "artefact.properties");
 		return artefactPropertiesFile;
 	}
-	
+
 	@Test
 	public void renamesDirInPluginOutputDir() throws Exception {
 		// prepare test
 		final File artefactPropertiesFile = prepareTestArtefact();
 		final String newPath = "folder1/folder2/subfolder";
-		
+
 		executeDirRenamingReplaceTest(artefactPropertiesFile, newPath, RENAMING_TEST_ARTEFACT, infrastructure.getPluginOutputDir());
 	}
 
@@ -345,22 +324,22 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 		// prepare test
 		final File artefactPropertiesFile = prepareTestArtefact();
 		final String newPath = ".hg";  // this is a excluded dir name
-		
+
 		executeDirRenamingReplaceTest(artefactPropertiesFile, newPath, RENAMING_TEST_TARGETDIR, applicationRootDir);
 	}
-	
+
 	@Test
 	public void replacesTwoMetoInfoReferencesInOneLine() throws Exception {
 		// prepare test
 		final File artefactPropertiesFile = prepareTestArtefact();
-		final String newPath = "newSubfolder";  
-		
+		final String newPath = "newSubfolder";
+
 		executeDirRenamingReplaceTest(artefactPropertiesFile, newPath, RENAMING_TEST_TARGETDIR, applicationRootDir);
 	}
-	
+
 	private void executeDirRenamingReplaceTest(final File artefactPropertiesFile,
 			                            final String newPath, final String mainTargetDirName,
-			                            final File targetDir) throws MOGLiPluginException 
+			                            final File targetDir) throws MOGLiPluginException
 	{
 		resetVelocityResultData(KnownTreeBuilderPropertyNames.RootName.name());
 		resetVelocityResultData(KnownTreeBuilderPropertyNames.ReplaceIn.name());
@@ -384,7 +363,62 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 		final File targetFile = new File(newFolder, RENAMING_TEST_FILE);
 		assertFileExists(newFolder);
 		assertFileExists(targetFile);
-		assertFileContainsEntry(targetFile, METAINFO_MODEL_PROJECT_DESCRIPTION);		
+		assertFileContainsEntry(targetFile, METAINFO_MODEL_PROJECT_DESCRIPTION);
+	}
+
+	@Test
+	public void skipsGenerationWhenConfiguredSoInArtefactProperties() throws Exception
+	{
+		// prepare test
+		final File applicationRoot = treeBuilderGenerator.getInfrastructure().getApplicationRootDir();
+		final File resultDir = new File(applicationRoot, "ModelTargetTestDir");
+		FileUtil.deleteDirWithContent(resultDir);
+		assertFileDoesNotExist(resultDir);
+
+		resetVelocityResultData(RESET_ALL_PROPERTIES);
+		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RootName.name(), "ModelTargetTestDir");
+		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MOGLiCC_JavaBeanModel");
+
+		// Test 1: without skip instruction
+		//call functionality under test
+		treeBuilderGenerator.doYourJob();
+
+		// verify test result
+		assertFileExists(resultDir);
+
+		// Test 2: with skip instruction
+		FileUtil.deleteDirWithContent(resultDir);
+		assertFileDoesNotExist(resultDir);
+		velocityResultData.addProperty(KnownGeneratorPropertyNames.SkipGeneration.name(), "true");
+
+		// call functionality under test
+		treeBuilderGenerator.doYourJob();
+
+		// verify test result
+		assertFileDoesNotExist(resultDir);
+	}
+
+	@Test
+	public void deleteTargetDirWhenConfiguredSoInArtefactProperties() throws Exception
+	{
+		// prepare test
+		final File applicationRoot = treeBuilderGenerator.getInfrastructure().getApplicationRootDir();
+		final File resultDir = new File(applicationRoot, "ModelTargetTestDir");
+		resultDir.mkdirs();
+		final File fileToBeCleaned = new File(resultDir, "toBeCleaned.txt");
+		fileToBeCleaned.createNewFile();
+		assertFileExists(fileToBeCleaned);
+
+		resetVelocityResultData(RESET_ALL_PROPERTIES);
+		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RootName.name(), "ModelTargetTestDir");
+		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MOGLiCC_JavaBeanModel");
+		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.CleanTarget.name(), "true");
+
+		//call functionality under test
+		treeBuilderGenerator.doYourJob();
+
+		// verify test result
+		assertFileDoesNotExist(fileToBeCleaned);
 	}
 
 }

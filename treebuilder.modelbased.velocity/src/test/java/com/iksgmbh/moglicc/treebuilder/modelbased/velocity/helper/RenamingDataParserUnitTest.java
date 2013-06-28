@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.iksgmbh.helper.FolderContentBasedFileRenamer.RenamingData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.test.VelocityModelBasedTreeBuilderTestParent;
+import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.VelocityModelBasedTreeBuilderTestParent;
 
 public class RenamingDataParserUnitTest extends VelocityModelBasedTreeBuilderTestParent {
 

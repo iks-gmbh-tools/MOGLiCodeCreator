@@ -40,6 +40,7 @@ public class MetaInfoValidationUtil {
 	public static final String OCCURS_IDENTIFIER = "|is valid to occur|";
 	public static final String IF_IDENTIFIER = "|if|";
 	public static final String TRUE_IDENTIFIER = "|is true.|";
+	public static final String FALSE_IDENTIFIER = "|is false.|";
 	public static final String DOT_IDENTIFIER = "|.|";
 	public static final String CONDITION_BLOCK_SEPARATOR = "OR";
 
@@ -238,7 +239,11 @@ public class MetaInfoValidationUtil {
 			additionalInfo = parseResult.additionalInformation;
 
 			if (additionalInfo.endsWith(TRUE_IDENTIFIER)) {
-				metaInfoValidationData.withConditionFilename(StringUtil.removeSuffixIfExisting(additionalInfo.trim(), TRUE_IDENTIFIER).trim());
+				metaInfoValidationData.withConditionsMustBeTrue(true)
+				                      .withConditionFilename(StringUtil.removeSuffixIfExisting(additionalInfo.trim(), TRUE_IDENTIFIER).trim());
+			} else if (additionalInfo.endsWith(FALSE_IDENTIFIER)) {
+				metaInfoValidationData.withConditionsMustBeTrue(false)
+                                      .withConditionFilename(StringUtil.removeSuffixIfExisting(additionalInfo.trim(), FALSE_IDENTIFIER).trim());
 			} else {
 				throw new MOGLiPluginException("Condition of MetaInfoValidator must end with " + TRUE_IDENTIFIER + ": <" + line + ">");
 			}

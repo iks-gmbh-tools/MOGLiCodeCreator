@@ -50,7 +50,7 @@ public class VelocityClassBasedGeneratorTestParent extends AbstractMOGLiTest {
 		
 		infrastructure = createInfrastructure();
 		velocityClassBasedGenerator = new VelocityClassBasedFileMakerStarter();
-		velocityClassBasedGenerator.setMOGLiInfrastructure(infrastructure);
+		velocityClassBasedGenerator.setInfrastructure(infrastructure);
 		velocityClassBasedGenerator.setTestDir(PROJECT_ROOT_DIR + TEST_SUBDIR);
 		generatorPluginInputDir = new File(applicationInputDir, VelocityClassBasedFileMakerStarter.PLUGIN_ID);
 		

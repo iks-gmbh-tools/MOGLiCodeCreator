@@ -1,42 +1,34 @@
-*******************************   R E S U L T   *******************************
+************************************   R E S U L T   *****************************************
 
 All 5 plugins executed successfully on model 'MOGLiCC_JavaBeanModel' in workspace <../inttest/target/TestDir>.
-53 generations for 7 artefacts have been performed.
+44 generations for 7 artefacts have been performed.
 
+----------------------------------------------------------------------------------------------
 VelocityModelBasedTreeBuilder has done work for following artefacts:
 
-1 artefact(s) have been generated and 29 generation event(s) have been performed.
+1 artefact(s) have been generated and 20 generation event(s) have been performed.
 
    Reports for artefact 'MOGLiCC_JavaBeanProject':
 
-		File structure artefact generated in: C:\dev\eclipse\workspaces\mogli\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
+		Tree artefact generated in: D:\Reik\dev\git\mogli\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
 
-		Created subdirectories:
-			src
-			main
-			java
-			com
-			iksgmbh
-			moglicc
-			demo
-			main
-			validator
-			types
-			resources
-			test
-			java
-			resources
+		Created subdirectories: 
+			\src\main\java\com\iksgmbh\moglicc\demo\main
+			\src\main\java\com\iksgmbh\moglicc\demo\validator\types
+			\src\main\resources
+			\src\test\java
+			\src\test\resources
 
-		Created files:
-			pom.xml
-			src\main\java\com\iksgmbh\moglicc\demo\main\MOGLiCC_JavaBeanProjectClassOverviewPrinter.java
-			src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationException.java
-			src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationResult.java
-			src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidator.java
-			src\main\java\com\iksgmbh\moglicc\demo\validator\JavaBeanValidator.java
-			src\main\java\com\iksgmbh\moglicc\demo\validator\types\MandatoryFieldValidator.java
-			src\main\java\com\iksgmbh\moglicc\demo\validator\types\MaxLengthValidator.java
-			src\main\java\com\iksgmbh\moglicc\demo\validator\types\MinLengthValidator.java
+		Created files: 
+			\pom.xml
+			\src\main\java\com\iksgmbh\moglicc\demo\main\MOGLiCC_JavaBeanProjectClassOverviewPrinter.java
+			\src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationException.java
+			\src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationResult.java
+			\src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidator.java
+			\src\main\java\com\iksgmbh\moglicc\demo\validator\JavaBeanValidator.java
+			\src\main\java\com\iksgmbh\moglicc\demo\validator\types\MandatoryFieldValidator.java
+			\src\main\java\com\iksgmbh\moglicc\demo\validator\types\MaxLengthValidator.java
+			\src\main\java\com\iksgmbh\moglicc\demo\validator\types\MinLengthValidator.java
 
 		Performed replacements:
 			Placeholder '<mavenGroupId>' replaced by 'com.iksgmbh.moglicc' in file 'pom.xml'
@@ -48,7 +40,7 @@ VelocityModelBasedTreeBuilder has done work for following artefacts:
 		Performed file renamings:
 			File 'main.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '..\inttest\target\TestDir\output\VelocityModelBasedTreeBuilder\MOGLiCC_JavaBeanProject\src\main\java\com\iksgmbh\moglicc\demo\main'
 
-
+----------------------------------------------------------------------------------------------
 VelocityClassBasedFileMaker has done work for following artefacts:
 
    Reports for artefact 'MOGLiJavaBean':
@@ -81,7 +73,7 @@ VelocityClassBasedFileMaker has done work for following artefacts:
       AddressValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       MiscValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
 
-
+----------------------------------------------------------------------------------------------
 VelocityModelBasedLineInserter has done work for following artefacts:
 
    Reports for artefact 'BeanFactory':
@@ -89,3 +81,5 @@ VelocityModelBasedLineInserter has done work for following artefacts:
       inserted by a above-instruction into BeanFactory.java in directory <applicationRootDir>/example
       inserted by a below-instruction into BeanFactory.java in directory <applicationRootDir>/example
       inserted by a replace-instruction into BeanFactory.java in directory <applicationRootDir>/example
+
+**************************************  E N D  ***********************************************

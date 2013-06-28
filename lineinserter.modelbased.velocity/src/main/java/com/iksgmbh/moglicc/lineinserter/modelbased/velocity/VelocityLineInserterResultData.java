@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.inserter.modelbased.velocity;
+package com.iksgmbh.moglicc.lineinserter.modelbased.velocity;
 
 import java.io.File;
 
@@ -7,54 +7,50 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGeneratorResultData;
 
 /**
- * Object to build a data structure with information needed to create or 
+ * Object to build a data structure with information needed to create or
  * insert content into a target file.
- * 
+ *
  * @author Reik Oberrath
  * @since 1.0.0
  */
-public class BuildUpVelocityInserterResultData extends BuildUpVelocityGeneratorResultData 
-                                               implements VelocityInserterResultData {
-	
-	public static final String MISSING_REPLACE_CONFIGURATION = "Either annotation '" + 
-								   VelocityInserterResultData.KnownInserterPropertyNames.ReplaceStart.name()
-	                               + "' or '" + 
-	                               VelocityInserterResultData.KnownInserterPropertyNames.ReplaceEnd.name()
+public class VelocityLineInserterResultData extends BuildUpVelocityGeneratorResultData {
+
+	enum KnownInserterPropertyNames { ReplaceStart, ReplaceEnd, InsertBelow, InsertAbove };
+	public static final String MISSING_REPLACE_CONFIGURATION = "Either annotation '" +
+								   KnownInserterPropertyNames.ReplaceStart.name()
+	                               + "' or '" +
+	                               KnownInserterPropertyNames.ReplaceEnd.name()
 	                               + "' is missing in template file.";
 
-	public static final String INVALID_INSERT_CONFIGURATION = "Annotations '" + 
-								   VelocityInserterResultData.KnownInserterPropertyNames.InsertBelow.name()
-                                   + "' and '" + 
-                                   VelocityInserterResultData.KnownInserterPropertyNames.InsertAbove.name()
+	public static final String INVALID_INSERT_CONFIGURATION = "Annotations '" +
+								   KnownInserterPropertyNames.InsertBelow.name()
+                                   + "' and '" +
+                                   KnownInserterPropertyNames.InsertAbove.name()
                                    + "' cannot be used simultanuously.";
-	
-	public static final String INVALID_MIXED_CONFIGURATION = "Insert and replace annotations '" 
+
+	public static final String INVALID_MIXED_CONFIGURATION = "Insert and replace annotations '"
 	   														  + "' cannot be used simultanuously.";
-	
-	public static final String CREATE_NEW_MIXED_CONFIGURATION = "CreateNew annotation with value 'true'" 
+
+	public static final String CREATE_NEW_MIXED_CONFIGURATION = "CreateNew annotation with value 'true'"
 			                                                      + " cannot be used with Insert or replace annotations.";
 
 
-	public BuildUpVelocityInserterResultData(final GeneratorResultData generatorResultData) {
+	public VelocityLineInserterResultData(final GeneratorResultData generatorResultData) {
 		super(generatorResultData);
 	}
-	
-	@Override
+
 	public String getReplaceStartIndicator() {
 		return getProperty(KnownInserterPropertyNames.ReplaceStart.name());
 	}
 
-	@Override
 	public String getReplaceEndIndicator() {
 		return getProperty(KnownInserterPropertyNames.ReplaceEnd.name());
 	}
 
-	@Override
 	public String getInsertBelowIndicator() {
 		return getProperty(KnownInserterPropertyNames.InsertBelow.name());
 	}
 
-	@Override
 	public String getInsertAboveIndicator() {
 		return getProperty(KnownInserterPropertyNames.InsertAbove.name());
 	}
@@ -69,21 +65,20 @@ public class BuildUpVelocityInserterResultData extends BuildUpVelocityGeneratorR
 		}
 		if (targetFile.exists() && ! targetFile.isFile()) {
 			throw new MOGLiPluginException(TEXT_TARGET_FILE_IS_A_DIRECTORY + "\n" + targetFile.getAbsolutePath());
-		}		
+		}
 	}
-	
-	@Override
+
 	public boolean mustGeneratedContentBeMergedWithExistingTargetFile() {
-		return isReplaceIndicatorDefined() || isInsertIndicatorDefined(); 
+		return isReplaceIndicatorDefined() || isInsertIndicatorDefined();
 	}
-	
-	
+
+
 	private boolean isReplaceIndicatorDefined() {
-		return getReplaceEndIndicator() != null || getReplaceStartIndicator() != null; 
+		return getReplaceEndIndicator() != null || getReplaceStartIndicator() != null;
 	}
 
 	private boolean isInsertIndicatorDefined() {
-		return getInsertAboveIndicator() != null || getInsertBelowIndicator() != null; 
+		return getInsertAboveIndicator() != null || getInsertBelowIndicator() != null;
 	}
 
 	@Override

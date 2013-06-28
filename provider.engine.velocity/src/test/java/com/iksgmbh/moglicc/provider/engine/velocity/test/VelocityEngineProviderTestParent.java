@@ -32,7 +32,7 @@ public class VelocityEngineProviderTestParent extends AbstractMOGLiTest {
 		super.setup();
 		
 		velocityEngineProvider = new VelocityEngineProviderStarter();
-		velocityEngineProvider.setMOGLiInfrastructure(createInfrastructure());
+		velocityEngineProvider.setInfrastructure(createInfrastructure());
 		
 		generatorPluginInputDir = new File(applicationInputDir, MockDataBuilder.GENERATOR_PLUGIN_ID);
 		generatorPluginInputDirWithArtefactSubDir = new File(generatorPluginInputDir, MockDataBuilder.ARTEFACT_TYPE);

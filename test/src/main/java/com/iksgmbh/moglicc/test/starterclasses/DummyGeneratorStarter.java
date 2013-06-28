@@ -31,7 +31,7 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
+	public void setInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -59,7 +59,7 @@ public class DummyGeneratorStarter implements Generator, MetaInfoValidatorVendor
 	}
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
 

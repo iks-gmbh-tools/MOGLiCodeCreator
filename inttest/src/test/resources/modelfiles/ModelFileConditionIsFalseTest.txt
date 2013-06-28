@@ -1,0 +1,17 @@
+model ConditionIsFalseTest
+
+class com.example.Invoice
+
+   attribute closureDate
+    metainfo field-type date
+
+  attribute taxFree
+    metainfo field-type checkbox
+
+  attribute taxId
+    metainfo field-type text
+    metainfo numeric-format Constants.FORMAT_NUMERIC
+
+  attribute netValue
+    metainfo field-type numeric
+    metainfo numeric-format Constants.FORMAT_NUMERIC

@@ -13,9 +13,9 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
+import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
 import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
-import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
@@ -103,7 +103,7 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
+	public void setInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -144,7 +144,8 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 
 		validatePropertyKeys(resultList, artefact);
 
-		if (! ModelValidationGeneratorUtil.validateModel(resultList.get(0).getNameOfValidModel(), model.getName())) {
+		final VelocityGeneratorResultData firstResultData = resultList.get(0);
+		if (! ModelValidationGeneratorUtil.validateModel(firstResultData, model.getName())) {
 			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '" + resultList.get(0).getNameOfValidModel()
 					                                 + "' as valid model.");
 			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + model.getName() + "'.");
@@ -349,7 +350,7 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 	}
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
 

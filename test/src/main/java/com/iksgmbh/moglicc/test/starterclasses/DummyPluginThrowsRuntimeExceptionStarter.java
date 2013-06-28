@@ -28,7 +28,7 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGL
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(final InfrastructureService infrastructure) {
+	public void setInfrastructure(final InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -44,7 +44,7 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGL
 	}
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
 

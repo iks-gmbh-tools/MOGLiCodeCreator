@@ -105,7 +105,7 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 	@Test
 	public void renamesFileWithNameReadFromModelFile() throws Exception {
 		// prepare test
-		FileUtil.deleteDirWithContent(velocityModelBasedTreeBuilderStarter.getMOGLiInfrastructure().getPluginInputDir());
+		FileUtil.deleteDirWithContent(velocityModelBasedTreeBuilderStarter.getInfrastructure().getPluginInputDir());
 		
 		final String filenameToReplace = "ToReplace.txt";
 		final String filenameReplaced = "Replaced.txt";
@@ -199,10 +199,10 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
                 "@RenameDir komponentenSpezifischerPfad $model.getMetaInfoValueFor(\"projectPath\")" + FileUtil.getSystemLineSeparator() +
                 "@RenameDir hg_init .hg");
 		
-		final File toRename1 = new File(velocityModelBasedTreeBuilderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+		final File toRename1 = new File(velocityModelBasedTreeBuilderStarter.getInfrastructure().getPluginInputDir(), 
                                         artefactName + "/hg_init");
 		toRename1.mkdirs();
-		final File toRename2 = new File(velocityModelBasedTreeBuilderStarter.getMOGLiInfrastructure().getPluginInputDir(), 
+		final File toRename2 = new File(velocityModelBasedTreeBuilderStarter.getInfrastructure().getPluginInputDir(), 
                 artefactName + "/src/main/java/komponentenSpezifischerPfad/package");
 		toRename2.mkdirs();
 		final File file = new File(toRename2, "Test.txt");
@@ -225,7 +225,7 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 	@Test
 	public void throwsExceptionForUnkownPlaceHolder() throws Exception {
 		// prepare test
-		final File artefactDir = new File(velocityModelBasedTreeBuilderStarter.getMOGLiInfrastructure().getPluginInputDir(), "testArtefact");
+		final File artefactDir = new File(velocityModelBasedTreeBuilderStarter.getInfrastructure().getPluginInputDir(), "testArtefact");
 		artefactDir.mkdirs();
 		final File artefactPropertiesFile = new File(artefactDir, VelocityModelBasedTreeBuilderStarter.FILENAME_ARTEFACT_PROPERTIES);
 		FileUtil.createNewFileWithContent(artefactPropertiesFile, "@RootName $model.getMetaInfoValueFor(\"UnkownPlaceholder\")");

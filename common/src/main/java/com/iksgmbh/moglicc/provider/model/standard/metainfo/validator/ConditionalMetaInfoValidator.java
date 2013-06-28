@@ -24,25 +24,43 @@ public class ConditionalMetaInfoValidator extends NumOccurMetaInfoValidator {
 	private List<List<MetaInfoValidationCondition>> conditionList;
 	private String conditionFilename;
 
+	/**
+	 * In case the conditions contained in the condition file are true,
+	 * but conditionsMustBeTrue is true, the validation is successful.
+	 *
+	 * In case the conditions contained in the condition file are true,
+	 * but conditionsMustBeTrue is false, the validation will result in an error.
+	 *
+	 * In case the conditions contained in the condition file are false,
+	 * but conditionsMustBeTrue is false, the validation is successful.
+	 *
+	 * In case the conditions contained in the condition file are false,
+	 * but conditionsMustBeTrue is true, the validation will result in an error.
+	 */
+	private boolean conditionsMustBeTrue = true;
+
 
 	public ConditionalMetaInfoValidator(final MetaInfoValidationData metaInfoValidationData) {
 		super(metaInfoValidationData);
 		validationType = ValidationType.Conditional;
 		conditionList = new ArrayList<List<MetaInfoValidationCondition>>();
 		conditionList.add(metaInfoValidationData.getConditionBlock());     // this is relevant for test purpose
-		this.conditionFilename = metaInfoValidationData.getConditionFilename();
+		conditionFilename = metaInfoValidationData.getConditionFilename();
+		conditionsMustBeTrue = metaInfoValidationData.mustConditionsBeTrue();
 	}
 
 	@Override
 	public boolean validate(final List<MetaInfo> metaInfoList) {
-		if (isThereAtleastOneTrueConditionBlock(metaInfoList)) {
+		final boolean atleastOneConditionBlockIsTrue = isThereAtleastOneTrueConditionBlock(metaInfoList);
+		final boolean validateOccurrences = atleastOneConditionBlockIsTrue == conditionsMustBeTrue;
+		if (validateOccurrences) {
 			final int occurences = countOccurences(metaInfoList);
 			final boolean ok = checkOccurrences(occurences);
 			if (! ok) {
 				return false;
 			}
 		} else {
-			// condition is not meet, thus occurrences will be not validated
+			// conditions are not meet, thus occurrences will be not validated
 		}
 
 		return true;
@@ -54,7 +72,8 @@ public class ConditionalMetaInfoValidator extends NumOccurMetaInfoValidator {
 			if (condition.isTrueFor(metaInfoList))  {
 				continue;
 			}
-			// conditions are linked by an "and"-relation (conjunction)
+			// conditions within a block (inner list) 
+			// are linked by an "and"-relation (conjunction)
 			// the first false condition causes this inner list to be "false"
 			return false;
 		}
@@ -64,8 +83,10 @@ public class ConditionalMetaInfoValidator extends NumOccurMetaInfoValidator {
 	private boolean isThereAtleastOneTrueConditionBlock(final List<MetaInfo> metaInfoList) {
 		for (List<MetaInfoValidationCondition> innerList : conditionList) {
 			if (areAllConditionsValid(innerList, metaInfoList))  {
-				// conditions are linked by an "or"-relation (disjunction)
-				// the first true inner list causes the whole condition list to be "true"
+				// condition blocks (inner lists) 
+				// are linked by an "or"-relation (disjunction)
+				// the first true block within the condition file
+				// causes the whole condition list to be "true"
 				return true;
 			}
 		}
@@ -90,6 +111,10 @@ public class ConditionalMetaInfoValidator extends NumOccurMetaInfoValidator {
 			counter += innerList.size();
 		}
 		return counter;
+	}
+
+	public boolean mustConditionsBeTrue() {
+		return conditionsMustBeTrue;
 	}
 
 }

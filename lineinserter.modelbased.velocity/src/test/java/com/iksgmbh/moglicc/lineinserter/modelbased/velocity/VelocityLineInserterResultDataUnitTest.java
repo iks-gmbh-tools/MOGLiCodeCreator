@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.inserter.modelbased.velocity;
+package com.iksgmbh.moglicc.lineinserter.modelbased.velocity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,11 +10,11 @@ import org.junit.Test;
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
-import com.iksgmbh.moglicc.inserter.modelbased.velocity.VelocityInserterResultData.KnownInserterPropertyNames;
+import com.iksgmbh.moglicc.lineinserter.modelbased.velocity.VelocityLineInserterResultData.KnownInserterPropertyNames;
 
-public class BuildUpVelocityInserterResultDataUnitTest {
+public class VelocityLineInserterResultDataUnitTest {
 
-	private BuildUpVelocityInserterResultData velocityInserterResultData;
+	private VelocityLineInserterResultData velocityResult;
 	private BuildUpGeneratorResultData buildUpGeneratorResultData;
 
 	@Before
@@ -24,7 +24,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		buildUpGeneratorResultData.addProperty(KnownGeneratorPropertyNames.TargetFileName.name(), "filename");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceStart.name(), "ReplaceStart");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "ReplaceEnd");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 	}
 
 	private BuildUpGeneratorResultData buildGeneratorResultData() {
@@ -38,7 +38,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 	@Test
 	public void returnsTargetFileName() {
 		// call functionality under test
-		final String targetFileName = velocityInserterResultData.getTargetFileName();
+		final String targetFileName = velocityResult.getTargetFileName();
 
 		// verify test result
 		assertEquals("targetFileName", "filename", targetFileName);
@@ -47,7 +47,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 	@Test
 	public void returnsReplaceStartIndicator() {
 		// call functionality under test
-		final String ReplaceStartIndicator = velocityInserterResultData.getReplaceStartIndicator();
+		final String ReplaceStartIndicator = velocityResult.getReplaceStartIndicator();
 
 		// verify test result
 		assertEquals("ReplaceStartIndicator", "ReplaceStart", ReplaceStartIndicator);
@@ -56,7 +56,7 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 	@Test
 	public void returnsReplaceEndIndicator() {
 		// call functionality under test
-		final String ReplaceEndIndicator = velocityInserterResultData.getReplaceEndIndicator();
+		final String ReplaceEndIndicator = velocityResult.getReplaceEndIndicator();
 
 		// verify test result
 		assertEquals("ReplaceEndIndicator", "ReplaceEnd", ReplaceEndIndicator);
@@ -66,10 +66,10 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 	public void returnsAboveIndicator() {
 		// prepare test
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertAbove.name(), "InsertAbove");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
-		final String InsertAboveIndicator = velocityInserterResultData.getInsertAboveIndicator();
+		final String InsertAboveIndicator = velocityResult.getInsertAboveIndicator();
 
 		// verify test result
 		assertEquals("InsertAboveIndicator", "InsertAbove", InsertAboveIndicator);
@@ -79,10 +79,10 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 	public void returnsBelowIndicator() {
 		// prepare test
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertBelow.name(), "InsertBelow");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
-		final String InsertBelowIndicator = velocityInserterResultData.getInsertBelowIndicator();
+		final String InsertBelowIndicator = velocityResult.getInsertBelowIndicator();
 
 		// verify test result
 		assertEquals("InsertBelowIndicator", "InsertBelow", InsertBelowIndicator);
@@ -94,13 +94,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// prepare test
 		buildUpGeneratorResultData = buildGeneratorResultData();
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceStart.name(), "Start");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validatePropertyKeys("test");
+			velocityResult.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION);
+			assertStringContains(e.getMessage(), VelocityLineInserterResultData.MISSING_REPLACE_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
@@ -119,13 +119,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		// prepare test
 		buildUpGeneratorResultData = buildGeneratorResultData();
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "End");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validatePropertyKeys("test");
+			velocityResult.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.MISSING_REPLACE_CONFIGURATION);
+			assertStringContains(e.getMessage(), VelocityLineInserterResultData.MISSING_REPLACE_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
@@ -137,13 +137,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		buildUpGeneratorResultData = buildGeneratorResultData();
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertAbove.name(), "ABOVE");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertBelow.name(), "BELOW");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validatePropertyKeys("test");
+			velocityResult.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_INSERT_CONFIGURATION);
+			assertStringContains(e.getMessage(), VelocityLineInserterResultData.INVALID_INSERT_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
@@ -156,13 +156,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceStart.name(), "START");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "END");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertBelow.name(), "BELOW");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validatePropertyKeys("test");
+			velocityResult.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION);
+			assertStringContains(e.getMessage(), VelocityLineInserterResultData.INVALID_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
@@ -176,13 +176,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceStart.name(), "START");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "END");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertAbove.name(), "ABOVE");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validatePropertyKeys("test");
+			velocityResult.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.INVALID_MIXED_CONFIGURATION);
+			assertStringContains(e.getMessage(), VelocityLineInserterResultData.INVALID_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
@@ -195,13 +195,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		buildUpGeneratorResultData = buildGeneratorResultData();
 		buildUpGeneratorResultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertAbove.name(), "ABOVE");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validatePropertyKeys("test");
+			velocityResult.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
+			assertStringContains(e.getMessage(), VelocityLineInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
@@ -213,13 +213,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		buildUpGeneratorResultData = buildGeneratorResultData();
 		buildUpGeneratorResultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.InsertBelow.name(), "Below");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validatePropertyKeys("test");
+			velocityResult.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
+			assertStringContains(e.getMessage(), VelocityLineInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");
@@ -232,13 +232,13 @@ public class BuildUpVelocityInserterResultDataUnitTest {
 		buildUpGeneratorResultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceStart.name(), "ReplaceStart");
 		buildUpGeneratorResultData.addProperty(KnownInserterPropertyNames.ReplaceEnd.name(), "ReplaceEnd");
-		velocityInserterResultData = new BuildUpVelocityInserterResultData(buildUpGeneratorResultData);
+		velocityResult = new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
 		// call functionality under test
 		try {
-			velocityInserterResultData.validatePropertyKeys("test");
+			velocityResult.validatePropertyKeys("test");
 		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), BuildUpVelocityInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
+			assertStringContains(e.getMessage(), VelocityLineInserterResultData.CREATE_NEW_MIXED_CONFIGURATION);
 			return;
 		}
 		fail("Expected exception not thrown!");

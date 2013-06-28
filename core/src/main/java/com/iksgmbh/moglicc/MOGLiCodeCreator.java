@@ -314,7 +314,7 @@ public class MOGLiCodeCreator {
 	private int countTotalNumberOfGenerations() {
 		int counter = 0;
 		if (plugins != null && plugins.size() > 0) {
-			final List<Generator> generators = plugins.get(0).getMOGLiInfrastructure().getPluginsOfType(Generator.class);
+			final List<Generator> generators = plugins.get(0).getInfrastructure().getPluginsOfType(Generator.class);
 			for (final Generator generator : generators) {
 				counter += generator.getNumberOfGenerations();
 			}
@@ -325,7 +325,7 @@ public class MOGLiCodeCreator {
 	private int countTotalNumberOfArtefacts() {
 		int counter = 0;
 		if (plugins != null && plugins.size() > 0) {
-			final List<Generator> generators = plugins.get(0).getMOGLiInfrastructure().getPluginsOfType(Generator.class);
+			final List<Generator> generators = plugins.get(0).getInfrastructure().getPluginsOfType(Generator.class);
 			for (final Generator generator : generators) {
 				counter += generator.getNumberOfArtefacts();
 			}
@@ -338,28 +338,28 @@ public class MOGLiCodeCreator {
 			return;
 		}
 
-		final List<Generator> generators = plugins.get(0).getMOGLiInfrastructure().getPluginsOfType(Generator.class);
-		final StringBuffer report = new StringBuffer("*******************************   R E S U L T   ******************************* ");
+		final List<Generator> generators = plugins.get(0).getInfrastructure().getPluginsOfType(Generator.class);
+		final StringBuffer report = new StringBuffer("************************************   R E S U L T   *****************************************");
 
 		report.append(FileUtil.getSystemLineSeparator());
 		report.append(FileUtil.getSystemLineSeparator());
-
 		report.append(mainResultString);
 
-		report.append(FileUtil.getSystemLineSeparator());
-		report.append(FileUtil.getSystemLineSeparator());
-
 		for (final Generator generator : generators) {
+			report.append(FileUtil.getSystemLineSeparator());
+			report.append(FileUtil.getSystemLineSeparator());
+			report.append("----------------------------------------------------------------------------------------------");
+			report.append(FileUtil.getSystemLineSeparator());
 			report.append(generator.getGenerationReport());
-			report.append(FileUtil.getSystemLineSeparator());
-			report.append(FileUtil.getSystemLineSeparator());
-			report.append(FileUtil.getSystemLineSeparator());
 		}
+		report.append(FileUtil.getSystemLineSeparator());
+		report.append(FileUtil.getSystemLineSeparator());
+        report.append("**************************************  E N D  ***********************************************");
 
 		try {
 			FileUtil.createNewFileWithContent(applicationReportFile, report.toString().trim());
 			MOGLiLogUtil.logInfo("Report file created in application root: " + applicationReportFile.getAbsolutePath());
-		
+
 			if (! applicationReportFile.getAbsolutePath().equals(workspaceReportFile.getAbsolutePath())) {
 				FileUtil.createNewFileWithContent(workspaceReportFile, report.toString().trim());
 				MOGLiLogUtil.logInfo("Report file created in workspace: " + workspaceReportFile.getAbsolutePath());
@@ -406,7 +406,7 @@ public class MOGLiCodeCreator {
 	private String getModelName() {
 		String toReturn = "  ";
 		if (plugins != null && plugins.size() > 0) {
-			final List<ModelProvider> modelProviders = plugins.get(0).getMOGLiInfrastructure().getPluginsOfType(ModelProvider.class);
+			final List<ModelProvider> modelProviders = plugins.get(0).getInfrastructure().getPluginsOfType(ModelProvider.class);
 			for (final ModelProvider modelProvider : modelProviders) {
 				toReturn += modelProvider.getModelName() + ", ";  // in case their are more than one modelProviders
 			}
