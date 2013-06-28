@@ -11,12 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector;
-import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.build.helper.MavenExecutor;
 import com.iksgmbh.moglicc.build.helper.MavenExecutor.MavenData;
+import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector;
+import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.build.helper.VersionReplacer;
 import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
+import com.iksgmbh.utils.CmdUtil;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 import com.iksgmbh.utils.ZipUtil;
@@ -119,7 +120,10 @@ public class MOGLiReleaseBuilder {
 		if (MavenExecutor.EXECUTION_OK.equals(result)) {
 			ReleaseFileCollector.doYourJob(createFileCollectionData());
 			buildReleaseZipFile();
-			if (! isTestRun()) copyReleaseToArchive();
+			if (! isTestRun()) {
+				copyReleaseToArchive();
+				tagGitBranch();
+			}
 			VersionReplacer.doYourJob(getVersion(VERSION_TYPE.Release), getVersion(VERSION_TYPE.Next), pomFiles);
 		} else {
 			System.out.println("");
@@ -131,6 +135,20 @@ public class MOGLiReleaseBuilder {
 			toReturn = false;
 		}
 		return toReturn;
+	}
+
+	private void tagGitBranch() {
+		String exeCommand = "git tag -a v" + getVersion(VERSION_TYPE.Release)
+		                    + " -m \"Release " + getVersion(VERSION_TYPE.Release)
+		                    + "\"";
+		System.out.println("Calling command\n" + exeCommand
+				           + "\n in \n" + getGitRepositoryDir().getAbsolutePath());
+
+		System.out.println(CmdUtil.execWindowCommand(getGitRepositoryDir(), exeCommand, true));
+	}
+
+	private File getGitRepositoryDir() {
+		return new File(USER_DIR).getParentFile();
 	}
 
 	private boolean isTestRun() {
