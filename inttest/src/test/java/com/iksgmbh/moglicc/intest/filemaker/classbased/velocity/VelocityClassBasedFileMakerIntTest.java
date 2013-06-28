@@ -26,14 +26,14 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		velocityClassBasedFileMakerStarter.doYourJob();
 
 		// verify test result
-		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBean");
 		assertFileDoesNotExist(file);
 		final String generationReport = velocityClassBasedFileMakerStarter.getGenerationReport();
 		assertStringEquals("generationReport", velocityClassBasedFileMakerStarter.getId() + " have had nothing to do. " +
 				                               "6 artifacts, but no class in model file found.", generationReport);
 	}
-	
+
 	@Test
 	public void createsJavaBeanMiscJavaFile() throws MOGLiPluginException {
 		// prepare test
@@ -43,7 +43,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		velocityClassBasedFileMakerStarter.doYourJob();
 
 		// verify test result
-		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBean/Misc.java");
 		assertFileExists(file);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedMisc.java");
@@ -56,7 +56,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final String artefactName = "TestArtefact";
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
-		final File artefactTemplateDir = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File artefactTemplateDir = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(),
 				artefactName);
 		artefactTemplateDir.mkdirs();
 		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
@@ -68,7 +68,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		velocityClassBasedFileMakerStarter.doYourJob();
 
 		// verify test result
-		final File artefactTargetDir = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginOutputDir(),
+		final File artefactTargetDir = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginOutputDir(),
 				artefactName);
 		assertFileDoesNotExist(artefactTargetDir);
 
@@ -89,15 +89,15 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 	@Test
 	public void createsResultFileWithUmlauts() throws MOGLiPluginException, IOException {
 		// prepare test
-		final File defaultModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File defaultModelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
                                                StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		defaultModelFile.delete();
 		assertFileDoesNotExist(defaultModelFile);
-		final File testPropertiesFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File testPropertiesFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
                                                  StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 		testPropertiesFile.delete();
 		assertFileDoesNotExist(testPropertiesFile);
-		final File testModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File testModelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
 				                            "Umlauts.txt");
 		MOGLiFileUtil.createNewFileWithContent(testModelFile, "model DemoModel" + FileUtil.getSystemLineSeparator() +
 				                                              "metainfo umlauts ßüäöÜÄÖ" + FileUtil.getSystemLineSeparator() +
@@ -106,7 +106,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 
 		assertFileExists(testModelFile);
 
-		File inputDir = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir();
+		File inputDir = velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir();
 		FileUtil.deleteDirWithContent(inputDir);
 		assertFileDoesNotExist(inputDir);
 		inputDir = new File(inputDir, "Test");
@@ -147,7 +147,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 	protected File prepareOutputEncodingFormatTest() throws MOGLiPluginException {
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
-		final File generatorPluginInputDir = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir();
+		final File generatorPluginInputDir = velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir();
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);
 		final File targetDir = new File(generatorPluginInputDir, "myNewArtefact");
 		targetDir.mkdirs();
@@ -191,19 +191,19 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 	public void readMetaInfoValidationFileContainingNonASCIIChars() throws Exception {
 		// prepare test
 		final File testValidationFile = getTestFile("MetaInfoWithNonASCIIChars.validation");
-		final File f = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+		final File f = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
 		FileUtil.copyBinaryFile(testValidationFile, f);
-		
+
 		// call functionality under test
 		standardModelProviderStarter.doYourJob();
 
-		// verified if no exception was thrown	
+		// verified if no exception was thrown
 	}
 
 	@Test
 	public void skipsTargetFileCreationWhenConfiguredSoInTemplateProperties() throws MOGLiPluginException, IOException {
 		final String modelName = "SkipTestModel";
-		
+
 		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator() +
                 "class de.Test1" + FileUtil.getSystemLineSeparator() +
                 "  metainfo nonPersistent true" + FileUtil.getSystemLineSeparator() +
@@ -213,14 +213,14 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
                                            "@TargetFileName ${classDescriptor.simpleName}.java" + FileUtil.getSystemLineSeparator() +
                                            "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
                                            "@SkipGeneration $classDescriptor.doesHaveAnyMetaInfosWithName(\"nonPersistent\")";
-		
+
 		executeSkipGenerationTest(modelName, modelFileContent, templateFileContent);
 	}
 
 	@Test
 	public void skipsTargetFileCreationWhenConfiguredSoInTemplatePropertiesUsingNotConstruction() throws MOGLiPluginException, IOException {
 		final String modelName = "SkipFileTestModel";
-		
+
 		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator() +
                 "class de.Test1" + FileUtil.getSystemLineSeparator() +
                 "  metainfo databaseRelevant false" + FileUtil.getSystemLineSeparator() +
@@ -231,29 +231,29 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
                                            "@TargetFileName ${classDescriptor.simpleName}.java" + FileUtil.getSystemLineSeparator() +
                                            "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
                                            "@SkipGeneration NOT $classDescriptor.getMetaInfoValueFor(\"databaseRelevant\")";
-		
-		executeSkipGenerationTest(modelName, modelFileContent, templateFileContent);		
+
+		executeSkipGenerationTest(modelName, modelFileContent, templateFileContent);
 	}
-	
-	private void executeSkipGenerationTest(final String modelName, final String modelFileContent, 
-			                          final String templateFileContent) throws MOGLiPluginException, IOException 
+
+	private void executeSkipGenerationTest(final String modelName, final String modelFileContent,
+			                          final String templateFileContent) throws MOGLiPluginException, IOException
 	{
 		// prepare test
-		final File defaultModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File defaultModelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
                                                StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		defaultModelFile.delete();
 		assertFileDoesNotExist(defaultModelFile);
-		final File testPropertiesFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File testPropertiesFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
                                                  StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 		testPropertiesFile.delete();
 		assertFileDoesNotExist(testPropertiesFile);
-		final File testModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File testModelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
 				                            modelName + ".txt");
 		MOGLiFileUtil.createNewFileWithContent(testModelFile, modelFileContent);
 		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "modelfile=" + modelName + ".txt");
 		assertFileExists(testModelFile);
 
-		File inputDir = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir();
+		File inputDir = velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir();
 		FileUtil.deleteDirWithContent(inputDir);
 		assertFileDoesNotExist(inputDir);
 		inputDir = new File(inputDir, "Test");
@@ -271,12 +271,60 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		assertFileDoesNotExist(resultFile1);
 		final File resultFile2 = new File(applicationRootDir, "example/Test2.java");
 		assertFileExists(resultFile2);
-		
+
 		assertStringDoesNotContain(velocityClassBasedFileMakerStarter.getGenerationReport(), "Test1.java");
 		assertStringContains(velocityClassBasedFileMakerStarter.getGenerationReport(), "Test2.java");
-		
-		final String logfileContent = FileUtil.getFileContent(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginLogFile());
+
+		final String logfileContent = FileUtil.getFileContent(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginLogFile());
 		assertStringContains(logfileContent, "Test1.java");
 		assertStringDoesNotContain(logfileContent, "Test2.java");
 	}
+
+	@Test
+	public void acceptsTwoModelsAsValid() throws Exception {
+		// prepare test
+		final File templateFile = prepareOutputEncodingFormatTest();
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
+                "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
+                "@NameOfValidModel anotherValidModel" + FileUtil.getSystemLineSeparator() +
+                "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example");
+
+		// ##############  Test 1: execute with model 1  ###############
+		final File resultFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getApplicationRootDir(),
+		                                 "example/Umlauts.txt");
+		assertFileDoesNotExist(resultFile);
+
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// verify test result
+		assertFileExists(resultFile);
+
+		// ##############  Test 2: execute with model 2  ###############
+		FileUtil.replaceLinesInTextFile(modelFile, "MOGLiCC_JavaBeanModel", "anotherValidModel");
+		resultFile.delete();
+		assertFileDoesNotExist(resultFile);
+
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// verify test result
+		assertFileExists(resultFile);
+
+		// ##############  Test 3: execute with invalid model  ###############
+		FileUtil.replaceLinesInTextFile(modelFile, "anotherValidModel", "anInvalidModel");
+		resultFile.delete();
+		assertFileDoesNotExist(resultFile);
+
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// verify test result
+		assertFileDoesNotExist(resultFile);
+	}
+
 }

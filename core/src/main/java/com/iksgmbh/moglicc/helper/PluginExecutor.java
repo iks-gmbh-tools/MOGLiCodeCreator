@@ -104,7 +104,7 @@ public class PluginExecutor {
 	
 	private void setInfrastructureToPlugins(final List<MOGLiPlugin> sortedPluginsToExecute) {
 		for (final MOGLiPlugin plugin : sortedPluginsToExecute) {
-			plugin.setMOGLiInfrastructure(getInfrastructureFor(plugin.getId()));
+			plugin.setInfrastructure(getInfrastructureFor(plugin.getId()));
 		}
 	}
 	
@@ -162,7 +162,7 @@ public class PluginExecutor {
 				MOGLiLogUtil.logInfo(plugin.getId() + " Done!");
 			} catch (MOGLiPluginException e) {
 				infoMessage = e.getPluginErrorMessage();
-				plugin.getMOGLiInfrastructure().getPluginLogger().logError(infoMessage);
+				plugin.getInfrastructure().getPluginLogger().logError(infoMessage);
 			} catch (Throwable t) {
 				final Throwable rootCause = ExceptionUtils.getRootCause(t);
 				if (rootCause == null) {
@@ -177,7 +177,7 @@ public class PluginExecutor {
 	}
 
 	private void unpackDefaultInputDataIfNecessary(final MOGLiPlugin plugin) throws MOGLiPluginException {
-		final MOGLiInfrastructure infrastructure = (MOGLiInfrastructure) plugin.getMOGLiInfrastructure();
+		final MOGLiInfrastructure infrastructure = (MOGLiInfrastructure) plugin.getInfrastructure();
 		if (! infrastructure.getPluginInputDir().exists()) {
 			boolean created = plugin.unpackDefaultInputData();
 			if (created) {
@@ -197,7 +197,7 @@ public class PluginExecutor {
 	}
 
 	private void unpackHelpDataIfNecessary(final MOGLiPlugin plugin) throws MOGLiPluginException {
-		final MOGLiInfrastructure infrastructure = (MOGLiInfrastructure) plugin.getMOGLiInfrastructure();
+		final MOGLiInfrastructure infrastructure = (MOGLiInfrastructure) plugin.getInfrastructure();
 		if (! infrastructure.getPluginHelpDir().exists()) {
 			boolean created = plugin.unpackPluginHelpFiles();
 			if (created) {

@@ -48,7 +48,7 @@ public class MetaInfoValidationCondition {
 
 			}
 		}
-		return false; // otherMetaInfo is NOT present
+		return false; // otherMetaInfo is NOT present with otherMetaInfoValue
 	}
 
 	private boolean checkForValuePresence(final MetaInfo metaInfo) {

@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.treebuilder.modelbased.velocity.test;
+package com.iksgmbh.moglicc.treebuilder.modelbased.velocity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 		velocityEngineProviderDummy = new VelocityEngineProviderDummy();
 		infrastructure = createInfrastructure();
 		treeBuilderGenerator = new VelocityModelBasedTreeBuilderStarter();
-		treeBuilderGenerator.setMOGLiInfrastructure(infrastructure);
+		treeBuilderGenerator.setInfrastructure(infrastructure);
 		generatorPluginInputDir = new File(applicationInputDir, VelocityModelBasedTreeBuilderStarter.PLUGIN_ID);
 
 		if (isFirstTime) {
@@ -134,11 +134,11 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 		}
 
 		@Override
-		public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
+		public void setInfrastructure(InfrastructureService infrastructure) {
 		}
 
 		@Override
-		public InfrastructureService getMOGLiInfrastructure() {
+		public InfrastructureService getInfrastructure() {
 			return null;
 		}
 

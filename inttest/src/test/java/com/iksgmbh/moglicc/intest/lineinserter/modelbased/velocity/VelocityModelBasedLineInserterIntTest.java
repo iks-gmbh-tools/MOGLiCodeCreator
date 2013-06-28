@@ -31,7 +31,7 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 		velocityModelBasedLineInserterStarter.doYourJob();
 
 		// verify test result in plugin directory
-		final InfrastructureService infrastructure = velocityModelBasedLineInserterStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = velocityModelBasedLineInserterStarter.getInfrastructure();
 		File file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
 		assertFileExists(file);
 		file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
@@ -53,7 +53,7 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 		final String artefactName = "TestArtefact";
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
-		final File artefactTemplateDir = new File(velocityModelBasedLineInserterStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File artefactTemplateDir = new File(velocityModelBasedLineInserterStarter.getInfrastructure().getPluginInputDir(),
 				artefactName);
 		artefactTemplateDir.mkdirs();
 		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
@@ -68,7 +68,7 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 		velocityModelBasedLineInserterStarter.doYourJob();
 
 		// verify test result
-		final File artefactTargetDir = new File(velocityModelBasedLineInserterStarter.getMOGLiInfrastructure().getPluginOutputDir(),
+		final File artefactTargetDir = new File(velocityModelBasedLineInserterStarter.getInfrastructure().getPluginOutputDir(),
 				artefactName);
 		assertFileDoesNotExist(artefactTargetDir);
 
@@ -116,7 +116,7 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 
 		}
 
-		final File templateDir = new File(velocityModelBasedLineInserterStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File templateDir = new File(velocityModelBasedLineInserterStarter.getInfrastructure().getPluginInputDir(),
 				                          "TestArtifact");
 		templateDir.mkdirs();
 		final File mainTemplate1 = new File(templateDir, "Main1.tpl");
@@ -159,7 +159,7 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 		final String artefactName = "TestArtefact";
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
-		final File artefactTemplateDir = new File(velocityModelBasedLineInserterStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File artefactTemplateDir = new File(velocityModelBasedLineInserterStarter.getInfrastructure().getPluginInputDir(),
 				artefactName);
 		artefactTemplateDir.mkdirs();
 		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
@@ -213,15 +213,15 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 
 	private void prepareModelFile(final String modelName, final String modelFileContent) throws MOGLiPluginException, IOException
 	{
-		final File defaultModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File defaultModelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
 				                               StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		defaultModelFile.delete();
 		assertFileDoesNotExist(defaultModelFile);
-		final File testPropertiesFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		final File testPropertiesFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
 				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 		testPropertiesFile.delete();
 		assertFileDoesNotExist(testPropertiesFile); // asserts preparation is correct
-		final File testModelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), modelName
+		final File testModelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(), modelName
 				                            + ".txt");
 		MOGLiFileUtil.createNewFileWithContent(testModelFile, modelFileContent);
 		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "modelfile=" + modelName + ".txt");
@@ -231,7 +231,7 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 
 	private void prepareTemplateFile(final String templateFileContent) throws MOGLiPluginException, IOException
 	{
-		File inputDir = velocityModelBasedLineInserterStarter.getMOGLiInfrastructure().getPluginInputDir();
+		File inputDir = velocityModelBasedLineInserterStarter.getInfrastructure().getPluginInputDir();
 		FileUtil.deleteDirWithContent(inputDir);
 		assertFileDoesNotExist(inputDir);
 		inputDir = new File(inputDir, "Test");

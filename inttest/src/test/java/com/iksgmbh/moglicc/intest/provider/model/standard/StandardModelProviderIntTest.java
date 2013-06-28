@@ -26,7 +26,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		standardModelProviderStarter.doYourJob();
 
 		// verify test result
-		final InfrastructureService infrastructure = standardModelProviderStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = standardModelProviderStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		assertFileExists(file);
 		final File expectedFile = getTestFile("ExpectedModelStatistics.txt");
@@ -36,8 +36,8 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void filtersMetaInfoValidatorVendorsByNameOfModel() throws MOGLiPluginException {
 		// prepare test
-		setMetaInfoValidationFile(velocityClassBasedFileMakerStarter, "MetaInfoValidatorsForDifferentModels.txt");
-		setMetaInfoValidationFile(velocityModelBasedLineInserterStarter, "MetaInfoValidatorsForDifferentModels.txt");
+		setMetaInfoValidationFile(velocityModelBasedLineInserterStarter, "metainfovalidation/MetaInfoValidatorsForDifferentModels.txt");
+		setMetaInfoValidationFile(velocityClassBasedFileMakerStarter, "metainfovalidation/MetaInfoValidatorsForDifferentModels.txt");
 		standardModelProviderStarter.doYourJob();
 
 		// call functionality under test
@@ -59,14 +59,14 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void createsStatisticsFileWithMetaInfoNamesThatContainSpaces() throws MOGLiPluginException {
 		// prepare test
-		setModelFile("ModelFileWithMetaInfosContainingSpacesInNames.txt");
-		setMetaInfoValidationFile(velocityClassBasedFileMakerStarter, "MetaInfoValidatoresContainingSpacesInNames.txt");
+		setModelFile("modelfiles/ModelFileWithMetaInfosContainingSpacesInNames.txt");
+		setMetaInfoValidationFile(velocityClassBasedFileMakerStarter, "metainfovalidation/MetaInfoValidatoresContainingSpacesInNames.txt");
 
 		// call functionality under test
 		standardModelProviderStarter.doYourJob();
 
 		// verify test result
-		final InfrastructureService infrastructure = standardModelProviderStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = standardModelProviderStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		assertFileExists(file);
 		final File expectedFile = new File(getProjectTestResourcesDir(),
@@ -78,7 +78,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	public void readsModelFileWithCustomizedBraceSymbolForModelFileParsing() throws MOGLiPluginException {
 		// prepare test
 		final String newModelFileName = "CustomizedBraceSymbolTestModel.txt";
-		createModelFile("ModelFileWithMetaInfosContainingDoubleQoutesInNames.txt", newModelFileName);
+		createModelFile("modelfiles/ModelFileWithMetaInfosContainingDoubleQoutesInNames.txt", newModelFileName);
 		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "modelfile=" + newModelFileName +
 				                                                    FileUtil.getSystemLineSeparator() +
 				                                                    "BraceSymbolForModelFileParsing=*");
@@ -88,7 +88,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		standardModelProviderStarter.doYourJob();
 
 		// verify test result
-		final InfrastructureService infrastructure = standardModelProviderStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = standardModelProviderStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		assertFileExists(file);
 		final File expectedFile = new File(getProjectTestResourcesDir(),
@@ -102,7 +102,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		standardModelProviderStarter.doYourJob();
 
 		// verify test result
-		final File statisticsFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginOutputDir(),
+		final File statisticsFile = new File(standardModelProviderStarter.getInfrastructure().getPluginOutputDir(),
 				                                StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		assertFileExists(statisticsFile);
 		assertFileDoesNotContainEntry(statisticsFile, "WARNING:");
@@ -111,20 +111,20 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesTestModelByRule_MetaInfo_Nullable_must_exist_if_MetaInfo_MinOccurs_does_not_exist() throws Exception {
 		// prepare test
-		final File logFile = standardModelProviderStarter.getMOGLiInfrastructure().getPluginLogFile();
+		final File logFile = standardModelProviderStarter.getInfrastructure().getPluginLogFile();
 		logFile.delete();
 
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
+		File modelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse"
 												          + FileUtil.getSystemLineSeparator() +
 														  "MetaInfo MinOccurs 0");
 
-		final File conditionFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), "condition.txt");
+		final File conditionFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), "condition.txt");
 		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| MinOccurs |does not exist.|" );   // false because MinOccurs does exist
 
-        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
 				                                              "classes |in| TestModel |if| condition.txt |is true.|" );  // should fail - Nullable does not exist
 
@@ -144,7 +144,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		standardModelProviderStarter.doYourJob();
 
 		// verify test result
-		final String expected = "MetaInfo 'Nullable' was not found for class descriptor 'Testklasse' in model 'TestModel'";
+		final String expected = "MetaInfo 'Nullable' was not found for class 'Testklasse' in model 'TestModel'";
 		assertFileContainsEntry(logFile, expected);
 
 		// TEST 3: validation ok - condition is met and occurence for Nullable is successful validated
@@ -165,22 +165,22 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesTestModelByRule_MetaInfo_Nullable_must_exist_if_MetaInfos_DBType_and_DBLength_exist() throws Exception {
 		// prepare test
-		final File logFile = standardModelProviderStarter.getMOGLiInfrastructure().getPluginLogFile();
+		final File logFile = standardModelProviderStarter.getInfrastructure().getPluginLogFile();
 		logFile.delete();
 
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
+		File modelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse"
 												          + FileUtil.getSystemLineSeparator() +
 												          "MetaInfo DBLength 5");
 
-		final File conditionFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), "condition.txt");
+		final File conditionFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), "condition.txt");
 		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| DBType |exists.|"
 		                                                      + FileUtil.getSystemLineSeparator() +
                                                               "|if MetaInfo| DBLength |exists.|");  // conditions fail - first condition not met
 
-        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
 				                                              "classes |in| TestModel |if| condition.txt |is true.|" );  // should fail - Nullable does not exist
 
@@ -203,7 +203,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		standardModelProviderStarter.doYourJob();
 
 		// verify test result
-		String expected = "MetaInfo 'Nullable' was not found for class descriptor 'Testklasse' in model 'TestModel'";
+		String expected = "MetaInfo 'Nullable' was not found for class 'Testklasse' in model 'TestModel'";
 		assertFileContainsEntry(logFile, expected);
 
 		// TEST 3: validation successful because occurrence is validated successful
@@ -228,22 +228,22 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesTestModelByRule_MetaInfo_Nullable_must_exist_if_MetaInfos_DBType_OR_DBLength_exist() throws Exception {
 		// prepare test
-		final File logFile = standardModelProviderStarter.getMOGLiInfrastructure().getPluginLogFile();
+		final File logFile = standardModelProviderStarter.getInfrastructure().getPluginLogFile();
 		logFile.delete();
 
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
+		File modelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse");
 
-		final File conditionFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), "condition.txt");
+		final File conditionFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), "condition.txt");
 		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| DBType |exists.|"
 				                                              + FileUtil.getSystemLineSeparator() +
 				                                              "OR"
 				                                              + FileUtil.getSystemLineSeparator() +
 		                                                      "|if MetaInfo| DBLength |exists.|");  // conditions fails - both return false
 
-        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
 				                                              "classes |in| TestModel |if| condition.txt |is true.|"); // should fail - Nullable does not exist
 
@@ -266,7 +266,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		standardModelProviderStarter.doYourJob();
 
 		// call functionality under test
-		String expected = "MetaInfo 'Nullable' was not found for class descriptor 'Testklasse' in model 'TestModel'";
+		String expected = "MetaInfo 'Nullable' was not found for class 'Testklasse' in model 'TestModel'";
 		assertFileContainsEntry(logFile, expected);
 
 		// TEST 3: validation ok - condition is met and occurence for Nullable is successful validated
@@ -288,10 +288,10 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesTestModelByRule_MetaInfo_Nullable_must_exist_with_value_true_if_MetaInfos_MinOccurs_has_value_0() throws Exception {
 		// prepare test
-		final File logFile = standardModelProviderStarter.getMOGLiInfrastructure().getPluginLogFile();
+		final File logFile = standardModelProviderStarter.getInfrastructure().getPluginLogFile();
 		logFile.delete();
 
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
+		File modelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(), StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse "
@@ -300,10 +300,10 @@ public class StandardModelProviderIntTest extends IntTestParent {
 												          + FileUtil.getSystemLineSeparator() +
 												          "MetaInfo MinOccurs 1");
 
-		final File conditionFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), "condition.txt");
+		final File conditionFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), "condition.txt");
 		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| MinOccurs |with value| 0 |exists.|"); // condition fails due to wrong value of MinOccurs
 
-        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |with value| true |is valid to occur| 1 |time(s) for| " +
 				                                              "classes |in| TestModel |if| condition.txt |is true.|");  // should fails due to wrong value of Nullable
 
@@ -327,7 +327,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		standardModelProviderStarter.doYourJob();
 
 		// call functionality under test
-		String expected = "MetaInfo 'Nullable' was not found for class descriptor 'Testklasse' in model 'TestModel'";
+		String expected = "MetaInfo 'Nullable' was not found for class 'Testklasse' in model 'TestModel'";
 		assertFileContainsEntry(logFile, expected);
 
 		// TEST 3: validation ok - condition is met and occurence for Nullable is successful validated
@@ -349,7 +349,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void validatesModelWithErrorBecauseForbiddenMetainfoExist() throws Exception {
 		// prepare test
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		File modelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
 				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
@@ -358,7 +358,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 												          + FileUtil.getSystemLineSeparator() +
 												          "MetaInfo Nullable false");
 
-        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(),
+        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(),
         		                            MetaInfoValidationUtil.FILENAME_VALIDATION);
 
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |with value| false |is valid to occur| 0 |time(s) for| " +
@@ -368,22 +368,22 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		standardModelProviderStarter.doYourJob();
 
 		// call functionality under test
-		final File logFile = standardModelProviderStarter.getMOGLiInfrastructure().getPluginLogFile();
-		String expected = "MetaInfo 'Nullablewith value 'false'' was found too many times (expected: 0, actual: 1) for class descriptor 'Testklasse' in model 'TestModel'";
+		final File logFile = standardModelProviderStarter.getInfrastructure().getPluginLogFile();
+		String expected = "MetaInfo 'Nullablewith value 'false'' was found too many times (expected: 0, actual: 1) for class 'Testklasse' in model 'TestModel'";
 		assertFileContainsEntry(logFile, expected);
 	}
 
 	@Test
 	public void doesNotValidateBecauseHierarcyLevelMismatch() {
 		// prepare test
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		File modelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
 				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse ");
 
-        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(),
+        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(),
         		                            MetaInfoValidationUtil.FILENAME_VALIDATION);
 
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
@@ -400,14 +400,14 @@ public class StandardModelProviderIntTest extends IntTestParent {
 	@Test
 	public void doesNotValidateBecauseModelMismatch() throws Exception {
 		// prepare test
-		File modelFile = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(),
+		File modelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
 				                  StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 
 		MOGLiFileUtil.createNewFileWithContent(modelFile, "model TestModel"
 				                                          + FileUtil.getSystemLineSeparator() +
 				                                          "class de.Testklasse ");
 
-        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir(),
+        final File validatorFile = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(),
         		                            MetaInfoValidationUtil.FILENAME_VALIDATION);
 
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| Nullable |is valid to occur| 1 |time(s) for| " +
@@ -426,7 +426,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 		// prepare test
 		final String testModelFileName = "TestModelWithNonASCIIChars.txt";
 		final File testModelFile = getTestFile(testModelFileName);
-		final File f = new File(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir(), testModelFileName);
+		final File f = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(), testModelFileName);
 		FileUtil.copyBinaryFile(testModelFile, f);
 		MOGLiFileUtil.createNewFileWithContent(modelPropertiesFile, "modelfile=" + testModelFileName);
 
@@ -437,7 +437,7 @@ public class StandardModelProviderIntTest extends IntTestParent {
 			e.printStackTrace();
 			fail("No exception expected");
 		} finally {
-			FileUtil.deleteDirWithContent(standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir());
+			FileUtil.deleteDirWithContent(standardModelProviderStarter.getInfrastructure().getPluginInputDir());
 		}
 	}
 }

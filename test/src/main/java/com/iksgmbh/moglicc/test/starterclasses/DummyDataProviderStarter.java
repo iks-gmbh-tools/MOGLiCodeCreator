@@ -27,7 +27,7 @@ public class DummyDataProviderStarter implements MOGLiPlugin {
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
+	public void setInfrastructure(InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -45,7 +45,7 @@ public class DummyDataProviderStarter implements MOGLiPlugin {
 
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
 

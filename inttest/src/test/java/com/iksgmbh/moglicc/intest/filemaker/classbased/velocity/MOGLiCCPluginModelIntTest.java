@@ -20,7 +20,7 @@ public class MOGLiCCPluginModelIntTest extends IntTestParent {
 		velocityClassBasedFileMakerStarter.doYourJob();
 
 		// verify test result
-		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_NewPluginModel/NewGeneratorStarter.java");
 		assertFileExists(file);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "MOGLiCCPlugin/ExpectedNewGeneratorStarter.java");
@@ -38,7 +38,7 @@ public class MOGLiCCPluginModelIntTest extends IntTestParent {
 		velocityClassBasedFileMakerStarter.doYourJob();
 
 		// verify test result
-		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_NewPluginModel/NewEngineProviderStarter.java");
 		assertFileExists(file);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "MOGLiCCPlugin/ExpectedNewEngineProviderStarter.java");
@@ -55,7 +55,7 @@ public class MOGLiCCPluginModelIntTest extends IntTestParent {
 		velocityClassBasedFileMakerStarter.doYourJob();
 
 		// verify test result
-		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure();
+		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_NewPluginModel/NewModelProviderStarter.java");
 		assertFileExists(file);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "MOGLiCCPlugin/ExpectedNewModelProviderStarter.java");

@@ -50,7 +50,7 @@ public class VelocityModelBasedLineInserterTestParent extends AbstractMOGLiTest 
 
 		infrastructure = createInfrastructure();
 		velocityModelBasedLineInserter = new VelocityModelBasedLineInserterStarter();
-		velocityModelBasedLineInserter.setMOGLiInfrastructure(infrastructure);
+		velocityModelBasedLineInserter.setInfrastructure(infrastructure);
 		generatorPluginInputDir = new File(applicationInputDir, VelocityModelBasedLineInserterStarter.PLUGIN_ID);
 
 		if (isFirstTime) {

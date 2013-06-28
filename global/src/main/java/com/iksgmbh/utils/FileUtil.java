@@ -11,6 +11,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.iksgmbh.helper.IOEncodingHelper;
 
 public class FileUtil {
@@ -128,7 +130,7 @@ public class FileUtil {
 		createNewFileWithContent(file, transformStringListToString(content));
 	}
 
-	public static void createNewFileWithContent(final IOEncodingHelper encodingHelper, 
+	public static void createNewFileWithContent(final IOEncodingHelper encodingHelper,
 			                                    final File file, final List<String> content) throws Exception {
 		createNewFileWithContent(encodingHelper, file, transformStringListToString(content));
 	}
@@ -389,6 +391,45 @@ public class FileUtil {
 			}
 		}
 		return toReturn;
+	}
+
+	/**
+	 * Searches each line for "toReplace" and replaces in each line all occurrences
+	 * by the replavement.
+	 * @param textFile
+	 * @param toReplace
+	 * @param replacement
+	 */
+	public static void replaceLinesInTextFile(final File textFile, final String toReplace, final String replacement) {
+		try {
+			final List<String> oldFileContent = getFileContentAsList(textFile);
+			final List<String> newFileContent = new ArrayList<String>();
+
+			for (final String line : oldFileContent) {
+				newFileContent.add(StringUtils.replace(line, toReplace, replacement));
+			}
+
+			createNewFileWithContent(textFile, newFileContent);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @param folder
+	 * @return true if folder contains no subdirectory
+	 */
+	public static boolean isTip(final File folder) {
+		if (folder.isFile()) {
+			return false;
+		}
+		final File[] children = folder.listFiles();
+		for (final File file : children) {
+			if (file.isDirectory()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

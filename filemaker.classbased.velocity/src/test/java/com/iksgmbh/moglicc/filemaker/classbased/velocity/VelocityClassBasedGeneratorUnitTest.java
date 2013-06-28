@@ -385,14 +385,14 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	@Test
 	public void returnsMetaInfoValidatorList() throws MOGLiPluginException {
 		// prepare test
-		final File conditionFile = new File(velocityClassBasedGenerator.getMOGLiInfrastructure().getPluginInputDir(), "condition.txt");
+		final File conditionFile = new File(velocityClassBasedGenerator.getInfrastructure().getPluginInputDir(), "condition.txt");
 		MOGLiFileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| The \"other\" MetaInfo Name1 |exists.|"
 													          + FileUtil.getSystemLineSeparator() +
 													          "|if MetaInfo| The \"other\" MetaInfo Name2 |does not exist.|"
 													          + FileUtil.getSystemLineSeparator() +
 													          "|if MetaInfo| The \"other\" MetaInfo Name3 |with value| my value |does not exist.|" );
 
-        final File validatorFile = new File(velocityClassBasedGenerator.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+        final File validatorFile = new File(velocityClassBasedGenerator.getInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|"
 				                                             + FileUtil.getSystemLineSeparator() +
 				                                             "|MetaInfo| MetaInfoTestName2 |is| mandatory |for| attributes |in| ModelName |.|"
@@ -412,7 +412,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	@Test
 	public void throwsExceptionIfConditionFileWasNotFound() throws MOGLiPluginException {
 		// prepare test
-        final File validatorFile = new File(velocityClassBasedGenerator.getMOGLiInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
+        final File validatorFile = new File(velocityClassBasedGenerator.getInfrastructure().getPluginInputDir(), MetaInfoValidationUtil.FILENAME_VALIDATION);
 		MOGLiFileUtil.createNewFileWithContent(validatorFile, "|MetaInfo| MetaInfoTestName1 |is| optional |for| attributes |in| ModelName |.|"
 				                                             + FileUtil.getSystemLineSeparator() +
 				                                             "|MetaInfo| MetaInfoTestName4 |is valid to occur| 1-2 |time(s) for| attributes |in| ModelName |if| notExistingConditionFile.txt |is true.|" );

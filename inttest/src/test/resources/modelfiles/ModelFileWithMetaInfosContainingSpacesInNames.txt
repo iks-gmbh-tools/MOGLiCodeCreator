@@ -2,10 +2,10 @@ model SpaceTestModel
 metainfo "comment note" comment
 
 class com.iksgmbh.moglicc.demo.Person
- metainfo "comment note" comment 
- 
+ metainfo "comment note" comment
+
   attribute Firstname
-    metainfo "Java Type" String 
+    metainfo "Java Type" String
 
   attribute lastname
-    metainfo "Java Type" String 
+    metainfo "Java Type" String

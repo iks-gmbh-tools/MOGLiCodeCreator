@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.treebuilder.modelbased.velocity.test;
+package com.iksgmbh.moglicc.treebuilder.modelbased.velocity;
 
 import java.util.List;
 
@@ -45,11 +45,11 @@ public class VelocityEngineProviderDummy implements ModelBasedEngineProvider {
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(InfrastructureService infrastructure) {
+	public void setInfrastructure(InfrastructureService infrastructure) {
 	}
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return null;
 	}
 

@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.intest.IntTestParent;
@@ -17,7 +18,7 @@ public class MetainfoValidationIntTest extends IntTestParent {
 	@Test
 	public void inserterPluginCausesValidationErrorWhileOtherGeneratorsExecuteSuccessfully() throws Exception {
 		// prepare test
-		final File dir = velocityModelBasedLineInserterStarter.getMOGLiInfrastructure().getPluginInputDir();
+		final File dir = velocityModelBasedLineInserterStarter.getInfrastructure().getPluginInputDir();
 		final File validationFile = new File(dir, MetaInfoValidationUtil.FILENAME_VALIDATION);
 		FileUtil.createNewFileWithContent(validationFile, "|MetaInfo| NotExisting |is| mandatory |for| attributes |in| MOGLiCC_JavaBeanModel |.|");
 
@@ -39,7 +40,7 @@ public class MetainfoValidationIntTest extends IntTestParent {
 	@Test
 	public void forbidMetaInfoByConditionalValidationRuleWithZeroOccurrence() throws Exception {
 		// prepare test
-		final File dir = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir();
+		final File dir = velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir();
 		final File validationFile = new File(dir, MetaInfoValidationUtil.FILENAME_VALIDATION);
 		final File conditionFile = new File(dir, "condition.txt");
 		FileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| JavaType |exists.|");
@@ -70,7 +71,7 @@ public class MetainfoValidationIntTest extends IntTestParent {
 	@Test
 	public void doesNotAllowDoubleOccurrencesForOptionalMetaInfoValidation() throws Exception {
 		// prepare test
-		final File dir = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir();
+		final File dir = velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir();
 		final File validationFile = new File(dir, MetaInfoValidationUtil.FILENAME_VALIDATION);
 		final String validationRule = "|MetaInfo| Single |is| optional |for| classes |in| MOGLiCC_JavaBeanModel |.|";
 		FileUtil.createNewFileWithContent(validationFile, validationRule);
@@ -104,7 +105,7 @@ public class MetainfoValidationIntTest extends IntTestParent {
 	@Test
 	public void doesNotAllowDoubleOccurrencesForMandatoryMetaInfoValidation() throws Exception {
 		// prepare test
-		final File dir = velocityClassBasedFileMakerStarter.getMOGLiInfrastructure().getPluginInputDir();
+		final File dir = velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir();
 		final File validationFile = new File(dir, MetaInfoValidationUtil.FILENAME_VALIDATION);
 		final String validationRule = "|MetaInfo| Single |is| mandatory |for| classes |in| MOGLiCC_JavaBeanModel |.|";
 		FileUtil.createNewFileWithContent(validationFile, validationRule);
@@ -134,5 +135,76 @@ public class MetainfoValidationIntTest extends IntTestParent {
 			assertEquals("Error message", TextConstants.TEXT_MODEL_BREAKS_METAINFO_VALIDATORS, e.getMessage());
 		}
 	}
-	
+
+	@Test
+	public void validatesAttributesForNotHavingACertainMetaInfoIfACertainConditionIsFalse() throws Exception {
+		// prepare test
+		final File dir = velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir();
+		final File validationFile = new File(dir, MetaInfoValidationUtil.FILENAME_VALIDATION);
+		final File testValidatorFile = new File(getProjectTestResourcesDir(), "metainfovalidation/MetaInfoValidatorsForConditionIsFalseTest.txt");
+		final String testValidatorFileContent = FileUtil.getFileContent(testValidatorFile);
+		final String withoutFalseValidatorFileContent = testValidatorFileContent.replace(
+														MetaInfoValidationUtil.FALSE_IDENTIFIER,
+														MetaInfoValidationUtil.TRUE_IDENTIFIER);
+
+		final File conditionFile = new File(dir, "fieldTypeIsNumeric.condition");
+		FileUtil.createNewFileWithContent(conditionFile, "|if MetaInfo| field-type |with value| numeric |exists.|");
+
+		final File testModelfile = new File(getProjectTestResourcesDir(), "modelfiles/ModelFileConditionIsFalseTest.txt");
+		final String modelFileContentWithProblem = FileUtil.getFileContent(testModelfile);
+		final String textToReplace = "metainfo field-type text" + FileUtil.getSystemLineSeparator()
+		                             + "    metainfo numeric-format Constants.FORMAT_NUMERIC";
+		final String correctedModelFileContent = StringUtils.replace(modelFileContentWithProblem, 
+				                                                     textToReplace, "metainfo field-type text");
+		FileUtil.createNewFileWithContent(modelFile, modelFileContentWithProblem);
+
+		final File logFile = standardModelProviderStarter.getInfrastructure().getPluginLogFile();
+
+		// Test 1: call functionality under test WITH 'condtion is true'
+		FileUtil.createNewFileWithContent(validationFile, withoutFalseValidatorFileContent);
+
+		try {
+			// call functionality under test
+			standardModelProviderStarter.doYourJob();
+			velocityClassBasedFileMakerStarter.doYourJob();
+			fail("Expected exception was not thrown!");
+		} catch (Exception e) {
+			// verify test result
+			assertEquals("Error message", TextConstants.TEXT_MODEL_BREAKS_METAINFO_VALIDATORS, e.getMessage());
+
+			final String expected = "MetaInfo 'numeric-format' was found too many times (expected: 0, actual: 1) " +
+					                "for attribute 'netValue' of class 'Invoice' in model 'ConditionIsFalseTest'";
+			assertFileContainsEntry(logFile, expected);
+		}
+
+		// Test 2: now call functionality under test WITH 'condtion is false'
+		FileUtil.createNewFileWithContent(logFile, ""); // delete existing content
+		FileUtil.createNewFileWithContent(validationFile, testValidatorFileContent);
+
+		try {
+			// call functionality under test
+			standardModelProviderStarter.doYourJob();
+			velocityClassBasedFileMakerStarter.doYourJob();
+			fail("Expected exception was not thrown!");
+		} catch (Exception e) {
+			// verify test result
+			assertEquals("Error message", TextConstants.TEXT_MODEL_BREAKS_METAINFO_VALIDATORS, e.getMessage());
+
+			final String expected = "MetaInfo 'numeric-format' was found too many times (expected: 0, actual: 1) for attribute " +
+					                "'taxId' of class 'Invoice' in model 'ConditionIsFalseTest'";
+			assertFileContainsEntry(logFile, expected);
+		}
+
+		// Test 3: now call functionality under test WITH correct model file
+		FileUtil.createNewFileWithContent(logFile, ""); // delete existing content
+		FileUtil.createNewFileWithContent(modelFile, correctedModelFileContent);
+
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// verify test result -> no exception
+		assertFileContainsNoEntry(logFile, "Warning:");
+	}
+
 }

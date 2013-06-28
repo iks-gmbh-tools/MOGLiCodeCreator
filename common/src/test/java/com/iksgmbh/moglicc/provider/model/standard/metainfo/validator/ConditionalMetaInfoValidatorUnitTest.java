@@ -33,7 +33,6 @@ public class ConditionalMetaInfoValidatorUnitTest {
 		final MetaInfoValidationData metaInfoValidationData = new  MetaInfoValidationData().withMetaInfoName("metaInfoName")
 				                                                                           .withOccurrence("1") // mandatory
 				                                                                           .addCondition(condition);
-
 		// call functionality under test
 		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
 
@@ -200,28 +199,41 @@ public class ConditionalMetaInfoValidatorUnitTest {
 		assertFalse("Validation failed!", result); // false because condition is true and notExistingMetaInfo does not exist
 	}
 
+	protected MetaInfoValidationData getNullableValidationDataWithConditionMinOccursEqualsZero(final String occurrence) {
+		return getNullableValidationDataWithConditionMinOccursEqualsZero(occurrence, true);
+	}
+
 	/**
-	 * Defines special rule: MetaInfo "Nullable" must have value "true" if MetaInfo "MinOccurs" has value "0"
+	 * Defines rule:
+	 * If conditionsMustBeTrue=true:  MetaInfo "Nullable" must have value "true" if MetaInfo "MinOccurs" has value "0"
+	 * If conditionsMustBeTrue=false: MetaInfo "Nullable" must have value "true" if MetaInfo "MinOccurs" with value "0" does not exist
+	 *
 	 * @param occurrence
+	 * @param conditionsMustBeTrue
 	 * @return MetaInfoValidationData
 	 */
-	protected MetaInfoValidationData getSpecialRuleValidation(final String occurrence) {
+	protected MetaInfoValidationData getNullableValidationDataWithConditionMinOccursEqualsZero(
+			final String occurrence,
+			final boolean conditionsMustBeTrue)
+	{
 		final MetaInfoValidationCondition condition = new MetaInfoValidationCondition("MinOccurs", "0");
-		final MetaInfoValidationData metaInfoValidationData = new MetaInfoValidationData().withMetaInfoName("Nullable")
-																						.withMetaInfoValue("true")
-																						.withOccurrence(occurrence)
-																						.addCondition(condition);
+		final MetaInfoValidationData metaInfoValidationData = new MetaInfoValidationData()
+				.withMetaInfoName("Nullable")
+				.withMetaInfoValue("true")
+				.withOccurrence(occurrence)
+				.withConditionsMustBeTrue(conditionsMustBeTrue)
+				.addCondition(condition);
 		return metaInfoValidationData;
 	}
 
 	@Test
-	public void returnsFalseForSpecialRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0_dueToWrongValue() {
+	public void returnsFalseForRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0_dueToWrongValue() {
 		// prepare test
 		final List<MetaInfo> metaInfoList = new ArrayList<MetaInfo>();
 		metaInfoList.add(new MetaInfoDummy("Nullable", "false"));  // false lets validator return false
 		metaInfoList.add(new MetaInfoDummy("MinOccurs", "0")); // this makes condition true
 
-		final MetaInfoValidationData metaInfoValidationData = getSpecialRuleValidation("1");
+		final MetaInfoValidationData metaInfoValidationData = getNullableValidationDataWithConditionMinOccursEqualsZero("1");
 
 		// call functionality under test
 		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
@@ -231,13 +243,13 @@ public class ConditionalMetaInfoValidatorUnitTest {
 	}
 
 	@Test
-	public void returnsTrueForSpecialRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0() {
+	public void returnsTrueForRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0() {
 		// prepare test
 		final List<MetaInfo> metaInfoList = new ArrayList<MetaInfo>();
 		metaInfoList.add(new MetaInfoDummy("Nullable", "true")); // false lets validator return true
 		metaInfoList.add(new MetaInfoDummy("MinOccurs", "0")); // this makes condition true
 
-		final MetaInfoValidationData metaInfoValidationData = getSpecialRuleValidation("1");
+		final MetaInfoValidationData metaInfoValidationData = getNullableValidationDataWithConditionMinOccursEqualsZero("1");
 
 		// call functionality under test
 		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
@@ -247,12 +259,12 @@ public class ConditionalMetaInfoValidatorUnitTest {
 	}
 
 	@Test
-	public void returnsFalseForSpecialRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0_BecauseNullableIsMissing() {
+	public void returnsFalseForRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0_BecauseNullableIsMissing() {
 		// prepare test
 		final List<MetaInfo> metaInfoList = new ArrayList<MetaInfo>();
 		metaInfoList.add(new MetaInfoDummy("MinOccurs", "0")); // this makes condition true
 
-		final MetaInfoValidationData metaInfoValidationData = getSpecialRuleValidation("1");
+		final MetaInfoValidationData metaInfoValidationData = getNullableValidationDataWithConditionMinOccursEqualsZero("1");
 
 		// call functionality under test
 		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
@@ -262,12 +274,30 @@ public class ConditionalMetaInfoValidatorUnitTest {
 	}
 
 	@Test
-	public void returnsTrueForSpecialRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0_BecauseNullableIsOptionalAndMissing() {
+	public void returnsTrueForRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0_BecauseNullableIsOptionalAndMissing() {
 		// prepare test
 		final List<MetaInfo> metaInfoList = new ArrayList<MetaInfo>();
 		metaInfoList.add(new MetaInfoDummy("MinOccurs", "0")); // this makes condition true
 
-		final MetaInfoValidationData metaInfoValidationData = getSpecialRuleValidation("0-1");  // nullable is optional !
+		final MetaInfoValidationData metaInfoValidationData =
+			getNullableValidationDataWithConditionMinOccursEqualsZero("0-1");  // "0-1" means that nullable is optional !
+
+		// call functionality under test
+		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);
+
+		// verify test result
+		assertTrue("Validation failed!", result);
+	}
+
+	@Test
+	public void returnsTrueForRule_MetaInfo_Nullable_must_have_value_true_if_MetaInfo_MinOccurs_has_value_0_BecauseConditionMustBeFalse() {
+		// prepare test
+		final List<MetaInfo> metaInfoList = new ArrayList<MetaInfo>();
+		metaInfoList.add(new MetaInfoDummy("MinOccurs", "1"));   // missing MinOccurrs metainfo makes conditions false
+		metaInfoList.add(new MetaInfoDummy("Nullable", "true")); // this makes occurrence check resulting true
+
+		final MetaInfoValidationData metaInfoValidationData =
+			getNullableValidationDataWithConditionMinOccursEqualsZero("1", false); // 'false' causes the occurrence check to be performed
 
 		// call functionality under test
 		final boolean result = DataHelper.getValidator(metaInfoValidationData).validate(metaInfoList);

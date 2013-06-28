@@ -90,7 +90,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 			throw new RuntimeException(e);
 		}
 
-		final File pluginInputDir = standardModelProviderStarter.getMOGLiInfrastructure().getPluginInputDir();
+		final File pluginInputDir = standardModelProviderStarter.getInfrastructure().getPluginInputDir();
 		modelFile = new File(pluginInputDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		modelPropertiesFile = new File(pluginInputDir, StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 	}
@@ -98,7 +98,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 	protected MOGLiInfrastructure initPlugin(final MOGLiPlugin plugin) throws MOGLiPluginException {
 		infrastructureInitData.idOfThePluginToThisInfrastructure = plugin.getId();
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
-		plugin.setMOGLiInfrastructure(infrastructure);
+		plugin.setInfrastructure(infrastructure);
 		plugin.unpackDefaultInputData();
 		plugin.unpackPluginHelpFiles();
 		return infrastructure;
@@ -123,7 +123,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 	protected void setMetaInfoValidationFile(final MOGLiPlugin plugin,
 			                                 final String filename) {
 		final File source = new File(getProjectTestResourcesDir(), filename);
-		final File target = new File(plugin.getMOGLiInfrastructure().getPluginInputDir(),
+		final File target = new File(plugin.getInfrastructure().getPluginInputDir(),
 				                     MetaInfoValidationUtil.FILENAME_VALIDATION);
 		FileUtil.copyTextFile(source, target);
 	}

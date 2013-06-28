@@ -64,10 +64,6 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		return MOGLiPlugin.PluginType.MODEL_PROVIDER;
 	}
 
-	InfrastructureService getInfrastructure() {
-		return infrastructure;
-	}
-
 	@Override
 	public void doYourJob() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
@@ -106,7 +102,8 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 						if (! validationOk) {
 							validationErrorOccurred = true;
 							final String errorMessage = metaInfoValidator.getValidationErrorMessage()
-									                    + " for attribute descriptor '" + attributeDescriptor.getName() + "'"
+									                    + " for attribute '" + attributeDescriptor.getName() + "'"
+									                    + " of class '" + classDescriptor.getSimpleName() + "'"
 									                    + getModelString(metaInfoValidator);
 							infrastructure.getPluginLogger().logWarning(errorMessage);
 							addValidationErrorMessage(metaInfoValidator.getVendorPluginId(), errorMessage);
@@ -144,7 +141,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 					boolean validationOk = metaInfoValidator.validate(classDescriptor.getMetaInfoList());
 					if (! validationOk) {
 						validationErrorOccurred = true;
-						final String errorMessage = metaInfoValidator.getValidationErrorMessage() + " for class descriptor '"
+						final String errorMessage = metaInfoValidator.getValidationErrorMessage() + " for class '"
 								+ classDescriptor.getSimpleName() + "'"
 								+ getModelString(metaInfoValidator);
 						infrastructure.getPluginLogger().logWarning(errorMessage);
@@ -209,7 +206,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	}
 
 	@Override
-	public void setMOGLiInfrastructure(final InfrastructureService infrastructure) {
+	public void setInfrastructure(final InfrastructureService infrastructure) {
 		this.infrastructure = infrastructure;
 	}
 
@@ -384,7 +381,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	}
 
 	@Override
-	public InfrastructureService getMOGLiInfrastructure() {
+	public InfrastructureService getInfrastructure() {
 		return infrastructure;
 	}
 

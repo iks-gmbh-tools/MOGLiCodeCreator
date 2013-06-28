@@ -35,7 +35,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	@Before
 	public void setup() {
 		super.setup();
-		modelProvider.setMOGLiInfrastructure(infrastructure);
+		modelProvider.setInfrastructure(infrastructure);
 		infrastructure.getPluginLogFile().delete();
 		FileUtil.deleteDirWithContent(infrastructure.getPluginInputDir());
 		infrastructure.getPluginInputDir().mkdirs();
@@ -53,7 +53,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 
 		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, getPluginListForValidatorTest(), StandardModelProviderStarter.PLUGIN_ID));
-		modelProvider.setMOGLiInfrastructure(infrastructure);
+		modelProvider.setInfrastructure(infrastructure);
 	}
 
 	// **************************  Test Methods  *********************************
@@ -145,7 +145,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		setModelFile("MetaInfoForStatisticsFileTestWithoutUnusedElements.txt");
 		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, getPluginListForStatisticsFileTest(), StandardModelProviderStarter.PLUGIN_ID));
-		modelProvider.setMOGLiInfrastructure(infrastructure);
+		modelProvider.setInfrastructure(infrastructure);
 
 		// call functionality under test
 		modelProvider.doYourJob();
@@ -170,7 +170,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		pluginList.add(createGeneratorWithUnusedMetaInfoValidators());
 		infrastructure = new MOGLiInfrastructure(
 				createInfrastructureInitData(null, pluginList, StandardModelProviderStarter.PLUGIN_ID));
-		modelProvider.setMOGLiInfrastructure(infrastructure);
+		modelProvider.setInfrastructure(infrastructure);
 
 		// call functionality under test
 		modelProvider.doYourJob();
@@ -211,13 +211,13 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		modelProvider.doYourJob();
 
 		// verify test result
-		final String fileContent = FileUtil.getFileContent(modelProvider.getMOGLiInfrastructure().getPluginLogFile());
+		final String fileContent = FileUtil.getFileContent(modelProvider.getInfrastructure().getPluginLogFile());
 		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'modelMetaInfoMandatory' was not found for model 'MetaInfoValidatorTestModel'");
-		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseA'");
-		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'classMetaInfoMandatory' was not found for class descriptor 'TestklasseB'");
-		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A1'");
-		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'A2'");
-		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute descriptor 'B1'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'classMetaInfoMandatory' was not found for class 'TestklasseA'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'classMetaInfoMandatory' was not found for class 'TestklasseB'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute 'A1'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute 'A2'");
+		assertStringContains(fileContent, "Warning: Mandatory metaInfo 'attributeMetaInfoMandatory' was not found for attribute 'B1'");
 	}
 
 	@Test
@@ -366,7 +366,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 				null,
 				getPluginListWithDummyGeneratorContainingMandatoryValidatorForNotExistingMetaInfo(),
 				StandardModelProviderStarter.PLUGIN_ID));
-		modelProvider.setMOGLiInfrastructure(infrastructure);
+		modelProvider.setInfrastructure(infrastructure);
 
 		final File testModelFile = new File(infrastructure.getPluginInputDir(), "TestModel.txt");
 		FileUtil.createNewFileWithContent(testModelFile, "model TestModel" + FileUtil.getSystemLineSeparator() +
@@ -375,7 +375,7 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
 		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt");
 		assertChildrenNumberInDirectory(infrastructure.getPluginInputDir(), 2);
-		final File logFile = modelProvider.getMOGLiInfrastructure().getPluginLogFile();
+		final File logFile = modelProvider.getInfrastructure().getPluginLogFile();
 		final String expected = "Model breaks 1 MetaInfoValidator settings!";
 		assertFileDoesNotContainEntry(logFile, expected);
 
