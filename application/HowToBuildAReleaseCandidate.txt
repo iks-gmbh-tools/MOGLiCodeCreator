@@ -1,4 +1,4 @@
-0.  Verify your are working on the master branch.
+0.  Verify: current branch is master and all necessary changes from other branches have been merged.
 1.  Execute all Unit tests (use UnitTestExecutor.java).
 2.  Execute 'mvn install' on parent. This verifies that unit tests are successful not only running in Eclipse IDE
     and prepares the integration tests!
@@ -18,10 +18,11 @@
     c) Are all links working?
 10. Verify that in 'application/releaseBuilds' the Release Candidate can be found.
     If not check that property 'testRun' is 'false' in file 'application/src/main/resources/build.properties'.
-11. Commit the current state to the master with comment 'Release x.y.z'.
-12. Checkout the github branch, merge with the master and push to the github remote repository.
-13. Checkout the master branch again.
-14. In file 'application/src/main/resources/build.properties' adapt the three version settings to new values
-15. In file 'application/src/main/resources/build.properties' set 'testRun' back to 'true'.
+11. Check that a tag for the current release was automatically created.
+12. In file 'application/src/main/resources/build.properties' adapt the three version settings to new values
+13. In file 'application/src/main/resources/build.properties' set 'testRun' back to 'true'.
     This allows test runs of the release process executed automatically by 'BuildReleaseAndTestSystem.java'.
-16. Commit and tag source code in git and push it to iks gitblit and/or to github remote repositories.
+14. Commit the current state to the master with comment 'Release x.y.z'.
+15. Checkout the github branch, merge with the master and push to the github remote repository.
+16. Checkout the master branch again.
+17. Commit and tag source code in git and push it to iks gitblit and/or to github remote repositories.
