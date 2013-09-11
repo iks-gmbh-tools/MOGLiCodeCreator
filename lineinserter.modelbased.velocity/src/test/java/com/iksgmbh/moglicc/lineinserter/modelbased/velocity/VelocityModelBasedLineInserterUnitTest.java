@@ -609,7 +609,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
 
 		// verify test result
-		final String report = velocityModelBasedLineInserter.getGenerationReport();
+		final String report = velocityModelBasedLineInserter.getGeneratorReport();
 		final File expected = new File(getProjectTestResourcesDir(), "expectedReportCreateNew.txt");
 		assertEquals("report", FileUtil.getFileContent(expected), report);
 	}
@@ -635,7 +635,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
 
 		// verify test result
-		final String report = velocityModelBasedLineInserter.getGenerationReport();
+		final String report = velocityModelBasedLineInserter.getGeneratorReport();
 		final File expected = new File(getProjectTestResourcesDir(), "expectedReportNotOverwritten.txt");
 		assertEquals("report", FileUtil.getFileContent(expected), report);
 	}
@@ -658,7 +658,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
 
 		// verify test result
-		final String report = velocityModelBasedLineInserter.getGenerationReport();
+		final String report = velocityModelBasedLineInserter.getGeneratorReport();
 		final File expected = new File(getProjectTestResourcesDir(), "expectedReportAboveInsertion.txt");
 		assertEquals("report", FileUtil.getFileContent(expected), report);
 	}
@@ -681,7 +681,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
 
 		// verify test result
-		final String report = velocityModelBasedLineInserter.getGenerationReport();
+		final String report = velocityModelBasedLineInserter.getGeneratorReport();
 		final File expected = new File(getProjectTestResourcesDir(), "expectedReportBelowInsertion.txt");
 		assertEquals("report", FileUtil.getFileContent(expected), report);
 	}
@@ -705,7 +705,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
 
 		// verify test result
-		final String report = velocityModelBasedLineInserter.getGenerationReport();
+		final String report = velocityModelBasedLineInserter.getGeneratorReport();
 		final File expected = new File(getProjectTestResourcesDir(), "expectedReportReplaceInsertion.txt");
 		assertEquals("report", FileUtil.getFileContent(expected), report);
 	}

@@ -70,4 +70,10 @@ public class ModelDummy implements Model {
 		return false;
 	}
 
+	@Override
+	public ClassDescriptor getClassDescriptor(String classname)
+	{
+		return null;
+	}
+
 }

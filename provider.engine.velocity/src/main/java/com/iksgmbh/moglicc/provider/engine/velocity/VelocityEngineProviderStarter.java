@@ -16,12 +16,12 @@ import org.apache.velocity.runtime.RuntimeConstants;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
-import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
-import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ClassBasedEngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelBasedEngineProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.helper.MergeResultAnalyser;
 import com.iksgmbh.moglicc.provider.engine.velocity.helper.VelocityBugCorrector;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
@@ -40,10 +40,14 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	private InfrastructureService infrastructure;
 	private VelocityEngineData velocityEngineData;
 	private Model model;
+	private int callCountsModelBased = 0;
+	private int callCountsClassBased = 0;
+	final StringBuffer modelBasedReportEntries = new StringBuffer();
+	final StringBuffer classBasedReportEntries = new StringBuffer();
 
 	@Override
 	public PluginType getPluginType() {
-		return PluginType.ENGINE_PROVIDER;
+		return PluginType.PROVIDER;
 	}
 
 	@Override
@@ -75,7 +79,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	@Override
 	public GeneratorResultData startEngineWithModel() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("startEngineAllClassesIntoSingleTargetFile called");
-		prepareStart();
+		prepareStart(true);
 
 		final VelocityContext context = getVelocityContextWith(model);
 		final String mergeResult = mergeTemplateWith(context);
@@ -108,7 +112,7 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	@Override
 	public List<GeneratorResultData> startEngineWithClassList() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("startEngineEachClassIntoSeparateTargetFiles called");
-		prepareStart();
+		prepareStart(false);
 
 		final List<GeneratorResultData> toReturn = new ArrayList<GeneratorResultData>();
 		for (int i = 0; i < model.getSize(); i++) {
@@ -127,15 +131,30 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		return toReturn;
 	}
 
-	private void prepareStart() throws MOGLiPluginException {
+	private void prepareStart(final boolean modelBased) throws MOGLiPluginException {
 		if (velocityEngineData == null) {
 			throw new MOGLiPluginException(ENGINE_STARTED_WITHOUT_DATA);
 		}
-
+		
 		infrastructure.getPluginLogger().logInfo("-");
 		infrastructure.getPluginLogger().logInfo("Engine started from " + velocityEngineData.getGeneratorPluginId());
-		infrastructure.getPluginLogger().logInfo("MainTemplate: " + velocityEngineData.getTemplateDir().getAbsolutePath()
-				+ "/" + velocityEngineData.getMainTemplateSimpleFileName());
+		infrastructure.getPluginLogger().logInfo("MainTemplate: " + velocityEngineData.getTemplateDir().getAbsolutePath() 
+				                                  + "/" + velocityEngineData.getMainTemplateSimpleFileName());
+		
+		if (modelBased) {
+			modelBasedReportEntries.append("from " + velocityEngineData.getGeneratorPluginId() + " on main template '" 
+					+ velocityEngineData.getArtefactType() + "' on template '" 
+					+ velocityEngineData.getMainTemplateSimpleFileName() + "'");
+			modelBasedReportEntries.append(FileUtil.getSystemLineSeparator());
+			callCountsModelBased++;
+
+		} else {
+			classBasedReportEntries.append("from " + velocityEngineData.getGeneratorPluginId() + " for artefact '"
+			                               + velocityEngineData.getArtefactType() + "' on main template '" 
+			           					   + velocityEngineData.getMainTemplateSimpleFileName() + "'");
+			classBasedReportEntries.append(FileUtil.getSystemLineSeparator());
+			callCountsClassBased++;
+		}
 
 		model = velocityEngineData.getModel();
 		infrastructure.getPluginLogger().logInfo("Model " + model.getName() + " received from "
@@ -160,7 +179,11 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
         final VelocityEngine engine = getVelocityEngine();
         final StringWriter writer = new StringWriter();
         final Template template = createVelocityTemplate(engine);
-		template.merge(context, writer); // create new content from template and class from model
+        try {
+        	template.merge(context, writer); // create new content from template and class from model
+        } catch (Exception e) {
+        	throw new MOGLiPluginException("Velocity Error: " + e.getMessage());
+        }
         writer.flush();
         return writer.toString();
 	}
@@ -281,4 +304,34 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		return velocityEngineData;
 	}
 
+	@Override
+	public String getProviderReport()
+	{
+		return callCountsModelBased + " times called for model based generation: "
+			   + FileUtil.getSystemLineSeparator()
+			   + modelBasedReportEntries.toString().trim()
+			   + FileUtil.getSystemLineSeparator()
+			   + FileUtil.getSystemLineSeparator()
+	           + callCountsClassBased + " times called for class based generation:"
+			   + FileUtil.getSystemLineSeparator()
+	           + classBasedReportEntries.toString().trim();
+	}
+
+	@Override
+	public int getNumberOfCalls()
+	{
+		return callCountsClassBased + callCountsModelBased;
+	}
+
+	@Override
+	public String getShortReport()
+	{
+		return "Velocity engine started for " + getNumberOfCalls() + " calls.";
+	}
+
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 200;
+	}
 }

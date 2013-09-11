@@ -27,7 +27,12 @@ You find the lastest release build under application/releasedBuilds.
 
 License: **All Rights Reserved**
 
-Current version: **1.3.0**
+Current version: **1.4.0**
+
+**Changes to 1.3.0**
+- New Feature: Generation of a report dir containing the report files "generator.report", "provider.report" and "short.report"
+- New Feature: Generation of a "error.report" file in the application root dir containing information about the error occurred
+- New Feature: Each plugin provides information on the "Suggested Execution Order" by which they are executed if this order does not contradict their dependencies
 
 **Changes to 1.2.0**
 - New Feature: VelocityModelBasedTreeBuilder introduced to generate whole file trees (folders containing files and subfolders)

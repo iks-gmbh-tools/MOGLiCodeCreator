@@ -1,10 +1,9 @@
-package com.iksgmbh.moglicc.plugin.type;
+package com.iksgmbh.moglicc.plugin.subtypes.providers;
 
 import java.util.List;
 
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 
 /**
  * EngineProvider that provides a class based execution strategy

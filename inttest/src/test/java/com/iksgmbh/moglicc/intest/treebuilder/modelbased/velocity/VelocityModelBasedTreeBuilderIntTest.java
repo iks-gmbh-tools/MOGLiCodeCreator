@@ -35,7 +35,7 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 	}
 
 	@Test
-	public void createsNewGeneartorPluginUsing_MOGLiCC_NewPluginModel() throws Exception {
+	public void createsNewGeneratorPluginUsing_MOGLiCC_NewPluginModel() throws Exception {
 		// prepare test
 		FileUtil.createNewFileWithContent(modelPropertiesFile, "modelfile=MOGLiCC_NewPluginModel.txt");
 		standardModelProviderStarter.doYourJob();
@@ -65,7 +65,8 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 		final File targetDir = new File(applicationInputDir, VelocityModelBasedTreeBuilderStarter.PLUGIN_ID + "/umlautArtefact");
 		targetDir.mkdirs();
 		
-		final File artefactPropertiesFile = createArtefactPropertiesFile(targetDir);
+		final boolean withTargetDirProperty = true;
+		final File artefactPropertiesFile = createArtefactPropertiesFile(targetDir, withTargetDirProperty);
 		
 		final File contentFile = new File(artefactPropertiesFile.getParentFile(), UMLAUT_TEST_FILE);
 		MOGLiFileUtil.createNewFileWithContent(contentFile, UMLAUT_PLATZHALTER);
@@ -82,10 +83,18 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 		assertStringEquals("outputFileContent", "???????", MOGLiFileUtil.getFileContent(outputFile));
 	}
 
-	private File createArtefactPropertiesFile(final File targetDir) {
+	private File createArtefactPropertiesFile(final File targetDir, final boolean withTargetDirProperty) 
+	{
+		final String targetDirLine;
+		if (withTargetDirProperty) {
+			targetDirLine = "@TargetDir <applicationRootDir>" + FileUtil.getSystemLineSeparator();
+		} else {
+			targetDirLine = "";
+		}
+		
 		final File templateFile = new File(targetDir, "artefact.properties");
 		MOGLiFileUtil.createNewFileWithContent(templateFile, "@RootName TreeBuilderGeneratorUmlautTest" + FileUtil.getSystemLineSeparator() +
-                "@TargetDir <applicationRootDir>" + FileUtil.getSystemLineSeparator() +
+                targetDirLine +
                 "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@OutputEncodingFormat ASCII" + FileUtil.getSystemLineSeparator() + 
                 "@ReplaceIn " + UMLAUT_TEST_FILE + " " + UMLAUT_PLATZHALTER + " �������");
@@ -221,7 +230,6 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 		assertFileExists(newDir2);	
 	}
 
-
 	@Test
 	public void throwsExceptionForUnkownPlaceHolder() throws Exception {
 		// prepare test
@@ -240,5 +248,34 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 			assertStringContains(e.getMessage(), BuildUpVelocityGeneratorResultData.META_INFO_NOT_FOUND);
 		}
 	}
-	
+
+	@Test
+	public void createsNoTargetDirIfNotDefinedInArtefactProperties() throws Exception 
+	{
+		// prepare test
+		final String targetDirPath = MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/noTargetDirArtefact";
+		createNewModelFileContent(targetDirPath);
+		
+		final File artefactInputDir = new File(applicationInputDir, VelocityModelBasedTreeBuilderStarter.PLUGIN_ID + "/noTargetDirArtefact");
+		artefactInputDir.mkdirs();
+		
+		final boolean withTargetDirProperty = false;
+		final File artefactPropertiesFile = createArtefactPropertiesFile(artefactInputDir, withTargetDirProperty);
+		
+		final File contentFile = new File(artefactPropertiesFile.getParentFile(), "noTargetDirFile.txt");
+		MOGLiFileUtil.createNewFileWithContent(contentFile, "noTargetDirFileContent");
+		
+		standardModelProviderStarter.doYourJob();
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// call functionality under test
+		velocityModelBasedTreeBuilderStarter.doYourJob();
+
+		// verify test result
+		final File artefactOutputDir = new File(applicationOutputDir, VelocityModelBasedTreeBuilderStarter.PLUGIN_ID + "/noTargetDirArtefact");
+		assertFileExists(artefactOutputDir);
+		final File targetDir = new File(applicationRootDir, "noTargetDirArtefact");
+		assertFileDoesNotExist(targetDir);
+	}
+
 }

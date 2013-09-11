@@ -1,9 +1,9 @@
-package com.iksgmbh.moglicc.plugin.type.basic;
+package com.iksgmbh.moglicc.plugin.subtypes.providers;
 
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.subtypes.ProviderPlugin;
 
-public interface EngineProvider extends MOGLiPlugin {
+public interface EngineProvider extends ProviderPlugin {
 
 	/**
 	 * Called by a plugin to feed a engine provider with neccassary data.

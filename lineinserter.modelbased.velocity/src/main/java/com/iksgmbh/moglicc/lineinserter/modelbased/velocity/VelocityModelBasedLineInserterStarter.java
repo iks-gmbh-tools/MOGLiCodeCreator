@@ -1,5 +1,7 @@
 package com.iksgmbh.moglicc.lineinserter.modelbased.velocity;
 
+import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.*;
+
 import static com.iksgmbh.moglicc.lineinserter.modelbased.velocity.TextConstants.TEXT_END_REPLACE_INDICATOR_NOT_FOUND;
 import static com.iksgmbh.moglicc.lineinserter.modelbased.velocity.TextConstants.TEXT_START_REPLACE_INDICATOR_NOT_FOUND;
 
@@ -7,26 +9,31 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.iksgmbh.helper.IOEncodingHelper;
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
-import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
+import com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil;
+import com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.GeneratorStandardReportData;
+import com.iksgmbh.moglicc.generator.utils.ModelMatcherGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
-import com.iksgmbh.moglicc.plugin.type.Inserter;
-import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.generators.Inserter;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelBasedEngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
-import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
+import com.iksgmbh.utils.StringUtil;
 
 public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfoValidatorVendor {
 
@@ -40,13 +47,12 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 	private InfrastructureService infrastructure;
 	private ModelBasedEngineProvider velocityEngineProvider;
 	private IOEncodingHelper encodingHelper;
-	private Model model;
 	private String targetFileOfCurrentArtefact;
-	private int generationCounter = 0;
-	private int artefactCounter = 0;
-	private StringBuffer generationReport = new StringBuffer(PLUGIN_ID
-                                                             + " has done work for following artefacts:"
-                                                             + FileUtil.getSystemLineSeparator());
+	private int insertCounter = 0;
+	private int createdCounter = 0;
+	private StringBuffer reportForCurrentArtefact = new StringBuffer();
+	private StringBuffer generationReport = new StringBuffer();
+	final GeneratorStandardReportData standardReportData = new GeneratorStandardReportData();
 
 	@Override
 	public void setInfrastructure(final InfrastructureService infrastructure) {
@@ -54,16 +60,36 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 	}
 
 	@Override
-	public void doYourJob() throws MOGLiPluginException {
+	public void doYourJob() throws MOGLiPluginException 
+	{
+		standardReportData.jobStarted = true;
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
-		velocityEngineProvider = (ModelBasedEngineProvider) infrastructure.getEngineProvider(ENGINE_PROVIDER_ID);
+		velocityEngineProvider = (ModelBasedEngineProvider) infrastructure.getProvider(ENGINE_PROVIDER_ID);
 		encodingHelper = null;
+		final List<String> list = getArtefactList();  // read before possible exception for model access may be thrown
+		standardReportData.numberOfAllInputArtefacts = list.size();
+		
+		if (standardReportData.numberOfAllInputArtefacts == 0) {
+			infrastructure.getPluginLogger().logInfo("No input artefacts . Nothing to do.");
+			return;
+		}
+		
+		final ModelProvider modelProvider = (ModelProvider) infrastructure.getProvider(MODEL_PROVIDER_ID);
+		
+		try
+		{
+			standardReportData.model = modelProvider.getModel(PLUGIN_ID);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.modelError = e.getMessage();
+			throw e;
+		}		
+		
+		infrastructure.getPluginLogger().logInfo("Model '" + standardReportData.model.getName() + "' retrieved from " + MODEL_PROVIDER_ID);
 
-		model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel(PLUGIN_ID);
-		infrastructure.getPluginLogger().logInfo("Model '" + model.getName() + "' retrieved from " + MODEL_PROVIDER_ID);
-
-		final List<String> list = getArtefactList();
-		for (final String artefact : list) {
+		for (final String artefact : list) 
+		{
+			reportForCurrentArtefact = new StringBuffer(); 
 			generateArtefactReportHeader(artefact);
 			final File templateDir = new File(infrastructure.getPluginInputDir(), artefact);
 			final List<String> mainTemplates = findMainTemplates(templateDir);
@@ -73,6 +99,7 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 				final String targetFileReadFromMainTemplate = applyModelToArtefactTemplate(artefact, templateDir, mainTemplate);
 				validateTargetFileOfCurrentArtefact(artefact, targetFileReadFromMainTemplate);
 			}
+			generationReport.append(reportForCurrentArtefact);
 			infrastructure.getPluginLogger().logInfo("Doing my job...");
 		}
 
@@ -87,50 +114,88 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 				targetFileOfCurrentArtefact = targetFileReadFromMainTemplate; // init for first main template
 			} else {
 				if (! targetFileOfCurrentArtefact.equals(targetFileReadFromMainTemplate)) {
-					throw new MOGLiPluginException("There are main templates for artefact '" + artefact +
-							                       "' that differ in there targetFileName or targetDir!");
+					final String errorMessage = "There are main templates for artefact '" + artefact +
+		                                        "' that differ in there targetFileName or targetDir!";
+					standardReportData.invalidInputArtefacts.add("Error: " + errorMessage);
+					throw new MOGLiPluginException(errorMessage);
 				}
 			}
 		}
 	}
 
-	private void generateArtefactReportHeader(final String artefact) {
-		artefactCounter++;
-		generationReport.append(FileUtil.getSystemLineSeparator());
-		generationReport.append("   Reports for artefact '");
-		generationReport.append(artefact);
-		generationReport.append("':");
-		generationReport.append(FileUtil.getSystemLineSeparator());
+	private void generateArtefactReportHeader(final String artefact) 
+	{
+		standardReportData.numberOfOutputArtefacts++;
+		reportForCurrentArtefact.append(FileUtil.getSystemLineSeparator());
+		reportForCurrentArtefact.append(GeneratorReportUtil.getArtefactReportLine(artefact));
+		reportForCurrentArtefact.append(FileUtil.getSystemLineSeparator());
 	}
 
 	private String applyModelToArtefactTemplate(final String artefact, final File templateDir,
 			                                    final String mainTemplate) throws MOGLiPluginException
 	{
-		final VelocityLineInserterResultData velocityResult = doInsertsByCallingVelocityEngineProvider(artefact, templateDir, mainTemplate);
+		final VelocityLineInserterResultData velocityResult;
+		try
+		{
+			velocityResult = doInsertsByCallingVelocityEngineProvider(artefact, templateDir, mainTemplate);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
+			throw e;
+		}		
+		
+		try
+		{
+			velocityResult.validatePropertyKeys(artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add(artefact + " has invalid property keys: " + e.getMessage());
+			throw e;
+		}
 
-		velocityResult.validatePropertyKeys(artefact);
 
-		if (! ModelValidationGeneratorUtil.validateModel(velocityResult, model.getName())) {
+		if (! ModelMatcherGeneratorUtil.doesItMatch(velocityResult, standardReportData.model.getName())) 
+		{
 			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '"
                                                     + velocityResult.getNameOfValidModel() + "' as valid model.");
-			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + model.getName() + "'.");
+			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + standardReportData.model.getName() + "'.");
 
 			return null;
 		}
+		
+		standardReportData.numberOfModelMatchingInputArtefacts++;
 
-		velocityResult.validatePropertyForMissingMetaInfoValues(artefact);
+		try
+		{
+			velocityResult.validatePropertyForMissingMetaInfoValues(artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add(artefact + " uses invalid metainfos: " + e.getMessage());
+			throw e;
+		}
+
 
 		if (velocityResult.skipGeneration()) {
 			infrastructure.getPluginLogger().logInfo("Generation of file '" + velocityResult.getTargetFileName()
 							                         + "' was skipped as configured for artefact " + artefact + ".");
+			standardReportData.skippedArtefacts.add(velocityResult.getTargetFileName());
+			reportForCurrentArtefact= new StringBuffer();
 			return null;
 		}
 
 		encodingHelper = IOEncodingHelper.getInstance(EncodingUtils.getValidOutputEncodingFormat(velocityResult.getOutputEncodingFormat(),
 				                                      infrastructure.getPluginLogger()));
-		writeResultIntoPluginOutputDir(velocityResult, artefact);
-		writeResultIntoTargetDefinedInTemplate(velocityResult);
-		generateReportLine(velocityResult);
+		try
+		{
+			writeResultIntoPluginOutputDir(velocityResult, artefact);
+			writeResultIntoTargetDefinedInTemplate(velocityResult);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Cannot write output artefact for input artefact '" + artefact + "': " + e.getMessage());
+			throw e;
+		}
+		
+		generateReportForResult(velocityResult);
 		infrastructure.getPluginLogger().logInfo("Generated content for artefact '" + artefact
 				+ "' inserted into " + velocityResult.getTargetDir() + "/" + velocityResult.getTargetFileName());
 		return velocityResult.getTargetDir() + "/" + velocityResult.getTargetFileName();
@@ -138,7 +203,7 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 
 	private VelocityLineInserterResultData doInsertsByCallingVelocityEngineProvider(final String artefact, final File templateDir,
 			                                                                    final String mainTemplate) throws MOGLiPluginException {
-		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, model, PLUGIN_ID);
+		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, standardReportData.model, PLUGIN_ID);
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(mainTemplate);
 
@@ -146,33 +211,40 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 		return result;
 	}
 
-	private void generateReportLine(final VelocityLineInserterResultData resultData) {
-		generationCounter++;
+	private void generateReportForResult(final VelocityLineInserterResultData resultData) 
+	{
+		final String generatedContent = resultData.getGeneratedContent().trim();
+		final int numLines = StringUtil.getLinesFromText(generatedContent).size();
+
 		if (resultData.isTargetToBeCreatedNewly()) {
-			generationReport.append("      ");
-			generationReport.append(resultData.getTargetFileName());
-			generationReport.append(" was created in ");
-			generationReport.append(resultData.getTargetDir());
-			generationReport.append(FileUtil.getSystemLineSeparator());
+			createdCounter++;
+			reportForCurrentArtefact.append("      ");
+			reportForCurrentArtefact.append(resultData.getTargetFileName());
+			reportForCurrentArtefact.append(" was created in ");
+			reportForCurrentArtefact.append(resultData.getTargetDir());
+			reportForCurrentArtefact.append(FileUtil.getSystemLineSeparator());
 			return;
 		} else if (resultData.wasExistingTargetPreserved()) {
-			generationReport.append("      ");
-			generationReport.append(resultData.getTargetFileName());
-			generationReport.append(" did already exist and was NOT overwritten in ");
-			generationReport.append(resultData.getTargetDir());
-			generationReport.append(FileUtil.getSystemLineSeparator());
+			reportForCurrentArtefact.append("      ");
+			reportForCurrentArtefact.append(resultData.getTargetFileName());
+			reportForCurrentArtefact.append(" did already exist and was NOT overwritten in ");
+			reportForCurrentArtefact.append(resultData.getTargetDir());
+			reportForCurrentArtefact.append(FileUtil.getSystemLineSeparator());
 			return;
 		} else if (resultData.getInsertAboveIndicator() != null) {
-			generationReport.append("      inserted by a above-instruction into ");
+			insertCounter++;
+			reportForCurrentArtefact.append("      " + numLines + " line(s) inserted by a above-instruction into "); 
 		} else if (resultData.getInsertBelowIndicator() != null) {
-			generationReport.append("      inserted by a below-instruction into ");
+			insertCounter++;
+			reportForCurrentArtefact.append("      " + numLines + " line(s) inserted by a below-instruction into ");
 		} else if (resultData.getReplaceStartIndicator() != null) {
-			generationReport.append("      inserted by a replace-instruction into ");
+			insertCounter++;
+			reportForCurrentArtefact.append("      " + numLines + " line(s) inserted by a replace-instruction into "); 
 		}
-		generationReport.append(resultData.getTargetFileName());
-		generationReport.append(" in directory ");
-		generationReport.append(resultData.getTargetDir());
-		generationReport.append(FileUtil.getSystemLineSeparator());
+		reportForCurrentArtefact.append(resultData.getTargetFileName());
+		reportForCurrentArtefact.append(" in directory ");
+		reportForCurrentArtefact.append(resultData.getTargetDir());
+		reportForCurrentArtefact.append(FileUtil.getSystemLineSeparator());
 	}
 
 	private void writeResultIntoPluginOutputDir(final VelocityLineInserterResultData resultData, final String subDir)
@@ -355,7 +427,17 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 				+ engineData.getMainTemplateSimpleFileName() + "'...");
 
 		velocityEngineProvider.setEngineData(engineData);
-		final GeneratorResultData generatorResultData = velocityEngineProvider.startEngineWithModel();  // this does the actual insert job
+		
+		final GeneratorResultData generatorResultData;
+		try
+		{
+			generatorResultData = velocityEngineProvider.startEngineWithModel(); // this does the actual insert job
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Velocity Engine Provider Error:" + e.getMessage());
+			throw e;
+		}
+				
 		return new VelocityLineInserterResultData(generatorResultData);
 	}
 
@@ -437,21 +519,40 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 	}
 
 	@Override
-	public String getGenerationReport() {
-		if (artefactCounter == 0) {
-			return PLUGIN_ID + " have had nothing to do. No artefact found.";
-		}
-		return generationReport.toString().trim();
+	public String getGeneratorReport() 
+	{
+		standardReportData.additionalReport = FileUtil.getSystemLineSeparator() 
+				                              + REPORT_TAB + generationReport.toString().trim();
+		return GeneratorReportUtil.getReport(standardReportData); 
 	}
 
 	@Override
 	public int getNumberOfGenerations() {
-		return generationCounter;
+		return insertCounter + createdCounter;
 	}
 
 	@Override
-	public int getNumberOfArtefacts() {
-		return artefactCounter;
+	public int getNumberOfGeneratedArtefacts() {
+		return standardReportData.numberOfOutputArtefacts;
+	}
+	
+	@Override
+	public String getShortReport()
+	{
+		final String standardReport = GeneratorReportUtil.getShortReport(standardReportData);
+
+		if (! StringUtils.isEmpty(standardReport)) {
+			return standardReport;
+		}
+		
+		return "From " + standardReportData.numberOfAllInputArtefacts + " input artefact(s), have been " 
+		        + standardReportData.numberOfOutputArtefacts + " used to create " + createdCounter + " file(s) and to perform " 
+		        + insertCounter + " insertion(s).";
 	}
 
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 500;
+	}
 }

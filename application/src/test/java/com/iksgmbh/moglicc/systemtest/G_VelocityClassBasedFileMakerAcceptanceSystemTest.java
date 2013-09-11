@@ -5,7 +5,9 @@ import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -15,6 +17,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.filemaker.classbased.velocity.VelocityClassBasedFileMakerStarter;
 import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
+import com.iksgmbh.moglicc.provider.model.standard.parser.ModelParser;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
@@ -54,7 +57,7 @@ public class G_VelocityClassBasedFileMakerAcceptanceSystemTest extends __Abstrac
 	}
 
 	private void assertAllResultFileCreated() throws IOException {
-		final List<String> classnamesFromModelfile = readClassnameFromModelfile();
+		final List<String> classnamesFromModelfile = readAllClassnamesFromModelfile();
 		final File pluginOutputDir = new File(applicationOutputDir, GENERATOR_PLUGIN_ID
 				                              + "/" + VelocityClassBasedFileMakerStarter.ARTEFACT_JAVABEAN);
 		assertChildrenNumberInDirectory(pluginOutputDir, classnamesFromModelfile.size());
@@ -63,19 +66,39 @@ public class G_VelocityClassBasedFileMakerAcceptanceSystemTest extends __Abstrac
 		}
 	}
 
-	private List<String> readClassnameFromModelfile() throws IOException {
+	private String doVariableReplacement(String line, final HashMap<String, String> variableMap) {
+		final Set<String> keySet = variableMap.keySet();
+		for (final String key : keySet)
+		{
+			final String placeholder = ModelParser.VARIABLE_START_INDICATOR + key + ModelParser.VARIABLE_END_INDICATOR;
+			line = line.replace(placeholder, variableMap.get(key));
+		}
+		return line;
+	}
+	
+	private List<String> readAllClassnamesFromModelfile() throws IOException 
+	{
+		final HashMap<String, String> variableMap = new HashMap<String, String>();
 		final File modelDir = new File(testDir + "/" + DIR_INPUT_FILES + "/" + StandardModelProviderStarter.PLUGIN_ID);
 		List<String> fileContentAsList = FileUtil.getFileContentAsList(new File(modelDir, StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE));
 		final List<String> list = new ArrayList<String>();
 		for (String line : fileContentAsList) {
 			line = line.trim();
 			if (line.startsWith(MetaModelConstants.CLASS_IDENTIFIER)) {
-				String[] splitResult = line.split(" ");
+				final String[] splitResult = line.split(" ");
 				if (splitResult.length < 2) {
 					throw new MOGLiCoreException("Error reading model file");
 				}
-				final ClassNameData classNameData = new ClassNameData(splitResult[1]);
+				final String className = doVariableReplacement(splitResult[1], variableMap);
+				final ClassNameData classNameData = new ClassNameData(className);
 				list.add(classNameData.getSimpleClassName());
+			}
+			if (line.startsWith(MetaModelConstants.VARIABLE_IDENTIFIER)) {
+				final String[] splitResult = line.split(" ");
+				if (splitResult.length < 3) {
+					throw new MOGLiCoreException("Error reading model file");
+				}
+				variableMap.put(splitResult[1], splitResult[2]);
 			}
 		}
 		return list;

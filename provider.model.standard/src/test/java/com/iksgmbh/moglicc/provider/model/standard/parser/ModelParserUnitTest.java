@@ -6,6 +6,7 @@ import static com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants.MET
 import static com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants.MODEL_IDENTIFIER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
@@ -369,5 +371,22 @@ public class ModelParserUnitTest extends StandardModelProviderTestParent {
 		assertEquals("class name", "Address", model.getClassDescriptorList().get(1).getSimpleName());
 		assertEquals("Attribute number", 1, model.getClassDescriptorList().get(1).getAttributeDescriptorList().size());
 		assertEquals("Attribute name", "Street", model.getClassDescriptorList().get(1).getAttributeDescriptorList().get(0).getName());
+	}
+	
+	@Test
+	public void returnsClassDescriptorForClassName() throws ModelParserException {
+		// prepare test
+		final List<String> fileContentAsList = getFileContentForTestModelWithTwoClasses();
+		final Model model = modelParser.parse(fileContentAsList);
+		
+		// call functionality under test
+		final ClassDescriptor classDescriptor1 = model.getClassDescriptor("unkown class");
+		final ClassDescriptor classDescriptor2 = model.getClassDescriptor("de.test.Person");
+		final ClassDescriptor classDescriptor3 = model.getClassDescriptor("Person");
+		
+		// verify test result
+		assertNull(classDescriptor1);
+		assertNotNull(classDescriptor2);
+		assertNotNull(classDescriptor3);
 	}
 }

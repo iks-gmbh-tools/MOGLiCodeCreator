@@ -17,7 +17,6 @@ import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector;
 import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.build.helper.VersionReplacer;
 import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
-import com.iksgmbh.utils.CmdUtil;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 import com.iksgmbh.utils.ZipUtil;
@@ -44,7 +43,7 @@ public class MOGLiReleaseBuilder {
 	private static final String USER_DIR_PREFIX = "<RootDir>";
 	private static final String MAVEN_INSTALL_DIR_PREFIX = "<MavenRootDir>";
 	private static final String RELEASE_DEFAULT_DIR = USER_DIR_PREFIX + "/release";
-	private static final String RELEASE_DEFAULT_FILENAME = "Mogli";
+	private static final String RELEASE_DEFAULT_FILENAME = "MOGLiCC";
 	private static final String ARTEFACT_GROUP_ID = "com.iksgmbh.moglicc";
 
 	public static final List<String> FILES_TO_INSTALL_IN_ROOT = ImmutableUtil.getImmutableListOf(
@@ -122,7 +121,7 @@ public class MOGLiReleaseBuilder {
 			buildReleaseZipFile();
 			if (! isTestRun()) {
 				copyReleaseToArchive();
-				tagGitBranch();
+				// tagGitBranch();  comment out if git client is installed
 			}
 			VersionReplacer.doYourJob(getVersion(VERSION_TYPE.Release), getVersion(VERSION_TYPE.Next), pomFiles);
 		} else {
@@ -137,6 +136,7 @@ public class MOGLiReleaseBuilder {
 		return toReturn;
 	}
 
+	/* needed ?
 	private void tagGitBranch() {
 		String exeCommand = "git tag -a v" + getVersion(VERSION_TYPE.Release)
 		                    + " -m \"Release " + getVersion(VERSION_TYPE.Release)
@@ -146,10 +146,11 @@ public class MOGLiReleaseBuilder {
 
 		System.out.println(CmdUtil.execWindowCommand(getGitRepositoryDir(), exeCommand, true));
 	}
-
+	
 	private File getGitRepositoryDir() {
 		return new File(USER_DIR).getParentFile();
 	}
+	 */
 
 	private boolean isTestRun() {
 		final String property = (String) buildProperties.get("testRun");

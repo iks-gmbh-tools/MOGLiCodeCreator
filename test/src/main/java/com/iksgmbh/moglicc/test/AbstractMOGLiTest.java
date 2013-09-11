@@ -5,6 +5,7 @@ import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB_PLUGIN;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LOGS_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_OUTPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_REPORT_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_TEMP_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
@@ -44,7 +45,10 @@ public abstract class AbstractMOGLiTest {
 	protected static final String RESOURCES_DIR = "src/main/resources/";
 	protected static final String TEST_SUBDIR = TARGET_DIR + "TestDir"; // in target it will be deleted automatically with each clean
 	protected static final String LOGFILE = MOGLiSystemConstants.DIR_LOGS_FILES + "/" + MOGLiSystemConstants.FILENAME_LOG_FILE;
-	protected static final String REPORT_FILE = MOGLiSystemConstants.FILENAME_REPORT_FILE;
+	protected static final String GENERATION_REPORT_FILE = MOGLiSystemConstants.FILENAME_GENERATION_REPORT_FILE;
+	protected static final String PROVIDER_REPORT_FILE = MOGLiSystemConstants.FILENAME_PROVIDER_REPORT_FILE;
+	protected static final String SHORT_REPORT_FILE = MOGLiSystemConstants.FILENAME_SHORT_REPORT_FILE;
+	protected static final String ERROR_REPORT_FILE = MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE;
 
 
 	// **************************  Instance fields  *********************************
@@ -52,6 +56,7 @@ public abstract class AbstractMOGLiTest {
 	protected File projectResourcesDir;
 	protected File projectTestResourcesDir;
 	protected File applicationRootDir;
+	protected File applicationReportDir;
 	protected File applicationPropertiesFile;
 	protected File workspacePropertiesFile;
 	protected Properties applicationProperties;
@@ -79,6 +84,7 @@ public abstract class AbstractMOGLiTest {
 		projectTestResourcesDir = new File(getProjectTestResourcesDir());
 		projectResourcesDir = new File(getProjectResourcesDir());
 		applicationLogDir = new File(applicationRootDir, DIR_LOGS_FILES);
+		applicationReportDir = new File(applicationRootDir, DIR_REPORT_FILES);
 		applicationLogfile = new File(applicationLogDir, FILENAME_LOG_FILE);
 		applicationInputDir = new File(applicationRootDir, DIR_INPUT_FILES);
 		applicationOutputDir = new File(applicationRootDir, DIR_OUTPUT_FILES);
@@ -240,6 +246,15 @@ public abstract class AbstractMOGLiTest {
 	public void assertStringEquals(String message, String expected, String actual) {
 		if (expected == null) expected = "null";
 		if (actual == null) actual = "null";
+		if (! expected.trim().equals(actual.trim())) {
+			System.out.println("######################################################################");
+			System.out.println("Expected String:");
+			System.out.println(expected);
+			System.out.println("######################################################################");
+			System.out.println("Actual String:");
+			System.out.println(actual);
+			System.out.println("######################################################################");
+		}
 		assertEquals(message, expected, actual);
 	}
 

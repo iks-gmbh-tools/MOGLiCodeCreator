@@ -1,7 +1,7 @@
-package com.iksgmbh.moglicc.plugin.type.basic;
+package com.iksgmbh.moglicc.plugin.subtypes.providers;
 
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.subtypes.ProviderPlugin;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 
 /**
@@ -10,9 +10,10 @@ import com.iksgmbh.moglicc.provider.model.standard.Model;
  * @author Reik Oberrath
  * @since 1.0.0
  */
-public interface ModelProvider extends MOGLiPlugin {
+public interface ModelProvider extends ProviderPlugin {
 
-	Model getModel(String pluginId) throws MOGLiPluginException;
+	String getModelFileName();
 	String getModelName();
+	Model getModel(String pluginId) throws MOGLiPluginException;
 
 }

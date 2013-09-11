@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 import com.iksgmbh.moglicc.test.CoreTestParent;
 
@@ -21,7 +21,7 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(initData);
 
 		// call functionality under test
-		final List<Generator> generatorPlugins = infrastructure.getPluginsOfType(Generator.class);
+		final List<GeneratorPlugin> generatorPlugins = infrastructure.getPluginsOfType(GeneratorPlugin.class);
 		final List<MetaInfoValidatorVendor> validatorVendorPlugins = infrastructure.getPluginsOfType(MetaInfoValidatorVendor.class);
 		final List<Cloneable> emptyPluginList = infrastructure.getPluginsOfType(Cloneable.class);
 		

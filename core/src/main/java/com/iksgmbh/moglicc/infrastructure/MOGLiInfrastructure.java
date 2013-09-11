@@ -13,9 +13,8 @@ import com.iksgmbh.moglicc.core.Logger;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
-import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
+import com.iksgmbh.moglicc.plugin.subtypes.ProviderPlugin;
 
 /**
  * Implementation to provide the MOGLiCodeCreator core functionality to the plugins.
@@ -77,31 +76,21 @@ public class MOGLiInfrastructure implements InfrastructureService {
 	}
 
 	@Override
-	public ModelProvider getModelProvider(String id) {
+	public ProviderPlugin getProvider(String id) {
 		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null &&
-			 MOGLiPlugin.PluginType.MODEL_PROVIDER == plugin.getPluginType()) {
-			 return (ModelProvider) plugin;
+			 MOGLiPlugin.PluginType.PROVIDER == plugin.getPluginType()) {
+			 return (ProviderPlugin) plugin;
 		 }
 		 return null;
 	}
 
 	@Override
-	public EngineProvider getEngineProvider(String id) {
-		 MOGLiPlugin plugin = pluginMap.get(id);
-		 if (plugin != null &&
-			 MOGLiPlugin.PluginType.ENGINE_PROVIDER == plugin.getPluginType()) {
-			 return (EngineProvider) plugin;
-		 }
-		 return null;
-	}
-
-	@Override
-	public Generator getGenerator(String id) {
+	public GeneratorPlugin getGenerator(String id) {
 		 MOGLiPlugin plugin = pluginMap.get(id);
 		 if (plugin != null &&
 			 MOGLiPlugin.PluginType.GENERATOR == plugin.getPluginType()) {
-			 return (Generator) plugin;
+			 return (GeneratorPlugin) plugin;
 		 }
 		 return null;
 	}

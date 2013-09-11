@@ -3,11 +3,12 @@ package com.iksgmbh.moglicc.generator.classbased.velocity;
 import java.io.File;
 
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 
 /**
- * return Object for {@code VelocityEngineProviderStarter.startEngineWithClassList()}
+ * This class extends the abstract definition of {@link GeneratorResultData}.
+ * It is used from the Velocity based generators and the velocity engine provider.
  *
  * @author Reik Oberrath
  * @since 1.0.0
@@ -20,7 +21,8 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 
 	static final String NO_TARGET_FILE_NAME = "TargetFileName not defined.";
 	static final String NO_TARGET_DIR = "TargetDir not defined.";
-	public static final String TEXT_TARGET_DIR_NOT_FOUND = "Defined target directory does not exist";
+
+	public static final String TEXT_TARGET_DIR_NOT_FOUND = "Defined target directory does not exist:";
 	public static final String TEXT_TARGET_DIR_IS_A_FILE = "Defined target directory is no directory";
 	public static final String TEXT_TARGET_FILE_NOT_FOUND = "Defined target file does not exist";
 	public static final String TEXT_TARGET_FILE_IS_A_DIRECTORY = "Defined target file is no file";

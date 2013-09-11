@@ -21,4 +21,10 @@ public interface Model extends MetaInfoSupport {
 	 */
 	String getName();
 
+	/**
+	 * @param classname simple or fully qualified name of class to be returned 
+	 * @return class descriptors that corresponds to classname
+	 */
+	ClassDescriptor getClassDescriptor(String classname);	
+
 }

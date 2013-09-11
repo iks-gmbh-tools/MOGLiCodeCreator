@@ -11,7 +11,7 @@ import org.easymock.EasyMock;
 
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.AttributeDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;

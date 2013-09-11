@@ -1,0 +1,15 @@
+############## MOGLiCC SHORT REPORT ###############
+
+Status: OK
+
+Workspace used: DummyWorkspace
+Model read from file: DummyModelFile.xyz
+
+All 2 plugins executed successfully.
+A total of 11 generation events for 2 output artefact(s) have been performed.
+
+ModelProviderDummy: Model Provider Dummy Result
+
+GeneratorDummy: Generator Dummy Result
+
+######################  End  ######################

@@ -177,8 +177,8 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 		// verify test result
 		assertFileContainsEntry(applicationLogfile, "Plugins found:");
 		assertFileContainsEntry(applicationLogfile, "jarName=DummyPluginThrowsRuntimeExceptionStarter.jar, id=DummyPlugin, pluginType=GENERATOR, status=LOADED, infoMessage=UNEXPECTED PROBLEM: RuntimeException: fatal");
-		assertFileContainsEntry(applicationLogfile, "jarName=DummyStandardModelProviderStarter.jar, id=StandardModelProvider, pluginType=MODEL_PROVIDER, status=EXECUTED, infoMessage=" + TEXT_INFOMESSAGE_OK);
-		assertFileContainsEntry(applicationLogfile, "jarName=DummyDataProviderStarter.jar, id=DummyDataProvider, pluginType=DATA_PROVIDER, status=EXECUTED, infoMessage=" + TEXT_INFOMESSAGE_OK);
+		assertFileContainsEntry(applicationLogfile, "jarName=DummyStandardModelProviderStarter.jar, id=StandardModelProvider, pluginType=PROVIDER, status=EXECUTED, infoMessage=" + TEXT_INFOMESSAGE_OK);
+		assertFileContainsEntry(applicationLogfile, "jarName=DummyDataProviderStarter.jar, id=DummyDataProvider, pluginType=PROVIDER, status=EXECUTED, infoMessage=" + TEXT_INFOMESSAGE_OK);
 		assertFileContainsEntry(applicationLogfile, "jarName=DummyPluginStarter.jar, id=null, pluginType=null, status=ANALYSED, infoMessage=" + TEXT_DEACTIVATED_PLUGIN_INFO);
 		assertFileContainsEntry(applicationLogfile, "jarName=DummyPluginStarter2.jar, id=null, pluginType=null, status=ANALYSED, infoMessage=" + TEXT_DEACTIVATED_PLUGIN_INFO);
 		assertFileContainsEntry(applicationLogfile, "jarName=pluginWithoutExistingStarterClass.jar, id=null, pluginType=null, status=ANALYSED, infoMessage=" + TEXT_STARTERCLASS_UNKNOWN);

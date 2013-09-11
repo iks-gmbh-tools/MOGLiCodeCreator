@@ -1,7 +1,7 @@
 #########################################################################################################
-# This model file illustrates the usage of the MOGLi StandardModelProvider plugin.
+# This model file illustrates the usage of the model definition DSL of the StandardModelProvider plugin.
 #
-# The Standard Model is defined by the three hierarchy levels 'model', 'class' and 'attribute'.
+# A model is defined by the three hierarchy levels 'model', 'class' and 'attribute'.
 # All elements in each level must define a name - the only concretely predefined data.
 # The name of a class must be fully qualified and unique within the model.
 # The name of a attribute must be unique for its class.
@@ -12,6 +12,10 @@
 # Information which plugin uses which MetaInfo is presented in a statistics file
 # that is written into the plugin output directory of the StandardModelProvider plugin.
 #
+# For repreatedly used values such as path to domain objects, variables consisting of key-values-pairs 
+# can be defined. The key of a variable can be used as placeholder: <<variableKey>>. When this model file
+# is parsed all placeholders are replaced by its variable value. For an example see below.
+#
 # The MOGLiCC_JavaBeanModel provides data for the MOGLiCC JavaBean templates. Model data and templates are
 # used to create the MOGLiCC JavaBean artefacts. These are NOT designed for manual modification.
 # In case you want to have same modified, change the templates, the model data or both, and
@@ -19,11 +23,13 @@
 #
 #########################################################################################################
 
+variable DomainPath com.iksgmbh.moglicc.demo
+
 model MOGLiCC_JavaBeanModel
   metainfo eclipseProjectDir <applicationRootDir>
   metainfo projectName MOGLiCC_JavaBeanProject
 
-class com.iksgmbh.moglicc.demo.Person
+class <<DomainPath>>.Person
 
   attribute Firstname
     metainfo JavaType String
@@ -49,8 +55,8 @@ class com.iksgmbh.moglicc.demo.Person
     metainfo ExampleData 44
 
 
-class com.iksgmbh.moglicc.demo.Member
-  metainfo extends com.iksgmbh.moglicc.demo.Person
+class <<DomainPath>>.Member
+  metainfo extends <<DomainPath>>.Person
   metainfo implements java.io.Serializable
 
     attribute membershipNumber
@@ -58,7 +64,7 @@ class com.iksgmbh.moglicc.demo.Member
     metainfo ExampleData 333
 
 
-class com.iksgmbh.moglicc.demo.Address
+class <<DomainPath>>.Address
   metainfo implements java.io.Serializable
   metainfo implements java.lang.Cloneable
 
@@ -85,8 +91,8 @@ class com.iksgmbh.moglicc.demo.Address
     metainfo ExampleData 12
 
 
-class com.iksgmbh.moglicc.demo.Misc
-  metainfo extends com.iksgmbh.moglicc.demo.Person
+class <<DomainPath>>.Misc
+  metainfo extends <<DomainPath>>.Person
 
   attribute numberInt
     metainfo JavaType int

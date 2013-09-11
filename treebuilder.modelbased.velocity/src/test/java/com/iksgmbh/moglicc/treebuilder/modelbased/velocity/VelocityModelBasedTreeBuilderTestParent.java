@@ -9,15 +9,15 @@ import com.iksgmbh.moglicc.MOGLiCodeCreator;
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
-import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.VelocityModelBasedTreeBuilderStarter;
+import com.iksgmbh.moglicc.test.plugin.ModelProviderDummy;
+import com.iksgmbh.moglicc.test.plugin.VelocityEngineProviderDummy;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
@@ -25,6 +25,7 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 	public static final String PROJECT_ROOT_DIR = "../treebuilder.modelbased.velocity/";
 	public static final String METAINFO_MODEL_TARGETDIR = "ModelTargetTestDir";
 	public static final String METAINFO_MODEL_PROJECT_DESCRIPTION = "Description of project";
+	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 
 	private static boolean isFirstTime = true;
 
@@ -107,66 +108,9 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 	}
 
 	protected ModelProvider getDummyModelProvider(final String modelName, final HashMap<String, String> modelMetaInfos) {
-		return new DummyModelProvider(modelName, modelMetaInfos);
+		return new ModelProviderDummy(MODEL_PROVIDER_ID, getDummyModel(modelName, modelMetaInfos));
 	}
 
-	class DummyModelProvider implements ModelProvider {
-
-		private Model model;
-
-		public DummyModelProvider(final String modelName, final HashMap<String, String> modelMetaInfos) {
-			 model = getDummyModel(modelName, modelMetaInfos);
-		}
-
-		@Override
-		public PluginType getPluginType() {
-			return PluginType.MODEL_PROVIDER;
-		}
-
-		@Override
-		public String getId() {
-			return VelocityModelBasedTreeBuilderStarter.MODEL_PROVIDER_ID;
-		}
-
-		@Override
-		public List<String> getDependencies() {
-			return null;
-		}
-
-		@Override
-		public void setInfrastructure(InfrastructureService infrastructure) {
-		}
-
-		@Override
-		public InfrastructureService getInfrastructure() {
-			return null;
-		}
-
-		@Override
-		public void doYourJob() throws MOGLiPluginException {
-		}
-
-		@Override
-		public boolean unpackDefaultInputData() throws MOGLiPluginException {
-			return false;
-		}
-
-		@Override
-		public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
-			return false;
-		}
-
-		@Override
-		public Model getModel(String pluginId) throws MOGLiPluginException {
-			return model;
-		}
-
-		@Override
-		public String getModelName() {
-			return null;
-		}
-
-	}
 
 	protected Model getDummyModel(final String modelName, final HashMap<String, String> modelMetaInfos) {
 		return new DummyModel(modelName, modelMetaInfos);
@@ -231,7 +175,7 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 
 		@Override
 		public int getSize() {
-			return 0;
+			return 1;
 		}
 
 		@Override
@@ -245,6 +189,12 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 				return false;
 			}
 			return ! (metaInfoValue.startsWith(META_INFO_NOT_FOUND_START) && metaInfoValue.endsWith(META_INFO_NOT_FOUND_END));
+		}
+
+		@Override
+		public ClassDescriptor getClassDescriptor(String classname)
+		{
+			return null;
 		}
 
 	}

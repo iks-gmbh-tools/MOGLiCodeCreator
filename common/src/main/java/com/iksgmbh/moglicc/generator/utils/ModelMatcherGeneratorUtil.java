@@ -5,9 +5,9 @@ import java.util.List;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 
-public class ModelValidationGeneratorUtil {
+public class ModelMatcherGeneratorUtil {
 
-	public static boolean validateModel(final VelocityGeneratorResultData resultData,
+	public static boolean doesItMatch(final VelocityGeneratorResultData resultData,
 			                            final String modelName) throws MOGLiPluginException
 	{
 		final String key = VelocityGeneratorResultData.KnownGeneratorPropertyNames.NameOfValidModel.name();

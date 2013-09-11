@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.Model;

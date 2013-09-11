@@ -29,9 +29,9 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBean");
 		assertFileDoesNotExist(file);
-		final String generationReport = velocityClassBasedFileMakerStarter.getGenerationReport();
-		assertStringEquals("generationReport", velocityClassBasedFileMakerStarter.getId() + " have had nothing to do. " +
-				                               "6 artifacts, but no class in model file found.", generationReport);
+		final String generationReport = velocityClassBasedFileMakerStarter.getGeneratorReport();
+		System.err.println(generationReport);
+		assertStringEquals("generationReport", "6 input artefact(s) found. No classes in model. Nothing to do.", generationReport);
 	}
 
 	@Test
@@ -272,8 +272,9 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final File resultFile2 = new File(applicationRootDir, "example/Test2.java");
 		assertFileExists(resultFile2);
 
-		assertStringDoesNotContain(velocityClassBasedFileMakerStarter.getGenerationReport(), "Test1.java");
-		assertStringContains(velocityClassBasedFileMakerStarter.getGenerationReport(), "Test2.java");
+		assertStringContains(velocityClassBasedFileMakerStarter.getGeneratorReport(), 
+				                   "configured to skip generation:" + FileUtil.getSystemLineSeparator() + "Test1.java");
+		assertStringContains(velocityClassBasedFileMakerStarter.getGeneratorReport(), "Test2.java was created in");
 
 		final String logfileContent = FileUtil.getFileContent(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginLogFile());
 		assertStringContains(logfileContent, "Test1.java");

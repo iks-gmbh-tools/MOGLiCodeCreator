@@ -15,7 +15,7 @@ public class StarterClassWithMissingInterface {
 	}
 
 	public MOGLiPlugin.PluginType getPluginType() {
-		return MOGLiPlugin.PluginType.DATA_PROVIDER;
+		return MOGLiPlugin.PluginType.PROVIDER;
 	}
 
 	public void doYourJob() {

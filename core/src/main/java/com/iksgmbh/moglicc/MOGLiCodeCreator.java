@@ -5,11 +5,15 @@ import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_HELP_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_INPUT_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LOGS_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_OUTPUT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_REPORT_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_TEMP_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_GENERATION_REPORT_FILE;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_INTRODUCTION_HELPFILE;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_REPORT_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_PROVIDER_REPORT_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_SHORT_REPORT_FILE;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.WORKSPACE_PROPERTY;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_APPLICATION_TERMINATED;
@@ -24,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import com.iksgmbh.moglicc.PluginMetaData.PluginStatus;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.exceptions.DuplicatePluginIdException;
 import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
@@ -34,8 +37,6 @@ import com.iksgmbh.moglicc.helper.PluginExecutor;
 import com.iksgmbh.moglicc.helper.PluginExecutor.PluginExecutionData;
 import com.iksgmbh.moglicc.helper.PluginLoader;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
-import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
@@ -49,7 +50,7 @@ public class MOGLiCodeCreator {
 
 	// *****************************  static stuff  ************************************
 
-	public static final String VERSION = "1.4.0-SNAPSHOT";
+	public static final String VERSION = "1.5.0-SNAPSHOT";
 
 	private static String applicationRootDir = System.getProperty("user.dir");
 	private static String workspaceDirArgument;
@@ -108,55 +109,71 @@ public class MOGLiCodeCreator {
 
 	// **************************  Instance fields  *********************************
 
-	private File applicationReportFile;
-	private File workspaceReportFile;
+	private File errorReportFile;
+	private File shortReportFile;
+	private File generatorReportFile;
+	private File providerReportFile;
 	private List<PluginMetaData> pluginMetaDataList;
 	private Properties applicationProperties;
 	private Properties workspaceProperties;
 	private String workspace;
-	private List<MOGLiPlugin> plugins = null;
-	private List<String> logEntriesBeforeLogFileExists = new ArrayList<String>();
+	private List<MOGLiPlugin> plugins;
+	private List<String> logEntriesBeforeLogFileExists;
 	private File workspaceDir;
 	private File tempDir;
 	private File inputDir;
+	private File reportDir;
 	private File helpDir;
 	private File logDir;
 	private File outputDir;
 
 	// *****************************  Constructor  ************************************
 
-	public MOGLiCodeCreator() {
+	public MOGLiCodeCreator() 
+	{
+		logEntriesBeforeLogFileExists = new ArrayList<String>();
 		readApplicationPropertiesFile();
+		initErrorReportFile();
 		initWorkspace();
-		initApplicationDirectories();
-		initReportFiles();
+		initApplicationDirectories();  // to be called after initWorkspace due to needed log-file!
 	}
 
-	private void initReportFiles() {
-		applicationReportFile = new File(applicationRootDir, FILENAME_REPORT_FILE);
-		if (applicationReportFile.exists()) {
-			boolean ok = applicationReportFile.delete();
+	private void initReportFiles() 
+	{
+		generatorReportFile = new File(reportDir, FILENAME_GENERATION_REPORT_FILE);
+		deleteFileIfExisiting(generatorReportFile, "reportFile");
+
+		providerReportFile = new File(reportDir, FILENAME_PROVIDER_REPORT_FILE);
+		deleteFileIfExisiting(providerReportFile, "reportFile");
+		
+		shortReportFile = new File(reportDir, FILENAME_SHORT_REPORT_FILE);
+		deleteFileIfExisiting(shortReportFile, "shortReport");
+	}
+
+	private void initErrorReportFile() {
+		errorReportFile = new File(applicationRootDir, FILENAME_ERROR_REPORT_FILE);
+		deleteFileIfExisiting(errorReportFile, "errorReport");
+	}
+	
+	public void deleteFileIfExisiting(final File file, final String fileType) {
+		if (file.exists()) {
+			boolean ok = file.delete();
 			if (! ok) {
-				throw new MOGLiCoreException("Error deleting old reportFile: " + applicationReportFile.getAbsolutePath());
+				throw new MOGLiCoreException("Error deleting old " + fileType + ": " + file.getAbsolutePath());
 			}
 		}
-
-		workspaceReportFile = new File(workspaceDir, FILENAME_REPORT_FILE);
-		if (workspaceReportFile.exists()) {
-			boolean ok = workspaceReportFile.delete();
-			if (! ok) {
-				throw new MOGLiCoreException("Error deleting old reportFile: " + workspaceReportFile.getAbsolutePath());
-			}
-		}	}
+	}
 
 	private void initWorkspace() {
 		initWorkspaceDir();
 		createMogliLogFile();
 		readWorkspaceProperties();
 		initWorkspaceDirectories();
+		initReportFiles();
 	}
 
-	private void initWorkspaceDir() {
+	private void initWorkspaceDir() 
+	{
 		if (workspaceDirArgument != null) {
 			// check first application argument
 			workspace = workspaceDirArgument;
@@ -218,11 +235,19 @@ public class MOGLiCodeCreator {
 
 		inputDir = new File(workspaceDir, DIR_INPUT_FILES);
 		inputDir.mkdirs();
+		
+		reportDir = new File(workspaceDir, DIR_REPORT_FILES);
+		reportDir.mkdirs();
 	}
 
+	/**
+	 * Application directory to create is currently only the help dir.
+	 */
 	private void initApplicationDirectories() {
 		helpDir = new File(applicationRootDir + "/" + DIR_HELP_FILES);
-		if (! helpDir.exists()) {
+		
+		if (! helpDir.exists()) 
+		{
 			MOGLiLogUtil.logInfo("Application help directory does not exist and will be created!");
 			helpDir.mkdirs();
 			String content = null;
@@ -284,7 +309,8 @@ public class MOGLiCodeCreator {
 
 	// *****************************  explicitely tested methods  ************************************
 
-	void doYourJob() {
+	void doYourJob() 
+	{
 		pluginMetaDataList = MetaDataLoader.doYourJob(workspaceProperties);
 		if (getNumberOfPluginsToLoad(pluginMetaDataList) == 0) {
 			MOGLiLogUtil.logInfo(TEXT_NOTHING_TO_DO);
@@ -306,70 +332,17 @@ public class MOGLiCodeCreator {
 			return;
 		}
 
-		final String mainResultString = buildMainResultString();
-		createReportFiles(mainResultString);
-		logFinalInformation(mainResultString);
+		final ReportWriter reportWriter = new ReportWriter(plugins, pluginMetaDataList, workspace);
+		reportWriter.writeGeneratorReport(generatorReportFile);
+		reportWriter.writeProviderReport(providerReportFile);
+		reportWriter.writeShortReport(shortReportFile);
+		reportWriter.writeErrorReportIfNecessary(errorReportFile);
+		
+		logFinalInformation(reportWriter.getShortReportHeader());
 	}
 
-	private int countTotalNumberOfGenerations() {
-		int counter = 0;
-		if (plugins != null && plugins.size() > 0) {
-			final List<Generator> generators = plugins.get(0).getInfrastructure().getPluginsOfType(Generator.class);
-			for (final Generator generator : generators) {
-				counter += generator.getNumberOfGenerations();
-			}
-		}
-		return counter;
-	}
-
-	private int countTotalNumberOfArtefacts() {
-		int counter = 0;
-		if (plugins != null && plugins.size() > 0) {
-			final List<Generator> generators = plugins.get(0).getInfrastructure().getPluginsOfType(Generator.class);
-			for (final Generator generator : generators) {
-				counter += generator.getNumberOfArtefacts();
-			}
-		}
-		return counter;
-	}
-
-	private void createReportFiles(final String mainResultString) {
-		if (plugins == null || plugins.size() == 0) {
-			return;
-		}
-
-		final List<Generator> generators = plugins.get(0).getInfrastructure().getPluginsOfType(Generator.class);
-		final StringBuffer report = new StringBuffer("************************************   R E S U L T   *****************************************");
-
-		report.append(FileUtil.getSystemLineSeparator());
-		report.append(FileUtil.getSystemLineSeparator());
-		report.append(mainResultString);
-
-		for (final Generator generator : generators) {
-			report.append(FileUtil.getSystemLineSeparator());
-			report.append(FileUtil.getSystemLineSeparator());
-			report.append("----------------------------------------------------------------------------------------------");
-			report.append(FileUtil.getSystemLineSeparator());
-			report.append(generator.getGenerationReport());
-		}
-		report.append(FileUtil.getSystemLineSeparator());
-		report.append(FileUtil.getSystemLineSeparator());
-        report.append("**************************************  E N D  ***********************************************");
-
-		try {
-			FileUtil.createNewFileWithContent(applicationReportFile, report.toString().trim());
-			MOGLiLogUtil.logInfo("Report file created in application root: " + applicationReportFile.getAbsolutePath());
-
-			if (! applicationReportFile.getAbsolutePath().equals(workspaceReportFile.getAbsolutePath())) {
-				FileUtil.createNewFileWithContent(workspaceReportFile, report.toString().trim());
-				MOGLiLogUtil.logInfo("Report file created in workspace: " + workspaceReportFile.getAbsolutePath());
-			}
-		} catch (Exception e) {
-			MOGLiLogUtil.logError("Error creating reportfile: " + e.getMessage());
-		}
-	}
-
-	private void logFinalInformation(final String mainResultString) {
+	private void logFinalInformation(final String mainResultString) 
+	{
 		MOGLiLogUtil.logInfo("");
 
 		logPluginMetaData(pluginMetaDataList);
@@ -383,38 +356,6 @@ public class MOGLiCodeCreator {
 		MOGLiLogUtil.logInfo(TEXT_DONE);
 	}
 
-	private String buildMainResultString() {
-		String toReturn = "";
-		final int numberOfSuccessfullyExecutedPlugins = getNumberOfSuccessfullyExecutedPlugins(pluginMetaDataList);
-		final int numberOfNotExecutedPlugins = getNumberOfNotExecutedPlugins(pluginMetaDataList);
-		final String contextString = "on model '" + getModelName() + "' in workspace <" + workspace + ">.";
-
-		if (numberOfNotExecutedPlugins == 0) {
-			toReturn = "All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully " + contextString;
-		} else {
-			toReturn = numberOfSuccessfullyExecutedPlugins + " plugin(s) executed successfully " + contextString;
-			toReturn += FileUtil.getSystemLineSeparator();
-			toReturn += numberOfNotExecutedPlugins + " plugin(s) not or erroneously executed!";
-		}
-
-		toReturn += FileUtil.getSystemLineSeparator() + countTotalNumberOfGenerations() + " generations for "
-		            + countTotalNumberOfArtefacts() + " artefacts have been performed.";
-
-		return toReturn;
-	}
-
-	private String getModelName() {
-		String toReturn = "  ";
-		if (plugins != null && plugins.size() > 0) {
-			final List<ModelProvider> modelProviders = plugins.get(0).getInfrastructure().getPluginsOfType(ModelProvider.class);
-			for (final ModelProvider modelProvider : modelProviders) {
-				toReturn += modelProvider.getModelName() + ", ";  // in case their are more than one modelProviders
-			}
-			toReturn = toReturn.substring(0, toReturn.length() - 2);
-		}
-
-		return toReturn.trim();
-	}
 
 	private PluginExecutionData createPluginExecutionData(List<MOGLiPlugin> plugins) {
 		InfrastructureInitData infrastructureInitData = new InfrastructureInitData(new File(applicationRootDir),
@@ -465,27 +406,6 @@ public class MOGLiCodeCreator {
 	}
 
 
-	// *****************************  private methods  ************************************
-
-	private int getNumberOfSuccessfullyExecutedPlugins(List<PluginMetaData> pluginMetaDataList) {
-		int counter = 0;
-		for (PluginMetaData pluginMetaData : pluginMetaDataList) {
-			if (pluginMetaData.getStatus() == PluginStatus.EXECUTED) {
-				counter++;
-			}
-		}
-		return counter;
-	}
-
-	private int getNumberOfNotExecutedPlugins(List<PluginMetaData> pluginMetaDataList) {
-		int counter = 0;
-		for (PluginMetaData pluginMetaData : pluginMetaDataList) {
-			if (pluginMetaData.getStatus() != PluginStatus.EXECUTED) {
-				counter++;
-			}
-		}
-		return counter;
-	}
 
 
 	private void readApplicationPropertiesFile() {

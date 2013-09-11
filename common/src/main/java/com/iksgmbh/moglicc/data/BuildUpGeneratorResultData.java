@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.utils.FileUtil;
 
 /**
  * Object to build a data structure with information for a generator plugin needed to create artefacts.
+ * This class contains the most basic implementation of result data objects.
  *
  * @author Reik Oberrath
  * @since 1.0.0
@@ -18,8 +20,8 @@ public class BuildUpGeneratorResultData implements GeneratorResultData {
 
 	public static final String NO_CONTENT = "No generated content set.";
 
+	// result data
 	protected HashMap<String, List<String >> propertyMap = new HashMap<String, List<String>>();
-
 	protected String generatedContent;
 	protected List<String> validationErrors = new ArrayList<String>();
 

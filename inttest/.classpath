@@ -6,8 +6,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry excluding="ExpectedMisc.java|MOGLiCCPlugin/ExpectedNewDataProviderStarter.java|MOGLiCCPlugin/ExpectedNewEngineProviderStarter.java|MOGLiCCPlugin/ExpectedNewGeneratorStarter.java|MOGLiCCPlugin/ExpectedNewModelProviderStarter.java" kind="src" output="target/test-classes" path="src/test/resources">
+	<classpathentry including="**/*.java" kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>

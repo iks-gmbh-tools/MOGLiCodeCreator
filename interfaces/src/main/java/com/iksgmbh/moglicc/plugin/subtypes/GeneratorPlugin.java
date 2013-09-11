@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.plugin.type.basic;
+package com.iksgmbh.moglicc.plugin.subtypes;
 
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 
@@ -8,11 +8,11 @@ import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
  * @author Reik Oberrath
  * @since 1.0.0
  */
-public interface Generator extends MOGLiPlugin {
+public interface GeneratorPlugin extends MOGLiPlugin {
 
-	String getGenerationReport();
+	String getGeneratorReport();
 
 	int getNumberOfGenerations();
 
-	int getNumberOfArtefacts();
+	int getNumberOfGeneratedArtefacts();
 }

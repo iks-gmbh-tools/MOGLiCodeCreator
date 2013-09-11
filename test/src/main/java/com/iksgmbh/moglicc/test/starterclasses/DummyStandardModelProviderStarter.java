@@ -6,7 +6,7 @@ import java.util.List;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
 
@@ -21,7 +21,7 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin.PluginType.MODEL_PROVIDER;
+		return MOGLiPlugin.PluginType.PROVIDER;
 	}
 
 	@Override
@@ -63,6 +63,35 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 	@Override
 	public String getModelName() {
 		return null;
+	}
+
+	@Override
+	public String getModelFileName() {
+		return "dummy";
+	}
+
+	@Override
+	public String getShortReport()
+	{
+		return "";
+	}
+
+	@Override
+	public String getProviderReport()
+	{
+		return "";
+	}
+
+	@Override
+	public int getNumberOfCalls()
+	{
+		return 0;
+	}
+
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 0;
 	}
 
 }

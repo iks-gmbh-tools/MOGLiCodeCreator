@@ -81,12 +81,15 @@ public class PluginLoader {
 		}
 	}
 
-	private void updateMetaData(PluginMetaData pluginMetaData,
-			                            MOGLiPlugin loadedPlugin) {
+	private void updateMetaData(final PluginMetaData pluginMetaData,
+			                    final MOGLiPlugin loadedPlugin) 
+	{
 		pluginMetaData.setDependencies(loadedPlugin.getDependencies());
 		pluginMetaData.setId(loadedPlugin.getId());
 		pluginMetaData.setPluginType(loadedPlugin.getPluginType());
 		pluginMetaData.setPluginStatus(PluginStatus.LOADED);
+		pluginMetaData.setSuggestedExecutionOrder(loadedPlugin.getSuggestedPositionInExecutionOrder());
+
 	}
 	
 	class LoadResult {

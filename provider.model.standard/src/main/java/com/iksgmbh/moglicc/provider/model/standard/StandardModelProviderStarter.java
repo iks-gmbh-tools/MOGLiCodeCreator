@@ -25,7 +25,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.model.standard.exceptions.ModelParserException;
 import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpModel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
@@ -35,8 +35,7 @@ import com.iksgmbh.moglicc.provider.model.standard.parser.ModelParser;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
-public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin {
-
+public class StandardModelProviderStarter implements ModelProvider {
 
 	public static final String PLUGIN_ID = "StandardModelProvider";
 
@@ -46,11 +45,16 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	private static final String FILENAME_NEW_PLUGIN_MODEL_FILE = "MOGLiCC_NewPluginModel.txt";
 
 	private InfrastructureService infrastructure;
+	private boolean jobStarted = false;
+	private String modelBuildFailure;
+	private int callCounts = 0;
 	private File modelFile;
+	private String modelFileName;
 	private BuildUpModel buildUpModel;
 
 	private List<MetaInfoValidator> metaInfoValidatorList;
 	final HashMap<String, List<String>> validationErrorMessages = new HashMap<String, List<String>>();  // message list per plugin
+	final List<String> callingPlugins = new ArrayList<String>();
 
 	private Properties pluginProperties;
 
@@ -61,11 +65,12 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin.PluginType.MODEL_PROVIDER;
+		return MOGLiPlugin.PluginType.PROVIDER;
 	}
 
 	@Override
 	public void doYourJob() throws MOGLiPluginException {
+		jobStarted = true;
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
 		readPluginProperties();
 		buildUpModel = buildModel();
@@ -211,7 +216,11 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 	}
 
 	@Override
-	public Model getModel(final String pluginId) throws MOGLiPluginException {
+	public Model getModel(final String pluginId) throws MOGLiPluginException 
+	{
+		callCounts++;
+		callingPlugins.add(pluginId);
+		
 		if (buildUpModel == null) {
 			throw new MOGLiPluginException(TEXT_NO_MODEL_FILE_LOADED);
 		}
@@ -236,7 +245,8 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		try {
 			buildUpModel = ModelParser.doYourJob(fileContentAsList, braceSymbol);
 		} catch (ModelParserException e) {
-			throw new MOGLiPluginException(TEXT_PARSE_ERROR_FOUND
+			modelBuildFailure = TEXT_PARSE_ERROR_FOUND + ": " + modelFile.getName();
+			throw new MOGLiPluginException(TEXT_PARSE_ERROR_FOUND + " '" + modelFile.getName() + "':\n"
 					+ e.getParserErrors());
 		}
 
@@ -264,8 +274,8 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		try {
 			fileContentAsList = FileUtil.getFileContentAsList(modelFile);
 		} catch (IOException e) {
-			throw new MOGLiPluginException("Could not read file: "
-					+ modelFile, e);
+			modelBuildFailure = "Could not read file: " + modelFile;
+			throw new MOGLiPluginException(modelBuildFailure);
 		}
 		infrastructure.getPluginLogger().logInfo("Model file has been read!");
 		return fileContentAsList;
@@ -273,32 +283,37 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 
 	private void checkModelFile() throws MOGLiPluginException {
 		if (!modelFile.exists()) {
-			throw new MOGLiPluginException(TEXT_MODEL_NOT_EXISTS + ":\n"
-					+ modelFile.getAbsolutePath());
+			modelBuildFailure = TEXT_MODEL_NOT_EXISTS + ": " + modelFile.getAbsolutePath();
+			throw new MOGLiPluginException(modelBuildFailure);
 		}
 		final String content;
 		try {
 			content = FileUtil.getFileContent(modelFile);
 		} catch (IOException e) {
-			throw new MOGLiPluginException("Could not read file: "
-					+ modelFile.getAbsolutePath(), e);
+			modelBuildFailure = "Could not read file: " + modelFile.getAbsolutePath();
+			throw new MOGLiPluginException(modelBuildFailure, e);
 		}
 		if (content.trim().length() == 0) {
-			throw new MOGLiPluginException("Unexpected empty file: "
-					+ modelFile.getAbsolutePath());
+			modelBuildFailure = "Unexpected empty file: " + modelFile.getAbsolutePath();
+			throw new MOGLiPluginException(modelBuildFailure);
 		}
 		infrastructure.getPluginLogger().logInfo("Model file found!");
 	}
 
 	File getModelFile() throws MOGLiPluginException {
 		if (modelFile == null) {
-			final String filename = getModelFileName();
-			modelFile = new File(infrastructure.getPluginInputDir(), filename);
+			modelFileName = readModelFileName();
+			modelFile = new File(infrastructure.getPluginInputDir(), modelFileName);
 		}
 		return modelFile;
 	}
 
-	private String getModelFileName() throws MOGLiPluginException {
+	@Override
+	public String getModelFileName() {
+		return modelFileName;
+	}
+
+	private String readModelFileName() throws MOGLiPluginException {
 		String toReturn = null;
 
 		if (pluginProperties != null) {
@@ -317,6 +332,7 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		}
 
 		if (toReturn == null) {
+			modelBuildFailure = TEXT_NO_MODELFILE_FOUND;
 			throw new MOGLiPluginException(TEXT_NO_MODELFILE_FOUND);
 		}
 
@@ -396,6 +412,66 @@ public class StandardModelProviderStarter implements ModelProvider, MOGLiPlugin 
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
 	}
+
+	@Override
+	public String getShortReport()
+	{
+		if (! jobStarted) {
+			return "not yet executed";
+		}
+		else if (modelBuildFailure != null) {
+			return modelBuildFailure;
+		}
+			
+		return "Model " + buildUpModel.getName() + " with " + buildUpModel.getSize() 
+					   + " classes has been called " + getNumberOfCalls() + " times."; 
+	}
+	
+	@Override
+	public String getProviderReport()
+	{
+		final StringBuffer sb = new StringBuffer(getShortReport());
+		
+		if (buildUpModel != null) {
+			sb.append(FileUtil.getSystemLineSeparator());
+			sb.append(FileUtil.getSystemLineSeparator());
+			
+			sb.append("Classes in model:");
+			sb.append(FileUtil.getSystemLineSeparator());
+			
+			final List<ClassDescriptor> classDescriptorList = buildUpModel.getClassDescriptorList();
+			for (final ClassDescriptor classDescriptor : classDescriptorList)
+			{
+				sb.append(classDescriptor.getFullyQualifiedName());
+				sb.append(FileUtil.getSystemLineSeparator());
+			}
+
+			sb.append(FileUtil.getSystemLineSeparator());
+			
+			sb.append("Plugins called for the model:");
+			sb.append(FileUtil.getSystemLineSeparator());
+			
+			for (final String pluginId : callingPlugins)
+			{
+				sb.append(pluginId);
+				sb.append(FileUtil.getSystemLineSeparator());
+			}
+			
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public int getNumberOfCalls() {
+		return callCounts;
+	}
+
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 100;
+	}
+	
 
 	/**
 	 * FOR TEST PURPOSE ONLY

@@ -28,8 +28,14 @@ public class PluginMetaData {
 	private List<String> dependencies;
 	private PluginStatus status;	
 	private String infoMessage;
+	private int suggestedExecutionOrder;
 
-	public PluginMetaData(String jarName, String starterClass) {
+	// for test purpose
+	public PluginMetaData(final String id) {
+		this.id = id;
+	}
+	
+	public PluginMetaData(final String jarName, final String starterClass) {
 		super();
 		if (jarName == null) {
 			throw new MOGLiCoreException("JarName Missing");
@@ -98,24 +104,22 @@ public class PluginMetaData {
 	public void setDependencies(List<String> dependencies) {
 		this.dependencies = dependencies;
 	}
+	
+	public int getSuggestedExecutionOrder()
+	{
+		return suggestedExecutionOrder;
+	}
+
+	public void setSuggestedExecutionOrder(int suggestedExecutionOrder)
+	{
+		this.suggestedExecutionOrder = suggestedExecutionOrder;
+	}
 
 	@Override
-	public String toString() {
-		return "PluginMetaData [jarName=" + jarName + ", id=" + id
-				+ ", pluginType=" + pluginType + ", status=" + status
-				+ ", infoMessage=" + infoMessage + "]";
+	public String toString()
+	{
+		return "PluginMetaData [jarName=" + jarName + ", id=" + id + ", pluginType=" + pluginType + ", status=" 
+	            + status + ", infoMessage=" + infoMessage
+				+ ", suggestedExecutionOrder=" + suggestedExecutionOrder + "]";
 	}
-
-	public String toStringAllArrtibutes() {
-		StringBuffer dependsOn = new StringBuffer();
-		for (int i = 0; i < dependencies.size(); i++) {
-			dependsOn.append(dependencies.get(0));
-			dependsOn.append(", ");
-		}
-		String dependsOnString = dependsOn.toString().substring(0, dependsOn.length()-3);
-		return id + "  " + jarName + "  " + starterClass + "  " 
-		       + pluginType + "  " + status + "  " 
-		       + infoMessage + "  " + dependsOnString;
-	}
-
 }
