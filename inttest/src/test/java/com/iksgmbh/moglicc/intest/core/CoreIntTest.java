@@ -1,8 +1,10 @@
 package com.iksgmbh.moglicc.intest.core;
 
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_SHORT_REPORT_FILE;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
@@ -15,6 +17,7 @@ import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
 import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector;
 import com.iksgmbh.moglicc.build.helper.ReleaseFileCollector.FileCollectionData;
 import com.iksgmbh.moglicc.intest.IntTestParent;
+import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
@@ -32,20 +35,27 @@ public class CoreIntTest extends IntTestParent {
 	/** 
 	 * NOTE: This method represents no regular integration test!
 	 *       It is used to debug a problem with production data!
+	 * @throws IOException 
 	 *  */
 	//@Test  // comment this line out when building a MOGLiCC release
-	public void runWithExternalInputData() {
+	public void runWithExternalInputData() throws IOException {
 		// prepare test
 		initTestRootDir();
-		copyExternalInputDataIntoMOGLiCCWorkspace("C:/dev/sources/_mogli13/workspaces/_TEST");
+		copyExternalInputDataIntoMOGLiCCWorkspace("C:/dev/sources/ctlcrmoglicc/work/workspaces/cltWeblogicDBKomponenteSpring");
 
 		// call functionality under test
 		MOGLiCodeCreator.main(args);
 
 		// no verifying
+		//final File reportFile = new File(applicationReportDir, SHORT_REPORT_FILE);
+		//final File reportFile = new File(applicationReportDir, GENERATION_REPORT_FILE);
+		final File reportFile = applicationLogfile;
+		System.err.println(FileUtil.getFileContent(reportFile));
 	}
 
 	private void copyExternalInputDataIntoMOGLiCCWorkspace(final String parentDirOfInputFolder) {
+		FileUtil.deleteDirWithContent(applicationInputDir);
+		applicationInputDir.mkdir();
 		final File inputFolder = new File(parentDirOfInputFolder, "input");
 		if (! inputFolder.exists()) {
 			throw new RuntimeException("Input folder does not exist: " + inputFolder.getAbsolutePath());
@@ -55,7 +65,8 @@ public class CoreIntTest extends IntTestParent {
 		
 	}
 
-	private void initTestRootDir() {
+	private void initTestRootDir() 
+	{
 		FileUtil.deleteDirWithContent(applicationRootDir);
 
 		initBuildPropertiesFile();
@@ -108,11 +119,11 @@ public class CoreIntTest extends IntTestParent {
 
 		// verify test result
 		final File logfile = MOGLiFileUtil.getNewFileInstance(LOGFILE);
-		assertFileContainsEntry(logfile, "All 5 plugins executed successfully on model 'MOGLiCC_JavaBeanModel' in workspace <../inttest/target/TestDir>.");
+		assertFileContainsEntry(logfile, "All 5 plugins executed successfully.");
 	}
 
 	@Test
-	public void createsReportFile() {
+	public void createsGeneratorReportFile() {
 		// prepare test
 		initTestRootDir();
 
@@ -120,13 +131,153 @@ public class CoreIntTest extends IntTestParent {
 		MOGLiCodeCreator.main(args);
 
 		// verify test result
-		final File reportFile = MOGLiFileUtil.getNewFileInstance(REPORT_FILE);
+		final File reportFile = new File(applicationReportDir, GENERATION_REPORT_FILE);
 		assertFileExists(reportFile);
-		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedReport.txt");
+		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedGeneratorReport.txt");
 		assertFileEquals(expectedFile , reportFile);
 	}
 
+	@Test
+	public void createsReportFilesForInvalidTemplates() throws Exception {
+		// prepare test
+		initTestRootDir();
+		MOGLiCodeCreator.main(args);
+		final File templateFile = new File(applicationInputDir, "VelocityClassBasedFileMaker/MOGLiJavaBean/A_MainTemplate.tpl");
+		final String newContent = "@nonsense " + FileUtil.getSystemLineSeparator() + FileUtil.getFileContent(templateFile); 
+		FileUtil.createNewFileWithContent(templateFile, newContent);
 
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		
+		File reportFile = new File(applicationReportDir, SHORT_REPORT_FILE);
+		assertFileExists(reportFile);
+		File expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedShortReportForInvalidTemplate.txt");
+		assertFileEquals(expectedFile , reportFile);	
+
+		reportFile = new File(applicationReportDir, GENERATION_REPORT_FILE);
+		assertFileExists(reportFile);
+		assertFileContainsEntry(reportFile, "Error parsing artefact properties for artefact 'MOGLiJavaBean': " +
+				                        "Header attribute 'nonsense' in line 1 of main template of artefact 'MOGLiJavaBean' needs additional information.");
+
+		reportFile = new File(applicationReportDir, PROVIDER_REPORT_FILE);
+		assertFileExists(reportFile);
+		assertFileContainsEntry(reportFile, "All 2 provider plugins executed successfully.");
+		
+		reportFile = new File(applicationRootDir, ERROR_REPORT_FILE);
+		assertFileExists(reportFile);
+		assertFileContainsEntry(reportFile, "Problem for plugin 'VelocityClassBasedFileMaker': Header attribute 'nonsense' in line 1 " +
+				                            "of main template of artefact 'MOGLiJavaBean' needs additional information.");
+	}
+	
+	@Test
+	public void createsReportFilesForInvalidModel() throws Exception {
+		// prepare test
+		initTestRootDir();
+		MOGLiCodeCreator.main(args);
+		FileUtil.appendToFile(modelFile, FileUtil.getSystemLineSeparator() + "nonsense");
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		File reportFile = new File(applicationReportDir, GENERATION_REPORT_FILE);
+		assertFileExists(reportFile);
+		File expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedGeneratorReportForInvalidModel.txt");
+		assertFileEquals(expectedFile , reportFile);
+
+		reportFile = new File(applicationReportDir, PROVIDER_REPORT_FILE);
+		assertFileExists(reportFile);
+		expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedProviderReportForInvalidModel.txt");
+		assertFileEquals(expectedFile , reportFile);
+		
+		reportFile = new File(applicationReportDir, SHORT_REPORT_FILE);
+		assertFileExists(reportFile);
+		expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedShortReportForInvalidModel.txt");
+		assertFileEquals(expectedFile , reportFile);	
+		
+		reportFile = new File(applicationRootDir, ERROR_REPORT_FILE);
+		assertFileExists(reportFile);
+		assertFileContainsEntry(reportFile, "Problem for plugin 'StandardModelProvider': " +
+				                            "Error parsing model file 'MOGLiCC_JavaBeanModel.txt'");
+	}
+	
+	@Test
+	public void createsProviderReportFile() {
+		// prepare test
+		initTestRootDir();
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		final File reportFile = new File(applicationReportDir, PROVIDER_REPORT_FILE);
+		assertFileExists(reportFile);
+		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedProviderReport.txt");
+		assertFileEquals(expectedFile , reportFile);
+	}
+
+	@Test
+	public void createsShortReportFile() {
+		// prepare test
+		initTestRootDir();
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		final File resultFile = new File(applicationReportDir, MOGLiSystemConstants.FILENAME_SHORT_REPORT_FILE);
+		assertFileExists(resultFile);
+		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedShortReport.txt");
+		assertFileEquals(expectedFile , resultFile);
+	}
+
+	@Test
+	public void createsErrorReportFileForStatusError() throws IOException {
+		// prepare test
+		initTestRootDir();
+		MOGLiCodeCreator.main(args);
+		FileUtil.appendToFile(modelFile, FileUtil.getSystemLineSeparator() + "nonsense");
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		final File resultFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
+		assertFileExists(resultFile);
+		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedErrorReport.txt");
+		assertFileEquals(expectedFile , resultFile);	}	
+	
+	@Test
+	public void createsNoErrorReportFileForStatusOK() {
+		// prepare test
+		initTestRootDir();
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		final File resultFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
+		assertFileDoesNotExist(resultFile);
+	}	
+	
+	@Test
+	public void namesModelNameInMOGLiResultFileIfModelContainsSyntacticalErrors() throws IOException {
+		// prepare test
+		initTestRootDir();
+		MOGLiCodeCreator.main(args);
+		FileUtil.appendToFile(modelFile, "nonsense");
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		final File reportFile = new File(applicationReportDir, FILENAME_SHORT_REPORT_FILE);
+		assertFileContainsEntry(reportFile, TextConstants.TEXT_PARSE_ERROR_FOUND );
+		assertFileContainsEntry(reportFile, modelFile.getName());
+	}	
+	
 	@Test
 	public void createsEmergencyLogFileIfDefinedWorkspaceDirCannotBeCreated() {
 		// prepare test

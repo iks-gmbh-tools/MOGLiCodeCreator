@@ -13,6 +13,7 @@ public class TextConstants {
 	public static final String DUPLICATE_ATTRIBUTE_NAME = "Identical attribute name";
 	public static final String MODELFILE_PROPERTY = "modelfile";
 	public static final String BRACE_SYMBOL_PROPERTY = "BraceSymbolForModelFileParsing";
+	public static final String UNKOWN_VARIABLE = "Variable is not defined: ";
 
 	public static final String TEXT_PROPERTIES_FILE_NOT_LOADED = StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE + " not loaded: ";
 	public static final String TEXT_NO_MODELFILE_DEFINED_IN_PROPERTIES_FILE = StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE
@@ -21,7 +22,7 @@ public class TextConstants {
                                                               + "' not found.";
 	public static final String TEXT_NO_MODELFILE_FOUND = "No modelfile found";
 	public static final String TEXT_NO_MODEL_FILE_LOADED = "No model file loaded!";
-	public static final String TEXT_PARSE_ERROR_FOUND = "Error parsing model file:\n";
+	public static final String TEXT_PARSE_ERROR_FOUND = "Error parsing model file";
 	public static final String TEXT_MODEL_BREAKS_METAINFO_VALIDATORS = "Model breaks at least one MetaInfoValidation setting. See logfile of model provider for more information!";
 	public static final String TEXT_METAINFO_VALIDATION_ERROR_OCCURRED = "Error validating MetaInfos: ";
 

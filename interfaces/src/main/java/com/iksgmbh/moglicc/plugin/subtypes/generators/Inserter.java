@@ -1,6 +1,7 @@
-package com.iksgmbh.moglicc.plugin.type;
+package com.iksgmbh.moglicc.plugin.subtypes.generators;
 
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
+
 
 /**
  * Marker interface for inserter plugins.
@@ -10,6 +11,6 @@ import com.iksgmbh.moglicc.plugin.type.basic.Generator;
  * @author Reik Oberrath
  * @since 1.0.0
  */
-public interface Inserter extends Generator {
+public interface Inserter extends GeneratorPlugin {
 
 }

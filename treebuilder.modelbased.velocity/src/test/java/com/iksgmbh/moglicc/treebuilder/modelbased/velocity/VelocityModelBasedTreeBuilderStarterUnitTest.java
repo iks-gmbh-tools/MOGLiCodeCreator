@@ -1,7 +1,6 @@
 package com.iksgmbh.moglicc.treebuilder.modelbased.velocity;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -48,10 +47,10 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RootName.name(), METAINFO_MODEL_TARGETDIR);
 
-		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml <mavenGroupId> com.iksgmbh.moglicc");
-		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml <mavenArtefactId> ModelTargetTestDir");
-		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml <mavenProjectName> MOGLiJavaBean Artifacts");
-		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml <mavenProjectDescription> An example project to demonstrate both, the file structure generator and the artifacts of the MOGLiJavaBeanGroup");
+		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml mavenGroupId com.iksgmbh.moglicc");
+		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml mavenArtefactId ModelTargetTestDir");
+		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml mavenProjectName MOGLiJavaBean Artifacts");
+		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "pom.xml mavenProjectDescription An example project to demonstrate both, the file structure generator and the artifacts of the MOGLiJavaBeanGroup");
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.ReplaceIn.name(), "main.java class Main class $model.getMetaInfoValueFor(projectName)ClassOverviewPrinter");
 	}
 
@@ -129,7 +128,7 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 	}
 
 	@Test
-	public void doesNotOverwriteExistingFilesInTargetDirAndcreatesCorrespondingGenerationReport() throws Exception {
+	public void doesNotOverwriteExistingFilesInTargetDirAndCreatesCorrespondingGenerationReport() throws Exception {
 		// prepare test
 		FileUtil.deleteDirWithContent(applicationOutputDir);
 		final File targetDir = new File(applicationRootDir, "ModelTargetTestDir");
@@ -154,8 +153,7 @@ public class VelocityModelBasedTreeBuilderStarterUnitTest extends VelocityModelB
 		FileUtil.deleteDirWithContent(treeBuilderGenerator.getInfrastructure().getPluginInputDir());
 
 		// verify test result
-		final String generationReport = cutLocalFilePath(treeBuilderGenerator.getGenerationReport());
-		assertTrue("unexpected generation report", generationReport.startsWith("VelocityModelBasedTreeBuilder has done work for following artefacts:"));
+		final String generationReport = cutLocalFilePath(treeBuilderGenerator.getGeneratorReport());
 		assertStringContains(generationReport, "pom.xml  (file existed already in the targetDir and was preserved - " +
 				                               "the generated file is available in the plugin's output dir)");
 		assertStringContains(generationReport, "src\\main\\java\\com\\iksgmbh\\moglicc\\demo\\main\\main.java"

@@ -23,7 +23,7 @@ public class NewGeneratorStarter implements Generator, MetaInfoValidatorVendor {
 	private int generationCounter = 0;
 	private int artefactCounter = 0;
 	private StringBuffer generationReport = new StringBuffer(PLUGIN_ID
-                                                             + " has done work for following artefacts:"
+                                                             + " has done the following work:"
                                                             + FileUtil.getSystemLineSeparator());
 
 
@@ -127,9 +127,7 @@ public class NewGeneratorStarter implements Generator, MetaInfoValidatorVendor {
 	private void generateReportLines(final String artefact) {
 		artefactCounter++;
 		generationReport.append(FileUtil.getSystemLineSeparator());
-		generationReport.append("   Reports for artefact '");
-		generationReport.append(artefact);
-		generationReport.append("':");
+		generationReport.append(GeneratorReportUtil.getArtefactReportLine(artefact));
 		generationReport.append(FileUtil.getSystemLineSeparator());
 
 		// TODO add details here and call method from where it makes sense

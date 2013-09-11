@@ -6,13 +6,15 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoSupport;
 import com.iksgmbh.utils.FileUtil;
 
 /**
- * Object to build a data structure with information needed to create a result file
+ * Object to build a data structure with information needed to create a result file.
+ * This class adds functionality to the {@link BuildUpGeneratorResultData} class
+ * that is common to all velocity generators and is used by Velocity Engine Provider.
  *
  * @author Reik Oberrath
  * @since 1.0.0
@@ -58,11 +60,6 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 
 	@Override
-	public String getGeneratedContent() {
-		return generatedContent;
-	}
-
-	@Override
 	public boolean isTargetToBeCreatedNewly() {
 		final String value = getProperty(KnownGeneratorPropertyNames.CreateNew.name());
 		return doesStringRepresentBooleanTrue(value);
@@ -84,10 +81,6 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 
 	@Override
 	public void validatePropertyKeys(final String artefact) throws MOGLiPluginException {
-		if (getTargetFileName() == null) {
-			validationErrors.add(NO_TARGET_FILE_NAME);
-		}
-		
 		super.validatePropertyKeys(artefact);
 	}
 	
@@ -139,7 +132,7 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 			return;
 		}
 		if (! targetDirAsFile.exists()) {
-			throw new MOGLiPluginException(TEXT_TARGET_DIR_NOT_FOUND + FileUtil.getSystemLineSeparator() 
+			throw new MOGLiPluginException(TEXT_TARGET_DIR_NOT_FOUND + FileUtil.getSystemLineSeparator()
 					                      + targetDirAsFile.getAbsolutePath());
 		}
 		if (! targetDirAsFile.isDirectory()) {

@@ -1,0 +1,10 @@
+############## MOGLiCC ERROR REPORT ###############
+
+Problem for plugin 'StandardModelProvider': Error parsing model file 'MOGLiCC_JavaBeanModel.txt':
+Invalid information  in line 135!
+
+Problem for plugin 'VelocityModelBasedTreeBuilder': No model file loaded!
+Problem for plugin 'VelocityClassBasedFileMaker': No model file loaded!
+Problem for plugin 'VelocityModelBasedLineInserter': No model file loaded!
+
+######################  End  ######################

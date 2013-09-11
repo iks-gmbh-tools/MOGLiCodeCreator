@@ -6,11 +6,11 @@ import java.util.List;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 
-public class DummyGeneratorStarter2 implements Generator, MetaInfoValidatorVendor {
+public class DummyGeneratorStarter2 implements GeneratorPlugin, MetaInfoValidatorVendor {
 
 	public static final String PLUGIN_ID = "DummyGenerator2";
 	private InfrastructureService infrastructure;
@@ -69,7 +69,7 @@ public class DummyGeneratorStarter2 implements Generator, MetaInfoValidatorVendo
 	}
 
 	@Override
-	public String getGenerationReport() {
+	public String getGeneratorReport() {
 		return null;
 	}
 
@@ -79,8 +79,20 @@ public class DummyGeneratorStarter2 implements Generator, MetaInfoValidatorVendo
 	}
 
 	@Override
-	public int getNumberOfArtefacts() {
+	public int getNumberOfGeneratedArtefacts() {
 		return 0;
 	}
 
+
+	@Override
+	public String getShortReport()
+	{
+		return "";
+	}
+
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 0;
+	}
 }

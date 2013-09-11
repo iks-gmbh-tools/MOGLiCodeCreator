@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGeneratorResultData;
 import com.iksgmbh.utils.StringUtil;
 
@@ -37,14 +37,7 @@ public class VelocityTreeBuilderResultData extends BuildUpVelocityGeneratorResul
 
 	@Override
 	public void validatePropertyKeys(final String artefact) throws MOGLiPluginException {
-		try {
-			super.validatePropertyKeys(artefact);
-		} catch (Exception e) {
-			validationErrors.remove(NO_TARGET_FILE_NAME);  // not needed for the VelocityModelBasedTreeBuilder
-			if (validationErrors.size() > 0) {
-				throw new MOGLiPluginException(buildErrorString(artefact));
-			}
-		}
+		super.validatePropertyKeys(artefact);
 	}
 
 	public String getRootName() {

@@ -18,9 +18,7 @@
 '	private void generateReportLines(final String artefact) {
 '		artefactCounter++;
 '		generationReport.append(FileUtil.getSystemLineSeparator());
-'		generationReport.append("   Reports for artefact '");
-'		generationReport.append(artefact);
-'		generationReport.append("':");
+'		generationReport.append(GeneratorReportUtil.getArtefactReportLine(artefact));
 '		generationReport.append(FileUtil.getSystemLineSeparator());
 '	
 '		// TODO add details here and call method from where it makes sense

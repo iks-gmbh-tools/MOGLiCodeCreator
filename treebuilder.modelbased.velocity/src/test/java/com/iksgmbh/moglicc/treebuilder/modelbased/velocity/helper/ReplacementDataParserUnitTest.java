@@ -14,13 +14,13 @@ public class ReplacementDataParserUnitTest extends VelocityModelBasedTreeBuilder
 	@Test
 	public void parsesReplacementLine() throws MOGLiPluginException {
 		// prepare test
-		final String line = "* <mavenGroupId> com.iksgmbh.moglicc"; 
+		final String line = "* mavenGroupId com.iksgmbh.moglicc"; 
 
 		// call functionality under test
 		final ReplacementData replacement = ReplacementDataParser.doYourJobFor(line);
 
 		// verify test result
-		assertEquals("search string", "<mavenGroupId>", replacement.getOldString());
+		assertEquals("search string", "mavenGroupId", replacement.getOldString());
 		assertEquals("replacement string", "com.iksgmbh.moglicc", replacement.getNewString());
 		assertEquals("file ending pattern", null, replacement.getFileEndingPattern());
 	}

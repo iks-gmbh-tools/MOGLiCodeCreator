@@ -1,9 +1,13 @@
 package com.iksgmbh.moglicc.treebuilder.modelbased.velocity;
 
+import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.iksgmbh.data.FolderContent;
 import com.iksgmbh.helper.FolderContentBasedFileRenamer;
@@ -14,18 +18,20 @@ import com.iksgmbh.helper.FolderContentBasedTextFileLineReplacer.ReplacementData
 import com.iksgmbh.helper.IOEncodingHelper;
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
-import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
+import com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil;
+import com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.GeneratorStandardReportData;
+import com.iksgmbh.moglicc.generator.utils.ModelMatcherGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
-import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelBasedEngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
-import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
@@ -41,8 +47,8 @@ import com.iksgmbh.utils.StringUtil;
 * @author Reik Oberrath
 * @since V1.3.0
 */
-public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfoValidatorVendor {
-
+public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, MetaInfoValidatorVendor 
+{
 	public static final String PLUGIN_ID = "VelocityModelBasedTreeBuilder";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 	public static final String ENGINE_PROVIDER_ID = "VelocityEngineProvider";
@@ -72,13 +78,14 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 		                                                           "FieldValidator.java",
 		                                                           "JavaBeanValidator.java"};
 
-	private int generationCounter = 0;
-	private int artefactCounter = 0;
+	private int fileGenerationCounter = 0;
+	private int folderGenerationCounter = 0;
+	private int fileModificationCounter = 0;
 	private StringBuffer generationReport = new StringBuffer();
 	private InfrastructureService infrastructure;
-	private Model model;
 	private ModelBasedEngineProvider velocityEngineProvider;
 	private ArtefactProperties artefactProperties;
+	final GeneratorStandardReportData standardReportData = new GeneratorStandardReportData();
 
 	@Override
 	public void setInfrastructure(final InfrastructureService infrastructure) {
@@ -86,13 +93,30 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 	}
 
 	@Override
-	public void doYourJob() throws MOGLiPluginException {
+	public void doYourJob() throws MOGLiPluginException 
+	{
+		standardReportData.jobStarted = true;
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
+		final List<String> artefactList = getArtefactList(); // read before possible exception for model access may be thrown
+		standardReportData.numberOfAllInputArtefacts = artefactList.size();
+		if (standardReportData.numberOfAllInputArtefacts == 0) {
+			infrastructure.getPluginLogger().logInfo("No input artefacts . Nothing to do.");
+			return;
+		}
 
-		model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel(PLUGIN_ID);
-		velocityEngineProvider = (ModelBasedEngineProvider) infrastructure.getEngineProvider(ENGINE_PROVIDER_ID);
+		final ModelProvider modelProvider = (ModelProvider) infrastructure.getProvider(MODEL_PROVIDER_ID);
+		
+		try
+		{
+			standardReportData.model = modelProvider.getModel(PLUGIN_ID);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.modelError = e.getMessage();
+			throw e;
+		}
 
-		final List<String> artefactList = getArtefactList();
+		velocityEngineProvider = (ModelBasedEngineProvider) infrastructure.getProvider(ENGINE_PROVIDER_ID);
+
 		for (final String artefact : artefactList) {
 			doYourJobFor(artefact);
 			infrastructure.getPluginLogger().logInfo("Doing my job...");
@@ -107,35 +131,64 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 		final File sourceDir = new File(getInfrastructure().getPluginInputDir(), artefact);
 		final VelocityTreeBuilderResultData velocityResult = doInsertsByCallingVelocityEngineProvider(
 				                                               artefact, sourceDir, FILENAME_ARTEFACT_PROPERTIES);
-		velocityResult.validatePropertyKeys(artefact);
-		if (ModelValidationGeneratorUtil.validateModel(velocityResult, model.getName()))
+		try
 		{
-			velocityResult.validatePropertyForMissingMetaInfoValues(artefact);
+			velocityResult.validatePropertyKeys(artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add(artefact + " has invalid property keys: " + e.getMessage());
+			throw e;
+		}
+		
+		if (ModelMatcherGeneratorUtil.doesItMatch(velocityResult, standardReportData.model.getName()))
+		{
+			standardReportData.numberOfModelMatchingInputArtefacts++;
+
+			try
+			{
+				velocityResult.validatePropertyForMissingMetaInfoValues(artefact);
+			} catch (MOGLiPluginException e)
+			{
+				standardReportData.invalidInputArtefacts.add(artefact + " uses invalid metainfos: " + e.getMessage());
+				throw e;
+			}
 
 			if (velocityResult.skipGeneration()) {
+				standardReportData.skippedArtefacts.add(artefact);
 				infrastructure.getPluginLogger().logInfo("Generation of file '" + velocityResult.getTargetFileName()
                         + "' was skipped as configured for artefact " + artefact + ".");
 				return;
 			}
 
-			artefactProperties = new ArtefactProperties(velocityResult, artefact);
+			try
+			{
+				artefactProperties = new ArtefactProperties(velocityResult, artefact);
+			} catch (MOGLiPluginException e)
+			{
+				standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
+				throw e;
+			}
 
 			if (artefactProperties.isTargetToBeCleaned()) {
-				FileUtil.deleteDirWithContent(getArtifactTopFolder());
+				final File artifactTopFolder = getArtifactTopFolder();
+				if (artifactTopFolder != null) {					
+					FileUtil.deleteDirWithContent(artifactTopFolder);
+				}
 			}
 
 			doYourJobWith(sourceDir, artefact);
 		} else {
 			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '"
 			                                         + velocityResult.getNameOfValidModel() + "' as valid model.");
-			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + model.getName() + "'.");
+			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + standardReportData.model.getName() + "'.");
+			standardReportData.nonModelMatchingInputArtefacts.add(artefact);
 		}
 	}
 
 	private VelocityTreeBuilderResultData doInsertsByCallingVelocityEngineProvider(final String artefact, final File templateDir,
 			                                                                    final String mainTemplate) throws MOGLiPluginException
 	{
-		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, model, PLUGIN_ID);
+		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, standardReportData.model, PLUGIN_ID);
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(mainTemplate);
 
@@ -144,7 +197,16 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 													+ engineData.getMainTemplateSimpleFileName() + "'...");
 
 		velocityEngineProvider.setEngineData(engineData);
-		final GeneratorResultData generatorResultData = velocityEngineProvider.startEngineWithModel(); // this does the actual insert job
+		
+		final GeneratorResultData generatorResultData;
+		try
+		{
+			generatorResultData = velocityEngineProvider.startEngineWithModel(); 
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Velocity Engine Provider Error:" + e.getMessage());
+			throw e;
+		}
 
 		return new VelocityTreeBuilderResultData(generatorResultData);
 	}
@@ -158,7 +220,7 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 		// copy from inputDir to outputDir
 		final FolderContentBasedFolderDuplicator inputFolderDuplicator = new FolderContentBasedFolderDuplicator(sourceDir, filesToIgnore);
 		final File pluginOutputDir = new File(getInfrastructure().getPluginOutputDir(), artefact);
-		inputFolderDuplicator.duplicateTo(pluginOutputDir);
+		final HashMap<String, FileCreationStatus> duplicationResultsOutputDir = inputFolderDuplicator.duplicateTo(pluginOutputDir);
 
 		// do replacements in files of outputDir before renaming with original file names
 		final FolderContentBasedTextFileLineReplacer lineReplacer1 = new FolderContentBasedTextFileLineReplacer(pluginOutputDir, filesToIgnore);
@@ -180,8 +242,12 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 		// copy from outputDir to targetDir
 		final List<String> takeAllFiles = null; // here is no need for ignoring files -> outputFolder contains wanted files only!
 		final FolderContentBasedFolderDuplicator outputFolderDuplicator = new FolderContentBasedFolderDuplicator(pluginOutputDir, takeAllFiles);
-		final HashMap<String, FileCreationStatus> duplicationResults = outputFolderDuplicator.duplicateTo(getArtifactTopFolder(),
-				                                                                                 artefactProperties.isCreateNew());
+		final File artifactTopFolder = getArtifactTopFolder();
+		HashMap<String, FileCreationStatus> duplicationResultsTargetDir = null;
+		if (artifactTopFolder != null) {
+			// create target dir only when defined
+			duplicationResultsTargetDir = outputFolderDuplicator.duplicateTo(artifactTopFolder, artefactProperties.isCreateNew());
+		}
 		final FolderContent folderContent = outputFolderDuplicator.getFolderContent();
 
 		if (problems.size() > 0) {
@@ -190,6 +256,13 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 		                                   + StringUtil.buildTextFromLines(problems));
 		}
 
+		final HashMap<String, FileCreationStatus> duplicationResults;
+		if (duplicationResultsTargetDir != null) {
+			duplicationResults = duplicationResultsTargetDir;
+		} else {
+			duplicationResults = duplicationResultsOutputDir; // fall back if targetDir is not defined
+		}
+		
 		generateReportLines(artefact, artefactProperties.getReplacements(),
 							artefactProperties.getFileRenamings(),
 							folderContent.getFolders(), duplicationResults);
@@ -205,89 +278,108 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 
 	private void generateReportLines(final String artefact, final List<ReplacementData> replacements,
 			                         final List<RenamingData> fileRenamings, final List<File> generatedFolders,
-			                         final HashMap<String, FileCreationStatus> duplicationResults) {
-		artefactCounter++;
+			                         final HashMap<String, FileCreationStatus> duplicationResults) 
+	{
+		standardReportData.numberOfOutputArtefacts++;
 		generationReport.append(FileUtil.getSystemLineSeparator());
-		generationReport.append("   Reports for artefact '");
-		generationReport.append(artefact);
-		generationReport.append("':");
+		generationReport.append(GeneratorReportUtil.getArtefactReportLine(artefact));
 		generationReport.append(FileUtil.getSystemLineSeparator());
 		generationReport.append(FileUtil.getSystemLineSeparator());
-
-		final StringBuffer tmpReport = new StringBuffer();
-
+		
+		final StringBuffer artefactDetailReport = new StringBuffer();
+		final StringBuffer artefactHeaderReport = new StringBuffer();
+		
+		File artifactTopFolder = getArtifactTopFolder();
+		if (artifactTopFolder == null) {
+			artifactTopFolder = new File(infrastructure.getPluginOutputDir(), artefact);
+			artefactHeaderReport.append(REPORT_TAB + "No targetFile has beed defined. Therefore, tree artefact is generated only in output directory!");
+		}
+		
+		// ARTEFACT DETAIL REPORT
+		
 		// report created subfolders
-		tmpReport.append("		Tree artefact generated in: " + getArtifactTopFolder());
-		tmpReport.append(FileUtil.getSystemLineSeparator());
-		tmpReport.append(FileUtil.getSystemLineSeparator());
 		if (generatedFolders.size() > 1) {
-			tmpReport.append("		Created subdirectories: ");
-			tmpReport.append(FileUtil.getSystemLineSeparator());
+			artefactDetailReport.append("   Created subdirectories: ");
+			artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 			for (final File folder : generatedFolders) {
 				if (FileUtil.isTip(folder)) {
-					tmpReport.append("			" + cutRootPath(folder.getAbsolutePath(), artefact));
-					tmpReport.append(FileUtil.getSystemLineSeparator());
-					generationCounter++;
+					artefactDetailReport.append(REPORT_TAB + REPORT_TAB + cutRootPath(folder.getAbsolutePath(), artefact));
+					artefactDetailReport.append(FileUtil.getSystemLineSeparator());
+					folderGenerationCounter++;
 				}
 			}
 		}
-		tmpReport.append(FileUtil.getSystemLineSeparator());
+		artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 
 		// report created files
 		final List<String> generatedFiles = StringUtil.asSortedList(duplicationResults.keySet());
 		if (generatedFiles.size() > 0) {
-			tmpReport.append("		Created files: ");
-			tmpReport.append(FileUtil.getSystemLineSeparator());
+			artefactDetailReport.append(REPORT_TAB + "Created files: ");
+			artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 		}
 		for (String filename : generatedFiles) {
-			tmpReport.append("			" + cutRootPath(filename, getArtifactTopFolder().getAbsolutePath()));
+			artefactDetailReport.append(REPORT_TAB + REPORT_TAB + cutRootPath(filename, artifactTopFolder.getAbsolutePath()));
 			final FileCreationStatus fileStatus = duplicationResults.get(filename);
 			if (fileStatus == FileCreationStatus.EXISTING_FILE_OVERWRITTEN) {
 				//tmpReport.append("  (an existing file has been overwritten)"); this info is not given by the other generators - for similarity reason this output is commented out.
 			} else if (fileStatus == FileCreationStatus.EXISTING_FILE_PRESERVED) {
-				tmpReport.append("  (file existed already in the targetDir and was preserved - the generated file is available in the plugin's output dir)");
+				artefactDetailReport.append("  (file existed already in the targetDir and was preserved - the generated file is available in the plugin's output dir)");
 			}
 
-			tmpReport.append(FileUtil.getSystemLineSeparator());
-			generationCounter++;
+			artefactDetailReport.append(FileUtil.getSystemLineSeparator());
+			fileGenerationCounter++;
 		}
-		tmpReport.append(FileUtil.getSystemLineSeparator());
+		artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 
 		// report replacements
 		if (replacements.size() > 0) {
-			tmpReport.append("		Performed replacements:");
-			tmpReport.append(FileUtil.getSystemLineSeparator());
+			artefactDetailReport.append(REPORT_TAB + "Performed replacements:");
+			artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 		}
 		for (final ReplacementData replacementData : replacements) {
 			final List<File> matchingFiles = replacementData.getMatchingFiles();
-			tmpReport.append("			Placeholder '" + replacementData.getOldString() + "' replaced by '" + replacementData.getNewString() + "' in file '");
+			artefactDetailReport.append(REPORT_TAB + REPORT_TAB + "Placeholder '" + replacementData.getOldString() + "' replaced by '" 
+			                            + replacementData.getNewString() + "' in file '");
 			for (final File file : matchingFiles) {
-				tmpReport.append(file.getName());
-				tmpReport.append("'");
-				generationCounter++;
+				artefactDetailReport.append(file.getName());
+				artefactDetailReport.append("'");
+				fileModificationCounter++;
 			}
-			tmpReport.append(FileUtil.getSystemLineSeparator());
+			artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 		}
-		tmpReport.append(FileUtil.getSystemLineSeparator());
+		artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 
 		// report file renamings
 		if (fileRenamings.size() > 0) {
-			tmpReport.append("		Performed file renamings:");
-			tmpReport.append(FileUtil.getSystemLineSeparator());
+			artefactDetailReport.append(REPORT_TAB + "Performed file renamings:");
+			artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 		}
 		for (final RenamingData renaming : fileRenamings) {
 			final List<String> results = renaming.getRenamingResults();
 			for (String result : results) {
-				tmpReport.append("			" + result);
-				tmpReport.append(FileUtil.getSystemLineSeparator());
-				generationCounter++;
+				artefactDetailReport.append(REPORT_TAB + REPORT_TAB +  result);
+				artefactDetailReport.append(FileUtil.getSystemLineSeparator());
+				fileModificationCounter++;
 			}
 		}
 
-		generationReport.append(tmpReport);
+		// ARTEFACT HEADER REPORT
+		
+		artefactHeaderReport.append(REPORT_TAB + "Tree artefact generated in: " + artifactTopFolder);
+		artefactHeaderReport.append(FileUtil.getSystemLineSeparator());
+		artefactHeaderReport.append(REPORT_TAB + folderGenerationCounter + " folders have been created.");
+		artefactHeaderReport.append(FileUtil.getSystemLineSeparator());
+		artefactHeaderReport.append(REPORT_TAB + fileGenerationCounter + " files have been created.");
+		artefactHeaderReport.append(FileUtil.getSystemLineSeparator());
+		artefactHeaderReport.append(REPORT_TAB + fileModificationCounter + " file modifications were performed.");
+
+		generationReport.append(artefactHeaderReport);
+		generationReport.append(FileUtil.getSystemLineSeparator());
+		generationReport.append(FileUtil.getSystemLineSeparator());
+		generationReport.append(artefactDetailReport);
 		infrastructure.getPluginLogger().logInfo("----------------------------------------------"
 				                                 + FileUtil.getSystemLineSeparator()
-		                                         + tmpReport.toString()
+		                                         + artefactDetailReport.toString()
 				                                 + "----------------------------------------------");
 	}
 
@@ -298,6 +390,9 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 
 	private File getArtifactTopFolder() {
 		String path = artefactProperties.getTargetDir();
+		if (path == null) {
+			return null;
+		}
 		path = path.replace(MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER, getInfrastructure().getApplicationRootDir().getAbsolutePath());
 		return new File(path, artefactProperties.getRootName());
 	}
@@ -371,31 +466,21 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 	}
 
 	@Override
-	public String getGenerationReport() {
-		if (artefactCounter == 0) {
-			return PLUGIN_ID + " have had nothing to do. No artefact found.";
-		}
-
-		final StringBuffer toReturn = new StringBuffer(PLUGIN_ID
-		        + " has done work for following artefacts:"
-		        + FileUtil.getSystemLineSeparator());
-
-		toReturn.append(FileUtil.getSystemLineSeparator());
-		toReturn.append(artefactCounter + " artefact(s) have been generated and " + generationCounter + " generation event(s) have been performed.");
-		toReturn.append(FileUtil.getSystemLineSeparator());
-		toReturn.append(generationReport);
-
-		return toReturn.toString().trim();
+	public String getGeneratorReport() 
+	{
+		standardReportData.additionalReport = FileUtil.getSystemLineSeparator() 
+				                             + REPORT_TAB + generationReport.toString().trim();
+		return GeneratorReportUtil.getReport(standardReportData); 
 	}
 
 	@Override
 	public int getNumberOfGenerations() {
-		return generationCounter;
+		return folderGenerationCounter + fileGenerationCounter + fileModificationCounter;
 	}
 
 	@Override
-	public int getNumberOfArtefacts() {
-		return artefactCounter;
+	public int getNumberOfGeneratedArtefacts() {
+		return standardReportData.numberOfOutputArtefacts;
 	}
 
 	@Override
@@ -406,6 +491,26 @@ public class VelocityModelBasedTreeBuilderStarter implements Generator, MetaInfo
 		return metaInfoValidatorList;
 	}
 
+	@Override
+	public String getShortReport() 
+	{
+		final String standardReport = GeneratorReportUtil.getShortReport(standardReportData);
+
+		if (! StringUtils.isEmpty(standardReport)) {
+			return standardReport;
+		}
+		
+		return "From " + standardReportData.numberOfAllInputArtefacts + " input artefact(s), have been " 
+		        + standardReportData.numberOfOutputArtefacts + " used to perform " 
+		        + getNumberOfGenerations() + " generation events.";
+	}
+	
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 300;
+	}	
+	
 	/**
 	 * for test purpose only
 	 */

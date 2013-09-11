@@ -1,0 +1,12 @@
+**************************   G E N E R A T O R   R E P O R T   *******************************
+
+All 1 generator plugins executed successfully.
+Model file used is 'DummyModelFile.xyz', but no model is available.
+
+----------------------------------------------------------------------------------------------
+
+GeneratorDummy: 
+
+Generator Dummy Report
+
+**************************************  E N D  ***********************************************

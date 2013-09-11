@@ -9,8 +9,8 @@ import org.apache.velocity.VelocityContext;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.provider.engine.velocity.test.VelocityEngineProviderTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.AttributeDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;

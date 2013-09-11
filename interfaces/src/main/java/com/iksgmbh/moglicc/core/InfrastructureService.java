@@ -4,9 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
-import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
+import com.iksgmbh.moglicc.plugin.subtypes.ProviderPlugin;
 
 /**
  * Provides the Mogli core functionality to the plugins.
@@ -67,9 +66,8 @@ public interface InfrastructureService {
 	
 	File getApplicationRootDir();
 	
-	ModelProvider getModelProvider(String id);
-	EngineProvider getEngineProvider(String id);
-	Generator getGenerator(String id);
+	ProviderPlugin getProvider(String id);
+	GeneratorPlugin getGenerator(String id);
 
 	<T> List<T> getPluginsOfType(Class<T> type);
 		

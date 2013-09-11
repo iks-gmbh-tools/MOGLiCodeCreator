@@ -1,5 +1,7 @@
 package com.iksgmbh.moglicc.filemaker.classbased.velocity;
 
+import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,18 +10,20 @@ import org.apache.commons.lang.StringUtils;
 
 import com.iksgmbh.helper.IOEncodingHelper;
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGeneratorResultData;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
-import com.iksgmbh.moglicc.generator.utils.ModelValidationGeneratorUtil;
+import com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil;
+import com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.GeneratorStandardReportData;
+import com.iksgmbh.moglicc.generator.utils.ModelMatcherGeneratorUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
-import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ClassBasedEngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
@@ -29,7 +33,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.Conditiona
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
-public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoValidatorVendor {
+public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, MetaInfoValidatorVendor {
 
 	public static final String PLUGIN_ID = "VelocityClassBasedFileMaker";
 
@@ -82,9 +86,8 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 	private InfrastructureService infrastructure;
 	private IOEncodingHelper encodingHelper;
 	private String testDir = "";
+	final GeneratorStandardReportData standardReportData = new GeneratorStandardReportData();
 	private int generationCounter = 0;
-	private int artefactCounter;
-	private int numberOfClassesInModel = -1;
 	private StringBuffer generationReport = new StringBuffer();
 
 	@Override
@@ -109,19 +112,32 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 
 	@Override
 	public void doYourJob() throws MOGLiPluginException {
+		standardReportData.jobStarted = true;
 		infrastructure.getPluginLogger().logInfo("Doing my job...");
 		encodingHelper = null;
-
-		final Model model = getModel();
-		if (numberOfClassesInModel == 0) {
-			infrastructure.getPluginLogger().logInfo("No class in model file. Nothing to do.");
-			artefactCounter = getArtefactList().size(); // needed for generation report
+		final List<String> list = getArtefactList();  // read before possible exception for model access may be thrown
+		standardReportData.numberOfAllInputArtefacts = list.size();
+		if (standardReportData.numberOfAllInputArtefacts == 0) {
+			infrastructure.getPluginLogger().logInfo("No input artefacts . Nothing to do.");
 			return;
 		}
 
-		final List<String> list = getArtefactList();
+		try
+		{
+			standardReportData.model = getModel();
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.modelError = e.getMessage();
+			throw e;
+		}
+		
+		if (standardReportData.model.getSize() == 0) {
+			infrastructure.getPluginLogger().logInfo(standardReportData.numberOfAllInputArtefacts + " input artifact(s), but no class in model file found.");
+			return;
+		}
+
 		for (final String artefact : list) {
-			applyModelToArtefactTemplates(model, artefact);
+			applyModelToArtefactTemplates(standardReportData.model, artefact);
 			infrastructure.getPluginLogger().logInfo(LOGFILE_LINE_SEPARATOR);
 		}
 
@@ -129,49 +145,90 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 	}
 
 	private Model getModel() throws MOGLiPluginException {
-		final Model model = infrastructure.getModelProvider(MODEL_PROVIDER_ID).getModel(PLUGIN_ID);
-		numberOfClassesInModel = model.getSize();
+		final ModelProvider modelProvider = (ModelProvider) infrastructure.getProvider(MODEL_PROVIDER_ID);
+		final Model model = modelProvider.getModel(PLUGIN_ID);
+		int numberOfClasses = 0;
+		if (standardReportData.model != null) {
+			numberOfClasses = standardReportData.model.getSize();
+		}
 		infrastructure.getPluginLogger().logInfo("Model '" + model.getName() + "' with "
-		                                         + numberOfClassesInModel + " class(es) retrieved from "
+		                                         + numberOfClasses + " class(es) retrieved from "
 				                                 + MODEL_PROVIDER_ID);
 		infrastructure.getPluginLogger().logInfo(LOGFILE_LINE_SEPARATOR);
 		return model;
 	}
 
-	private void applyModelToArtefactTemplates(final Model model, final String artefact) throws MOGLiPluginException {
+	private void applyModelToArtefactTemplates(final Model model, final String artefact) throws MOGLiPluginException 
+	{
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, model, PLUGIN_ID);
-		final List<VelocityGeneratorResultData> resultList = generate(engineData);
+		final List<VelocityFileMakerResultData> resultList;
+		try
+		{
+			resultList = generate(engineData);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
+			throw e;
+		}
 
-		validatePropertyKeys(resultList, artefact);
-
+		try
+		{
+			validatePropertyKeys(resultList, artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add(artefact + " has invalid property keys: " + e.getMessage());
+			throw e;
+		}
+		
 		final VelocityGeneratorResultData firstResultData = resultList.get(0);
-		if (! ModelValidationGeneratorUtil.validateModel(firstResultData, model.getName())) {
+		if (! ModelMatcherGeneratorUtil.doesItMatch(firstResultData, model.getName())) 
+		{
 			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '" + resultList.get(0).getNameOfValidModel()
 					                                 + "' as valid model.");
 			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + model.getName() + "'.");
+			standardReportData.nonModelMatchingInputArtefacts.add(artefact);
 			return;
 		}
 
-		validatePropertyForMissingMetaInfoValues(resultList, artefact);
+		standardReportData.numberOfModelMatchingInputArtefacts++;
 
-		final List<VelocityGeneratorResultData> artefactsToCreate = removeSkippedClassesFromList(resultList, artefact);
+		try
+		{
+			validatePropertyForMissingMetaInfoValues(resultList, artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add(artefact + " uses invalid metainfos: " + e.getMessage());
+			throw e;
+		}
+
+		final List<VelocityFileMakerResultData> artefactsToCreate = removeSkippedClassesFromList(resultList, artefact);
 
 		encodingHelper = IOEncodingHelper.getInstance(EncodingUtils.getValidOutputEncodingFormat(resultList.get(0).getOutputEncodingFormat(),
 				                                      infrastructure.getPluginLogger()));
-		writeFilesIntoPluginOutputDir(artefactsToCreate, artefact);
-		writeFilesIntoTargetDirReadFromTemplateFile(artefactsToCreate);
+		
+		try
+		{
+			writeFilesIntoPluginOutputDir(artefactsToCreate, artefact);
+			writeFilesIntoTargetDirReadFromTemplateFile(artefactsToCreate, artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Cannot write output artefact for input artefact '" + artefact + "': " + e.getMessage());
+			throw e;
+		}
+		
 		generateReportLines(artefactsToCreate, artefact);
 		infrastructure.getPluginLogger().logInfo(artefactsToCreate.size() + " files for artefact '" + artefact + "' created!");
 	}
 
-	private List<VelocityGeneratorResultData> removeSkippedClassesFromList(final List<VelocityGeneratorResultData> resultList,
+	private List<VelocityFileMakerResultData> removeSkippedClassesFromList(final List<VelocityFileMakerResultData> resultList,
 			                                                               final String artefact)
     {
-		final List<VelocityGeneratorResultData> toReturn = new ArrayList<VelocityGeneratorResultData>();
-		for (final VelocityGeneratorResultData resultData : resultList) {
+		final List<VelocityFileMakerResultData> toReturn = new ArrayList<VelocityFileMakerResultData>();
+		for (final VelocityFileMakerResultData resultData : resultList) {
 			if (resultData.skipGeneration()) {
 				infrastructure.getPluginLogger().logInfo("Generation of file '" + resultData.getTargetFileName()
 						                                  + "' was skipped as configured for artefact " + artefact + ".");
+				standardReportData.skippedArtefacts.add(resultData.getTargetFileName());
 			} else {
 				toReturn.add(resultData);
 			}
@@ -179,15 +236,13 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 		return toReturn;
 	}
 
-	private void generateReportLines(final List<VelocityGeneratorResultData> resultList, final String artefact) {
-		artefactCounter++;
+	private void generateReportLines(final List<VelocityFileMakerResultData> resultList, final String artefact) {
+		standardReportData.numberOfOutputArtefacts++;
 		generationReport.append(FileUtil.getSystemLineSeparator());
-		generationReport.append("   Reports for artefact '");
-		generationReport.append(artefact);
-		generationReport.append("':");
+		generationReport.append(GeneratorReportUtil.getArtefactReportLine(artefact));
 		generationReport.append(FileUtil.getSystemLineSeparator());
 
-		for (final VelocityGeneratorResultData resultData : resultList) {
+		for (final VelocityFileMakerResultData resultData : resultList) {
 			generationCounter++;
 			if (resultData.wasExistingTargetPreserved()) {
 				generationReport.append("      ");
@@ -205,18 +260,18 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 		}
 	}
 
-	private void validatePropertyKeys(final List<VelocityGeneratorResultData> resultList,
+	private void validatePropertyKeys(final List<VelocityFileMakerResultData> resultList,
 			              final String artefact) throws MOGLiPluginException
 	{
-		for (final VelocityGeneratorResultData resultData : resultList) {
+		for (final VelocityFileMakerResultData resultData : resultList) {
 			resultData.validatePropertyKeys(artefact);
 		}
 	}
 
-	private void validatePropertyForMissingMetaInfoValues(final List<VelocityGeneratorResultData> resultList,
+	private void validatePropertyForMissingMetaInfoValues(final List<VelocityFileMakerResultData> resultList,
 			                          final String artefact) throws MOGLiPluginException
 	{
-		for (final VelocityGeneratorResultData resultData : resultList) {
+		for (final VelocityFileMakerResultData resultData : resultList) {
 			resultData.validatePropertyForMissingMetaInfoValues(artefact);
 		}
 	}
@@ -226,13 +281,25 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
 	}
 
-	void writeFilesIntoTargetDirReadFromTemplateFile(final List<VelocityGeneratorResultData> resultList) throws MOGLiPluginException {
-		for (final VelocityGeneratorResultData resultData : resultList) {
-			final File outputFile = resultData.getTargetFile(infrastructure.getApplicationRootDir().getAbsolutePath(),
-					                                             getTestPathPrefix(true));
+	void writeFilesIntoTargetDirReadFromTemplateFile(final List<VelocityFileMakerResultData> resultList,
+			                                         final String artefact) throws MOGLiPluginException {
+		for (final VelocityFileMakerResultData resultData : resultList) 
+		{
+			final File outputFile;
+			try
+			{
+				outputFile = resultData.getTargetFile(infrastructure.getApplicationRootDir().getAbsolutePath(), getTestPathPrefix(true));
+			} catch (MOGLiPluginException e)
+			{
+				standardReportData.invalidInputArtefacts.add("Error for artefact '" + artefact 
+						                                      + "': " + e.getMessage());
+				throw e;
+			}
+			 
 			if (outputFile == null) {
 				return; // @TargetDir not defined in template -> do nothing here
 			}
+			
 			if (resultData.isTargetToBeCreatedNewly()
 				|| ! outputFile.exists()) {
 				try {
@@ -247,11 +314,11 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 		}
 	}
 
-	private void writeFilesIntoPluginOutputDir(final List<VelocityGeneratorResultData> resultList, final String subDir)
+	private void writeFilesIntoPluginOutputDir(final List<VelocityFileMakerResultData> resultList, final String subDir)
 	                                           throws MOGLiPluginException {
 		final File targetdir = new File(infrastructure.getPluginOutputDir(), subDir);
 		targetdir.mkdirs();
-		for (final VelocityGeneratorResultData resultData : resultList) {
+		for (final VelocityFileMakerResultData resultData : resultList) {
 			if (resultData.getTargetDir() == null) {
 
 			}
@@ -264,28 +331,39 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 		}
 	}
 
-	List<VelocityGeneratorResultData> generate(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException {
+	List<VelocityFileMakerResultData> generate(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException {
 		final File templateDir = new File(infrastructure.getPluginInputDir(), engineData.getArtefactType());
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(findMainTemplate(templateDir));
 
 		final ClassBasedEngineProvider velocityEngineProvider =
-			       (ClassBasedEngineProvider) infrastructure.getEngineProvider(ENGINE_PROVIDER_ID);
+			       (ClassBasedEngineProvider) infrastructure.getProvider(ENGINE_PROVIDER_ID);
 
 		infrastructure.getPluginLogger().logInfo("Starting velocity engine for artefact '"
 				+ engineData.getArtefactType() + " and with template '"
 				+ engineData.getMainTemplateSimpleFileName() + "'...");
 
 		velocityEngineProvider.setEngineData(engineData);
-		final List<GeneratorResultData> generatorResultDataList = velocityEngineProvider.startEngineWithClassList();
+		
+		
+		final List<GeneratorResultData> generatorResultDataList;
+		try
+		{
+			generatorResultDataList = velocityEngineProvider.startEngineWithClassList();
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Velocity Engine Provider Error:" + e.getMessage());
+			throw e;
+		}
+		
 		return buildVelocityResultData(generatorResultDataList);
 	}
 
-	private List<VelocityGeneratorResultData> buildVelocityResultData(final List<GeneratorResultData>
+	private List<VelocityFileMakerResultData> buildVelocityResultData(final List<GeneratorResultData>
 	                                                                   generatorResultDataList) {
-		final List<VelocityGeneratorResultData> velocityGeneratorResultData = new ArrayList<VelocityGeneratorResultData>();
+		final List<VelocityFileMakerResultData> velocityGeneratorResultData = new ArrayList<VelocityFileMakerResultData>();
 		for (final GeneratorResultData generatorResultData : generatorResultDataList) {
-			velocityGeneratorResultData.add(new BuildUpVelocityGeneratorResultData(generatorResultData));
+			velocityGeneratorResultData.add(new VelocityFileMakerResultData(generatorResultData));
 		}
 		return velocityGeneratorResultData;
 	}
@@ -366,22 +444,15 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 	}
 
 	@Override
-	public String getGenerationReport() {
-		if (artefactCounter == 0) {
-			return PLUGIN_ID + " have had nothing to do. No artefact found.";
+	public String getGeneratorReport() 
+	{
+		if (standardReportData.model != null && standardReportData.model.getSize() == 0) {
+			return standardReportData.numberOfAllInputArtefacts + " input artefact(s) found. No classes in model. Nothing to do.";
 		}
 
-		if (numberOfClassesInModel == 0) {
-			return PLUGIN_ID + " have had nothing to do. " + artefactCounter + " artifacts, but no class in model file found.";
-		}
-
-		final StringBuffer toReturn = new StringBuffer(PLUGIN_ID
-		        + " has done work for following artefacts:"
-		        + FileUtil.getSystemLineSeparator());
-
-		toReturn.append(generationReport);
-
-		return toReturn.toString().trim();
+		standardReportData.additionalReport = FileUtil.getSystemLineSeparator() 
+				                              + REPORT_TAB + generationReport.toString().trim();
+		return GeneratorReportUtil.getReport(standardReportData); 
 	}
 
 	@Override
@@ -389,23 +460,40 @@ public class VelocityClassBasedFileMakerStarter implements Generator, MetaInfoVa
 		return generationCounter;
 	}
 
+	@Override
+	public String getShortReport() 
+	{
+		final String standardReport = GeneratorReportUtil.getShortReport(standardReportData);
+
+		if (! StringUtils.isEmpty(standardReport)) {
+			return standardReport;
+		}	
+
+		return "From " + standardReportData.numberOfAllInputArtefacts + " input artefact(s), have been " 
+		        + standardReportData.numberOfOutputArtefacts + " used to make " + generationCounter + " files.";
+	}
+	
+	@Override
+	public int getNumberOfGeneratedArtefacts() {
+		return standardReportData.numberOfOutputArtefacts;
+	}
+	
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 400;
+	}
+	
 	/**
 	 * FOR TEST PURPOSE ONLY
 	 */
+	
 	public void setTestDir(final String testDir) {
 		this.testDir = testDir;
 	}
 
-	/**
-	 * FOR TEST PURPOSE ONLY
-	 */
 	public IOEncodingHelper getEncodingHelper() {
 		return encodingHelper;
-	}
-
-	@Override
-	public int getNumberOfArtefacts() {
-		return artefactCounter;
 	}
 
 }

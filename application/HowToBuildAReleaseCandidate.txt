@@ -1,28 +1,27 @@
-0.  Verify: current branch is master and all necessary changes from other branches have been merged.
-1.  Execute all Unit tests (use UnitTestExecutor.java).
-2.  Execute 'mvn install' on parent. This verifies that unit tests are successful not only running in Eclipse IDE
+1.  Verify: current branch is master and all necessary changes from other branches have been merged.
+2.  Execute all Unit tests (use UnitTestExecutor.java).
+3.  Execute 'mvn install' on parent. This verifies that unit tests are successful not only running in Eclipse IDE
     and prepares the integration tests!
-3.  Execute integration tests (Start 'Run as JUnit Test' on inttest).
-4.  Execute unit test for ReleaseBuilder (use BuildTestExecutor.java).
+4.  Execute integration tests (Start 'Run as JUnit Test' on inttest).
 5.  Check for correct version settings in following three files:
     a) application/src/main/resources/build.properties,
     b) readme.md in root
     c) core/src/main/resources/MOGLi Code Creator.htm
-6.  Add release notes in readme.md in root
-7.  In file 'application/src/main/resources/build.properties' assure that 'testRun' equals 'false'.
-8.  Execute 'BuildReleaseAndTestSystem.java' as JUnit test. This builds the release candidate
+6.  Add changes to last version to the version history (release notes)
+7.  Execute unit test for ReleaseBuilder (use BuildTestExecutor.java) if Release Builder Code has changed.
+8.  In file 'application/src/main/resources/build.properties' assure that 'testRun' equals 'false'.
+9.  Execute 'BuildReleaseAndTestSystem.java' as JUnit test. This builds the release candidate
     and executes the system tests automatically on it.
-9.  Open 'help/MOGLi Code Creator.htm' of unzipped (!) Release Candidate in a web browser and check
+10. Open 'help/MOGLi Code Creator.htm' of unzipped (!) Release Candidate in a web browser and check
     a) Is the file readable? If not, encoding of file in repository is not UTF-8!
     b) Is MOGLiCC version correct?
     c) Are all links working?
-10. Verify that in 'application/releaseBuilds' the Release Candidate can be found.
+11. Verify that in 'application/releaseBuilds' the Release Candidate can be found.
     If not check that property 'testRun' is 'false' in file 'application/src/main/resources/build.properties'.
-11. Check that a tag for the current release was automatically created.
-12. In file 'application/src/main/resources/build.properties' adapt the three version settings to new values
-13. In file 'application/src/main/resources/build.properties' set 'testRun' back to 'true'.
+12. Check that a tag for the current release was automatically created - if not do it manually (pattern: vx.y.z).
+13. In file 'application/src/main/resources/build.properties' adapt the three version settings to new values
+14. In file 'application/src/main/resources/build.properties' set 'testRun' back to 'true'.
     This allows test runs of the release process executed automatically by 'BuildReleaseAndTestSystem.java'.
-14. Commit the current state to the master with comment 'Release x.y.z'.
-15. Checkout the github branch, merge with the master and push to the github remote repository.
-16. Checkout the master branch again.
-17. Commit and tag source code in git and push it to iks gitblit and/or to github remote repositories.
+15. Commit the current state to the master with comment 'Release x.y.z'.
+16. Checkout the github branch, merge with the master and push to the github remote repository.
+17. Checkout the master branch again.

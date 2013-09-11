@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.systemtest;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_REPORT_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.*;
 
 import java.io.File;
 
@@ -103,21 +103,29 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 	}
 
 	@Test
-	public void createsReportFiles() throws Exception {
+	public void createsReportFilesInCustomWorkspace() throws Exception {
 		// prepare test
 		final String workspaceDirName =  "workspaces/test";
 		final File applicationPropertiesFile = initApplicationPropertiesFile(
 				MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
 				 + "/" + workspaceDirName);
 		assertFileExists(applicationPropertiesFile);
-		final File workspaceDir = initWorkspaceDir(workspaceDirName);
 
+		final File shortReportFile = new File(applicationRootDir, workspaceDirName + "/" + DIR_REPORT_FILES + "/" 
+                                                                   + FILENAME_SHORT_REPORT_FILE);
+		shortReportFile.delete();
+		assertFileDoesNotExist(shortReportFile);
+		
+		final File generatorReportFile = new File(applicationRootDir, workspaceDirName + "/" + DIR_REPORT_FILES + "/" 
+		                                                             + FILENAME_GENERATION_REPORT_FILE);
+		generatorReportFile.delete();
+		assertFileDoesNotExist(generatorReportFile);
 
-		final File applicationReportFile = new File(testDir, FILENAME_REPORT_FILE);
-		applicationReportFile.delete();
-		assertFileDoesNotExist(applicationReportFile);
-		final File workspaceReportFile = new File(workspaceDir, FILENAME_REPORT_FILE);
-		assertFileDoesNotExist(workspaceReportFile);
+		
+		final File providerReportFile = new File(applicationRootDir, workspaceDirName + "/" + DIR_REPORT_FILES + "/" 
+                                                 + FILENAME_PROVIDER_REPORT_FILE);
+		providerReportFile.delete();
+		assertFileDoesNotExist(providerReportFile);
 
 		// call functionality under test
 		executeMogliApplication();
@@ -126,8 +134,9 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 		applicationPropertiesFile.delete();
 
 		// verify test result
-		assertFileExists(applicationReportFile);
-		assertFileExists(workspaceReportFile);
+		assertFileExists(shortReportFile);
+		assertFileExists(providerReportFile);
+		assertFileExists(generatorReportFile);
 	}
 
 	// *************************************************************************************

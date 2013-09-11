@@ -1,4 +1,3 @@
-VelocityModelBasedLineInserter has done work for following artefacts:
-
-   Reports for artefact 'TestArtefact':
-      inserted by a replace-instruction into targetFile.txt in directory <applicationRootDir>/temp
+No model available. No generation done.
+   Report for input artefact 'TestArtefact':
+      1 line(s) inserted by a replace-instruction into targetFile.txt in directory <applicationRootDir>/temp

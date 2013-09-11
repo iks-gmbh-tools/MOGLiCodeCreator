@@ -1,9 +1,9 @@
-package com.iksgmbh.moglicc.data;
+package com.iksgmbh.moglicc.generator;
 
 import java.util.List;
 
 /**
- * Return object for EngineProvider.
+ * Most basic, abstract definition of a return object for EngineProviders. 
  * 
  * @author Reik Oberrath
  * @since 1.0.0

@@ -18,9 +18,9 @@ import org.junit.Test;
 import com.iksgmbh.moglicc.data.InfrastructureInitData;
 import com.iksgmbh.moglicc.infrastructure.MOGLiInfrastructure;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.EngineProvider;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
-import com.iksgmbh.moglicc.plugin.type.basic.ModelProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.EngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.test.CoreTestParent;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
@@ -161,7 +161,7 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
 
 		// call functionality under test
-		Generator generator = infrastructure.getGenerator("null");
+		GeneratorPlugin generator = infrastructure.getGenerator("null");
 
 		// verify test result
 		assertNull("Null expected", generator);
@@ -176,11 +176,11 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
 
 		// call functionality under test
-		ModelProvider modelProvider = infrastructure.getModelProvider("null");
+		ModelProvider modelProvider = (ModelProvider) infrastructure.getProvider("null");
 
 		// verify test result
 		assertNull("Null expected", modelProvider);
-		modelProvider = infrastructure.getModelProvider("StandardModelProvider");
+		modelProvider = (ModelProvider) infrastructure.getProvider("StandardModelProvider");
 		assertNotNull("Not null expected", modelProvider);
 	}
 
@@ -192,11 +192,11 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final MOGLiInfrastructure infrastructure = new MOGLiInfrastructure(infrastructureInitData);
 
 		// call functionality under test
-		EngineProvider engineProvider = infrastructure.getEngineProvider("null");
+		EngineProvider engineProvider = (EngineProvider) infrastructure.getProvider("null");
 
 		// verify test result
 		assertNull("Null expected", engineProvider);
-		engineProvider = infrastructure.getEngineProvider("VelocityEngineProvider");
+		engineProvider = (EngineProvider) infrastructure.getProvider("VelocityEngineProvider");
 		assertNotNull("Not null expected", engineProvider);
 	}
 

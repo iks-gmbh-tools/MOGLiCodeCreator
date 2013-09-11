@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.ClassBasedEngineProvider;
-import com.iksgmbh.moglicc.plugin.type.ModelBasedEngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ClassBasedEngineProvider;
+import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelBasedEngineProvider;
 
 public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvider, ModelBasedEngineProvider {
 
@@ -34,7 +34,7 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin.PluginType.ENGINE_PROVIDER;
+		return MOGLiPlugin.PluginType.PROVIDER;
 	}
 
 	@Override
@@ -93,4 +93,27 @@ public class DummyVelocityEngineProviderStarter implements ClassBasedEngineProvi
 		return false;
 	}
 
+	@Override
+	public String getShortReport()
+	{
+		return "";
+	}
+
+	@Override
+	public int getNumberOfCalls()
+	{
+		return 0;
+	}
+
+	@Override
+	public String getProviderReport()
+	{
+		return null;
+	}
+
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 0;
+	}
 }

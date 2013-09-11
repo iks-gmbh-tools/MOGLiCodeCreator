@@ -2,8 +2,8 @@ package com.iksgmbh.moglicc.lineinserter.modelbased.velocity;
 
 import java.io.File;
 
-import com.iksgmbh.moglicc.data.GeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGeneratorResultData;
 
 /**
@@ -11,11 +11,12 @@ import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGenerato
  * insert content into a target file.
  *
  * @author Reik Oberrath
- * @since 1.0.0
+ * @since 1.3.0
  */
 public class VelocityLineInserterResultData extends BuildUpVelocityGeneratorResultData {
 
 	enum KnownInserterPropertyNames { ReplaceStart, ReplaceEnd, InsertBelow, InsertAbove };
+	
 	public static final String MISSING_REPLACE_CONFIGURATION = "Either annotation '" +
 								   KnownInserterPropertyNames.ReplaceStart.name()
 	                               + "' or '" +
@@ -82,7 +83,15 @@ public class VelocityLineInserterResultData extends BuildUpVelocityGeneratorResu
 	}
 
 	@Override
-	public void validatePropertyKeys(final String artefact) throws MOGLiPluginException {
+	public void validatePropertyKeys(final String artefact) throws MOGLiPluginException 
+	{
+		if (getTargetFileName() == null) {
+			validationErrors.add(NO_TARGET_FILE_NAME);
+		}
+		if (getTargetDir() == null) {
+			validationErrors.add(NO_TARGET_DIR);
+		}
+		
 		if (getReplaceEndIndicator() == null && getReplaceStartIndicator() != null) {
 			validationErrors.add(MISSING_REPLACE_CONFIGURATION);
 		}
@@ -107,9 +116,7 @@ public class VelocityLineInserterResultData extends BuildUpVelocityGeneratorResu
 		if (getInsertAboveIndicator() != null && isTargetToBeCreatedNewly()) {
 			validationErrors.add(CREATE_NEW_MIXED_CONFIGURATION);
 		}
-		if (getTargetDir() == null) {
-			validationErrors.add(NO_TARGET_DIR);
-		}
+		
 		super.validatePropertyKeys(artefact);
 	}
 

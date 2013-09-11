@@ -59,20 +59,25 @@ public class ReleaseFileCollector {
 		}
 	}
 
-	void createLibDirectory() {
+	void createLibDirectory() 
+	{
 		libDir = new File(fileData.releaseDir + "/" + fileData.libSubdir);
-		boolean ok = libDir.mkdirs();
-		if (! ok) {
-			throw new MOGLiCoreException("Directory not created: " + libDir.getAbsolutePath());
+		if (! libDir.exists()) {
+			boolean ok = libDir.mkdirs();
+			if (! ok) {
+				throw new MOGLiCoreException("Directory not created: " + libDir.getAbsolutePath());
+			}
 		}
 	}
 	
 	void createPluginDirectory() {
 		pluginDir = new File(fileData.releaseDir + "/" + fileData.libSubdir 
 				                                 + "/" + fileData.pluginsSubdir);
-		boolean ok = pluginDir.mkdirs();
-		if (! ok) {
-			throw new MOGLiCoreException("Directory not created: " + fileData.pluginsSubdir);
+		if (! pluginDir.exists()) {			
+			boolean ok = pluginDir.mkdirs();
+			if (! ok) {
+				throw new MOGLiCoreException("Directory not created: " + fileData.pluginsSubdir);
+			}
 		}
 	}
 

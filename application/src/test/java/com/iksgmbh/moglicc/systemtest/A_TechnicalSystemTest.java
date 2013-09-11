@@ -1,8 +1,8 @@
 package com.iksgmbh.moglicc.systemtest;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.*;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_REPORT_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_GENERATION_REPORT_FILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -195,16 +195,21 @@ public class A_TechnicalSystemTest extends __AbstractSystemTest {
 	}
 
 	@Test
-	public void createsReportFile() {
+	public void createsAllThreeReportFiles() {
 		// prepare test
-		final File reportFile = new File(testDir, FILENAME_REPORT_FILE);
-		assertFileDoesNotExist(reportFile);
+		final File shortReportFile = new File(applicationReportDir, FILENAME_SHORT_REPORT_FILE);
+		assertFileDoesNotExist(shortReportFile);
+		final File providerReportFile = new File(applicationReportDir, FILENAME_PROVIDER_REPORT_FILE);
+		assertFileDoesNotExist(providerReportFile);
+		final File generatorReportFile = new File(applicationReportDir, FILENAME_GENERATION_REPORT_FILE);
+		assertFileDoesNotExist(generatorReportFile);
 
 		// call functionality under test
 		executeMogliApplication();
 
 		// verify test result
-		assertFileExists(reportFile);
-	}
+		assertFileExists(shortReportFile);
+		assertFileExists(providerReportFile);
+		assertFileExists(generatorReportFile);	}
 
 }

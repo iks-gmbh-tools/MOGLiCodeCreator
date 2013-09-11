@@ -18,7 +18,7 @@ public class DummyDataProviderStarter implements MOGLiPlugin {
 
 	@Override
 	public PluginType getPluginType() {
-		return MOGLiPlugin.PluginType.DATA_PROVIDER;
+		return MOGLiPlugin.PluginType.PROVIDER;
 	}
 
 	@Override
@@ -52,6 +52,18 @@ public class DummyDataProviderStarter implements MOGLiPlugin {
 	@Override
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		return false;
+	}
+
+	@Override
+	public String getShortReport()
+	{
+		return "";
+	}
+
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 10;
 	}
 
 }

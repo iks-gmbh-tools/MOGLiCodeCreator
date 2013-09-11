@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +14,6 @@ import org.junit.Test;
 
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.filemaker.classbased.velocity.VelocityClassBasedFileMakerStarter;
-import com.iksgmbh.moglicc.generator.classbased.velocity.BuildUpVelocityGeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
@@ -119,12 +116,12 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		assertFileContainsEntry(targetFile, "Content");
 	}
 
-	private VelocityGeneratorResultData buildVelocityGeneratorResultData(final String targetFileName,
+	private VelocityFileMakerResultData buildVelocityGeneratorResultData(final String targetFileName,
 			final String targetdir, final String content, final boolean createNew) {
 		final BuildUpGeneratorResultData buildUpGeneratorResultData = new BuildUpGeneratorResultData();
 		buildUpGeneratorResultData.setGeneratedContent(content);
-		final BuildUpVelocityGeneratorResultData toReturn =
-			   new BuildUpVelocityGeneratorResultData(buildUpGeneratorResultData);
+		final VelocityFileMakerResultData toReturn =
+			   new VelocityFileMakerResultData(buildUpGeneratorResultData);
 
 		if (targetFileName != null) {
 			toReturn.addProperty(KnownGeneratorPropertyNames.TargetFileName.name(), targetFileName);
@@ -368,13 +365,13 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 	@Test
 	public void writesUmlautsIntoTargetFile() throws MOGLiPluginException {
 		// prepare test
-		final List<VelocityGeneratorResultData> resultList = new ArrayList<VelocityGeneratorResultData>();
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData("Umlaute.txt", "example",
+		final List<VelocityFileMakerResultData> resultList = new ArrayList<VelocityFileMakerResultData>();
+		final VelocityFileMakerResultData resultData = buildVelocityGeneratorResultData("Umlaute.txt", "example",
 				                                                                        "ßäüöÄÜÖ", true);
 		resultList.add(resultData);
 
 		// call functionality under test
-		velocityClassBasedGenerator.writeFilesIntoTargetDirReadFromTemplateFile(resultList);
+		velocityClassBasedGenerator.writeFilesIntoTargetDirReadFromTemplateFile(resultList, "artefact");
 
 		// verify test result
 		final File file = new File(applicationRootDir + "/example", "Umlaute.txt");
@@ -426,28 +423,6 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 			assertStringContains(e.getMessage(), "notExistingConditionFile.txt");
 		}
 	}
-
-	@Test
-	public void returnsListOfGeneratedArtefact() throws MOGLiPluginException, IOException {
-		// prepare test
-		FileUtil.deleteFiles(applicationTempDir.listFiles());
-		final List<VelocityGeneratorResultData> resultDataList = new ArrayList<VelocityGeneratorResultData>();
-		VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData("targetFile1.txt", "temp", "Content", true);
-		resultDataList.add(resultData);
-		resultData = buildVelocityGeneratorResultData("targetFile2.java", "temp", "Content", false);
-		resultDataList.add(resultData);
-		resultData = buildVelocityGeneratorResultData("targetFile3.java", "temp", "Content", true);
-		resultDataList.add(resultData);
-		velocityEngineProvider.setVelocityGeneratorResultDataList(resultDataList);
-
-		// call functionality under test
-		velocityClassBasedGenerator.doYourJob();
-
-		// verify test result
-		final String report = velocityClassBasedGenerator.getGenerationReport();
-		final File expected = new File(getProjectTestResourcesDir(), "expectedReport.txt");
-		assertEquals("report", FileUtil.getFileContent(expected), report);
-	}
 	
 	@Test
 	public void doesNotOverwriteExistingFilesInTargetDirAndcreatesCorrespondingGenerationReport() throws Exception {
@@ -472,7 +447,7 @@ public class VelocityClassBasedGeneratorUnitTest extends VelocityClassBasedGener
 		velocityClassBasedGenerator.doYourJob();
 
 		// verify test result
-		final String generationReport = velocityClassBasedGenerator.getGenerationReport();
+		final String generationReport = velocityClassBasedGenerator.getGeneratorReport();
 		assertTrue("unexpected generation result", generationReport.contains("targetFile.txt did already exist and was NOT overwritten in testArtefact"));
 	}
 

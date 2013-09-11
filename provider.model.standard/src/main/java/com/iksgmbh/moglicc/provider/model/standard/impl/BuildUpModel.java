@@ -112,4 +112,24 @@ public class BuildUpModel extends MetaModelObject implements Model {
 		}
 	}
 
+	@Override
+	public ClassDescriptor getClassDescriptor(final String classname)
+	{
+		for (final ClassDescriptor classDescriptor : classDescriptorList)
+		{
+			if (classDescriptor.getFullyQualifiedName().equals(classname)) {
+				return classDescriptor;
+			}
+		}
+		
+		for (final ClassDescriptor classDescriptor : classDescriptorList)
+		{
+			if (classDescriptor.getSimpleName().equals(classname)) {
+				return classDescriptor;
+			}
+		}
+		
+		return null;
+	}
+
 }

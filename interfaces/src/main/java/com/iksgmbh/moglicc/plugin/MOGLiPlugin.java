@@ -19,7 +19,7 @@ public interface MOGLiPlugin {
 	String FILENAME_PLUGIN_JAR_PROPERTIES = "Mogli.properties";
 	String ARTEFACT_PROPERTIES_HELP_FILE = "ArtefactProperties.htm";
 
-	enum PluginType { GENERATOR, MODEL_PROVIDER, DATA_PROVIDER, ENGINE_PROVIDER};
+	enum PluginType { GENERATOR, PROVIDER};
 
 	/**
 	 * @return PluginType to indicate the plugin's purpose
@@ -65,4 +65,17 @@ public interface MOGLiPlugin {
 	 * @throws MOGLiPluginException
 	 */
 	boolean unpackPluginHelpFiles() throws MOGLiPluginException;
+	
+	/**
+	 * @return Compressed information about work done
+	 */
+	String getShortReport();
+	
+	/**
+	 * If possible (in terms of resolved dependencies) plugins are
+	 * ordered to execute in the order defined by the return value. 
+	 * @return suggested execution order of the pludin
+	 */
+	int getSuggestedPositionInExecutionOrder();
+		
 }

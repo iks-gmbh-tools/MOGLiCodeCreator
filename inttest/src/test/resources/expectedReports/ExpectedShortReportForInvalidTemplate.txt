@@ -1,0 +1,20 @@
+############## MOGLiCC SHORT REPORT ###############
+
+Status: ERROR
+
+Workspace used: ../inttest/target/TestDir
+Model read from file: MOGLiCC_JavaBeanModel.txt
+
+4 plugin(s) executed successfully.
+1 plugin(s) not or erroneously executed!
+A total of 24 generation events for 2 output artefact(s) have been performed.
+
+StandardModelProvider: Model MOGLiCC_JavaBeanModel with 4 classes has been called 3 times.
+VelocityEngineProvider: Velocity engine started for 8 calls.
+
+VelocityModelBasedTreeBuilder: From 2 input artefact(s), have been 1 used to perform 20 generation events.
+VelocityClassBasedFileMaker: Error parsing artefact properties for artefact 'MOGLiJavaBean': Header attribute 'nonsense' in line 1 of main template of artefact 'MOGLiJavaBean' needs additional information.
+
+VelocityModelBasedLineInserter: From 1 input artefact(s), have been 1 used to create 1 file(s) and to perform 3 insertion(s).
+
+######################  End  ######################

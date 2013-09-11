@@ -6,9 +6,9 @@ import java.util.List;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
-import com.iksgmbh.moglicc.plugin.type.basic.Generator;
+import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
 
-public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGLiPlugin {
+public class DummyPluginThrowsRuntimeExceptionStarter implements GeneratorPlugin, MOGLiPlugin {
 
 	private static final String PLUGIN_ID = "DummyPlugin";
 	private InfrastructureService infrastructure;
@@ -54,8 +54,8 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGL
 	}
 
 	@Override
-	public String getGenerationReport() {
-		return null;
+	public String getGeneratorReport() {
+		return "";
 	}
 
 	@Override
@@ -64,8 +64,19 @@ public class DummyPluginThrowsRuntimeExceptionStarter implements Generator, MOGL
 	}
 
 	@Override
-	public int getNumberOfArtefacts() {
+	public int getNumberOfGeneratedArtefacts() {
 		return 0;
 	}
 
+	@Override
+	public String getShortReport()
+	{
+		return "";
+	}
+
+	@Override
+	public int getSuggestedPositionInExecutionOrder()
+	{
+		return 0;
+	}
 }

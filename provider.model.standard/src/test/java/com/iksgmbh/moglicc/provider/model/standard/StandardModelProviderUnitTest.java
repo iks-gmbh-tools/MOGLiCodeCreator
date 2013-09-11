@@ -103,7 +103,6 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 	@Test
 	public void buildsModelFromFileDefinedInPluginPropertiesFile() throws Exception{
 		// prepare test
-		setModelFile("MetaInfoValidatorTest_Success.txt");
 		final File modelfile = new File(getProjectTestResourcesDir(), "modelFiles/simpelModelFile.txt");
 		FileUtil.copyTextFile(modelfile, infrastructure.getPluginInputDir().getAbsolutePath());
 		final File propertiesFile = new File(infrastructure.getPluginInputDir(), StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE );
@@ -420,4 +419,78 @@ public class StandardModelProviderUnitTest extends StandardModelProviderTestPare
 		// verify test result -> no Exception 
 	}
 
+	@Test
+	public void readsModelWithVariableDefinitions() throws Exception {
+		// prepare test
+		final String path = "com.iksgmbh.moglicc.test";
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "TestModel.txt");
+		FileUtil.createNewFileWithContent(testModelFile, "model TestModel" + FileUtil.getSystemLineSeparator() +
+                "variable path " + path + FileUtil.getSystemLineSeparator() +
+                "class <<path>>.Person1");
+		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
+				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt");
+
+		// call functionality under test
+		modelProvider.doYourJob();
+
+		// verify test result
+		final Model model = modelProvider.getModel(null);
+		assertStringEquals("package name", path, model.getClassDescriptorList().get(0).getPackage());
+	}
+	
+	@Test
+	public void readsModelWithVariableInVariableDefinitions() throws Exception {
+		// prepare test
+		setModelFile("ModelFileWithVariableInVariable.txt");
+
+		// call functionality under test
+		modelProvider.doYourJob();
+
+		// verify test result
+		final Model model = modelProvider.getModel("");
+		assertStringEquals("class name", "de.test.TestClassA", model.getClassDescriptorList().get(0).getFullyQualifiedName());
+	}
+	
+
+	@Test
+	public void throwsExceptionForUnkownVariable() throws Exception {
+		// prepare test
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "TestModel.txt");
+		FileUtil.createNewFileWithContent(testModelFile, "model TestModel" + FileUtil.getSystemLineSeparator() +
+                "class <<path>>Person1");
+		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
+				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt");
+
+		// call functionality under test
+		try {
+			modelProvider.doYourJob();
+			fail("Expected exception was not thrown!");
+		} catch (Exception e) {
+			// verify test result
+			assertStringContains(e.getMessage(), "Variable is not defined: <<path>> in line 2!");
+		}
+	}
+	
+	@Test
+	public void throwsExceptionForInvalidVariableDefinition() throws Exception {
+		// prepare test
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "TestModel.txt");
+		FileUtil.createNewFileWithContent(testModelFile, "model TestModel" + FileUtil.getSystemLineSeparator() +
+                "variable path");
+		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
+				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt");
+
+		// call functionality under test
+		try {
+			modelProvider.doYourJob();
+			fail("Expected exception was not thrown!");
+		} catch (Exception e) {
+			// verify test result
+			System.err.println(e.getMessage());
+			assertStringContains(e.getMessage(), "Problem in line 2: Invalid information for variable 'path'");
+		}
+	}	
 }

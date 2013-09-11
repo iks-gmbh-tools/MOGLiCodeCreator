@@ -1,0 +1,21 @@
+**************************   G E N E R A T O R   R E P O R T   *******************************
+
+0 from 3 generator plugins ecexuted successfully.
+Model file used is 'MOGLiCC_JavaBeanModel.txt', but no model is available.
+
+----------------------------------------------------------------------------------------------
+VelocityModelBasedTreeBuilder: 
+
+No model available. No generation done.
+
+----------------------------------------------------------------------------------------------
+VelocityClassBasedFileMaker: 
+
+No model available. No generation done.
+
+----------------------------------------------------------------------------------------------
+VelocityModelBasedLineInserter: 
+
+No model available. No generation done.
+
+**************************************  E N D  ***********************************************
