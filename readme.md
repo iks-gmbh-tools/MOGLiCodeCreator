@@ -27,6 +27,8 @@ You find the lastest release build under application/releasedBuilds.
 
 License: **All Rights Reserved**
 
+travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.png?branch=master)](https://travis-ci.org/iks-github/MOGLiCodeCreator)
+
 Current version: **1.4.0**
 
 **Changes to 1.3.0**
