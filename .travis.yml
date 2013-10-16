@@ -5,4 +5,4 @@ before_install: chmod +x .travis-install.sh
 install : ./.travis-install.sh
 script :
   - cd ./parent
-  - mvn clean install -Dmaven.test.skip=true -e
+  - mvn clean install -Dmaven.test.skip=false -e
