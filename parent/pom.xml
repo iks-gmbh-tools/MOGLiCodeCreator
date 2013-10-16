@@ -18,7 +18,6 @@
 		<module>../interfaces</module>
 		<module>../core</module>
 		<module>../test</module>
-		<module>../application</module>
 	</modules>
 
 	<dependencies>
@@ -60,4 +59,19 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>release</id>
+			<modules>
+				<module>../parent.plugin</module>
+				<module>../global</module>
+				<module>../common</module>
+				<module>../interfaces</module>
+				<module>../core</module>
+				<module>../test</module>
+				<module>../application</module>
+			</modules>
+		</profile>
+	</profiles>
+	
 </project>

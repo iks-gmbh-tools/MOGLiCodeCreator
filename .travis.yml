@@ -1,9 +1,8 @@
 language: java
 jdk:
   - oraclejdk6
-  - oraclejdk7
 before_install: chmod +x .travis-install.sh
 install : ./.travis-install.sh
 script :
   - cd ./parent
-  - mvn clean package -Dmaven.test.skip=true -o -e -X
+  - mvn clean install -Dmaven.test.skip=true -e
