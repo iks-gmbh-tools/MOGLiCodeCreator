@@ -26,4 +26,9 @@ public interface ClassDescriptor extends MetaInfoSupport {
 	 */
 	List<AttributeDescriptor> getAttributeDescriptorList();
 
+	
+	/**
+	 * @return attribute descriptor that name equals attributeName 
+	 */
+	AttributeDescriptor getAttributeDescriptor(String attributeName);	
 }
