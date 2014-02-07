@@ -2,10 +2,12 @@ package com.iksgmbh.data;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.OSUtil;
 
 /**
  * Data object to access files and subfolders of a given rootDir.
@@ -86,7 +88,10 @@ public class FolderContent {
 	 *        ending part of filename or path to the file. If null, all files are returned.
 	 * @return all files of all subFolders and rootDir with the given file extension
 	 */
-	public List<File> getFilesWithEndingPattern(final String endingPattern) {
+	public List<File> getFilesWithEndingPattern(String endingPattern) {
+		if (OSUtil.isWindows() && endingPattern != null) {
+			endingPattern = endingPattern.replace('/', '\\'); 
+		}
 		final List<File> toReturn = new ArrayList<File>();
 		for (final File dir : directories) {
 			final List<File> list = content.get(dir);
@@ -107,6 +112,7 @@ public class FolderContent {
 		for (final File dir : directories) {
 			toReturn.add(dir);
 		}
+		Collections.sort(toReturn);
 		return toReturn;
 	}
 
@@ -123,7 +129,9 @@ public class FolderContent {
 
 	public File getFolder(String pathEnding) 
 	{
-		pathEnding = pathEnding.replace('/', '\\');
+		if (OSUtil.isWindows() && pathEnding != null) {			
+			pathEnding = pathEnding.replace('/', '\\'); 
+		}
 		final List<File> matches = new ArrayList<File>();
 		
 		for (final File dir : directories) {

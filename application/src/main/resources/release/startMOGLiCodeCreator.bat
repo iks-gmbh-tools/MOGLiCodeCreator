@@ -1,7 +1,7 @@
 echo off
 set "workspaceDir=%~1"
 set classpath=".\lib\*;.\lib\plugins\*"
-set JAVABIN="C:\Program Files\Java\jre6\bin"
+set JAVABIN=%JAVA_HOME%/bin
 
 
 if "%JAVA_HOME%" == "" goto Java_Home_Not_Set

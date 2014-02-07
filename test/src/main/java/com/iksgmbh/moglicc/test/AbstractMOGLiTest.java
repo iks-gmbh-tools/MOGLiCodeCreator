@@ -102,6 +102,15 @@ public abstract class AbstractMOGLiTest {
 	protected void initProperties() {
 		initWorkspacePropertiesWith("");
 	}
+	
+
+	protected void giveSystemTimeToExecute() {
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 	protected void initApplicationPropertiesWith(final String propertiesFileContent) {
 		applicationPropertiesFile = new File(applicationRootDir, FILENAME_APPLICATION_PROPERTIES);
@@ -381,8 +390,8 @@ public abstract class AbstractMOGLiTest {
 
 			for (int i = 0; i < expectedFileContent.size(); i++)
 			{
-				final String expectedLine = cutLocalFilePath(expectedFileContent.get(i).trim());
-				final String actualLine = cutLocalFilePath(actualFileContent.get(i));
+				final String expectedLine = unifyFilePath(expectedFileContent.get(i).trim());
+				final String actualLine = unifyFilePath(actualFileContent.get(i));
 
 				if (! expectedLine.equals(actualLine)) {
 					logoutFileContents(expectedFileContent, actualFileContent);
@@ -433,8 +442,12 @@ public abstract class AbstractMOGLiTest {
 		return file;
 	}
 
-	protected String cutLocalFilePath(final String line) {
-		return StringUtil.replaceBetween(line, "in: ", "..\\", ".").trim();
+	protected String unifyFilePath(final String line) {
+		String toReturn = line;
+		toReturn = StringUtil.replaceBetween(line, "in: ", "..\\", ".").trim();  // cut local file path
+		toReturn = StringUtil.replaceBetween(toReturn, "in: ", "../", ".").trim(); // cut local file path
+		toReturn = toReturn.replace('\\', '/'); // for windows file separator must be modified
+		return toReturn;
 	}
 
 

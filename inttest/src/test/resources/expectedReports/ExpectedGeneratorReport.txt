@@ -13,28 +13,28 @@ MOGLiCC_NewPluginProject
 
 Report for input artefact 'MOGLiCC_JavaBeanProject':
 
-   Tree artefact generated in: C:\dev\sources\ctlcrmoglicc\development\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
+   Tree artefact generated in: C:/dev/sources/ctlcrmoglicc/development/inttest/../inttest/target/TestDir/MOGLiCC_JavaBeanProject
    5 folders have been created.
    9 files have been created.
    6 file modifications were performed.
 
    Created subdirectories: 
-      \src\main\java\com\iksgmbh\moglicc\demo\main
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\types
-      \src\main\resources
-      \src\test\java
-      \src\test\resources
+      /src/main/java/com/iksgmbh/moglicc/demo/main
+      /src/main/java/com/iksgmbh/moglicc/demo/validator/types
+      /src/main/resources
+      /src/test/java
+      /src/test/resources
 
    Created files: 
-      \pom.xml
-      \src\main\java\com\iksgmbh\moglicc\demo\main\MOGLiCC_JavaBeanProjectClassOverviewPrinter.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationException.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationResult.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidator.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\JavaBeanValidator.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MandatoryFieldValidator.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MaxLengthValidator.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MinLengthValidator.java
+      /pom.xml
+      /src/main/java/com/iksgmbh/moglicc/demo/main/MOGLiCC_JavaBeanProjectClassOverviewPrinter.java
+      /src/main/java/com/iksgmbh/moglicc/demo/validator/FieldValidationException.java
+      /src/main/java/com/iksgmbh/moglicc/demo/validator/FieldValidationResult.java
+      /src/main/java/com/iksgmbh/moglicc/demo/validator/FieldValidator.java
+      /src/main/java/com/iksgmbh/moglicc/demo/validator/JavaBeanValidator.java
+      /src/main/java/com/iksgmbh/moglicc/demo/validator/types/MandatoryFieldValidator.java
+      /src/main/java/com/iksgmbh/moglicc/demo/validator/types/MaxLengthValidator.java
+      /src/main/java/com/iksgmbh/moglicc/demo/validator/types/MinLengthValidator.java
 
    Performed replacements:
       Placeholder 'mavenGroupId' replaced by 'com.iksgmbh.moglicc' in file 'pom.xml'
@@ -44,7 +44,7 @@ Report for input artefact 'MOGLiCC_JavaBeanProject':
       Placeholder 'class Main' replaced by 'class MOGLiCC_JavaBeanProjectClassOverviewPrinter' in file 'main.java'
 
    Performed file renamings:
-      File 'main.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '..\inttest\target\TestDir\output\VelocityModelBasedTreeBuilder\MOGLiCC_JavaBeanProject\src\main\java\com\iksgmbh\moglicc\demo\main'
+      File 'main.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '../inttest/target/TestDir/output/VelocityModelBasedTreeBuilder/MOGLiCC_JavaBeanProject/src/main/java/com/iksgmbh/moglicc/demo/main'
 
 ----------------------------------------------------------------------------------------------
 

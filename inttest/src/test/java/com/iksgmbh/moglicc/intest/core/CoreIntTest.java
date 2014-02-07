@@ -41,7 +41,8 @@ public class CoreIntTest extends IntTestParent {
 	public void runWithExternalInputData() throws IOException {
 		// prepare test
 		initTestRootDir();
-		copyExternalInputDataIntoMOGLiCCWorkspace("C:/dev/sources/ctlcrmoglicc/work/workspaces/cltWeblogicDBKomponenteSpring");
+		//copyExternalInputDataIntoMOGLiCCWorkspace("C:/dev/sources/moglicc/workspaces/spring");
+		copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/MOGLiCC_dev1.5.0/application/target/releaseDir/SystemTestDir");
 
 		// call functionality under test
 		MOGLiCodeCreator.main(args);

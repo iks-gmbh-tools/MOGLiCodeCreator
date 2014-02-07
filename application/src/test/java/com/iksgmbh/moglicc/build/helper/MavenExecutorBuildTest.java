@@ -1,10 +1,11 @@
 package com.iksgmbh.moglicc.build.helper;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.apache.maven.shared.invoker.InvocationResult;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,17 +20,16 @@ public class MavenExecutorBuildTest extends ApplicationTestParent {
 	@Before
 	public void setup() {
 		super.setup();
-		MavenData mavenData = new MavenData("compile", (new MOGLiReleaseBuilder()).getMavenRootDir(),
+		MavenData mavenData = new MavenData("clean compile", (new MOGLiReleaseBuilder()).getMavenRootDir(),
 				new File(PROJECT_ROOT_DIR + "../global"));
 		mavenExecutor = new MavenExecutor(mavenData);
 	}
 
 	@Test
 	public void testCallMaven() {
-		String mavenResult = mavenExecutor.callMaven();
+		final InvocationResult mavenResult = mavenExecutor.callMaven();
 		assertNotNull(mavenResult);
-		System.out.println(mavenResult);
-		assertTrue("Unexpected mavenResult: " + mavenResult, mavenResult.contains("[INFO] Building Global"));
-		assertTrue("Maven Build not successful: " + mavenResult, mavenResult.contains("[INFO] BUILD SUCCESS"));
+		System.out.println(mavenResult.getExecutionException());
+		assertEquals("Exit Code", 0, mavenResult.getExitCode());
 	}
 }
