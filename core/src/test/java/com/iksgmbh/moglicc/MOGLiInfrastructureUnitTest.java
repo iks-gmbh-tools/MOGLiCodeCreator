@@ -84,7 +84,8 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 
 		// verify test result
 		final File applicationInputDir = MOGLiFileUtil.getNewFileInstance(DIR_INPUT_FILES);
-		assertStringEquals("Wrong logDir created", applicationInputDir.getAbsolutePath() + "\\" + PLUGIN_TEST_ID, actualPluginInputDir.getAbsolutePath());
+		assertStringEquals("Wrong logDir created", applicationInputDir.getAbsolutePath() + File.separator + PLUGIN_TEST_ID, 
+				                                   actualPluginInputDir.getAbsolutePath());
 	}
 
 	@Test
@@ -100,7 +101,8 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 		final File actualPluginTempDir = infrastructure.getPluginTempDir();
 
 		// verify test result
-		assertStringEquals("Wrong tempDir created", tempDir.getAbsolutePath() + "\\" + PLUGIN_TEST_ID, actualPluginTempDir.getAbsolutePath());
+		assertStringEquals("Wrong tempDir created", tempDir.getAbsolutePath() + File.separator + PLUGIN_TEST_ID, 
+				                                    actualPluginTempDir.getAbsolutePath());
 	}
 
 	@Test
@@ -133,7 +135,8 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 
 		// verify test result
 		assertFileExists(pluginResultDir);
-		assertStringEquals("PluginResultDir", resultDir.getAbsolutePath() + "\\" + PLUGIN_TEST_ID, pluginResultDir.getAbsolutePath());
+		assertStringEquals("PluginResultDir", resultDir.getAbsolutePath() + File.separator + PLUGIN_TEST_ID, 
+				                              pluginResultDir.getAbsolutePath());
 	}
 
 
@@ -151,7 +154,8 @@ public class MOGLiInfrastructureUnitTest extends CoreTestParent {
 
 		// verify test result
 		assertFileExists(pluginLogFile);
-		assertStringEquals("PluginResultDir", logDir.getAbsolutePath() + "\\" + PLUGIN_TEST_ID + ".log", pluginLogFile.getAbsolutePath());
+		assertStringEquals("PluginResultDir", logDir.getAbsolutePath() + File.separator + PLUGIN_TEST_ID + ".log", 
+				                              pluginLogFile.getAbsolutePath());
 	}
 
 	@Test

@@ -1,6 +1,14 @@
 package com.iksgmbh.moglicc.build.helper;
 
 import java.io.File;
+import java.util.Collections;
+
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.DefaultInvoker;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.InvocationResult;
+import org.apache.maven.shared.invoker.Invoker;
+import org.apache.maven.shared.invoker.MavenInvocationException;
 
 import com.iksgmbh.utils.CmdUtil;
 
@@ -14,15 +22,17 @@ public class MavenExecutor {
 	}
 
 	public static String doYourJob(MavenData mavenData) {
-		MavenExecutor mavenExecutor = new MavenExecutor(mavenData);
-		final String result = mavenExecutor.callMaven();
-		if (result.contains("FAILURE")) {
-			return result;
+		final MavenExecutor mavenExecutor = new MavenExecutor(mavenData);
+		final InvocationResult result = mavenExecutor.callMaven();
+		if ( result.getExitCode() != 0 )
+		{
+		    return "Build failed due to unexpected exit code " 
+		           + result.getExitCode() + "ExecutionException: " + result.getExecutionException(); 
 		}
 		return EXECUTION_OK;
 	}
 	
-	String callMaven() {
+	String callMavenOld() {
 		final String mavenHome = mavenData.mavenRootDir;
 		String exeCommand = mavenHome + "/bin/mvn " + mavenData.mavenTargetString 
 		                    + " --settings " + mavenHome + "/conf/settings.xml " 
@@ -33,6 +43,23 @@ public class MavenExecutor {
 		System.out.println("Calling command\n" + exeCommand 
 				           + "\n in \n" + mavenData.parentBuildDir.getAbsolutePath());
 		return CmdUtil.execWindowCommand(mavenData.parentBuildDir, exeCommand, true);
+	}
+	
+	InvocationResult callMaven() 
+	{
+		final InvocationRequest request = new DefaultInvocationRequest();
+		request.setPomFile( new File( mavenData.parentBuildDir, "pom.xml" ) );
+		request.setGoals( Collections.singletonList( mavenData.mavenTargetString ) );
+		final Invoker invoker = new DefaultInvoker();
+		invoker.setMavenHome(new File(mavenData.mavenRootDir));
+		InvocationResult result;
+		try {
+			result = invoker.execute( request );
+		} catch (MavenInvocationException e) {
+			throw new IllegalStateException( "Build failed due to error in execution." );
+		}
+
+		return result;
 	}
 	
 	public static class MavenData {

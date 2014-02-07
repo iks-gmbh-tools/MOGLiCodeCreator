@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.OSUtil;
 
 /**
  * Helfer, um den Namespace von Eclipse-Projekten in einem Workspace zu ändern, z.B.
@@ -71,8 +72,14 @@ public class NameSpaceReplacer {
 
 	public void replaceWorkspace(final String workspaceDir) throws Exception {
 		System.out.println("");
-		sourcePackageStructure  = sourceNamespace.replace('.', '\\');
-		targetPackageStructure  = targetNamespace.replace('.', '\\');
+		if (OSUtil.isWindows()) {
+			sourcePackageStructure = sourceNamespace.replace('.', '\\');
+			targetPackageStructure = targetNamespace.replace('.', '\\');
+		} else {			
+			sourcePackageStructure = sourceNamespace.replace('.', '/');
+			targetPackageStructure = targetNamespace.replace('.', '/');
+		}
+		
 
 		final File workspace = new File(workspaceDir);
 		final File[] files = workspace.listFiles();

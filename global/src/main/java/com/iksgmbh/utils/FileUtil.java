@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -360,9 +361,17 @@ public class FileUtil {
 		if (resource == null) {
 			throw new RuntimeException("Cannot find resource '" + pathToResource + "'");
 		}
-		final int pos = pathToResource.lastIndexOf('.');
-		final String filename = pathToResource.substring(pos);
-		return FileUtil.getFileContent(resource, filename);
+		
+		final int pos = pathToResource.lastIndexOf('/');
+		
+		final String filename;
+		if (pos > -1) {
+			filename = pathToResource.substring(pos + 1);
+		} else {
+			filename = pathToResource;
+		}
+		
+		return FileUtil.getFileContent(resource, "/" + filename);
 	}
 
 	public static List<String> getNamesOfSubdirs(final File dir) {
@@ -385,6 +394,7 @@ public class FileUtil {
 		}
 		final List<File> toReturn = new ArrayList<File>();
 		final File[] files = dir.listFiles();
+		Arrays.sort(files);
 		for (File file : files) {
 			if (file.isFile()) {
 				toReturn.add(file);
