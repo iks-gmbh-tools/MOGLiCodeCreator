@@ -20,8 +20,6 @@ public class VelocityModelBasedLineInserterTestParent extends AbstractMOGLiTest 
 
 	public static final String PROJECT_ROOT_DIR = "../lineinserter.modelbased.velocity/";
 
-	private static boolean isFirstTime = true;
-
 	protected File generatorPluginInputDir;
 	protected VelocityModelBasedLineInserterStarter velocityModelBasedLineInserter;
 	protected InfrastructureService infrastructure;
@@ -53,11 +51,9 @@ public class VelocityModelBasedLineInserterTestParent extends AbstractMOGLiTest 
 		velocityModelBasedLineInserter.setInfrastructure(infrastructure);
 		generatorPluginInputDir = new File(applicationInputDir, VelocityModelBasedLineInserterStarter.PLUGIN_ID);
 
-		if (isFirstTime) {
-			isFirstTime = false;
-			FileUtil.deleteDirWithContent(generatorPluginInputDir);
-			applicationTempDir.mkdirs();
-		}
+		FileUtil.deleteDirWithContent(applicationRootDir);
+		applicationRootDir.mkdirs();
+		applicationTempDir.mkdirs();
 
 		initPluginInputDirWithDefaultDataIfNotExisting();
 	}

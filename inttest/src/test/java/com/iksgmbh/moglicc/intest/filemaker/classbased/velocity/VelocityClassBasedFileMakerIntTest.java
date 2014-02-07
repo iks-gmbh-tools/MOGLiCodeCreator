@@ -30,7 +30,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBean");
 		assertFileDoesNotExist(file);
 		final String generationReport = velocityClassBasedFileMakerStarter.getGeneratorReport();
-		System.err.println(generationReport);
+		System.out.println(generationReport);
 		assertStringEquals("generationReport", "6 input artefact(s) found. No classes in model. Nothing to do.", generationReport);
 	}
 

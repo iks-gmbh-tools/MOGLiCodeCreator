@@ -1,18 +1,24 @@
 package com.iksgmbh.moglicc.systemtest;
 
-import static com.iksgmbh.moglicc.MOGLiSystemConstants.*;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_REPORT_FILES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_GENERATION_REPORT_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_PROVIDER_REPORT_FILE;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_SHORT_REPORT_FILE;
 
 import java.io.File;
 
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
+import com.iksgmbh.moglicc.build.MOGLiReleaseBuilder;
 import com.iksgmbh.moglicc.lineinserter.modelbased.velocity.VelocityModelBasedLineInserterStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
-import com.iksgmbh.utils.CmdUtil;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.OSUtil;
 
 public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSystemTest {
+
+	private static final String PROPERTIES_DIR = "properties";
 
 	@Test
 	public void doesNotExecuteDeactivatedPlugin() throws Exception {
@@ -39,16 +45,28 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 	}
 
 	@Test
-	public void createsWorkspaceDirProvidedAsArgumentOfStartBatchFile() throws Exception {
+	public void createsWorkspaceDirProvidedAsArgumentOfStartScript() throws Exception {
 		// prepare test
 		final String workspace = "workspaces/test3";
-		final String startBat = "start.bat";
 		final File workspaceDir = initWorkspaceDir(workspace);
-		final File startFile = new File(applicationRootDir, startBat);
-		MOGLiFileUtil.createNewFileWithContent(startFile, "startMOGLiCodeCreator.bat " + workspace);
+		final File startFile;
+		final String startScript;
+		final String exeCommand;
+		
+		if (OSUtil.isWindows()) {
+			startScript = "start.bat";
+			startFile = new File(applicationRootDir, startScript);
+			MOGLiFileUtil.createNewFileWithContent(startFile, MOGLiReleaseBuilder.FILENAME_STARTBAT + " " + workspace);
+			exeCommand = startScript;
+		} else {
+			startScript = "start.sh";
+			startFile = new File(applicationRootDir, startScript);
+			MOGLiFileUtil.createNewFileWithContent(startFile, "sh " + MOGLiReleaseBuilder.FILENAME_STARTSH + " " + workspace);
+			exeCommand = "sh " + startScript;
+		}
 
 		// call functionality under test
-		CmdUtil.execWindowCommand(testDir, startBat, true);
+		executeMogliApplication(exeCommand);
 
 		// cleanup
 		startFile.delete();
@@ -58,16 +76,16 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 	}
 
 	@Test
-	public void createsWorkspaceDirConfiguredInStartBatchFile() throws Exception {
+	public void createsWorkspaceDirConfiguredInStartScript() throws Exception {
 		// prepare test
 		final File workspaceDir = initWorkspaceDir("workspaces/test2");
-		setCustomizedStartBatchFile();
+		setCustomizedStartScriptFile();
 
 		// call functionality under test
 		executeMogliApplication();
 
 		// cleanup
-		resetDefaultStartBatchFile();
+		resetDefaultStartScriptFile();
 
 		// verify test result
 		assertWorkspace(workspaceDir);
@@ -159,7 +177,7 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 	private void assertWorkspacePropertiesFile(File workspaceDir) {
 		final File workspacePropertiesFile = new File(workspaceDir, MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
 		assertFileExists(workspacePropertiesFile);
-		final File expectedFile = new File(PROJECT_ROOT_DIR + "../core/src/main/resources/"
+		final File expectedFile = new File(PROJECT_ROOT_DIR + "../core/src/main/resources/" + PROPERTIES_DIR + "/"
 				                           + MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES);
 		assertFileEquals(expectedFile, workspacePropertiesFile);
 	}
@@ -177,15 +195,33 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 		return workspaceDir;
 	}
 
-	private void setCustomizedStartBatchFile() {
-		final File sourceFile = new File(getProjectTestResourcesDir(), "startBatWithCustomizedWorkspaceDir.bat");
-		final File targetFile = new File(applicationRootDir, "startMOGLiCodeCreator.bat");
+	private void setCustomizedStartScriptFile() {
+		final File sourceFile;
+		final File targetFile;
+		
+		if (OSUtil.isWindows()) {			
+			sourceFile = new File(getProjectTestResourcesDir(), "startBatWithCustomizedWorkspaceDir.bat");
+			targetFile = new File(applicationRootDir, "startMOGLiCodeCreator.bat");
+		} else {
+			sourceFile = new File(getProjectTestResourcesDir(), "startShWithCustomizedWorkspaceDir.sh");
+			targetFile = new File(applicationRootDir, "startMOGLiCodeCreator.sh");
+		}
+		
 		MOGLiFileUtil.createNewFileWithContent(targetFile, MOGLiFileUtil.getFileContent(sourceFile));
 	}
 
-	private void resetDefaultStartBatchFile() {
-		final File sourceFile = new File(getProjectResourcesDir(), "release/startMOGLiCodeCreator.bat");
-		final File targetFile = new File(applicationRootDir, "startMOGLiCodeCreator.bat");
+	private void resetDefaultStartScriptFile() {
+		final File sourceFile;
+		final File targetFile;
+
+		if (OSUtil.isWindows()) {
+			sourceFile = new File(getProjectResourcesDir(), "release/startMOGLiCodeCreator.bat");
+			targetFile = new File(applicationRootDir, "startMOGLiCodeCreator.bat");			
+		} else {
+			sourceFile = new File(getProjectResourcesDir(), "release/startMOGLiCodeCreator.sh");
+			targetFile = new File(applicationRootDir, "startMOGLiCodeCreator.sh");			
+		}
+		
 		MOGLiFileUtil.createNewFileWithContent(targetFile, MOGLiFileUtil.getFileContent(sourceFile));
 	}
 }
