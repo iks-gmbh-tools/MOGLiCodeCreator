@@ -1,0 +1,26 @@
+#########################################################################################################
+# This model file illustrates the usage of the model definition DSL of the StandardModelProvider plugin.
+#
+# Three hierarchy levels exist in which elements can be defined: 'model', 'class' and 'attribute'.
+# Elements in each level are only defined by a name.
+# A model file must contain exactly one model element.
+# The name of a class must be fully qualified and unique within the model.
+# The name of a attribute must be unique for its class.
+#
+# For elements in each level so-called 'MetaInfos' can be assigned in any number.
+# A MetaInfo consists of a non-unique name and a value.
+#
+# Elements in each level and each of their MetaInfos can be adressed from the template files.
+#
+#########################################################################################################
+
+model Hello_World_Example_Simple
+	metainfo targetDir C:/temp/moglicc
+  
+	class com.iksgmbh.moglicc.example.HelloWorldSimpleExample
+		metainfo comment "Hello World example 1 for the MOGLi Code Creator."
+ 
+		attribute greeting
+			metainfo toPrint "Hello World"
+			
+			
