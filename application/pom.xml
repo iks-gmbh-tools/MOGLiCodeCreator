@@ -99,11 +99,12 @@
 		</dependency>
 
 		<dependency>
+			<!-- not yet available by a public maven repository -> maven artefact is installed in local maven repository by the cpsuite project -->
 			<groupId>cpsuite</groupId>
 			<artifactId>cpsuite</artifactId>
 			<version>1.2.6</version>
 		</dependency>
-		
+ 		
 		<dependency>
 			<groupId>org.apache.maven.shared</groupId>
 			<artifactId>maven-invoker</artifactId>
