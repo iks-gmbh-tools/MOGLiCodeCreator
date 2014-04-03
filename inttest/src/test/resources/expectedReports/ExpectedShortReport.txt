@@ -11,8 +11,8 @@ A total of 44 generation events for 7 output artefact(s) have been performed.
 StandardModelProvider: Model MOGLiCC_JavaBeanModel with 4 classes has been called 3 times.
 VelocityEngineProvider: Velocity engine started for 12 calls.
 
-VelocityModelBasedTreeBuilder: From 2 input artefact(s), have been 1 used to perform 20 generation events.
 VelocityClassBasedFileMaker: From 6 input artefact(s), have been 5 used to make 20 files.
 VelocityModelBasedLineInserter: From 1 input artefact(s), have been 1 used to create 1 file(s) and to perform 3 insertion(s).
+VelocityModelBasedTreeBuilder: From 2 input artefact(s), have been 1 used to perform 20 generation events.
 
 ######################  End  ######################

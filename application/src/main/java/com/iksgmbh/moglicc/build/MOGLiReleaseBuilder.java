@@ -277,7 +277,8 @@ public class MOGLiReleaseBuilder {
 		return new File (WORKSPACE.getAbsolutePath() + "/" + module);
 	}
 
-	public String getMavenRootDir() {
+	public String getMavenRootDir() 
+	{
 		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_HOME);
 		if (mavenPath != null) {
 			final File file = new File(mavenPath);
@@ -286,7 +287,7 @@ public class MOGLiReleaseBuilder {
 			}
 		}
 
-		mavenPath = System.getenv().get(PROPERTY_MAVEN_HOME);
+		mavenPath = System.getProperty(PROPERTY_MAVEN_HOME, mavenPath);
 		if (mavenPath != null) {
 			final File file = new File(mavenPath);
 			if (file.exists()) {
@@ -294,8 +295,8 @@ public class MOGLiReleaseBuilder {
 			}
 		}
 		throw new MOGLiCoreException("Property '" + PROPERTY_MAVEN_HOME +
-				                     "' does not point to a existing directory. " +
-				                     "Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES +
+				                     "' does not point to a existing directory: <" + mavenPath + 
+				                     ">. Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES +
 				                     "' or as system property.");
 	}
 
@@ -313,7 +314,7 @@ public class MOGLiReleaseBuilder {
 			System.out.println(key + " " + getenv.get(key));
 		}
 
-		mavenPath = System.getenv().get(PROPERTY_MAVEN_REPO);
+		mavenPath = System.getProperty(PROPERTY_MAVEN_HOME, mavenPath);
 		if (mavenPath != null) {
 			mavenPath = mavenPath.replace(MAVEN_INSTALL_DIR_PREFIX, getMavenRootDir());
 			final File file = new File(mavenPath);
@@ -321,10 +322,10 @@ public class MOGLiReleaseBuilder {
 				return mavenPath;
 			}
 		}
-		throw new MOGLiCoreException("Property '" + PROPERTY_MAVEN_REPO +
-				                     "' does not point to a existing directory. " +
-				                     "Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES +
-				                     "' or as system property.");
+		throw new MOGLiCoreException("Property '" + PROPERTY_MAVEN_HOME +
+                "' does not point to a existing directory: <" + mavenPath + 
+                ">. Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES +
+                "' or as system property.");
 	}
 
 	public String getVersion(VERSION_TYPE type) {

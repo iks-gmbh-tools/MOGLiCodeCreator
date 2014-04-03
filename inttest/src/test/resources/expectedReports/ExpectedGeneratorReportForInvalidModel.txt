@@ -5,12 +5,6 @@ Model file used is 'MOGLiCC_JavaBeanModel.txt', but no model is available.
 
 ----------------------------------------------------------------------------------------------
 
-VelocityModelBasedTreeBuilder: 
-
-Model Error: No model file loaded! No generation done.
-
-----------------------------------------------------------------------------------------------
-
 VelocityClassBasedFileMaker: 
 
 Model Error: No model file loaded! No generation done.
@@ -18,6 +12,12 @@ Model Error: No model file loaded! No generation done.
 ----------------------------------------------------------------------------------------------
 
 VelocityModelBasedLineInserter: 
+
+Model Error: No model file loaded! No generation done.
+
+----------------------------------------------------------------------------------------------
+
+VelocityModelBasedTreeBuilder: 
 
 Model Error: No model file loaded! No generation done.
 

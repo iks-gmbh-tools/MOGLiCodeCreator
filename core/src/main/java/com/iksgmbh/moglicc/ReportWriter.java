@@ -1,6 +1,8 @@
 package com.iksgmbh.moglicc;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +40,10 @@ public class ReportWriter
 		this.shortReportHeader = buildShortReportHeader();
 	}
 	
+	public String getShortReportHeader()
+	{
+		return shortReportHeader;
+	}
 
 	public void writeErrorReportIfNecessary(final File errorReportFile)
 	{
@@ -74,7 +80,9 @@ public class ReportWriter
 		}
 
 		final List<GeneratorPlugin> generators = plugins.get(0).getInfrastructure().getPluginsOfType(GeneratorPlugin.class);
+		sortGenerators(generators);
 		final List<ProviderPlugin> providers = plugins.get(0).getInfrastructure().getPluginsOfType(ProviderPlugin.class);
+		sortProviders(providers);
 		
 		final StringBuffer report = new StringBuffer("############## MOGLiCC SHORT REPORT ###############");
 
@@ -116,6 +124,7 @@ public class ReportWriter
 			return;
 		}
 		final List<ProviderPlugin> providers = plugins.get(0).getInfrastructure().getPluginsOfType(ProviderPlugin.class);
+		sortProviders(providers);
 		final StringBuffer report = new StringBuffer("***************************   P R O V I D E R   R E P O R T   ********************************");
 
 		report.append(FileUtil.getSystemLineSeparator());
@@ -193,6 +202,7 @@ public class ReportWriter
 		}
 		
 		final List<GeneratorPlugin> generators = plugins.get(0).getInfrastructure().getPluginsOfType(GeneratorPlugin.class);
+		sortGenerators(generators);
 		final StringBuffer report = new StringBuffer("**************************   G E N E R A T O R   R E P O R T   *******************************");
 
 		report.append(FileUtil.getSystemLineSeparator());
@@ -347,10 +357,29 @@ public class ReportWriter
 
 		return toReturn.trim();
 	}
-
-	public String getShortReportHeader()
+	
+	private void sortProviders(List<ProviderPlugin> providers) 
 	{
-		return shortReportHeader;
+		Collections.sort(providers, new Comparator<ProviderPlugin>() {
+
+			@Override
+			public int compare(ProviderPlugin p1, ProviderPlugin p2)
+			{
+				return p1.getId().compareTo(p2.getId());
+			}
+		});
+	}
+	
+	private void sortGenerators(List<GeneratorPlugin> generators) 
+	{
+		Collections.sort(generators, new Comparator<GeneratorPlugin>() {
+
+			@Override
+			public int compare(GeneratorPlugin p1, GeneratorPlugin p2)
+			{
+				return p1.getId().compareTo(p2.getId());
+			}
+		});
 	}
 
 }
