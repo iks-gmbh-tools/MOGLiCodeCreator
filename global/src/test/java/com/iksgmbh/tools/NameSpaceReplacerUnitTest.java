@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.OSUtil;
 
 public class NameSpaceReplacerUnitTest {
 	
@@ -29,6 +30,7 @@ public class NameSpaceReplacerUnitTest {
 		assertFalse("Dir must not exist!", testDir.exists());
 		final File sourceDir = new File(SIMPLE_TEST_DIR, "src/de/iks_gmbh/automobile/test");
 		sourceDir.mkdirs();
+		assertTrue("Dir must exist!", sourceDir.exists());
 		createTestFile(SIMPLE_TEST_DIR + "/src/de/iks_gmbh/automobile/test", "Test.java", STANDARD_TEST_FILE_CONTENT);
 		
 		// call functionality under test
@@ -46,13 +48,23 @@ public class NameSpaceReplacerUnitTest {
 		// prepare test
 		fileDataList.clear();
 		initComplexTestFileStructure();
+
 		
 		// call functionality under test
 		(new NameSpaceReplacer()).replaceWorkspace(COMPLEX_TEST_DIR);
 
 		// verify test result
+		final String oldString;
+		final String newString;
+		if (OSUtil.isWindows()) {
+			oldString = "de\\iks_gmbh\\automobile";
+			newString = "com\\iksgmbh\\moglicc";
+		} else {
+			oldString = "de/iks_gmbh/automobile";
+			newString = "com/iksgmbh/moglicc";
+		}
 		for (final String filepath : fileDataList) {
-			final String path = filepath.replace("de\\iks_gmbh\\automobile", "com\\iksgmbh\\moglicc");
+			final String path = filepath.replace(oldString, newString);
 			final File file = new File(path);
 			final String fileContent = FileUtil.getFileContent(file).trim();
 			if ("target".equals(file.getParentFile().getName())) {

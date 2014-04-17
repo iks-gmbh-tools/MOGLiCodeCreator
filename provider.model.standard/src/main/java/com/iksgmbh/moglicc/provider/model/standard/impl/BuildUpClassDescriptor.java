@@ -87,4 +87,20 @@ public class BuildUpClassDescriptor extends MetaModelObject implements ClassDesc
 		return totalMetaInfoList;
 	}
 
+	@Override
+	public AttributeDescriptor getAttributeDescriptor(String attributeName) 
+	{
+		if (attributeDescriptorList == null || attributeDescriptorList.size() == 0)
+			return null;
+
+		for (AttributeDescriptor attributeDescriptor : attributeDescriptorList) 
+		{
+			if (attributeName.equals(attributeDescriptor.getName())) {
+				return attributeDescriptor;
+			}
+
+		}
+		
+		return null;
+	}	
 }

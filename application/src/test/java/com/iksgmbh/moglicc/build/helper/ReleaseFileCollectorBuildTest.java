@@ -36,15 +36,18 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 			rootDir = new File(MOGLiReleaseBuilder.getApplicationRootDir());
 			releaseDir = new File(rootDir + "/releasetest");
 			final File[] testCoreFiles = {new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_BUILD_PROPERTIES), 
-					new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_STARTBAT)};
-			final File[] testPluginFiles = {new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_STARTBAT)};
+					new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_STARTBAT),
+					new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_STARTSH)};
+			final File[] testPluginFiles = {new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_STARTBAT),
+					                        new File(rootDir + "/" + MOGLiReleaseBuilder.FILENAME_STARTSH)};
 			final File[] thirdPartyLibraries = mogliReleaseBuilder.getThirdPartyJars();
 			fileData = new FileCollectionData();
 			fileData.libSubdir = DIR_LIB;
 			fileData.pluginsSubdir = DIR_PLUGIN;
 			fileData.sourceDir = rootDir;
 			fileData.releaseDir = releaseDir;
-			fileData.fileListForRootDir = ImmutableUtil.getImmutableListOf(MOGLiReleaseBuilder.FILENAME_STARTBAT);
+			fileData.fileListForRootDir = ImmutableUtil.getImmutableListOf(MOGLiReleaseBuilder.FILENAME_STARTBAT,
+					                                                       MOGLiReleaseBuilder.FILENAME_STARTSH);
 			fileData.jarsOfCoreComponents = testCoreFiles;
 			fileData.jarsOfPlugins = testPluginFiles;
 			fileData.thirdPartyJars = thirdPartyLibraries;
@@ -61,7 +64,11 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		
 		final File batfile = new File(getProjectResourcesDir() + MOGLiReleaseBuilder.RELEASE_DATA_SOURCE_SUBDIR
 				+ "/" + MOGLiReleaseBuilder.FILENAME_STARTBAT);
+		final File shfile = new File(getProjectResourcesDir() + MOGLiReleaseBuilder.RELEASE_DATA_SOURCE_SUBDIR
+				+ "/" + MOGLiReleaseBuilder.FILENAME_STARTSH);
+		
 		FileUtil.copyTextFile(batfile, MOGLiReleaseBuilder.getApplicationRootDir());
+		FileUtil.copyTextFile(shfile, MOGLiReleaseBuilder.getApplicationRootDir());
 	}
 	
 	@Test
@@ -74,8 +81,9 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 	public void copiesFileIntoRootDir() {
 		releaseFileCollector.copyFileIntoRootDir();
 		final File[] filelist = fileData.releaseDir.listFiles();
-		assertEquals("Unexpected number of files:", 1, filelist.length);
-		assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[0].getName());
+		assertEquals("Unexpected number of files:", 2, filelist.length);
+		assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTSH, filelist[0].getName());
+		assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[1].getName());
 	}
 	
 	@Test
@@ -116,9 +124,9 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 	public void copiesCoreJarFilesIntoReleaseDir() {
 		releaseFileCollector.createLibDirectory();
 		releaseFileCollector.copyCoreJarFiles();
-		File libDir = new File(fileData.releaseDir + "/" + fileData.libSubdir);
-		File[] listFiles = libDir.listFiles();
-		assertEquals("Unexpected file number.", 2, listFiles.length);
+		File releaseDir = new File(fileData.releaseDir + "/" + fileData.libSubdir);
+		File[] listFiles = releaseDir.listFiles();
+		assertEquals("Unexpected file number.", 3, listFiles.length);
 	}	
 	
 	@Test
@@ -137,7 +145,7 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		File pluginDir = new File(fileData.releaseDir + "/" + fileData.libSubdir 
 				                                      + "/" + fileData.pluginsSubdir);
 		File[] listFiles = pluginDir.listFiles();
-		assertEquals("Unexpected file number.", 1, listFiles.length);
+		assertEquals("Unexpected file number.", 2, listFiles.length);
 	}	
 	
 	@Test

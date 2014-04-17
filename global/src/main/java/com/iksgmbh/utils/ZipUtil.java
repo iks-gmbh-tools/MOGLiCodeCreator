@@ -40,7 +40,7 @@ public class ZipUtil {
 		while (enu.hasMoreElements()) {
 			ZipEntry zipEntry = (ZipEntry) enu.nextElement();
 
-			String name = zipEntry.getName();
+			String name = zipEntry.getName().replace("\\", "/");
 			//long size = zipEntry.getSize();
 			//long compressedSize = zipEntry.getCompressedSize();
 			//System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize);
