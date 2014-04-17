@@ -12,8 +12,8 @@ A total of 0 generation events for 0 output artefact(s) have been performed.
 StandardModelProvider: Error parsing model file: MOGLiCC_JavaBeanModel.txt
 VelocityEngineProvider: Velocity engine started for 0 calls.
 
-VelocityModelBasedTreeBuilder: Model Error: No model file loaded! No generation done.
 VelocityClassBasedFileMaker: Model Error: No model file loaded! No generation done.
 VelocityModelBasedLineInserter: Model Error: No model file loaded! No generation done.
+VelocityModelBasedTreeBuilder: Model Error: No model file loaded! No generation done.
 
 ######################  End  ######################

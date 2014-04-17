@@ -1,6 +1,8 @@
 package com.iksgmbh.moglicc.provider.model.standard;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -77,7 +79,7 @@ public class StatisticsFileCreator {
 	private void appendWarningForUnusedMetaInfos(final StringBuffer sb) throws MOGLiPluginException {
 		final String sep = FileUtil.getSystemLineSeparator();
 		final List<MetaInfo> allMetaInfos = model.getAllMetaInfos();
-		final Set<String> uniqueUnusedMetaInfoMessages = new HashSet<String>();
+		final List<String> uniqueUnusedMetaInfoMessages = new ArrayList<String>();
 		for (final MetaInfo metaInfo : allMetaInfos) {
 			if (metaInfo.getPluginList().size() == 0) {
 				uniqueUnusedMetaInfoMessages.add("'" + metaInfo.getName() + "' in " 
@@ -106,13 +108,20 @@ public class StatisticsFileCreator {
 
 	private void appendUsageInfo(final StringBuffer sb, final HashMap<String, HashSet<String>> metaInfoNamesForPluginIds) {
 		final Set<String> keySet = metaInfoNamesForPluginIds.keySet();
-		for (final String pluginID : keySet) {
+		final List<String> sortedList = new ArrayList<String>(keySet);
+		Collections.sort(sortedList);
+		
+		for (final String pluginID : sortedList) {		
 			sb.append(FileUtil.getSystemLineSeparator()).append(FileUtil.getSystemLineSeparator());
 			sb.append("Plugin '" + pluginID + "' uses the following MetaInfo elements:").append(FileUtil.getSystemLineSeparator());
 			final HashSet<String> metaInfoNames = metaInfoNamesForPluginIds.get(pluginID);
-			final int size = metaInfoNames.size();
+			
+			final List<String> sortedNames = new ArrayList<String>(metaInfoNames);
+			Collections.sort(sortedNames);
+			
+			final int size = sortedNames.size();
 			int counter = 0;
-			for (final String metaInfoName : metaInfoNames) {
+			for (final String metaInfoName : sortedNames) {
 				sb.append(metaInfoName);
 				counter++;
 				if (counter < size) {

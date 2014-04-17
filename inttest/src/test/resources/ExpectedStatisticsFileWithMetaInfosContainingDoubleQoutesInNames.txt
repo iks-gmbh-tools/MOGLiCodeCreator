@@ -4,7 +4,7 @@ Number of vendor plugins defining MetaInfoValidators: 0
 
 WARNING:
 Following MetaInfos defined in 'CustomizedBraceSymbolTestModel.txt' are unused:
-'comment "note"' in ClassLevel
-'Java """ Type' in AttributeLevel
 'comment " note' in ModelLevel
+'comment "note"' in ClassLevel
 '"Java" "Type"' in AttributeLevel
+'Java """ Type' in AttributeLevel
