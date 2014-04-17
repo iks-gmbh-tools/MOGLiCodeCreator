@@ -2,6 +2,7 @@ package com.iksgmbh.helper;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -118,6 +119,7 @@ public class FolderContentBasedTextFileLineReplacer {
 		}
 
 		public List<File> getMatchingFiles() {
+			Collections.sort(matchingFiles); 
 			return matchingFiles;
 		}
 	}

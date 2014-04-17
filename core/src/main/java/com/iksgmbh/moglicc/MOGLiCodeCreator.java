@@ -51,7 +51,8 @@ public class MOGLiCodeCreator {
 	// *****************************  static stuff  ************************************
 
 	public static final String VERSION = "1.5.0-SNAPSHOT";
-
+	public static final String PROPERTIES_DIR = "properties";
+	
 	private static String applicationRootDir = System.getProperty("user.dir");
 	private static String workspaceDirArgument;
 
@@ -199,18 +200,21 @@ public class MOGLiCodeCreator {
 		}
 	}
 
-	private void readWorkspaceProperties() {
+	void readWorkspaceProperties() {
 		final File workspacePropertiesFile = new File(workspaceDir, FILENAME_WORKSPACE_PROPERTIES);
 		if (! workspacePropertiesFile.exists()) {
 			try {
 				workspacePropertiesFile.createNewFile();
-				final String defaultContent = FileUtil.readTextResourceContentFromClassPath(getClass(), FILENAME_WORKSPACE_PROPERTIES);
+				final String defaultContent = FileUtil.readTextResourceContentFromClassPath(getClass(), 
+						                               PROPERTIES_DIR + "/" + 
+						                               FILENAME_WORKSPACE_PROPERTIES);
 				FileUtil.appendToFile(workspacePropertiesFile, defaultContent);
-				logEntriesBeforeLogFileExists.add("File '" + FILENAME_WORKSPACE_PROPERTIES
-						                           + "' did not exist and was created.");
+				MOGLiLogUtil.logInfo("File '" + FILENAME_WORKSPACE_PROPERTIES + "' did not exist and has been created.");
 			} catch (IOException e) {
 				throw new MOGLiCoreException("Error creating " + workspacePropertiesFile.getAbsolutePath(),  e);
 			}
+		} else {
+			MOGLiLogUtil.logInfo("File '" + FILENAME_WORKSPACE_PROPERTIES + "' found.");
 		}
 
 		workspaceProperties = readProperties(workspacePropertiesFile, FILENAME_WORKSPACE_PROPERTIES);
@@ -248,7 +252,6 @@ public class MOGLiCodeCreator {
 		
 		if (! helpDir.exists()) 
 		{
-			MOGLiLogUtil.logInfo("Application help directory does not exist and will be created!");
 			helpDir.mkdirs();
 			String content = null;
 
@@ -272,7 +275,7 @@ public class MOGLiCodeCreator {
 				return;
 			}
 
-			MOGLiLogUtil.logInfo("Application help directory created");
+			MOGLiLogUtil.logInfo("Application help directory did not exist and has been created!");
 		}
 	}
 
@@ -395,18 +398,21 @@ public class MOGLiCodeCreator {
 		if (! applicationPropertiesFile.exists()) {
 			try {
 				applicationPropertiesFile.createNewFile();
-				final String defaultContent = FileUtil.readTextResourceContentFromClassPath(getClass(), FILENAME_APPLICATION_PROPERTIES);
+				final String defaultContent = FileUtil.readTextResourceContentFromClassPath(getClass(), 
+						                      PROPERTIES_DIR + "/" + 
+						                      FILENAME_APPLICATION_PROPERTIES);
 				FileUtil.appendToFile(applicationPropertiesFile, defaultContent);
 				logEntriesBeforeLogFileExists.add("File '" + FILENAME_APPLICATION_PROPERTIES
-						                           + "' did not exist and was created.");
+						                           + "' did not exist and has been created.");
 			} catch (IOException e) {
 				throw new MOGLiCoreException("Error creating " + applicationPropertiesFile.getAbsolutePath(),  e);
 			}
+		} else {
+			logEntriesBeforeLogFileExists.add("File '" + FILENAME_APPLICATION_PROPERTIES
+                    + "' found.");
 		}
+
 	}
-
-
-
 
 	private void readApplicationPropertiesFile() {
 		checkApplicationPropertiesFile();

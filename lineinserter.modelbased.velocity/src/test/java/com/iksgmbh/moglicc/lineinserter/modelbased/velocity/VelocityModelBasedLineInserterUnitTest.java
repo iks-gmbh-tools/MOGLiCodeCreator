@@ -439,7 +439,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void createsExistingTargetFileNewlyWithCreateNewInstructions() throws Exception {
 		// prepare test
-		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
+		final String targetDir = applicationRootDir.getAbsolutePath() + "/example";
 		final String content = "ContentToInsert";
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData(content,
 				targetDir, TARGET_FILE_TXT,
@@ -447,6 +447,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		resultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityEngineProvider.setVelocityGeneratorResultData(resultData);
 		targetFile = new File(targetDir, TARGET_FILE_TXT);
+		targetFile.getParentFile().mkdirs();
 		FileUtil.createNewFileWithContent(targetFile, "Test");
 		assertFileDoesNotContainEntry(targetFile, "ContentToInsert");
 
@@ -480,12 +481,13 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void doesNotOverwriteExistingTargetFile() throws Exception {
 		// prepare test
-		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
+		final String targetDir = applicationRootDir.getAbsolutePath() + "/example";
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				targetDir, TARGET_FILE_TXT,
 				KnownGeneratorPropertyNames.CreateNew.name(), "false");
 		velocityEngineProvider.setVelocityGeneratorResultData(resultData);
 		final File targetFile = new File(targetDir, TARGET_FILE_TXT);
+		targetFile.getParentFile().mkdirs();
 		FileUtil.createNewFileWithContent(targetFile, "Test");
 		assertFileContainsEntry(targetFile, "Test");
 
@@ -605,9 +607,6 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		// call functionality under test
 		velocityModelBasedLineInserter.doYourJob();
 
-		// clean up
-		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
-
 		// verify test result
 		final String report = velocityModelBasedLineInserter.getGeneratorReport();
 		final File expected = new File(getProjectTestResourcesDir(), "expectedReportCreateNew.txt");
@@ -619,20 +618,17 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		// prepare test
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);
 		createFakeArtefactDir();
-		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
-		new File(targetDir).mkdirs();
-		final File file = new File(applicationRootDir + "/example", TARGET_FILE_TXT);
-		FileUtil.createNewFileWithContent(file, "content");
+		final String targetDir = "/example";
+		targetFile = new File(applicationRootDir.getAbsoluteFile() + targetDir, TARGET_FILE_TXT);
+		targetFile.getParentFile().mkdirs();
+		FileUtil.createNewFileWithContent(targetFile, "content");
 		final VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
-				targetDir, TARGET_FILE_TXT,
+				VelocityGeneratorResultData.ROOT_IDENTIFIER + targetDir, TARGET_FILE_TXT,
 				KnownGeneratorPropertyNames.CreateNew.name(), "false");
 		velocityEngineProvider.setVelocityGeneratorResultData(resultData);  // fake result for the mocked engine plugin
 
 		// call functionality under test
 		velocityModelBasedLineInserter.doYourJob();
-
-		// clean up
-		FileUtil.deleteDirWithContent(generatorPluginInputDir);  // forces setup to rebuild it
 
 		// verify test result
 		final String report = velocityModelBasedLineInserter.getGeneratorReport();

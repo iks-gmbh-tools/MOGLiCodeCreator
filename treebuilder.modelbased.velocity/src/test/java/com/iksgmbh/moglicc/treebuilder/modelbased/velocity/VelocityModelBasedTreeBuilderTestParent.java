@@ -27,8 +27,6 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 	public static final String METAINFO_MODEL_PROJECT_DESCRIPTION = "Description of project";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 
-	private static boolean isFirstTime = true;
-
 	protected File generatorPluginInputDir;
 	protected VelocityModelBasedTreeBuilderStarter treeBuilderGenerator;
 	protected VelocityEngineProviderDummy velocityEngineProviderDummy;
@@ -61,13 +59,13 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 		treeBuilderGenerator.setInfrastructure(infrastructure);
 		generatorPluginInputDir = new File(applicationInputDir, VelocityModelBasedTreeBuilderStarter.PLUGIN_ID);
 
-		if (isFirstTime) {
-			isFirstTime = false;
-			FileUtil.deleteDirWithContent(generatorPluginInputDir);
-			applicationTempDir.mkdirs();
-		}
+		FileUtil.deleteDirWithContent(applicationRootDir);
+		applicationRootDir.mkdirs();
+		applicationTempDir.mkdirs();
 
 		initPluginInputDirWithDefaultDataIfNotExisting();
+		
+		giveSystemTimeToExecute();
 	}
 
 

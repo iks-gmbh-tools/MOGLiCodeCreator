@@ -21,6 +21,7 @@ import com.iksgmbh.moglicc.exceptions.MOGLiCoreException;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
 import com.iksgmbh.utils.CmdUtil;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.OSUtil;
 import com.iksgmbh.utils.ZipUtil;
 
 public class __AbstractSystemTest extends ApplicationTestParent {
@@ -34,7 +35,8 @@ public class __AbstractSystemTest extends ApplicationTestParent {
 	protected static boolean testRun = false;
 
 	protected static final String TEST_SUB_DIR_NAME = "SystemTestDir";
-	protected static final String MOGLI_EXE_COMMAND = "startMOGLiCodeCreator.bat";
+	protected static final String MOGLI_EXE_COMMAND_WIN = "startMOGLiCodeCreator.bat";
+	protected static final String MOGLI_EXE_COMMAND_LINUX = "sh startMOGLiCodeCreator.sh";
 
 	protected final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
 	protected final String TEST_DIR_NAME = releaseBuilder.getReleaseDir() + "/" + TEST_SUB_DIR_NAME;
@@ -136,24 +138,24 @@ public class __AbstractSystemTest extends ApplicationTestParent {
 
 	final void printMogliLogFile() {
 		final File logFile = new File(applicationLogDir, FILENAME_LOG_FILE);
-		try {
-			final String fileContent = FileUtil.getFileContent(logFile);
-			final int pos1 = fileContent
-					.lastIndexOf(MOGLiTextConstants.TEXT_PLUGINS_FOUND);
-			final int pos2 = fileContent
-					.lastIndexOf(MOGLiTextConstants.TEXT_DONE);
-			System.out
-					.println("\n\n#######################################################################");
-			System.out.println("#############       Summary from current "
-					+ FILENAME_LOG_FILE + "       #############");
-			System.out
-					.println("#######################################################################\n");
-			System.out.println(fileContent.substring(pos1, pos2));
-			System.out
-					.println("#######################################################################\n");
-		} catch (IOException e) {
-			System.err
-					.println("Error printing " + FILENAME_LOG_FILE);
+		if (logFile.exists()) 
+		{
+			try {
+				final String fileContent = FileUtil.getFileContent(logFile);
+				final int pos1 = fileContent.lastIndexOf(MOGLiTextConstants.TEXT_PLUGINS_FOUND);
+				final int pos2 = fileContent.lastIndexOf(MOGLiTextConstants.TEXT_DONE);
+				
+				if (pos1 > -1  && pos2 > -1) {					
+					System.out.println("\n\n#######################################################################");
+					System.out.println("#############       Summary from current " + FILENAME_LOG_FILE + "       #############");
+					System.out.println("#######################################################################\n");
+					System.out.println(fileContent.substring(pos1, pos2));
+					System.out.println("#######################################################################\n");
+				}
+			} catch (IOException e) {
+				System.err
+						.println("Error printing " + FILENAME_LOG_FILE);
+			}
 		}
 	}
 
@@ -180,10 +182,34 @@ public class __AbstractSystemTest extends ApplicationTestParent {
 	}
 
 	protected void executeMogliApplication() {
-		try {
-			CmdUtil.execWindowCommand(testDir, MOGLI_EXE_COMMAND, true);
-		} catch (Exception e) {
-			throw new RuntimeException("Error executing MOGLiCC", e);
+		if (OSUtil.isWindows()) {
+			CmdUtil.execWindowCommand(testDir, MOGLI_EXE_COMMAND_WIN, true);
+		} else {			
+			executeMogliApplication(MOGLI_EXE_COMMAND_LINUX);
+		}
+	}
+
+	protected void executeMogliApplication(final String exeCommand) {
+		if (OSUtil.isWindows()) {
+			CmdUtil.execWindowCommand(testDir, exeCommand, true);
+		} else {
+			Process p = null;
+			try {
+				final ProcessBuilder pb = new ProcessBuilder();
+				pb.directory(testDir);
+				pb.command("bash", "-c", exeCommand);
+				p = pb.start();			
+				System.out.println(CmdUtil.getMessageFromStream(p.getInputStream()));
+			} catch (Exception e) {
+				if (p != null) {				
+					try {
+						System.err.println(CmdUtil.getMessageFromStream(p.getErrorStream()));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+				throw new RuntimeException("Error executing MOGLiCC", e);
+			}
 		}
 	}
 

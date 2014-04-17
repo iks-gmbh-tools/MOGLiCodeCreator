@@ -351,7 +351,7 @@ public class StandardModelProviderStarter implements ModelProvider {
 		}
 
 		if (list.size() == 1) {
-			toReturn = files.get(0).getName();
+			toReturn = list.get(0).getName();
 		}
 
 		return toReturn;

@@ -2,6 +2,7 @@ package com.iksgmbh.moglicc.generator.utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -33,6 +34,7 @@ public class ArtefactListUtil {
 				toReturn.add(subdir);
 			}
 		}		
+		Collections.sort(toReturn);
 		return toReturn;
 	}
 

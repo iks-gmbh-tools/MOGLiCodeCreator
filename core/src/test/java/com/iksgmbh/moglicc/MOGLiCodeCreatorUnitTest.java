@@ -3,6 +3,7 @@ package com.iksgmbh.moglicc;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LOGS_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_OUTPUT_FILES;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_APPLICATION_PROPERTIES;
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_WORKSPACE_PROPERTIES;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_APPLICATION_TERMINATED;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_INFO;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DUPLICATE_PLUGINIDS;
@@ -34,11 +35,19 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 	private MOGLiCodeCreator mogliCodeCreator;
 
 	@Before
-	public void setup() {
+	public void setup() 
+	{
 		MOGLiLogUtil.setCoreLogfile(null);
 		super.setup();  // this recreates the same logfile and stores a reference to it in the parent class
 		mogliCodeCreator = new MOGLiCodeCreator();  // this creates new logfile
 		initProperties();
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// *****************************  test methods  ************************************
@@ -213,10 +222,31 @@ public class MOGLiCodeCreatorUnitTest extends CoreTestParent {
 
 		// verify test result
 		final String fileContent = MOGLiFileUtil.getFileContent(applicationPropertiesFile).trim();
-		final File defaultPropertiesFile = new File(getProjectResourcesDir(), FILENAME_APPLICATION_PROPERTIES);
+		final File defaultPropertiesFile = new File(getProjectResourcesDir(), 
+				                                    MOGLiCodeCreator.PROPERTIES_DIR 
+				                                    + System.getProperty("file.separator") 
+				                                    + FILENAME_APPLICATION_PROPERTIES);
 		final String expected = FileUtil.getFileContent(defaultPropertiesFile).trim();
 		assertEquals("Content of '" + FILENAME_APPLICATION_PROPERTIES + "'", expected , fileContent);
 	}
+	
+	@Test
+	public void createsWorkspacePropertiesFileIfDoesNotExist() throws IOException {
+		// prepare test
+		initApplicationPropertiesWith("");
+		boolean delete = workspacePropertiesFile.delete();
+		assertTrue("Could not delete " + workspacePropertiesFile.getAbsolutePath(), delete);
+
+		// call functionality under test
+		mogliCodeCreator.readWorkspaceProperties();
+
+		// verify test result
+		final String fileContent = MOGLiFileUtil.getFileContent(workspacePropertiesFile).trim();
+		final File defaultPropertiesFile = new File(getProjectResourcesDir(), MOGLiCodeCreator.PROPERTIES_DIR + System.getProperty("file.separator") + FILENAME_WORKSPACE_PROPERTIES);
+		final String expected = FileUtil.getFileContent(defaultPropertiesFile).trim();
+		assertEquals("Content of '" + workspacePropertiesFile + "'", expected , fileContent);
+	}
+	
 
 	@Test
 	public void readsWorkspaceFromApplicationProperties() {
