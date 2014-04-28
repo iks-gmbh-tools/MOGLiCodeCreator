@@ -1,40 +1,37 @@
 #!/bin/sh
-
 echo "Executing MOGLiCodeCreator..."
-
 workspaceDir="$1"
 JAVABIN=$JAVA_HOME/bin
-CLASSPATH=$CLASSPATH:./lib/*:./lib/plugins/*
-export CLASSPATH
-
+export CLASSPATH="$CLASSPATH:./lib/*:./lib/plugins/*"
 echo CLASSPATH: $CLASSPATH
+echo workspaceDir: $1
 if [$JAVA_HOME == ""] 
 then
 
-	echo "environment variable JAVA_HOME not set"
-
-	if [ ! -f $JAVABIN/java ] 
-	then
-
-		echo "Java executable not found in " $JAVABIN
-
-	else
-
-		echo $JAVABIN/java
-		$JAVABIN/java -cp $CLASSPATH com.iksgmbh.moglicc.MOGLiCodeCreator $workspaceDir
-
-	fi
+	echo "Problem: no JVM available because environment variable JAVA_HOME is not set"
 
 else
 
-	if [ ! -f $JAVA_HOME/bin/java ] 
+	echo "JAVA_HOME: $JAVA_HOME"
+	
+	if [ -f $JAVA_HOME/java ] 
 	then
 
-	    	echo "Java executable not found in " $JAVA_HOME/bin
+		$JAVA_HOME/java -cp $CLASSPATH com.iksgmbh.moglicc.MOGLiCodeCreator $workspaceDir
 
 	else 
-		echo $JAVA_HOME/bin/java
-		$JAVA_HOME/bin/java -cp $CLASSPATH com.iksgmbh.moglicc.MOGLiCodeCreator $workspaceDir
+
+		if [ -f $JAVA_HOME/bin/java ]
+		then
+		
+			$JAVA_HOME/bin/java -cp $CLASSPATH com.iksgmbh.moglicc.MOGLiCodeCreator $workspaceDir
+			
+		else
+
+	    	echo "Problem: no JVM available because no java executable was found in %JAVA_HOME%"
+
+		fi
+		
 	fi
-	
+
 fi
