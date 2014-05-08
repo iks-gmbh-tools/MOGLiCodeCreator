@@ -13,6 +13,7 @@ import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_WORKSPACE_PROPER
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,6 +102,15 @@ public abstract class AbstractMOGLiTest {
 
 	protected void initProperties() {
 		initWorkspacePropertiesWith("");
+	}
+	
+
+	protected void giveSystemTimeToExecute() {
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void initApplicationPropertiesWith(final String propertiesFileContent) {
@@ -369,27 +379,51 @@ public abstract class AbstractMOGLiTest {
 		assertFileContainsEntry(applicationLogfile, s);
 	}
 
-	protected void assertFileEquals(final File expectedFile, final File actualFile) {
+	protected void assertFileEquals(final File expectedFile, final File actualFile) 
+	{
 		try {
 			final List<String> expectedFileContent = cutTrailingEmptyLines(FileUtil.getFileContentAsList(expectedFile));
 			final List<String> actualFileContent = cutTrailingEmptyLines(FileUtil.getFileContentAsList(actualFile));
-
-			if (expectedFileContent.size() != actualFileContent.size()) {
-				logoutFileContents(expectedFileContent, actualFileContent);
-			}
+			logoutFileContents(expectedFileContent, actualFileContent);
 			assertEquals("Number lines in file", expectedFileContent.size(), actualFileContent.size());
 
+			final List<Integer> errorLines = new ArrayList<Integer>();
 			for (int i = 0; i < expectedFileContent.size(); i++)
 			{
-				final String expectedLine = cutLocalFilePath(expectedFileContent.get(i).trim());
-				final String actualLine = cutLocalFilePath(actualFileContent.get(i));
+				final String expectedLine = unifyFilePath(expectedFileContent.get(i).trim());
+				final String actualLine = unifyFilePath(actualFileContent.get(i));
 
 				if (! expectedLine.equals(actualLine)) {
-					logoutFileContents(expectedFileContent, actualFileContent);
+					errorLines.add(i);
 				}
-
-				assertStringEquals((i+1) + ". line of file", expectedLine, actualLine);
 			}
+			
+			if (errorLines.size() > 0) {
+				System.err.println("######################################################################");
+				System.err.println("There are differences in following lines:");
+				for (int i = 0; i < errorLines.size(); i++) {
+					System.err.print(" " + (errorLines.get(i) + 1) + " ");
+				}
+				System.err.println("");
+				System.err.println("######################################################################");
+
+				System.err.println("");
+				System.err.println("For copy purpose:");
+				
+				System.err.println("######################################################################");
+				for (int i = 0; i < actualFileContent.size(); i++)
+				{
+					System.err.println(actualFileContent.get(i));
+				}
+				System.err.println("######################################################################");
+				
+				if (errorLines.size() > 1) {
+					fail("There are " + errorLines.size() + " different lines!");	
+				} else {
+					assertEquals("Unexpected line", expectedFileContent.get(errorLines.get(0)), actualFileContent.get(errorLines.get(0)));
+				}
+			}
+
 		} catch (Exception e) {
 			throw new RuntimeException("Error comparing files", e);
 		}
@@ -399,12 +433,12 @@ public abstract class AbstractMOGLiTest {
 		System.out.println("######################################################################");
 		System.out.println("expectedFileContent:");
 		for (int i = 0; i < expectedFileContent.size(); i++) {
-			System.out.println(expectedFileContent.get(i));
+			System.out.println((i+1) + ". " + expectedFileContent.get(i));
 		}
 		System.out.println("######################################################################");
 		System.out.println("actualFileContent:");
 		for (int i = 0; i < actualFileContent.size(); i++) {
-			System.out.println(actualFileContent.get(i));
+			System.out.println((i+1) + ". " + actualFileContent.get(i));
 		}
 		System.out.println("######################################################################");
 	}
@@ -433,8 +467,10 @@ public abstract class AbstractMOGLiTest {
 		return file;
 	}
 
-	protected String cutLocalFilePath(final String line) {
-		return StringUtil.replaceBetween(line, "in: ", "..\\", ".").trim();
+	protected String unifyFilePath(final String line) {
+		String toReturn = line.replace('\\', '/'); // for windows file separator must be modified
+		toReturn = StringUtil.replaceBetween(toReturn, "in: ", "../", ".").trim(); // cut local file path
+		return toReturn;
 	}
 
 

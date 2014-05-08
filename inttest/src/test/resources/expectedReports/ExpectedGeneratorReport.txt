@@ -6,54 +6,12 @@ A total of 44 generation events for 7 output artefact(s) have been performed.
 
 ----------------------------------------------------------------------------------------------
 
-VelocityModelBasedTreeBuilder: 
-
-Following 1 artefact(s) did not match the model used:
-MOGLiCC_NewPluginProject
-
-Report for input artefact 'MOGLiCC_JavaBeanProject':
-
-   Tree artefact generated in: C:\dev\sources\ctlcrmoglicc\development\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
-   5 folders have been created.
-   9 files have been created.
-   6 file modifications were performed.
-
-   Created subdirectories: 
-      \src\main\java\com\iksgmbh\moglicc\demo\main
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\types
-      \src\main\resources
-      \src\test\java
-      \src\test\resources
-
-   Created files: 
-      \pom.xml
-      \src\main\java\com\iksgmbh\moglicc\demo\main\MOGLiCC_JavaBeanProjectClassOverviewPrinter.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationException.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationResult.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidator.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\JavaBeanValidator.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MandatoryFieldValidator.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MaxLengthValidator.java
-      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MinLengthValidator.java
-
-   Performed replacements:
-      Placeholder 'mavenGroupId' replaced by 'com.iksgmbh.moglicc' in file 'pom.xml'
-      Placeholder 'mavenArtefactId' replaced by 'MOGLiCC_JavaBeanProject' in file 'pom.xml'
-      Placeholder 'mavenProjectName' replaced by 'MOGLiJavaBean Artifacts' in file 'pom.xml'
-      Placeholder 'mavenProjectDescription' replaced by 'An example project to demonstrate both, the file structure generator and the artifacts of the MOGLiJavaBeanGroup' in file 'pom.xml'
-      Placeholder 'class Main' replaced by 'class MOGLiCC_JavaBeanProjectClassOverviewPrinter' in file 'main.java'
-
-   Performed file renamings:
-      File 'main.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '..\inttest\target\TestDir\output\VelocityModelBasedTreeBuilder\MOGLiCC_JavaBeanProject\src\main\java\com\iksgmbh\moglicc\demo\main'
-
-----------------------------------------------------------------------------------------------
-
 VelocityClassBasedFileMaker: 
 
 Following 1 artefact(s) did not match the model used:
 MOGLiCC_NewPluginModel
 
-Report for input artefact 'MOGLiJavaBean':
+   Report for input artefact 'MOGLiJavaBean':
       Person.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       Member.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       Address.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
@@ -92,5 +50,47 @@ Report for input artefact 'BeanFactory':
       1 line(s) inserted by a above-instruction into BeanFactory.java in directory <applicationRootDir>/example
       1 line(s) inserted by a below-instruction into BeanFactory.java in directory <applicationRootDir>/example
       12 line(s) inserted by a replace-instruction into BeanFactory.java in directory <applicationRootDir>/example
+
+----------------------------------------------------------------------------------------------
+
+VelocityModelBasedTreeBuilder: 
+
+Following 1 artefact(s) did not match the model used:
+MOGLiCC_NewPluginProject
+
+   Report for input artefact 'MOGLiCC_JavaBeanProject':
+
+   Tree artefact generated in: C:\dev\MOGLiCC\ReikOberrath_Master\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
+   5 folders have been created.
+   9 files have been created.
+   6 file modifications were performed.
+
+   Created subdirectories: 
+      \src\main\java\com\iksgmbh\moglicc\demo\main
+      \src\main\java\com\iksgmbh\moglicc\demo\validator\types
+      \src\main\resources
+      \src\test\java
+      \src\test\resources
+
+   Created files: 
+      \pom.xml
+      \src\main\java\com\iksgmbh\moglicc\demo\main\MOGLiCC_JavaBeanProjectClassOverviewPrinter.java
+      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationException.java
+      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidationResult.java
+      \src\main\java\com\iksgmbh\moglicc\demo\validator\FieldValidator.java
+      \src\main\java\com\iksgmbh\moglicc\demo\validator\JavaBeanValidator.java
+      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MandatoryFieldValidator.java
+      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MaxLengthValidator.java
+      \src\main\java\com\iksgmbh\moglicc\demo\validator\types\MinLengthValidator.java
+
+   Performed replacements:
+      Placeholder 'mavenGroupId' replaced by 'com.iksgmbh.moglicc' in file 'pom.xml'
+      Placeholder 'mavenArtefactId' replaced by 'MOGLiCC_JavaBeanProject' in file 'pom.xml'
+      Placeholder 'mavenProjectName' replaced by 'MOGLiJavaBean Artifacts' in file 'pom.xml'
+      Placeholder 'mavenProjectDescription' replaced by 'An example project to demonstrate both, the file structure generator and the artifacts of the MOGLiJavaBeanGroup' in file 'pom.xml'
+      Placeholder 'class Main' replaced by 'class MOGLiCC_JavaBeanProjectClassOverviewPrinter' in file 'main.java'
+
+   Performed file renamings:
+      File 'main.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '..\inttest\target\TestDir\output\VelocityModelBasedTreeBuilder\MOGLiCC_JavaBeanProject\src\main\java\com\iksgmbh\moglicc\demo\main'
 
 **************************************  E N D  ***********************************************

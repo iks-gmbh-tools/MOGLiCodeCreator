@@ -2,6 +2,7 @@ package com.iksgmbh.helper;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -109,9 +110,9 @@ public class FolderContentBasedFileRenamer {
 			startsWithDot = true;
 		}
 		
-		toReturn = toReturn.replace('/', '\\');
+		//toReturn = toReturn.replace('/', '\\');
 		toReturn = StringUtils.replace(toReturn, "/.", SLASHDOT_SAVER);
-		toReturn = toReturn.replace('.', '\\');
+		//toReturn = toReturn.replace('.', '\\');
 		toReturn = StringUtils.replace(toReturn, SLASHDOT_SAVER, "\\.");
 		
 		if (startsWithDot) {
@@ -145,6 +146,7 @@ public class FolderContentBasedFileRenamer {
 		}
 
 		public List<String> getRenamingResults() {
+			Collections.sort(renamingResults);
 			return renamingResults;
 		}
 

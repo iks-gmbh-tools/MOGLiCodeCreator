@@ -20,15 +20,12 @@ import com.iksgmbh.utils.FileUtil;
 public class CoreTestParent extends AbstractMOGLiTest {
 
 	private static final String PROJECT_ROOT_DIR = "../core/";
-	private static boolean isFirstTest = true;
 
 	@Override
 	public void setup() {
 		super.setup();
-		if (isFirstTest) {
-			isFirstTest = false;
-			initForFirstUnitTest();
-		}
+		FileUtil.deleteDirWithContent(applicationRootDir);
+		initForFirstUnitTest();
 		initPluginLibSubdir();
 		createMogliLogFile();
 		MOGLiLogUtil.setCoreLogfile(applicationLogfile);

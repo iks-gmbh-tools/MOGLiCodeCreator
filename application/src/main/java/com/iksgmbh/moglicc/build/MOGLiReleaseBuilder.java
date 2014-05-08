@@ -25,6 +25,7 @@ public class MOGLiReleaseBuilder {
 
 	public static final String FILENAME_BUILD_PROPERTIES = "build.properties";
 	public static final String FILENAME_STARTBAT = "startMOGLiCodeCreator.bat";
+	public static final String FILENAME_STARTSH = "startMOGLiCodeCreator.sh";
 	public static final String FILENAME_README = "readme.htm";
 	public static final String RELEASE_DATA_SOURCE_SUBDIR = "release";
 	public static final String RELEASE_ARCHIV_DIR = "releasedBuilds";
@@ -47,7 +48,7 @@ public class MOGLiReleaseBuilder {
 	private static final String ARTEFACT_GROUP_ID = "com.iksgmbh.moglicc";
 
 	public static final List<String> FILES_TO_INSTALL_IN_ROOT = ImmutableUtil.getImmutableListOf(
-			                          FILENAME_STARTBAT, FILENAME_README);
+			                          FILENAME_STARTBAT, FILENAME_STARTSH, FILENAME_README);
 	public static final List<String> CORE_MODULES = ImmutableUtil.getImmutableListOf(
 			                          "global", "common", "core", "interfaces");  // basic mandatory modules for release
 	public static final List<String> PLUGIN_MODULES = ImmutableUtil.getImmutableListOf(
@@ -87,7 +88,7 @@ public class MOGLiReleaseBuilder {
 	 */
 	public MOGLiReleaseBuilder() {
 		try {
-			buildProperties = readBuildPropertiesFile();
+		buildProperties = readBuildPropertiesFile();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -276,7 +277,8 @@ public class MOGLiReleaseBuilder {
 		return new File (WORKSPACE.getAbsolutePath() + "/" + module);
 	}
 
-	public String getMavenRootDir() {
+	public String getMavenRootDir() 
+	{
 		String mavenPath = buildProperties.getProperty(PROPERTY_MAVEN_HOME);
 		if (mavenPath != null) {
 			final File file = new File(mavenPath);
@@ -285,7 +287,7 @@ public class MOGLiReleaseBuilder {
 			}
 		}
 
-		mavenPath = System.getenv().get(PROPERTY_MAVEN_HOME);
+		mavenPath = System.getProperty(PROPERTY_MAVEN_HOME, mavenPath);
 		if (mavenPath != null) {
 			final File file = new File(mavenPath);
 			if (file.exists()) {
@@ -293,8 +295,8 @@ public class MOGLiReleaseBuilder {
 			}
 		}
 		throw new MOGLiCoreException("Property '" + PROPERTY_MAVEN_HOME +
-				                     "' does not point to a existing directory. " +
-				                     "Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES +
+				                     "' does not point to a existing directory: <" + mavenPath + 
+				                     ">. Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES +
 				                     "' or as system property.");
 	}
 
@@ -312,7 +314,7 @@ public class MOGLiReleaseBuilder {
 			System.out.println(key + " " + getenv.get(key));
 		}
 
-		mavenPath = System.getenv().get(PROPERTY_MAVEN_REPO);
+		mavenPath = System.getProperty(PROPERTY_MAVEN_HOME, mavenPath);
 		if (mavenPath != null) {
 			mavenPath = mavenPath.replace(MAVEN_INSTALL_DIR_PREFIX, getMavenRootDir());
 			final File file = new File(mavenPath);
@@ -320,10 +322,10 @@ public class MOGLiReleaseBuilder {
 				return mavenPath;
 			}
 		}
-		throw new MOGLiCoreException("Property '" + PROPERTY_MAVEN_REPO +
-				                     "' does not point to a existing directory. " +
-				                     "Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES +
-				                     "' or as system property.");
+		throw new MOGLiCoreException("Property '" + PROPERTY_MAVEN_HOME +
+                "' does not point to a existing directory: <" + mavenPath + 
+                ">. Set this property correctly either in '" + FILENAME_BUILD_PROPERTIES +
+                "' or as system property.");
 	}
 
 	public String getVersion(VERSION_TYPE type) {
