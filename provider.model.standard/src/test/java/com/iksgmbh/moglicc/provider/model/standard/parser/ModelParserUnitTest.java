@@ -14,6 +14,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.iksgmbh.moglicc.provider.model.standard.AttributeDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
@@ -389,4 +390,21 @@ public class ModelParserUnitTest extends StandardModelProviderTestParent {
 		assertNotNull(classDescriptor2);
 		assertNotNull(classDescriptor3);
 	}
+	
+	@Test
+	public void returnsAttributeForAttributeName() throws ModelParserException {
+		// prepare test
+		final List<String> fileContentAsList = getFileContentForTestModelWithTwoClasses();
+		final Model model = modelParser.parse(fileContentAsList);
+		final ClassDescriptor classDescriptor = model.getClassDescriptor("de.test.Person");	
+		
+		// call functionality under test	
+		AttributeDescriptor attributeDescriptor = classDescriptor.getAttributeDescriptor("FirstName");
+		
+		// verify test result
+		assertNotNull(attributeDescriptor);
+		assertEquals("Attribute name", "FirstName", attributeDescriptor.getName());
+		assertEquals("Metainfo", "int", attributeDescriptor.getMetaInfoValueFor("JavaType"));
+	}	
+
 }

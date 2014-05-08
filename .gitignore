@@ -1,4 +1,9 @@
 */target/*
+*/bin/*
+*/.settings/*
+*/.project
+*/.classpath
+
 application/log/*
 application/temp/*
 application/workspaces/*

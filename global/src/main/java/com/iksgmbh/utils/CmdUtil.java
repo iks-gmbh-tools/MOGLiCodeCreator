@@ -49,7 +49,7 @@ public class CmdUtil {
 		return messages.infoMessage;
 	}
 
-	private static String getMessageFromStream(InputStream is) throws IOException {
+	public static String getMessageFromStream(InputStream is) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String line = reader.readLine();
 		StringBuffer message = new StringBuffer();

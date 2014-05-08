@@ -45,7 +45,7 @@ public class A_TechnicalSystemTest extends __AbstractSystemTest {
 	@Test
 	public void assertInitialFileStructure() {
 		assertTrue("TestsDir does not exist!", testDir.exists());
-		assertEquals("File number in root", 3, testDir.listFiles().length);
+		assertEquals("File number in root", 4, testDir.listFiles().length);
 
 		final File libDir = FileUtil.getSubDir(testDir, "lib");
 		assertEquals("File number in lib subdir", getNumberOfJarFilesToExpectInLibDir() + 1, libDir.listFiles().length);

@@ -2,18 +2,18 @@ Model Name: MOGLiCC_JavaBeanModel
 Number of class descriptions in model file: 4
 Number of vendor plugins defining MetaInfoValidators: 2
 
-Plugin 'VelocityModelBasedTreeBuilder' uses the following MetaInfo elements:
-'projectName' in Model level
-'eclipseProjectDir' in Model level
-
 Plugin 'VelocityClassBasedFileMaker' uses the following MetaInfo elements:
-'projectName' in Model level
+'ExampleData' in Attribute level
 'JavaType' in Attribute level
 'Mandatory' in Attribute level
-'extends' in Class level
 'MaxLength' in Attribute level
 'MinLength' in Attribute level
-'ExampleData' in Attribute level
 'TestExampleData' in Attribute level
-'implements' in Class level
 'eclipseProjectDir' in Model level
+'extends' in Class level
+'implements' in Class level
+'projectName' in Model level
+
+Plugin 'VelocityModelBasedTreeBuilder' uses the following MetaInfo elements:
+'eclipseProjectDir' in Model level
+'projectName' in Model level
