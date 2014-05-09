@@ -7,7 +7,7 @@
     a) application/src/main/resources/build.properties,
     b) readme.md in root
     c) core/src/main/resources/MOGLi Code Creator.htm
-6.  Add changes to last version to the version history (release notes)
+6.  Add changes between the current and last version (release notes) to the version history in the global readme.md file. 
 7.  Execute unit test for ReleaseBuilder (use BuildTestExecutor.java) if Release Builder Code has changed.
 8.  In file 'application/src/main/resources/build.properties' assure that 'testRun' equals 'false'.
 9.  Execute 'BuildReleaseAndTestSystem.java' as JUnit test. This builds the release candidate
@@ -25,3 +25,5 @@
 15. Commit the current state to the master with comment 'Release x.y.z'.
 16. Checkout the github branch, merge with the master and push to the github remote repository.
 17. Checkout the master branch again.
+
+

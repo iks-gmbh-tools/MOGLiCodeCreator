@@ -4,11 +4,17 @@
 
 Just another code generator? - NO! - It's THE Lightweight autogeneration tool! 
 
-It is a small standalone Tool for a quick start into model based development!
+It's provides inserting into existing files, making complete new files and building trees of files within the file system.
 
-It's written in Java but made to generate more than only Java code.  
+It's a small standalone Tool for a quick start into model based development!
 
-You find the lastest release build under application/releasedBuilds.
+It's easy to learn, to apply and to integrate in your IDE.
+
+It's quick in execution.
+
+It's failsafe because it supports Reverse Engineering: re-generate your artefacts as your wish.
+
+It's written in Java but made to generate all kinds of text documents.
 
 * * *
 
