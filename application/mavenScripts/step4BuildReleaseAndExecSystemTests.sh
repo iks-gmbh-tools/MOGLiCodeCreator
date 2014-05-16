@@ -29,4 +29,4 @@ echo "*"
 echo "*"
 
 cd ..
-mvn clean install test -Dtest=BuildReleaseAndTestSystem
+mvn clean install -Dtest=BuildReleaseAndTestSystem

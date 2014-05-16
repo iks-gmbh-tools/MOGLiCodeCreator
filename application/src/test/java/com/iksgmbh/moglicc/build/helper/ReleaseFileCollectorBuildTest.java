@@ -82,8 +82,16 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		releaseFileCollector.copyFileIntoRootDir();
 		final File[] filelist = fileData.releaseDir.listFiles();
 		assertEquals("Unexpected number of files:", 2, filelist.length);
-		assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTSH, filelist[0].getName());
-		assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[1].getName());
+		if (filelist[0].getName().endsWith(".sh"))
+		{
+			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTSH, filelist[0].getName());
+			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[1].getName());
+		}
+		else
+		{
+			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[0].getName());
+			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTSH, filelist[1].getName());
+		}
 	}
 	
 	@Test

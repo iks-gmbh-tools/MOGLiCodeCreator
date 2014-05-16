@@ -15,7 +15,7 @@ echo *
 echo *     Starting step 1
 echo *     Please wait until step 1 is finished!
 echo *
-start step1BuildApplicationModule.bat
+start step1ExecUnitTestsAndBuildModules.bat
 pause
 
 
@@ -27,7 +27,7 @@ echo *
 echo *      Starting step 2
 echo *      Please wait until step 2 is finished!
 echo *
-start step2ExecUnitTestsAndBuildModules.bat
+start step2BuildApplicationModule.bat
 pause
 
 
