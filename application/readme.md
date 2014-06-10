@@ -1,1 +1,1 @@
-The MOGLiCC **application** project provides the technical infrastructure for building Release candidates, for starting the different types of tests (unit and system).
+The MOGLiCC **application** project provides the technical infrastructure for building Release candidates, for starting the different types of tests (unit and system, for integration test the projects inttest).
