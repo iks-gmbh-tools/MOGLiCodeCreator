@@ -80,7 +80,7 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 		// verify test result
 		assertFileExists(targetDir);
 		final File outputFile = new File(applicationRootDir, "TreeBuilderGeneratorUmlautTest/UmlautTestFile.txt");
-		assertStringEquals("outputFileContent", "???????", MOGLiFileUtil.getFileContent(outputFile));
+		assertTrue("Unexpected outputFileContent", MOGLiFileUtil.getFileContent(outputFile).startsWith("???????"));
 	}
 
 	private File createArtefactPropertiesFile(final File targetDir, final boolean withTargetDirProperty) 
