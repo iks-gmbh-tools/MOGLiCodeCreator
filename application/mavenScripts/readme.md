@@ -1,1 +1,0 @@
-This folder contains maven scripts with which the complete quality assurance can be performed.
