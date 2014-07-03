@@ -21,7 +21,7 @@ public class MavenExecutorBuildTest extends ApplicationTestParent {
 	public void setup() {
 		super.setup();
 		MavenData mavenData = new MavenData("clean compile", (new MOGLiReleaseBuilder()).getMavenRootDir(),
-				new File(PROJECT_ROOT_DIR + "../global"));
+				new File(PROJECT_ROOT_DIR + "../cpsuite"));
 		mavenExecutor = new MavenExecutor(mavenData);
 	}
 
