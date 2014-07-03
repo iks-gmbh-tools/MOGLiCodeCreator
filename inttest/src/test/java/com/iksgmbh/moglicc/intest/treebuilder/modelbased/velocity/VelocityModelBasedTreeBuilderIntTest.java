@@ -1,6 +1,7 @@
 package com.iksgmbh.moglicc.intest.treebuilder.modelbased.velocity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -80,7 +81,7 @@ public class VelocityModelBasedTreeBuilderIntTest extends IntTestParent {
 		// verify test result
 		assertFileExists(targetDir);
 		final File outputFile = new File(applicationRootDir, "TreeBuilderGeneratorUmlautTest/UmlautTestFile.txt");
-		assertStringEquals("outputFileContent", "???????", MOGLiFileUtil.getFileContent(outputFile));
+		assertTrue("Unexpected outputFileContent", MOGLiFileUtil.getFileContent(outputFile).startsWith("???????"));
 	}
 
 	private File createArtefactPropertiesFile(final File targetDir, final boolean withTargetDirProperty) 
