@@ -15,7 +15,8 @@ import com.iksgmbh.moglicc.lineinserter.modelbased.velocity.VelocityModelBasedLi
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineProviderStarter;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
+import com.iksgmbh.moglicc.provider.model.standard.excel.ExcelStandardModelProviderStarter;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.test.AbstractMOGLiTest;
 import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.VelocityModelBasedTreeBuilderStarter;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
@@ -34,6 +35,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 	protected VelocityModelBasedLineInserterStarter velocityModelBasedLineInserterStarter;
 	protected VelocityModelBasedTreeBuilderStarter velocityModelBasedTreeBuilderStarter;
 	protected StandardModelProviderStarter standardModelProviderStarter;
+	protected ExcelStandardModelProviderStarter excelStandardModelProviderStarter;
 	protected VelocityEngineProviderStarter velocityEngineProviderStarter;
 
 	protected File modelFile;
@@ -71,6 +73,8 @@ public class IntTestParent extends AbstractMOGLiTest {
 		plugins.add(velocityModelBasedTreeBuilderStarter);
 		standardModelProviderStarter = new StandardModelProviderStarter();
 		plugins.add(standardModelProviderStarter);
+		excelStandardModelProviderStarter = new ExcelStandardModelProviderStarter();
+		plugins.add(excelStandardModelProviderStarter);
 		velocityEngineProviderStarter = new VelocityEngineProviderStarter();
 		plugins.add(velocityEngineProviderStarter);
 		velocityClassBasedFileMakerStarter = new VelocityClassBasedFileMakerStarter();
@@ -82,6 +86,7 @@ public class IntTestParent extends AbstractMOGLiTest {
 		try {
 			/** INIT STARTER INSTANCES FOR NEW PLUGINS BELOW THIS LINE - DO NOT MODIFY THIS LINE, IT IS A MARKER LINE FOR MOGLiCC-INSERTER ! */
 			initPlugin(velocityModelBasedTreeBuilderStarter);
+			initPlugin(excelStandardModelProviderStarter);
 			initPlugin(standardModelProviderStarter);
 			initPlugin(velocityEngineProviderStarter);
 			initPlugin(velocityClassBasedFileMakerStarter);

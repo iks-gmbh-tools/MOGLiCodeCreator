@@ -80,7 +80,7 @@ class com.iksgmbh.moglicc.demo.Misc
   attribute numberByte
     metainfo JavaType byte 
     
-  attribute id
+  attribute primitivChar
     metainfo JavaType char 
     
   attribute stringArray

@@ -13,8 +13,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.6</source>
+					<target>1.6</target>
 					<optimize>false</optimize>
 				</configuration>
 			</plugin>
@@ -67,6 +67,13 @@
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>provider.model.standard</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.iksgmbh.moglicc</groupId>
+			<artifactId>provider.model.standard.excel</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

@@ -190,9 +190,21 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 		}
 
 		@Override
+		public List<MetaInfo> getMetaInfosWithNameStartingWith(String prefix)
+		{
+			return null;
+		}
+
+		@Override
 		public ClassDescriptor getClassDescriptor(String classname)
 		{
 			return null;
+		}
+
+		@Override
+		public boolean isValueNotAvailable(String metaInfoValue)
+		{
+			return false;
 		}
 
 	}

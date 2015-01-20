@@ -18,7 +18,6 @@
 		<module>../interfaces</module>
 		<module>../core</module>
 		<module>../test</module>
-		<module>../cpsuite</module>
 	</modules>
 
 	<dependencies>

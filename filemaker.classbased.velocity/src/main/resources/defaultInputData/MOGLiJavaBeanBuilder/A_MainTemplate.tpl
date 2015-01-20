@@ -3,9 +3,12 @@
 @CreateNew true # creates target dir if not existing and overwrites target file if existing
 @NameOfValidModel MOGLiCC_JavaBeanModel
 
-package ${classDescriptor.package};
+package ${classDescriptor.package}.builder;
 '
-#parse("commonSubtemplates/B_ImportStatements.tpl")
+#parse("commonSubtemplates/importDomainModelClasses.tpl")
+
+import ${classDescriptor.package}.${classDescriptor.simpleName};
+import ${classDescriptor.package}.validator.${classDescriptor.simpleName}Validator;
 
 /**
  * Builder class of the MOGLiCC JavaBean Group for JavaBean '${classDescriptor.simpleName}.java'

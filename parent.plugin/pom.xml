@@ -14,6 +14,7 @@
 
 	<modules>
 		<module>../provider.model.standard</module>
+		<module>../provider.model.standard.excel</module>
 		<module>../provider.engine.velocity</module>
 		<module>../lineinserter.modelbased.velocity</module>
 		<module>../filemaker.classbased.velocity</module>
