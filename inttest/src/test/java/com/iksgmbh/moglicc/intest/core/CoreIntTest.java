@@ -2,6 +2,7 @@ package com.iksgmbh.moglicc.intest.core;
 
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_SHORT_REPORT_FILE;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.StringUtil;
 
 public class CoreIntTest extends IntTestParent {
 
@@ -41,8 +43,13 @@ public class CoreIntTest extends IntTestParent {
 	public void runWithExternalInputData() throws IOException {
 		// prepare test
 		initTestRootDir();
-		//copyExternalInputDataIntoMOGLiCCWorkspace("C:/dev/sources/moglicc/workspaces/spring");
-		copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/MOGLiCC_dev1.5.0/application/target/releaseDir/SystemTestDir");
+		
+		//copyExternalInputDataIntoMOGLiCCWorkspace("C:\\dev\\sources\\ctlbignet2boni\\src\\test\\resources\\MOGLiCodeCreator");
+		//copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//sources//ctlcrmoglicc//work//workspaces//ctlFluxJob");
+		//copyExternalInputDataIntoMOGLiCCWorkspace("C:\\dev\\sources\\ctlbignet2boni\\src\\test\\resources\\MOGLiCodeCreator");
+		copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/ReikOberrath_Master_final/application/target/releaseDir/SystemTestDir");
+		                                           
+		//copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//MOGLiCC//ReikOberrath_Master//application//target//releaseDir//SystemTestDir");
 
 		// call functionality under test
 		MOGLiCodeCreator.main(args);
@@ -50,8 +57,10 @@ public class CoreIntTest extends IntTestParent {
 		// no verifying
 		//final File reportFile = new File(applicationReportDir, SHORT_REPORT_FILE);
 		//final File reportFile = new File(applicationReportDir, GENERATION_REPORT_FILE);
-		final File reportFile = applicationLogfile;
+		//final File reportFile = applicationLogfile;
+		final File reportFile = new File(applicationRootDir, ERROR_REPORT_FILE);
 		System.err.println(FileUtil.getFileContent(reportFile));
+		fail("Do not forget to comment out the test annotation of this method before checking in.");
 	}
 
 	private void copyExternalInputDataIntoMOGLiCCWorkspace(final String parentDirOfInputFolder) {
@@ -120,7 +129,7 @@ public class CoreIntTest extends IntTestParent {
 
 		// verify test result
 		final File logfile = MOGLiFileUtil.getNewFileInstance(LOGFILE);
-		assertFileContainsEntry(logfile, "All 5 plugins executed successfully.");
+		assertFileContainsEntry(logfile, "Execution of all 6 plugins successful.");
 	}
 
 	@Test
@@ -164,7 +173,7 @@ public class CoreIntTest extends IntTestParent {
 
 		reportFile = new File(applicationReportDir, PROVIDER_REPORT_FILE);
 		assertFileExists(reportFile);
-		assertFileContainsEntry(reportFile, "All 2 provider plugins executed successfully.");
+		assertFileContainsEntry(reportFile, "All 3 provider plugins executed successfully.");
 		
 		reportFile = new File(applicationRootDir, ERROR_REPORT_FILE);
 		assertFileExists(reportFile);
@@ -299,5 +308,44 @@ public class CoreIntTest extends IntTestParent {
 		assertFileContainsEntry(emergencyLogFile, "ERROR: Error creating workspaceDir");
 	}
 
+
+	@Test
+	public void createsExplainingReportEntryForMissingPackageOfJavaBeanClass() throws IOException {
+		// prepare test
+		initTestRootDir();
+		MOGLiCodeCreator.main(args);  // unpack default stuff
+
+		// test1
+		MOGLiFileUtil.createNewFileWithContent(modelFile, "model MOGLiCC_JavaBeanModel" + System.getProperty("line.separator") + "class NoPackageClassName");
+		MOGLiCodeCreator.main(args);
+		giveSystemTimeToExecute(2000);
+		File errorReportFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
+		assertFileExists(errorReportFile);
+		final String errorReportFileContent1 = FileUtil.getFileContent(errorReportFile);
+		
+		// test1
+		MOGLiFileUtil.createNewFileWithContent(modelFile, "model MOGLiCC_JavaBeanModel" + System.getProperty("line.separator") + "class a.smallLetterInTheBeginninClassName");
+		MOGLiCodeCreator.main(args);
+		giveSystemTimeToExecute(2000);
+		assertFileExists(errorReportFile);
+		errorReportFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
+		final String errorReportFileContent2 = FileUtil.getFileContent(errorReportFile);
+		
+		// test3
+		MOGLiFileUtil.createNewFileWithContent(modelFile, "model MOGLiCC_JavaBeanModel" + System.getProperty("line.separator") + "class a.CorrectClassName");
+		MOGLiCodeCreator.main(args);
+		giveSystemTimeToExecute(2000);
+		errorReportFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
+		assertFileExists(errorReportFile);
+		errorReportFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
+		final String errorReportFileContent3 = FileUtil.getFileContent(errorReportFile);
+		
+		// verify test result
+		final File expected = new File(getProjectTestResourcesDir(), "ExpectedReportErrorFileForMissingPackage.txt");
+		final String expectedErrorMessage = FileUtil.getFileContent(expected);
+		assertStringContains(errorReportFileContent1, expectedErrorMessage); 
+		assertStringContains(errorReportFileContent2, expectedErrorMessage); 
+		assertStringDoesNotContain(errorReportFileContent3, expectedErrorMessage); 
+	}	
 
 }

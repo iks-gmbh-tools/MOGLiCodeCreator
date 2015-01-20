@@ -1,8 +1,18 @@
 package com.iksgmbh.moglicc.demo;
 
+import java.lang.Boolean;
+import java.util.List;
+import java.lang.Long;
+import java.lang.String;
+import java.lang.Integer;
+import java.lang.Float;
+import java.lang.Double;
 import java.util.HashSet;
-import java.util.Arrays;
+import java.lang.Character;
+import java.math.BigDecimal;
 import com.iksgmbh.moglicc.demo.Person;
+import java.util.Arrays;
+import java.lang.Byte;
 
 /**
 * JavaBean class of the MOGLiCC JavaBean Group
@@ -12,17 +22,49 @@ import com.iksgmbh.moglicc.demo.Person;
 public class Misc extends Person
 {
 	// instance fields
+	private String text;
+	private boolean ready;
+	private char primitivChar;
+	private byte numberByte;
 	private int numberInt;
 	private long numberLong;
 	private float numberFloat;
 	private double numberDouble;
-	private byte numberByte;
-	private char id;
+	private Boolean booleanWrapper;
+	private Character charWrapper;
+	private Byte byteWrapper;
+	private Integer intWrapper;
+	private Long longWrapper;
+	private Float floatWrapper;
+	private Double doubleWrapper;
+	private BigDecimal bigDecimal;
+	private List<Long> listOfLongs;
+	private List<String> stringList;
 	private String[] stringArray;
 	private HashSet<String> hashSet;
-	private boolean ready;
+	private Person instanceVariable;
 
 	// ===============  setter methods  ===============
+
+	public void setText(final String text)
+	{
+		this.text = text;
+	}
+
+	public void setReady(final boolean ready)
+	{
+		this.ready = ready;
+	}
+
+	public void setPrimitivChar(final char primitivChar)
+	{
+		this.primitivChar = primitivChar;
+	}
+
+	public void setNumberByte(final byte numberByte)
+	{
+		this.numberByte = numberByte;
+	}
 
 	public void setNumberInt(final int numberInt)
 	{
@@ -44,14 +86,54 @@ public class Misc extends Person
 		this.numberDouble = numberDouble;
 	}
 
-	public void setNumberByte(final byte numberByte)
+	public void setBooleanWrapper(final Boolean booleanWrapper)
 	{
-		this.numberByte = numberByte;
+		this.booleanWrapper = booleanWrapper;
 	}
 
-	public void setId(final char id)
+	public void setCharWrapper(final Character charWrapper)
 	{
-		this.id = id;
+		this.charWrapper = charWrapper;
+	}
+
+	public void setByteWrapper(final Byte byteWrapper)
+	{
+		this.byteWrapper = byteWrapper;
+	}
+
+	public void setIntWrapper(final Integer intWrapper)
+	{
+		this.intWrapper = intWrapper;
+	}
+
+	public void setLongWrapper(final Long longWrapper)
+	{
+		this.longWrapper = longWrapper;
+	}
+
+	public void setFloatWrapper(final Float floatWrapper)
+	{
+		this.floatWrapper = floatWrapper;
+	}
+
+	public void setDoubleWrapper(final Double doubleWrapper)
+	{
+		this.doubleWrapper = doubleWrapper;
+	}
+
+	public void setBigDecimal(final BigDecimal bigDecimal)
+	{
+		this.bigDecimal = bigDecimal;
+	}
+
+	public void setListOfLongs(final List<Long> listOfLongs)
+	{
+		this.listOfLongs = listOfLongs;
+	}
+
+	public void setStringList(final List<String> stringList)
+	{
+		this.stringList = stringList;
 	}
 
 	public void setStringArray(final String[] stringArray)
@@ -64,12 +146,32 @@ public class Misc extends Person
 		this.hashSet = hashSet;
 	}
 
-	public void setReady(final boolean ready)
+	public void setInstanceVariable(final Person instanceVariable)
 	{
-		this.ready = ready;
+		this.instanceVariable = instanceVariable;
 	}
 
 	// ===============  getter methods  ===============
+
+	public String getText()
+	{
+		return text;
+	}
+
+	public boolean getReady()
+	{
+		return ready;
+	}
+
+	public char getPrimitivChar()
+	{
+		return primitivChar;
+	}
+
+	public byte getNumberByte()
+	{
+		return numberByte;
+	}
 
 	public int getNumberInt()
 	{
@@ -91,14 +193,54 @@ public class Misc extends Person
 		return numberDouble;
 	}
 
-	public byte getNumberByte()
+	public Boolean getBooleanWrapper()
 	{
-		return numberByte;
+		return booleanWrapper;
 	}
 
-	public char getId()
+	public Character getCharWrapper()
 	{
-		return id;
+		return charWrapper;
+	}
+
+	public Byte getByteWrapper()
+	{
+		return byteWrapper;
+	}
+
+	public Integer getIntWrapper()
+	{
+		return intWrapper;
+	}
+
+	public Long getLongWrapper()
+	{
+		return longWrapper;
+	}
+
+	public Float getFloatWrapper()
+	{
+		return floatWrapper;
+	}
+
+	public Double getDoubleWrapper()
+	{
+		return doubleWrapper;
+	}
+
+	public BigDecimal getBigDecimal()
+	{
+		return bigDecimal;
+	}
+
+	public List<Long> getListOfLongs()
+	{
+		return listOfLongs;
+	}
+
+	public List<String> getStringList()
+	{
+		return stringList;
 	}
 
 	public String[] getStringArray()
@@ -111,9 +253,9 @@ public class Misc extends Person
 		return hashSet;
 	}
 
-	public boolean getReady()
+	public Person getInstanceVariable()
 	{
-		return ready;
+		return instanceVariable;
 	}
 
 	// ===============  additional Javabean methods  ===============
@@ -122,15 +264,27 @@ public class Misc extends Person
 	public String toString()
 	{
 		return "Misc ["
+				+ "text = " + text + ", "
+				+ "ready = " + ready + ", "
+				+ "primitivChar = " + primitivChar + ", "
+				+ "numberByte = " + numberByte + ", "
 				+ "numberInt = " + numberInt + ", "
 				+ "numberLong = " + numberLong + ", "
 				+ "numberFloat = " + numberFloat + ", "
 				+ "numberDouble = " + numberDouble + ", "
-				+ "numberByte = " + numberByte + ", "
-				+ "id = " + id + ", "
+				+ "booleanWrapper = " + booleanWrapper + ", "
+				+ "charWrapper = " + charWrapper + ", "
+				+ "byteWrapper = " + byteWrapper + ", "
+				+ "intWrapper = " + intWrapper + ", "
+				+ "longWrapper = " + longWrapper + ", "
+				+ "floatWrapper = " + floatWrapper + ", "
+				+ "doubleWrapper = " + doubleWrapper + ", "
+				+ "bigDecimal = " + bigDecimal + ", "
+				+ "listOfLongs = " + listOfLongs + ", "
+				+ "stringList = " + stringList + ", "
 				+ "stringArray = " + Arrays.toString(stringArray) + ", "
 				+ "hashSet = " + hashSet + ", "
-				+ "ready = " + ready + ""
+				+ "instanceVariable = " + instanceVariable + ""
 				+ "]";
 	}
 
@@ -145,6 +299,21 @@ public class Misc extends Person
 
 		final Misc other = (Misc) obj;
 
+		if (text == null)
+		{
+			if (other.text != null)
+				return false;
+		} else
+		{
+			if (! text.equals(other.text))
+				   return false;
+		}
+		if (ready != other.ready)
+			return false;
+		if (primitivChar != other.primitivChar)
+			return false;
+		if (numberByte != other.numberByte)
+			return false;
 		if (numberInt != other.numberInt)
 			return false;
 		if (numberLong != other.numberLong)
@@ -153,10 +322,96 @@ public class Misc extends Person
 			return false;
 		if (Double.doubleToLongBits(numberDouble) != Double.doubleToLongBits(other.numberDouble))
 			return false;
-		if (numberByte != other.numberByte)
-			return false;
-		if (id != other.id)
-			return false;
+		if (booleanWrapper == null)
+		{
+			if (other.booleanWrapper != null)
+				return false;
+		} else
+		{
+			if (! booleanWrapper.equals(other.booleanWrapper))
+				   return false;
+		}
+		if (charWrapper == null)
+		{
+			if (other.charWrapper != null)
+				return false;
+		} else
+		{
+			if (! charWrapper.equals(other.charWrapper))
+				   return false;
+		}
+		if (byteWrapper == null)
+		{
+			if (other.byteWrapper != null)
+				return false;
+		} else
+		{
+			if (! byteWrapper.equals(other.byteWrapper))
+				   return false;
+		}
+		if (intWrapper == null)
+		{
+			if (other.intWrapper != null)
+				return false;
+		} else
+		{
+			if (! intWrapper.equals(other.intWrapper))
+				   return false;
+		}
+		if (longWrapper == null)
+		{
+			if (other.longWrapper != null)
+				return false;
+		} else
+		{
+			if (! longWrapper.equals(other.longWrapper))
+				   return false;
+		}
+		if (floatWrapper == null)
+		{
+			if (other.floatWrapper != null)
+				return false;
+		} else
+		{
+			if (! floatWrapper.equals(other.floatWrapper))
+				   return false;
+		}
+		if (doubleWrapper == null)
+		{
+			if (other.doubleWrapper != null)
+				return false;
+		} else
+		{
+			if (! doubleWrapper.equals(other.doubleWrapper))
+				   return false;
+		}
+		if (bigDecimal == null)
+		{
+			if (other.bigDecimal != null)
+				return false;
+		} else
+		{
+			if (! bigDecimal.equals(other.bigDecimal))
+				   return false;
+		}
+		if (listOfLongs == null)
+		{
+			if (other.listOfLongs != null)
+				return false;
+		} else
+		{
+			if (! listOfLongs.equals(other.listOfLongs))
+				   return false;
+		}
+		if (stringList == null)
+		{
+			if (other.stringList != null)
+				return false;
+		} else
+		{
+			if (! stringList.equals(other.stringList))
+				   return false;
+		}
 		if (!Arrays.equals(stringArray, other.stringArray))
 			return false;
 		if (hashSet == null)
@@ -168,8 +423,15 @@ public class Misc extends Person
 			if (! hashSet.equals(other.hashSet))
 				   return false;
 		}
-		if (ready != other.ready)
-			return false;
+		if (instanceVariable == null)
+		{
+			if (other.instanceVariable != null)
+				return false;
+		} else
+		{
+			if (! instanceVariable.equals(other.instanceVariable))
+				   return false;
+		}
 		return true;
 	}
 
@@ -178,16 +440,28 @@ public class Misc extends Person
 		final int prime = 31;
 		int result = 1;
 
+               result = prime * result + ((text == null) ? 0 : 3556653);
+ 		result = prime * result + (ready ? 1231 : 1237);
+		result = prime * result + primitivChar;
+		result = prime * result + numberByte;
 		result = prime * result + numberInt;
  		result = prime * result + (int) (numberLong ^ (numberLong >>> 32));
  		result = prime * result + Float.floatToIntBits(numberFloat);
 		long temp = Double.doubleToLongBits(numberDouble);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + numberByte;
-		result = prime * result + id;
+               result = prime * result + ((booleanWrapper == null) ? 0 : -63687861);
+               result = prime * result + ((charWrapper == null) ? 0 : 80559197);
+               result = prime * result + ((byteWrapper == null) ? 0 : 1668153963);
+               result = prime * result + ((intWrapper == null) ? 0 : -1142847068);
+               result = prime * result + ((longWrapper == null) ? 0 : -5877129);
+               result = prime * result + ((floatWrapper == null) ? 0 : -815539561);
+               result = prime * result + ((doubleWrapper == null) ? 0 : 1558176642);
+               result = prime * result + ((bigDecimal == null) ? 0 : -554856911);
+               result = prime * result + ((listOfLongs == null) ? 0 : -1260473502);
+               result = prime * result + ((stringList == null) ? 0 : -1573317553);
 		result = prime * result + Arrays.hashCode(stringArray);
                result = prime * result + ((hashSet == null) ? 0 : 697516148);
- 		result = prime * result + (ready ? 1231 : 1237);
+               result = prime * result + ((instanceVariable == null) ? 0 : 1081501233);
 
 		return result;
 	}

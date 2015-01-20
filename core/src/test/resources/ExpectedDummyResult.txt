@@ -2,10 +2,10 @@
 
 Status: OK
 
-Workspace used: DummyWorkspace
-Model read from file: DummyModelFile.xyz
+Workspace: DummyWorkspace
+Model file: DummyModelFile.xyz
 
-All 2 plugins executed successfully.
+Execution of all 2 plugins successful.
 A total of 11 generation events for 2 output artefact(s) have been performed.
 
 ModelProviderDummy: Model Provider Dummy Result

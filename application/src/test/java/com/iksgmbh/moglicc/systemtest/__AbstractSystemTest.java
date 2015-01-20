@@ -147,14 +147,13 @@ public class __AbstractSystemTest extends ApplicationTestParent {
 				
 				if (pos1 > -1  && pos2 > -1) {					
 					System.out.println("\n\n#######################################################################");
-					System.out.println("#############       Summary from current " + FILENAME_LOG_FILE + "       #############");
+					System.out.println("#############       Summary from current " + FILENAME_LOG_FILE + "       ###########");
 					System.out.println("#######################################################################\n");
 					System.out.println(fileContent.substring(pos1, pos2));
 					System.out.println("#######################################################################\n");
 				}
 			} catch (IOException e) {
-				System.err
-						.println("Error printing " + FILENAME_LOG_FILE);
+				System.err.println("Error printing " + FILENAME_LOG_FILE);
 			}
 		}
 	}

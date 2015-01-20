@@ -10,9 +10,8 @@ import java.util.List;
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoDummy;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.MandatoryMetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoDummy;
 
 public class MandatoryMetaInfoValidatorUnitTest {
 	

@@ -25,9 +25,10 @@ import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginDataUnpacker;
 import com.iksgmbh.moglicc.generator.utils.helper.PluginPackedData;
 import com.iksgmbh.moglicc.plugin.MOGLiPlugin;
+import com.iksgmbh.moglicc.plugin.subtypes.ProviderPlugin;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpModel;
 import com.iksgmbh.moglicc.provider.model.standard.exceptions.ModelParserException;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpModel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
@@ -35,6 +36,12 @@ import com.iksgmbh.moglicc.provider.model.standard.parser.ModelParser;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
 
+
+/**
+* Starter class of the StandardModelProvider plugin.
+* It is instanciated by the core's PluginLoader via reflection.
+* @author Reik Oberrath
+*/
 public class StandardModelProviderStarter implements ModelProvider {
 
 	public static final String PLUGIN_ID = "StandardModelProvider";
@@ -42,6 +49,7 @@ public class StandardModelProviderStarter implements ModelProvider {
 	public static final String PLUGIN_PROPERTIES_FILE = "_model.properties";
 	public static final String FILENAME_STATISTICS_FILE = "ModelStatistics.txt";
 	public static final String FILENAME_STANDARD_MODEL_FILE = "MOGLiCC_JavaBeanModel.txt";
+	public static final String USE_EXTENSION_PLUGIN_ID = "useExtensionPlugin";
 	private static final String FILENAME_NEW_PLUGIN_MODEL_FILE = "MOGLiCC_NewPluginModel.txt";
 
 	private InfrastructureService infrastructure;
@@ -57,6 +65,8 @@ public class StandardModelProviderStarter implements ModelProvider {
 	final List<String> callingPlugins = new ArrayList<String>();
 
 	private Properties pluginProperties;
+
+	private List<String> warnMessages = new ArrayList<String>();
 
 	@Override
 	public String getId() {
@@ -87,11 +97,15 @@ public class StandardModelProviderStarter implements ModelProvider {
 		validateClassMetaInfos(metaInfoValidatorList);
 		validateAttributeMetaInfos(metaInfoValidatorList);
 
-		if (validationErrorMessages.size() > 0) {
-			infrastructure.getPluginLogger().logInfo("Model breaks "
-					+ validationErrorMessages.size() + " MetaInfoValidator settings!");
+		if (validationErrorMessages.size() > 0) 
+		{
+			infrastructure.getPluginLogger().logInfo("Error: Model breaks " + validationErrorMessages.size() 
+					                                  + " MetaInfoValidator settings!");
 		}
-		infrastructure.getPluginLogger().logInfo("Model is valid corresponding the MetaInfoValidators!");
+		else
+		{			
+			infrastructure.getPluginLogger().logInfo("Model is valid corresponding the MetaInfoValidators!");
+		}
 	}
 
 	private boolean validateAttributeMetaInfos(final List<MetaInfoValidator> allMetaInfoValidators) {
@@ -230,9 +244,46 @@ public class StandardModelProviderStarter implements ModelProvider {
 		if (errorListForTheCallingPlugin != null) {
 			throw new MOGLiPluginException(TEXT_MODEL_BREAKS_METAINFO_VALIDATORS);
 		}
+		
 		return buildUpModel;
 	}
 
+	private void extendModelDataIfNeccessary() throws MOGLiPluginException
+	{
+		if (buildUpModel.doesHaveAnyMetaInfosWithName(USE_EXTENSION_PLUGIN_ID)) 
+		{
+			final String extensionPluginId = buildUpModel.getMetaInfoValueFor(USE_EXTENSION_PLUGIN_ID);
+			final ProviderPlugin extensionPlugin = infrastructure.getProvider(extensionPluginId);
+			
+			if (extensionPlugin != null)
+			{
+				if (extensionPlugin instanceof ModelProvider)
+				{
+					final ModelProvider modelProvider =  (ModelProvider) extensionPlugin;
+					buildUpModel = (BuildUpModel) modelProvider.getModel(PLUGIN_ID, buildUpModel);					
+				}
+				else
+				{
+					final String warnMsg = "Model MetaInfo '" + USE_EXTENSION_PLUGIN_ID + "' does not call a ModelProvider plugin <" + extensionPluginId + ">!";
+					infrastructure.getPluginLogger().logWarning(warnMsg);
+					warnMessages.add(warnMsg);
+				}
+			} 
+			else 
+			{
+				final String warnMsg = "Model MetaInfo '" + USE_EXTENSION_PLUGIN_ID + "' calls a unkown provider plugin <" + extensionPluginId + ">!";
+				infrastructure.getPluginLogger().logWarning(warnMsg);
+				warnMessages.add(warnMsg);
+			}
+		}
+	}
+
+	@Override
+	public Model getModel(final String pluginId, final Object inputData) throws MOGLiPluginException 
+	{
+		return getModel(pluginId); // inputData is not needed for this model provider
+	}
+	
 	public BuildUpModel buildModel() throws MOGLiPluginException {
 		modelFile = getModelFile();
 		checkModelFile();
@@ -242,9 +293,13 @@ public class StandardModelProviderStarter implements ModelProvider {
 		infrastructure.getPluginLogger().logInfo("Brace symbol used: " + braceSymbol);
 
 
-		try {
+		try 
+		{
 			buildUpModel = ModelParser.doYourJob(fileContentAsList, braceSymbol);
-		} catch (ModelParserException e) {
+			extendModelDataIfNeccessary();
+		} 
+		catch (ModelParserException e) 
+		{
 			modelBuildFailure = TEXT_PARSE_ERROR_FOUND + ": " + modelFile.getName();
 			throw new MOGLiPluginException(TEXT_PARSE_ERROR_FOUND + " '" + modelFile.getName() + "':\n"
 					+ e.getParserErrors());
@@ -389,9 +444,11 @@ public class StandardModelProviderStarter implements ModelProvider {
 	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackDefaultInputData");
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR, PLUGIN_ID);
+		
 		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
 		defaultData.addFile(FILENAME_STANDARD_MODEL_FILE);
 		defaultData.addFile(FILENAME_NEW_PLUGIN_MODEL_FILE);
+		
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;
 	}
@@ -455,6 +512,12 @@ public class StandardModelProviderStarter implements ModelProvider {
 			{
 				sb.append(pluginId);
 				sb.append(FileUtil.getSystemLineSeparator());
+			}
+			
+			for (final String msg : warnMessages) {
+				sb.append("Warning: ");
+				sb.append(msg);
+				sb.append(FileUtil.getSystemLineSeparator());	
 			}
 			
 		}

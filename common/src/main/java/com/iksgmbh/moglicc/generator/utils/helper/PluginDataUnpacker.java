@@ -66,8 +66,8 @@ public class PluginDataUnpacker {
 			path = "/" + subdir;
 		}
 		subInputDir.mkdirs();
-		final String fileContent = readContentFromFile(defaultData.getTargetSubDir() + path + "/" + fileName);
-		createFile(subInputDir, fileName, fileContent);
+		final File targetFile = new File(subInputDir, fileName);
+		writeBinaryResourceWithContentFromClassPath(defaultData.getTargetSubDir() + path + "/" + fileName, targetFile.getAbsolutePath());
 	}
 
 	/**
@@ -94,9 +94,17 @@ public class PluginDataUnpacker {
 			final File subInputDir = new File(targetDir, folderName);
 			subInputDir.mkdirs();
 			for (String filename : filenames) {
-				final String fileContent = readContentFromFile(defaultData.getTargetSubDir() + "/" + folderName + "/" + filename);
-				createFile(subInputDir, filename, fileContent);
+				final File targetFile = new File(subInputDir, filename);
+				writeBinaryResourceWithContentFromClassPath(defaultData.getTargetSubDir() + "/" + folderName + "/" + filename, targetFile.getAbsolutePath());
 			}
+		}
+	}
+
+	private void writeBinaryResourceWithContentFromClassPath(final String pathToResource, final String targetFileName) throws MOGLiPluginException {
+		try {
+			FileUtil.writeBinaryResourceWithContentFromClassPath(defaultData.getClazz(), pathToResource, targetFileName);
+		} catch (IOException e) {
+			throw new MOGLiPluginException("Error reading file: " + pathToResource, e);
 		}
 	}
 	

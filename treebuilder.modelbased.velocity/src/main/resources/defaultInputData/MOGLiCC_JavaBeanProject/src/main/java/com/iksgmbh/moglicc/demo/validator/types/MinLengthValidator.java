@@ -1,8 +1,8 @@
 package com.iksgmbh.moglicc.demo.validator.types;
 
-import com.iksgmbh.moglicc.demo.validator.FieldValidationResult;
-import com.iksgmbh.moglicc.demo.validator.FieldValidationResult.Status;
-import com.iksgmbh.moglicc.demo.validator.FieldValidator;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult.Status;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidator;
 
 
 public class MinLengthValidator extends FieldValidator {
@@ -27,11 +27,10 @@ public class MinLengthValidator extends FieldValidator {
 		}
 		
 		if (expectedType.isInstance(value)) {
-			int actualLength = value.toString().length();
-			if (actualLength < minLength) {
+			if (value.toString().length() < minLength) {
 				return new FieldValidationResult(Status.ERROR, this.getClass().getSimpleName() + ": " + 
 						                                       "Minimum length for field '" + fieldName +  
-						                                       "' (" + minLength + ") not reached: " + actualLength);
+						                                       "' (" + minLength + ") is not reached by value '" + value + "'");
 			}
 		} else {
 			return new FieldValidationResult(Status.ERROR, this.getClass().getSimpleName() + ": " + 

@@ -1,5 +1,7 @@
 package com.iksgmbh.moglicc;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,9 @@ import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 
 public class ReportWriterUnitTest extends CoreTestParent {
 	
-	private ReportWriter reportManager;
+	private ReportWriter reportWriter;
 	private List<MOGLiPlugin> plugins;
+	private List<PluginMetaData> pluginMetaDataList;
 	
 	@Before
 	@Override
@@ -31,8 +34,10 @@ public class ReportWriterUnitTest extends CoreTestParent {
 		
 		plugins = new ArrayList<MOGLiPlugin>();
 		
-		final ModelProviderDummy modelProviderDummy = new ModelProviderDummy("ModelProviderDummy", "DummyModelFile.xyz");
-		final GeneratorDummy generatorDummy = new GeneratorDummy("GeneratorDummy");
+		final String pluginID1 = "ModelProviderDummy";
+		final String pluginID2 = "GeneratorDummy";
+		final ModelProviderDummy modelProviderDummy = new ModelProviderDummy(pluginID1, "DummyModelFile.xyz");
+		final GeneratorDummy generatorDummy = new GeneratorDummy(pluginID2);
 		
 		plugins.add(modelProviderDummy);
 		plugins.add(generatorDummy);
@@ -40,17 +45,19 @@ public class ReportWriterUnitTest extends CoreTestParent {
 		modelProviderDummy.setInfrastructure(createInfrastructure(modelProviderDummy.getId()));
 		modelProviderDummy.setInfrastructure(createInfrastructure(generatorDummy.getId()));
 				
-		final List<PluginMetaData> pluginMetaDataList = new ArrayList<PluginMetaData>();
+		pluginMetaDataList = new ArrayList<PluginMetaData>();
 		final PluginMetaData metaDataForTheGenerator = new PluginMetaData("jar", null);
 		metaDataForTheGenerator.setPluginStatus(PluginStatus.EXECUTED);
 		metaDataForTheGenerator.setPluginType(PluginType.GENERATOR);
+		metaDataForTheGenerator.setId(pluginID1);
 		pluginMetaDataList.add(metaDataForTheGenerator);
 		final PluginMetaData metaDataForTheProvider = new PluginMetaData("jar", null);
 		metaDataForTheProvider.setPluginStatus(PluginStatus.EXECUTED);
 		metaDataForTheProvider.setPluginType(PluginType.PROVIDER);
+		metaDataForTheProvider.setId(pluginID2);
 		pluginMetaDataList.add(metaDataForTheProvider);
 
-		reportManager = new ReportWriter(plugins, pluginMetaDataList, "DummyWorkspace");
+		reportWriter = new ReportWriter(plugins, pluginMetaDataList, "DummyWorkspace");
 		
 		applicationReportDir.mkdir();
 	}
@@ -72,7 +79,7 @@ public class ReportWriterUnitTest extends CoreTestParent {
 		assertFileDoesNotExist(resultFile);
 
 		// act
-		reportManager.writeShortReport(resultFile);
+		reportWriter.writeShortReport(resultFile);
 
 		// assert
 		assertFileExists(resultFile);
@@ -90,7 +97,7 @@ public class ReportWriterUnitTest extends CoreTestParent {
 		assertFileDoesNotExist(reportFile);		
 
 		// act
-		reportManager.writeGeneratorReport(reportFile);
+		reportWriter.writeGeneratorReport(reportFile);
 
 		// assert
 		assertFileExists(reportFile);
@@ -108,13 +115,38 @@ public class ReportWriterUnitTest extends CoreTestParent {
 		assertFileDoesNotExist(reportFile);		
 
 		// act
-		reportManager.writeProviderReport(reportFile);
+		reportWriter.writeProviderReport(reportFile);
 
 		// assert
 		assertFileExists(reportFile);
 		final File file = new File(getProjectTestResourcesDir(), "ExpectedProviderReport.txt");
 		final String expected = MOGLiFileUtil.getFileContent(file);
 		assertStringEquals("MOGLiCC Result", expected, MOGLiFileUtil.getFileContent(reportFile));
+	}
+
+	@Test
+	public void doesNotHandleDeactivatedPluginsAsError() throws Exception
+	{
+		// arrange
+		pluginMetaDataList.get(0).setInfoMessage(MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_INFO);
+		pluginMetaDataList.get(0).setPluginStatus(PluginStatus.ANALYSED);
+		final File errorReportFile = new File(applicationReportDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
+		errorReportFile.delete();
+		assertFileDoesNotExist(errorReportFile);		
+
+		// act
+		reportWriter = new ReportWriter(plugins, pluginMetaDataList, "DummyWorkspace");
+		reportWriter.writeErrorReportIfNecessary(errorReportFile);
+		final String shortReportHeader = reportWriter.getShortReportHeader();
+
+		// assert
+		assertEquals("deactivated plugin not found", 1, reportWriter.getIdsOfDeactivatedPlugins().size());
+		assertEquals("deactivated plugin not found", pluginMetaDataList.get(0).getId(), reportWriter.getIdsOfDeactivatedPlugins().get(0));
+		assertFileDoesNotExist(errorReportFile);
+	
+		final File file = new File(getProjectTestResourcesDir(), "ExpectedReportHeaderForDeactivatedPlugin.txt");
+		final String expected = MOGLiFileUtil.getFileContent(file);
+		assertEquals("shortReportHeader", expected, shortReportHeader);
 	}
 	
 }

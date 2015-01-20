@@ -2,11 +2,11 @@ package com.iksgmbh.moglicc.provider.model.standard.parser;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
-import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpMetaInfo;
 import com.iksgmbh.data.Annotation;
 import com.iksgmbh.helper.AnnotationParser;
+import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
+import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpMetaInfo;
 
 public class MetaInfoParser extends AnnotationParser {
 	

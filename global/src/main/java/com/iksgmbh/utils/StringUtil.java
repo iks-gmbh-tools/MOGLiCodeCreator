@@ -63,17 +63,23 @@ public class StringUtil {
 	}
 
 	public static String concat(final List<String> list) {
+
+		return concat(list, FileUtil.getSystemLineSeparator());
+	}
+	
+	public static String concat(final List<String> list, final String lineSeparator) {
 		final StringBuffer sb = new StringBuffer();
 		int counter = 0;
 		for (String line : list) {
 			counter++;
 			sb.append(line);
-			if (counter < list.size()) {
-				sb.append(FileUtil.getSystemLineSeparator());
+			if (counter < list.size() && lineSeparator != null) {
+				sb.append(lineSeparator);
 			}
 		}
 		return sb.toString();
 	}
+	
 
 	public static String removePrefixIfExisting(final String s, final String prefix) {
 		if (s.startsWith(prefix)) {
@@ -106,6 +112,38 @@ public class StringUtil {
 		}
 		return sb.toString().trim();
 	}
+	
+	/**
+	 * Removes all lines from the list that contains <toRemove>.
+	 * @param lines
+	 * @param toRemove
+	 * @return List<String>
+	 */
+	public static List<String> removeLineFromList(final List<String> lines, final String toRemove) {
+		final List<String> toReturn = new ArrayList<String>();
+		for (final String line : lines) {
+			if (! line.contains(toRemove))
+			{
+				toReturn.add(line);
+			}
+		}
+		return toReturn;
+	}
+	
+	public static List<String> replaceLineInList(final List<String> lines, final String lineToReplace, final String replacementLine) {
+		final List<String> toReturn = new ArrayList<String>();
+		for (final String line : lines) {
+			if (line.equals(lineToReplace))
+			{
+				toReturn.add(replacementLine);
+			}
+			else
+			{				
+				toReturn.add(line);
+			}
+		}
+		return toReturn;
+	}	
 
 	public static String replaceBetween(final String s, final String replaceStart, final String replaceEnd, final String replacement) {
 		final String toReplace = substringBetween(s, replaceStart, replaceEnd);
@@ -164,4 +202,21 @@ public class StringUtil {
 		return -1;
 	}
 
+	public static List<String> commaSeparatedStringToStringList(final String s) {
+		final String[] result = commaSeparatedStringToStringArray(s);
+		final List<String> toReturn = new ArrayList<String>();
+		for (int i = 0; i < result.length; i++) {
+			toReturn.add(result[i]); 
+		}
+		return toReturn;
+	}
+
+	public static String[] commaSeparatedStringToStringArray(final String s) {
+		final String[] result = s.split(",");
+		for (int i = 0; i < result.length; i++) {
+			result[i] = result[i].trim(); 
+		}
+		return result;
+	}
+	
 }

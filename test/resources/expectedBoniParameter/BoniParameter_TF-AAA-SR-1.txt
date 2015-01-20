@@ -1,0 +1,1 @@
+Boni2Parameter [bix=null, boniKlasse=null, krediturteil=01, zahlungsweise=11, hoechstkrediturteil=05, hoechstkreditvorschlag=null]

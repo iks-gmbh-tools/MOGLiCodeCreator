@@ -39,13 +39,25 @@ public class TemplateJavaUtility {
 		PRIMITIVE_TYPE_WRAPPERS.add("Character");
 		PRIMITIVE_TYPE_WRAPPERS.add("Byte");
 	}
+	
+	private static Set<String> PRIMITIVE_TYPE_WRAPPERS_FULLY_QUALIFIED = new HashSet<String>();
+	static {
+		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Boolean");
+		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Integer");
+		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Long");
+		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Float");
+		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Double");
+		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Character");
+		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Byte");
+	}
+	
 
 	public static boolean isPrimitiveTypeWrapper(String clazz) {
-		return PRIMITIVE_TYPE_WRAPPERS.contains(clazz);
+		return PRIMITIVE_TYPE_WRAPPERS.contains(clazz)
+				|| PRIMITIVE_TYPE_WRAPPERS_FULLY_QUALIFIED.contains(clazz);
 	}
 
-	// Folgenden Klassen werden beim Generieren von clone herangezogen. Instanzen dieser
-	// Klassen müssen nicht gekolnt werden:
+	// These classes are relevant for cloning purpose because they need not to be cloned.
 	private static Set<String> IMMUTTABLE_CLASSES = new HashSet<String>();
 	static {
 		IMMUTTABLE_CLASSES.addAll(PRIMITIVE_TYPE);
@@ -105,6 +117,8 @@ public class TemplateJavaUtility {
 			checkTypeOfValue(importClasses, val);
 		} else if (ClassNameData.isFullyQualifiedClassnameValid(className)) {
 			importClasses.add(className);
+		} else if (ClassNameData.isSimpleClassNameKnown(className)) {
+			importClasses.add(ClassNameData.makeNameFullyQualifiedNameIfsimple(className));
 		}
 	}
 
@@ -112,9 +126,10 @@ public class TemplateJavaUtility {
 	 * Import Statement                                                      *
 	\*-----------------------------------------------------------------------*/
 
-	private Set<String> cachedImportStatements = new HashSet<String>(); // vermeidet doppelte Import-Zeilen
+	private Set<String> cachedImportStatements = new HashSet<String>(); // avoid multiple import statements
 
 	/**
+	 * Adds fully qualilified class names if necesarry (Date -> java.util.Date)
 	 * @param clazz
 	 * @return Import statement for clazz. For types like "Boolean" no import statement is generated and 
 	 *         an empty String returned. For types like "Date", the package "java.util" is added automatically.
@@ -122,19 +137,15 @@ public class TemplateJavaUtility {
 	public String importStatement(String clazz) {
 		Validate.notNull(clazz, "Argument 'clazz' is null.");
 
-		// Abkürzungen durch volle gepackagete Klassen ersetzen (Date -> java.util.Date)
-
-		// Falls ein Klassenname (immer noch) einfach (ohne Package) ist, muss er nicht importiert werden.
-		// Dies tritt auf bei allen Standardtypen wie "int", "String", "Boolean", etc.
-		// Will man den Effekt bei anderen Typen nutzen, z.B. bei "IAdresseCrefoEntry", muss man im
-		// Template dafür sorgen, dass z.B. ein globaler Import (mit .*) für Klassen dieser Art vorhanden ist.
 		if (clazz.equals(getSimpleClassName(clazz))) {
+			// primitive types
 			return "";
 		}
-		// Ansonsten Import-Statement erzeugen und cachen...
+		
 		String importStatement = "import " + clazz + ";";
+		
 		if (cachedImportStatements.contains(importStatement)) {
-			return ""; // keine doppelten Imports
+			return ""; // avoid dublicates
 		}
 		cachedImportStatements.add(importStatement);
 
