@@ -3,9 +3,9 @@ package com.iksgmbh.moglicc.provider.model.standard.metainfo.validator;
 import java.util.List;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorParent;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidatorParent;
 /**
  * Validation results in always true. 
  * Used to analyse the usage of MetaInfo elements by generator plugins.

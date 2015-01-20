@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.utils.FileUtil;
 
 public class MetainfoValidationIntTest extends IntTestParent {

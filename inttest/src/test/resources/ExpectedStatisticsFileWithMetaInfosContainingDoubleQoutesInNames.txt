@@ -3,7 +3,7 @@ Number of class descriptions in model file: 1
 Number of vendor plugins defining MetaInfoValidators: 0
 
 WARNING:
-Following MetaInfos defined in 'CustomizedBraceSymbolTestModel.txt' are unused:
+For following MetaInfos defined in 'CustomizedBraceSymbolTestModel.txt' no validation rule exists:
 'comment " note' in ModelLevel
 'comment "note"' in ClassLevel
 '"Java" "Type"' in AttributeLevel

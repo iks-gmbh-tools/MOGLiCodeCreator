@@ -83,6 +83,7 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		final File[] filelist = fileData.releaseDir.listFiles();
 		assertEquals("Unexpected number of files:", 2, filelist.length);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTSH, filelist[0].getName());
 		assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[1].getName());		
 =======
@@ -93,10 +94,21 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[1].getName());
 		}
 		else
+=======
+		if (filelist[0].getName().endsWith(".bat"))
+>>>>>>> development
 		{
 			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[0].getName());
 			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTSH, filelist[1].getName());
 		}
+<<<<<<< HEAD
+=======
+		else
+		{			
+			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTSH, filelist[0].getName());
+			assertEquals("Unexpected filename.", MOGLiReleaseBuilder.FILENAME_STARTBAT, filelist[1].getName());
+		}
+>>>>>>> development
 	}
 	
 	@Test
@@ -148,7 +160,7 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 		releaseFileCollector.copyThirdPartyJars();
 		File libDir = new File(fileData.releaseDir + "/" + fileData.libSubdir);
 		File[] listFiles = libDir.listFiles();
-		assertEquals("Unexpected file number.", 3, listFiles.length);
+		assertEquals("Unexpected file number.", 8, listFiles.length);
 	}	
 	
 	@Test

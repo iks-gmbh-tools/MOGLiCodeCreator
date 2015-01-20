@@ -7,17 +7,17 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.iksgmbh.data.ClassNameData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.GeneratorResultData;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpAttributeDescriptor;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpClassDescriptor;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpMetaInfo;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpModel;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpAttributeDescriptor;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpClassDescriptor;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpMetaInfo;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpModel;
 import com.iksgmbh.moglicc.test.MockDataBuilder;
-import com.iksgmbh.data.ClassNameData;
 import com.iksgmbh.utils.FileUtil;
 
 public class VelocityEngineProviderIntTest extends IntTestParent {

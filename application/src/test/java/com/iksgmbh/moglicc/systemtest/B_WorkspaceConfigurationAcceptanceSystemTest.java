@@ -61,7 +61,9 @@ public class B_WorkspaceConfigurationAcceptanceSystemTest extends __AbstractSyst
 		} else {
 			startScript = "start.sh";
 			startFile = new File(applicationRootDir, startScript);
-			MOGLiFileUtil.createNewFileWithContent(startFile, "sh " + MOGLiReleaseBuilder.FILENAME_STARTSH + " " + workspace);
+			MOGLiFileUtil.createNewFileWithContent(startFile, "#!/bin/sh"  + System.getProperty("line.separator") +  
+					                                           System.getProperty("line.separator") +
+					                                          "sh " + MOGLiReleaseBuilder.FILENAME_STARTSH + " " + workspace);
 			exeCommand = "sh " + startScript;
 		}
 

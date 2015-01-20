@@ -2,13 +2,14 @@
 
 Status: ERROR
 
-Workspace used: ../inttest/target/TestDir
-Model read from file: MOGLiCC_JavaBeanModel.txt
+Workspace: ../inttest/target/TestDir
+Model file: MOGLiCC_JavaBeanModel.txt
 
-1 plugin(s) executed successfully.
+2 plugin(s) executed successfully.
 4 plugin(s) not or erroneously executed!
 A total of 0 generation events for 0 output artefact(s) have been performed.
 
+ExcelStandardModelProvider: not used for code generation
 StandardModelProvider: Error parsing model file: MOGLiCC_JavaBeanModel.txt
 VelocityEngineProvider: Velocity engine started for 0 calls.
 
