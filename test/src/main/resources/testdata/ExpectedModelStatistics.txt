@@ -4,16 +4,69 @@ Number of vendor plugins defining MetaInfoValidators: 2
 
 Plugin 'VelocityClassBasedFileMaker' uses the following MetaInfo elements:
 'ExampleData' in Attribute level
+'InvalidChars' in Attribute level
 'JavaType' in Attribute level
 'Mandatory' in Attribute level
 'MaxLength' in Attribute level
 'MinLength' in Attribute level
-'TestExampleData' in Attribute level
+'Misc1' in Attribute level
+'Misc2' in Attribute level
+'ValidChars' in Attribute level
 'eclipseProjectDir' in Model level
 'extends' in Class level
 'implements' in Class level
 'projectName' in Model level
+'useExtensionPlugin' in Model level
 
 Plugin 'VelocityModelBasedTreeBuilder' uses the following MetaInfo elements:
 'eclipseProjectDir' in Model level
 'projectName' in Model level
+
+WARNING:
+For following MetaInfos defined in 'MOGLiCC_JavaBeanModel.txt' no validation rule exists:
+'Person1' in AttributeLevel
+'Person2' in AttributeLevel
+'Person3' in AttributeLevel
+'Person4' in AttributeLevel
+'Person1' in AttributeLevel
+'Person2' in AttributeLevel
+'Person3' in AttributeLevel
+'Person4' in AttributeLevel
+'Person1' in AttributeLevel
+'Person2' in AttributeLevel
+'Person3' in AttributeLevel
+'Person4' in AttributeLevel
+'Person1' in AttributeLevel
+'Person2' in AttributeLevel
+'Person3' in AttributeLevel
+'Person4' in AttributeLevel
+'Member1' in AttributeLevel
+'Member2' in AttributeLevel
+'Member3' in AttributeLevel
+'Member4' in AttributeLevel
+'Member5' in AttributeLevel
+'Address1' in AttributeLevel
+'Address2' in AttributeLevel
+'Address3' in AttributeLevel
+'Address4' in AttributeLevel
+'Address5' in AttributeLevel
+'Address1' in AttributeLevel
+'Address2' in AttributeLevel
+'Address3' in AttributeLevel
+'Address4' in AttributeLevel
+'Address5' in AttributeLevel
+'Address1' in AttributeLevel
+'Address2' in AttributeLevel
+'Address3' in AttributeLevel
+'Address4' in AttributeLevel
+'Address5' in AttributeLevel
+'Address1' in AttributeLevel
+'Address2' in AttributeLevel
+'Address3' in AttributeLevel
+'Address4' in AttributeLevel
+'Address5' in AttributeLevel
+'Address1' in AttributeLevel
+'Address2' in AttributeLevel
+'Address3' in AttributeLevel
+'Address4' in AttributeLevel
+'Address5' in AttributeLevel

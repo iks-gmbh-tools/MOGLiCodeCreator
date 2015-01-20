@@ -23,7 +23,7 @@
 #end
 
 '		if (validationErrors.size() > 0) {
-'			throw new FieldValidationException(buildErrorMessage());
+'			throw new FieldValidationException(buildErrorMessage( "${classDescriptor.simpleName}" ));
 '		}
 
 '	}

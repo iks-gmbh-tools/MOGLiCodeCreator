@@ -94,4 +94,10 @@ public class DummyStandardModelProviderStarter implements ModelProvider, MOGLiPl
 		return 0;
 	}
 
+	@Override
+	public Model getModel(String pluginId, Object inputData) throws MOGLiPluginException
+	{
+		return null;
+	}
+
 }

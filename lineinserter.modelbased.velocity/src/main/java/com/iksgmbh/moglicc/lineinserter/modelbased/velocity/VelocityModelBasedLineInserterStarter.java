@@ -1,7 +1,6 @@
 package com.iksgmbh.moglicc.lineinserter.modelbased.velocity;
 
-import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.*;
-
+import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.REPORT_TAB;
 import static com.iksgmbh.moglicc.lineinserter.modelbased.velocity.TextConstants.TEXT_END_REPLACE_INDICATOR_NOT_FOUND;
 import static com.iksgmbh.moglicc.lineinserter.modelbased.velocity.TextConstants.TEXT_START_REPLACE_INDICATOR_NOT_FOUND;
 
@@ -27,9 +26,9 @@ import com.iksgmbh.moglicc.plugin.subtypes.generators.Inserter;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
@@ -320,7 +319,7 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 		String generatedContent = resultData.getGeneratedContent();
 		final String insertAboveIndicator = resultData.getInsertAboveIndicator();
 		if (insertAboveIndicator != null) {
-			generatedContent = InsertAbove(oldContent, generatedContent, insertAboveIndicator);
+			generatedContent = insertAbove(oldContent, generatedContent, insertAboveIndicator);
 			infrastructure.getPluginLogger().logInfo("Generated Content inserted above '"
 		            + insertAboveIndicator + "' in\n" + outputFile.getAbsolutePath());
 			return generatedContent;
@@ -328,7 +327,7 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 
 		final String insertBelowIndicator = resultData.getInsertBelowIndicator();
 		if (insertBelowIndicator != null) {
-			generatedContent = InsertBelow(oldContent, generatedContent, insertBelowIndicator);
+			generatedContent = insertBelow(oldContent, generatedContent, insertBelowIndicator);
 			infrastructure.getPluginLogger().logInfo("Generated Content inserted below '"
 					                                 + insertBelowIndicator + "' in\n" + outputFile.getAbsolutePath());
 			return generatedContent;
@@ -378,30 +377,60 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 		return sb.toString();
 	}
 
-	private String InsertBelow(final List<String> oldContent, final String contentToInsert,
-			                   final String InsertBelowIndicator) throws MOGLiPluginException {
-		final StringBuffer sb = new StringBuffer();
+	String insertBelow(final List<String> oldContent, 
+			           final String contentToInsert,
+			           final String insertBelowIndicator) throws MOGLiPluginException 
+    {
+		final StringBuffer toReturn = new StringBuffer();
+		final StringBuffer contentBelowTheIndicator = new StringBuffer();
 		boolean indicatorFound = false;
-		for (final String line : oldContent) {
-			sb.append(line);
-			sb.append(FileUtil.getSystemLineSeparator());
-			if (line.contains(InsertBelowIndicator)) {
-				sb.append(contentToInsert);
-				sb.append(FileUtil.getSystemLineSeparator());
+		
+		for (final String line : oldContent) 
+		{
+			if (indicatorFound)
+			{
+				contentBelowTheIndicator.append(line);
+				contentBelowTheIndicator.append(FileUtil.getSystemLineSeparator());
+			}
+			toReturn.append(line);
+			toReturn.append(FileUtil.getSystemLineSeparator());
+			if (line.contains(insertBelowIndicator)) 
+			{
+				toReturn.append(contentToInsert);
+				toReturn.append(FileUtil.getSystemLineSeparator());
 				indicatorFound = true;
 			}
 		}
+		
 		if (! indicatorFound) {
-			throw new MOGLiPluginException(TextConstants.TEXT_INSERT_BELOW_INDICATOR_NOT_FOUND + InsertBelowIndicator);
+			throw new MOGLiPluginException(TextConstants.TEXT_INSERT_BELOW_INDICATOR_NOT_FOUND + insertBelowIndicator);
 		}
-		return sb.toString();
+		
+		if (contentBelowTheIndicator.toString().contains(contentToInsert))
+		{
+			// contentToInsert is already present / do not create insertion doubles
+			return StringUtil.concat(oldContent).trim();
+		}
+		
+		return toReturn.toString();
 	}
 
-	private String InsertAbove(final List<String> oldContent, final String contentToInsert,
-			                   final String insertAboveIndicator) throws MOGLiPluginException {
+	String insertAbove(final List<String> oldContent, 
+			           final String contentToInsert,
+			           final String insertAboveIndicator) throws MOGLiPluginException 
+	{
 		final StringBuffer sb = new StringBuffer();
 		boolean indicatorFound = false;
-		for (final String line : oldContent) {
+		final StringBuffer contentAboveTheIndicator = new StringBuffer();
+		
+		for (final String line : oldContent) 
+		{
+			if (! indicatorFound)
+			{
+				contentAboveTheIndicator.append(line);
+				contentAboveTheIndicator.append(FileUtil.getSystemLineSeparator());
+			}
+			
 			if (line.contains(insertAboveIndicator)) {
 				sb.append(contentToInsert);
 				sb.append(FileUtil.getSystemLineSeparator());
@@ -410,9 +439,17 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 			sb.append(line);
 			sb.append(FileUtil.getSystemLineSeparator());
 		}
+		
 		if (! indicatorFound) {
 			throw new MOGLiPluginException(TextConstants.TEXT_INSERT_ABOVE_INDICATOR_NOT_FOUND + insertAboveIndicator);
 		}
+		
+		if (contentAboveTheIndicator.toString().contains(contentToInsert))
+		{
+			// contentToInsert is already present / do not create insertion doubles
+			return StringUtil.concat(oldContent).trim();
+		}
+		
 		return sb.toString();
 	}
 

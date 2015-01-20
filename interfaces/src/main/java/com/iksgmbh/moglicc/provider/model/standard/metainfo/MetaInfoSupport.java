@@ -39,6 +39,12 @@ public interface MetaInfoSupport {
 	List<MetaInfo> getMetaInfoList();
 
 	/**
+	 * @param prefix
+	 * @return List of MetaInfo elements of the current hierarchy level with names starting with <prefix>
+	 */
+	List<MetaInfo> getMetaInfosWithNameStartingWith(String prefix);
+	
+	/**
 	 * @return List of MetaInfo elements including those of containing hierarchy levels
 	 */
 	List<MetaInfo> getAllMetaInfos();
@@ -58,8 +64,16 @@ public interface MetaInfoSupport {
 
 	/**
 	 * @param metaInfoValue
-	 * @return true if the value does not contain META_INFO_NOT_FOUND
+	 * @return true if the value does contain META_INFO_NOT_FOUND
 	 * @since 1.3.0
 	 */
-	boolean isValueAvailable(String metaInfoValue);	
+	boolean isValueAvailable(String metaInfoValue);
+	
+	/**
+	 * @param metaInfoValue
+	 * @return false if the value does contain META_INFO_NOT_FOUND
+	 * @since 1.5.0
+	 */
+	boolean isValueNotAvailable(String metaInfoValue);	
+	
 }

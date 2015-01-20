@@ -25,8 +25,8 @@ echo "*     ***********************************************************"
 echo "*     ***********************************************************"
 echo "*"
 echo "*"
-echo "*"
-echo "*"
+echo "Press [Enter] to continue..."
+read enter
 
 cd ..
 mvn clean install -Dtest=BuildReleaseAndTestSystem

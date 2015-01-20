@@ -3,18 +3,38 @@ package com.iksgmbh.data;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import com.iksgmbh.utils.StringUtil;
 
 public class ClassNameData {
+
+	private static HashSet<String> PRIMITIVE_TYPE = new HashSet<String>();
+	static {
+		PRIMITIVE_TYPE.add("boolean");
+		PRIMITIVE_TYPE.add("int");
+		PRIMITIVE_TYPE.add("long");
+		PRIMITIVE_TYPE.add("float");
+		PRIMITIVE_TYPE.add("double");
+		PRIMITIVE_TYPE.add("char");
+		PRIMITIVE_TYPE.add("byte");
+	}
 	
 	private static Map<String, String> KNOWN_CLASSES = new HashMap<String, String>();
 	static { // these classes can be instantiated by their simple name
 		KNOWN_CLASSES.put("BigDecimal", "java.math.BigDecimal");
 		KNOWN_CLASSES.put("DateTime", "org.joda.time.DateTime");
 		KNOWN_CLASSES.put("List", "java.util.List");
+		KNOWN_CLASSES.put("HashSet", "java.util.HashSet");
 		KNOWN_CLASSES.put("String", "java.lang.String");
+		KNOWN_CLASSES.put("Boolean", "java.lang.Boolean");
+		KNOWN_CLASSES.put("Character", "java.lang.Character");
+		KNOWN_CLASSES.put("Byte", "java.lang.Byte");
+		KNOWN_CLASSES.put("Integer", "java.lang.Integer");
+		KNOWN_CLASSES.put("Long", "java.lang.Long");
+		KNOWN_CLASSES.put("Float", "java.lang.Float");
+		KNOWN_CLASSES.put("Double", "java.lang.Double");
 	}
 	
 	private String simpleClassName;
@@ -27,15 +47,19 @@ public class ClassNameData {
 		classname = makeNameFullyQualifiedNameIfsimple(classname);
 		
 		if (! isFullyQualifiedClassnameValid(classname)) {
-			throw new IllegalArgumentException("Not a valid fully qualified class name: <" 
-					+ classname + ">"); 
+			packageName = "";
+			simpleClassName = classname;
+			fullyQualifiedClassname = classname;
+			KNOWN_CLASSES.put(simpleClassName, fullyQualifiedClassname);  // dynamically growing knowledge
 		}
-		
-		final int pos = classname.lastIndexOf('.');
-		packageName = classname.substring(0, pos);
-		simpleClassName = classname.substring(pos + 1);
-		fullyQualifiedClassname = classname;
-		KNOWN_CLASSES.put(simpleClassName, fullyQualifiedClassname);  // dynamically growing knowledge
+		else
+		{
+			final int pos = classname.lastIndexOf('.');
+			packageName = classname.substring(0, pos);
+			simpleClassName = classname.substring(pos + 1);
+			fullyQualifiedClassname = classname;
+			KNOWN_CLASSES.put(simpleClassName, fullyQualifiedClassname);  // dynamically growing knowledge
+		}
 	}
 
 	public String getSimpleClassName() {
@@ -62,7 +86,7 @@ public class ClassNameData {
 	 * @param simpleName
 	 * @return fullyQualifiedClassname
 	 */
-	private String makeNameFullyQualifiedNameIfsimple(String simpleName) {
+	public static String makeNameFullyQualifiedNameIfsimple(String simpleName) {
 		final String fullyQualifiedClassname = KNOWN_CLASSES.get(simpleName);
 		if (fullyQualifiedClassname == null) {
 			return simpleName;
@@ -74,6 +98,27 @@ public class ClassNameData {
 		return getPackageName().replace('.', '/');
 	}	
 
+	
+	/**
+	 * Checks whether simple classname is a known class.
+	 * Used to detect domain types.
+	 * @param classname
+	 * @return false for unknown unqualified classes AND primitive types
+	 */
+	public static boolean isSimpleClassNameKnown(final String simpleClassname) {
+		if (PRIMITIVE_TYPE.contains(simpleClassname))
+		{
+			return false;
+		}
+		
+		return KNOWN_CLASSES.get(simpleClassname) != null;
+	}
+	
+	/**
+	 * Checks whether classname is valid in Java
+	 * @param classname
+	 * @return true or false
+	 */
 	public static boolean isFullyQualifiedClassnameValid(final String classname) {
 	      if (classname == null) return false;
 	      if (classname.trim().length() == 0) return false;

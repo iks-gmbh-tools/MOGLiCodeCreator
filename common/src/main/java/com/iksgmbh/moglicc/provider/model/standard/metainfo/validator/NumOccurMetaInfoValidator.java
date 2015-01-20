@@ -3,8 +3,8 @@ package com.iksgmbh.moglicc.provider.model.standard.metainfo.validator;
 import java.util.List;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationData;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorParent;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationData;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidatorParent;
 
 /**
  * Validation result is false when the number of occurrences of the

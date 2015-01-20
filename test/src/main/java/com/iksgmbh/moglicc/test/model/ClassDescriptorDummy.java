@@ -84,4 +84,16 @@ public class ClassDescriptorDummy implements ClassDescriptor {
 	public AttributeDescriptor getAttributeDescriptor(String attributeName) {
 		return null;
 	}
+
+	@Override
+	public List<MetaInfo> getMetaInfosWithNameStartingWith(String prefix)
+	{
+		return null;
+	}
+
+	@Override
+	public boolean isValueNotAvailable(String metaInfoValue)
+	{
+		return false;
+	}
 }

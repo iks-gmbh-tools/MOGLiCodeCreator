@@ -2,7 +2,9 @@ package com.iksgmbh.moglicc.provider.engine.velocity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -72,10 +74,16 @@ public class TemplateStringUtility {
 	}
 
 	public static boolean isListEmpty(final List<String> list) {
+		if (list == null || list.size() == 0) {
+			return true;
+		}
 		return list.isEmpty();
 	}
 
 	public static String toCommaSeparatedString(final List<String> list) {
+		if (list == null || list.size() == 0) {
+			return "";
+		}
 		final StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < list.size(); i++) {
 			sb.append(list.get(i));
@@ -85,7 +93,33 @@ public class TemplateStringUtility {
 		}
 		return sb.toString();
 	}
+	
+	public static String[] commaSeparatedStringToStringArray(final String s) {
+		final String[] result = s.split(",");
+		for (int i = 0; i < result.length; i++) {
+			result[i] = result[i].trim(); 
+		}
+		return result;
+	}
+	
+	public static List<String> commaSeparatedStringToStringList(final String s) {
+		final String[] result = commaSeparatedStringToStringArray(s);
+		final List<String> toReturn = new ArrayList<String>();
+		for (int i = 0; i < result.length; i++) {
+			toReturn.add(result[i]); 
+		}
+		return toReturn;
+	}
 
+	public static HashSet<String> commaSeparatedStringToStringHashSet(final String s) {
+		final String[] result = commaSeparatedStringToStringArray(s);
+		final HashSet<String> toReturn = new HashSet<String>();
+		for (int i = 0; i < result.length; i++) {
+			toReturn.add(result[i]); 
+		}
+		return toReturn;
+	}
+	
 	public static String getNowAsTimeStamp() {
 		return "" + new Date().getTime();
 	}
