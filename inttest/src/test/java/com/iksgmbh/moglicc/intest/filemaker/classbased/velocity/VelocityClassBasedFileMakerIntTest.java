@@ -1,16 +1,19 @@
 package com.iksgmbh.moglicc.intest.filemaker.classbased.velocity;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
+import com.iksgmbh.moglicc.ReportWriter;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 
@@ -31,7 +34,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		assertFileDoesNotExist(file);
 		final String generationReport = velocityClassBasedFileMakerStarter.getGeneratorReport();
 		System.out.println(generationReport);
-		assertStringEquals("generationReport", "6 input artefact(s) found. No classes in model. Nothing to do.", generationReport);
+		assertStringEquals("generationReport", "9 input artefact(s) found. No classes in model. Nothing to do.", generationReport);
 	}
 
 	@Test
@@ -49,6 +52,22 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedMisc.java");
 		assertFileEquals(expectedFile, file);
 	}
+	
+	@Test
+	public void createsJavaBeanMiscFactoryJavaFile() throws MOGLiPluginException {
+		// prepare test
+		standardModelProviderStarter.doYourJob();
+
+		// call functionality under test
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// verify test result
+		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
+		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBeanFactory/MiscFactory.java");
+		assertFileExists(file);
+		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedMiscFactory.java");
+		assertFileEquals(expectedFile, file);
+	}	
 
 	@Test
 	public void createsArtefactOnlyIfModelIsValid() throws Exception {
@@ -305,6 +324,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 
 		// ##############  Test 2: execute with model 2  ###############
 		FileUtil.replaceLinesInTextFile(modelFile, "MOGLiCC_JavaBeanModel", "anotherValidModel");
+		FileUtil.replaceLinesInTextFile(modelFile, "metainfo useExtensionPlugin ExcelStandardModelProvider", "");
 		resultFile.delete();
 		assertFileDoesNotExist(resultFile);
 
@@ -327,5 +347,5 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		// verify test result
 		assertFileDoesNotExist(resultFile);
 	}
-
+	
 }

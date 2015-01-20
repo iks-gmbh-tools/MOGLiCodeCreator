@@ -8,6 +8,7 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
+import com.iksgmbh.data.ClassNameData;
 import com.iksgmbh.moglicc.provider.engine.velocity.test.VelocityEngineProviderTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.AttributeDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
@@ -18,6 +19,71 @@ import com.iksgmbh.moglicc.test.model.MetaInfoDummy;
 
 public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParent {
 
+	@Test
+	public void findsJavaLangTypes() {
+		// prepare test
+		final MetaInfo metaInfo = new MetaInfoDummy(MetaInfo.HierarchyLevel.Class, "Integer", "extends");
+		final AttributeDescriptor attributeDescriptor = new AttributeDescriptorDummy("Adresse", "Double");
+		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("Person", attributeDescriptor, metaInfo);
+		
+		// call functionality under test
+		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		
+		// verify test result
+		assertEquals("number of class names", 2, searchForClassNames.size());
+		assertTrue(searchForClassNames.contains("java.lang.Integer"));
+		assertTrue(searchForClassNames.contains("java.lang.Double"));
+	}
+	
+	@Test
+	public void findsBigDecimal() {
+		// prepare test
+		final MetaInfo metaInfo = new MetaInfoDummy(MetaInfo.HierarchyLevel.Class, "java.lang.Object", "extends");
+		final AttributeDescriptor attributeDescriptor = new AttributeDescriptorDummy("Adresse", "java.math.BigDecimal");
+		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("Person", attributeDescriptor, metaInfo);
+		
+		// call functionality under test
+		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		
+		// verify test result
+		assertEquals("number of class names", 2, searchForClassNames.size());
+		assertTrue(searchForClassNames.contains("java.lang.Object"));
+		assertTrue(searchForClassNames.contains("java.math.BigDecimal"));
+	}
+	
+	@Test
+	public void findsSimpleQualifiedDomainTypeInMetaInfos() {
+		// prepare test
+		final MetaInfo metaInfo = new MetaInfoDummy(MetaInfo.HierarchyLevel.Class, "java.lang.Object", "extends");
+		final AttributeDescriptor attributeDescriptor = new AttributeDescriptorDummy("Adresse", "Address");
+		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("Person", attributeDescriptor, metaInfo);
+		new ClassNameData("de.test.Address");
+		
+		// call functionality under test
+		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		
+		// verify test result
+		assertEquals("number of class names", 2, searchForClassNames.size());
+		assertTrue(searchForClassNames.contains("java.lang.Object"));
+		assertTrue(searchForClassNames.contains("de.test.Address"));
+	}
+	
+	@Test
+	public void findsFullyQualifiedDomainTypeInMetaInfos() {
+		// prepare test
+		final MetaInfo metaInfo = new MetaInfoDummy(MetaInfo.HierarchyLevel.Class, "java.lang.Object", "extends");
+		final AttributeDescriptor attributeDescriptor = new AttributeDescriptorDummy("Adresse", "de.test.Address");
+		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("Person", attributeDescriptor, metaInfo);
+		
+		// call functionality under test
+		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		
+		// verify test result
+		assertEquals("number of class names", 2, searchForClassNames.size());
+		assertTrue(searchForClassNames.contains("java.lang.Object"));
+		assertTrue(searchForClassNames.contains("de.test.Address"));
+	}
+	
 	@Test
 	public void findsDateTimeInMetaInfos() {
 		// prepare test
@@ -107,4 +173,5 @@ public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParen
 		assertEquals("collectionMetaType", "Error in method getCollectionElementType with argument 'java.lang.Object'", TemplateJavaUtility.getCollectionElementType("java.lang.Object"));
 		assertEquals("collectionMetaType", "String", TemplateJavaUtility.getCollectionElementType("java.util.ArrayList<String>"));
 	}
+	
 }

@@ -15,6 +15,15 @@
 	'		validatorList.add(new MandatoryFieldValidator("$attributeName", $value));
 		#end
 
+		#if ( $attributeDescriptor.doesHaveAnyMetaInfosWithName("ValidChars") )
+			#set( $value = $attributeDescriptor.getMetaInfoValueFor("ValidChars") )
+	'		validatorList.add(new ValidCharFieldValidator("$attributeName", "$value"));
+		#end
+
+		#if ( $attributeDescriptor.doesHaveAnyMetaInfosWithName("InvalidChars") )
+			#set( $value = $attributeDescriptor.getMetaInfoValueFor("InvalidChars") )
+	'		validatorList.add(new InvalidCharFieldValidator("$attributeName", "$value"));
+		#end
 
 		#if ( $attributeDescriptor.doesHaveAnyMetaInfosWithName("MinLength") )
 			#set( $value = $attributeDescriptor.getMetaInfoValueFor("MinLength") )

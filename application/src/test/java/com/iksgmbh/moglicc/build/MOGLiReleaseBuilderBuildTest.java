@@ -83,7 +83,7 @@ public class MOGLiReleaseBuilderBuildTest extends ApplicationTestParent {
 	public void returnsListOfAllMavenModules() {
 		final List<String> mavenModuleList = releaseBuilder.getListOfAllMavenModules();
 		assertNotNull(mavenModuleList);
-		assertEquals("module number", 14, mavenModuleList.size());
+		assertEquals("module number", 15, mavenModuleList.size());
 	}
 	
 	@Test

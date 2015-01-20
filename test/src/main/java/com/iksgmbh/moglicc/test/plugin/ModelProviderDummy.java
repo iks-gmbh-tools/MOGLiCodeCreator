@@ -103,5 +103,11 @@ public class ModelProviderDummy implements ModelProvider {
 		return 0;
 	}
 
+	@Override
+	public Model getModel(String pluginId, Object inputData) throws MOGLiPluginException
+	{
+		return null;
+	}
+
 }
 

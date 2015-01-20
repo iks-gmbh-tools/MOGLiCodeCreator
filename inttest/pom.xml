@@ -73,6 +73,13 @@
 
 		<dependency>
 			<groupId>com.iksgmbh.moglicc</groupId>
+			<artifactId>provider.model.standard.excel</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.iksgmbh.moglicc</groupId>
 			<artifactId>provider.engine.velocity</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>

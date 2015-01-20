@@ -1,8 +1,8 @@
 package com.iksgmbh.moglicc.provider.model.standard.parser;
 
-import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.data.Annotation;
 import com.iksgmbh.helper.AnnotationParser;
+import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 
 public class ModelNameParser extends AnnotationParser {
 	

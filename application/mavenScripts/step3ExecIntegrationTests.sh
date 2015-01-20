@@ -25,14 +25,10 @@ echo "*     ***********************************************************"
 echo "*     ***********************************************************"
 echo "*"
 echo "*"
-echo "*"
-echo "*"
+echo "Press [Enter] to continue..."
+read enter
 
 cd ../../inttest
 mvn clean test
 
-echo "*"
-echo "*"
-echo "Press [Enter] to continue..."
-read enter
 

@@ -105,6 +105,14 @@ public abstract class AbstractMOGLiTest {
 	}
 	
 
+	protected void giveSystemTimeToExecute(final int millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
 	protected void giveSystemTimeToExecute() {
 		try {
 			Thread.sleep(100);
@@ -307,6 +315,7 @@ public abstract class AbstractMOGLiTest {
 
 	public void assertFileDoesNotContainEntry(final File f, final String entry) {
 		final String actualFileContent = TestUtil.getFileContent(f);
+		System.err.println(actualFileContent);
 		final boolean entryFound = actualFileContent.contains(entry);
 		assertFalse("Expected Entry was found in file: " + entry
 				+ "\nFile: " + f.getAbsolutePath(), entryFound);
@@ -385,6 +394,11 @@ public abstract class AbstractMOGLiTest {
 			final List<String> expectedFileContent = cutTrailingEmptyLines(FileUtil.getFileContentAsList(expectedFile));
 			final List<String> actualFileContent = cutTrailingEmptyLines(FileUtil.getFileContentAsList(actualFile));
 			logoutFileContents(expectedFileContent, actualFileContent);
+			if (expectedFileContent.size() != actualFileContent.size())
+			{
+				sysOutFileContentWithoutLineNumbers(actualFileContent);
+
+			}
 			assertEquals("Number lines in file", expectedFileContent.size(), actualFileContent.size());
 
 			final List<Integer> errorLines = new ArrayList<Integer>();
@@ -407,15 +421,7 @@ public abstract class AbstractMOGLiTest {
 				System.err.println("");
 				System.err.println("######################################################################");
 
-				System.err.println("");
-				System.err.println("For copy purpose:");
-				
-				System.err.println("######################################################################");
-				for (int i = 0; i < actualFileContent.size(); i++)
-				{
-					System.err.println(actualFileContent.get(i));
-				}
-				System.err.println("######################################################################");
+				sysOutFileContentWithoutLineNumbers(actualFileContent);
 				
 				if (errorLines.size() > 1) {
 					fail("There are " + errorLines.size() + " different lines!");	
@@ -423,10 +429,24 @@ public abstract class AbstractMOGLiTest {
 					assertEquals("Unexpected line", expectedFileContent.get(errorLines.get(0)), actualFileContent.get(errorLines.get(0)));
 				}
 			}
+			
+			
 
 		} catch (Exception e) {
 			throw new RuntimeException("Error comparing files", e);
 		}
+	}
+	private void sysOutFileContentWithoutLineNumbers(final List<String> actualFileContent)
+	{
+		System.out.println("");
+		System.out.println("For copy purpose:");
+		
+		System.out.println("######################################################################");
+		for (int i = 0; i < actualFileContent.size(); i++)
+		{
+			System.out.println(actualFileContent.get(i));
+		}
+		System.out.println("######################################################################");
 	}
 
 	private void logoutFileContents(final List<String> expectedFileContent, final List<String> actualFileContent) {
@@ -435,10 +455,9 @@ public abstract class AbstractMOGLiTest {
 		for (int i = 0; i < expectedFileContent.size(); i++) {
 			System.out.println((i+1) + ". " + expectedFileContent.get(i));
 		}
-		System.out.println("######################################################################");
-		System.out.println("actualFileContent:");
+		System.err.println("actualFileContent:");
 		for (int i = 0; i < actualFileContent.size(); i++) {
-			System.out.println((i+1) + ". " + actualFileContent.get(i));
+			System.err.println((i+1) + ". " + actualFileContent.get(i));
 		}
 		System.out.println("######################################################################");
 	}

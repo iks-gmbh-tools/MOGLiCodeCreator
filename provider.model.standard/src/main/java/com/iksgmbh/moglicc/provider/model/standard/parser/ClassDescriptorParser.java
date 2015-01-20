@@ -1,12 +1,12 @@
 package com.iksgmbh.moglicc.provider.model.standard.parser;
 
-import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
-import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpClassDescriptor;
 import com.iksgmbh.data.Annotation;
 import com.iksgmbh.data.ClassNameData;
 import com.iksgmbh.helper.AnnotationParser;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
+import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
+import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpClassDescriptor;
 
 public class ClassDescriptorParser extends AnnotationParser {
 	

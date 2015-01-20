@@ -10,6 +10,30 @@ import org.junit.Test;
 public class StringUtilUnitTest {
 
 	@Test
+	public void removesLineFromList() {
+		final String sep = FileUtil.getSystemLineSeparator();
+		final String s = "# comment 1" + sep + "plugin1, plugin2" + sep + "# comment 2" + sep + "plugin 3" + sep + "#comment 3";
+		final List<String> lines = StringUtil.getLinesFromText(s);
+		final List<String> result = StringUtil.removeLineFromList(lines, "comment");
+		final String actual = StringUtil.concat(result, ", ");
+		final String expected = "plugin1, plugin2, plugin 3";
+		assertEquals("Comment line removed incorrectly", expected, actual);
+		assertEquals("Line Number", lines.size()-3, result.size());
+	}
+	
+	@Test
+	public void replacesLineInList() {
+		final String sep = FileUtil.getSystemLineSeparator();
+		final String s = "# comment 1" + sep + "plugin1, plugin2" + sep + "# comment 2" + sep + "plugin 3" + sep + "#comment 3";
+		final List<String> lines = StringUtil.getLinesFromText(s);
+		final List<String> result = StringUtil.replaceLineInList(lines, "plugin 3", "replaced");
+		final String actual = StringUtil.concat(result, ", ");
+		final String expected = "# comment 1, plugin1, plugin2, # comment 2, replaced, #comment 3";
+		assertEquals("Comment line removed incorrectly", expected, actual);
+		assertEquals("Line Number", lines.size(), result.size());
+	}	
+
+	@Test
 	public void testExtractCommaSeparatedPluginList() {
 		final String sep = FileUtil.getSystemLineSeparator();
 		final String s = "# comment 1" + sep + "plugin1, plugin2" + sep + sep + "# comment 2" + sep + "plugin 3" + sep + "#comment 3";
@@ -134,4 +158,19 @@ public class StringUtilUnitTest {
 		assertEquals("result ", -1, result2 );
 	}
 
+	@Test
+	public void buildsStringListFromCommaSeparatedString() {
+		// prepare test
+		final String s = "Can you see, you and me, are free.";
+		
+		// call functionality under test
+		final List<String> result = StringUtil.commaSeparatedStringToStringList(s);
+		
+		// verify test result
+		assertEquals("result size", 3, result.size() );
+		assertEquals("result ", "Can you see", result.get(0) );
+		assertEquals("result ", "you and me", result.get(1) );
+		assertEquals("result ", "are free.", result.get(2) );
+	}
+		
 }
