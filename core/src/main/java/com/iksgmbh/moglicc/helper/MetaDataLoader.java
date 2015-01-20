@@ -1,11 +1,7 @@
 package com.iksgmbh.moglicc.helper;
 
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB_PLUGIN;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_INFO;
 import static com.iksgmbh.moglicc.MOGLiTextConstants.*;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_MANIFEST_FOUND;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_NO_STARTERCLASS_IN_PROPERTY_FILE;
-import static com.iksgmbh.moglicc.MOGLiTextConstants.TEXT_STARTERCLASS_MANIFEST_PROPERTIES;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -127,13 +123,12 @@ public class MetaDataLoader {
 				final String basicJarName = removeVersionFromFilename(jarName);
 				final String activationProperty = workspaceProperties.getProperty(basicJarName);
 
-				if (activationProperty == null) {
-					// no setting in workspace properties, thus deactivate plugin by default
-					pluginMetaData.setInfoMessage(TEXT_DEACTIVATED_PLUGIN_INFO);					
-				}
-				else if (! activationProperty.toUpperCase().equals(TEXT_ACTIVATED_PLUGIN_PROPERTY)) {
-					// plugin deactivated by user setting
+				if (activationProperty == null 
+					|| 
+					! activationProperty.toUpperCase().equals(TEXT_ACTIVATED_PLUGIN_PROPERTY)) 
+				{
 					pluginMetaData.setInfoMessage(TEXT_DEACTIVATED_PLUGIN_INFO);
+					pluginMetaData.setId(getIdFromJarName(pluginMetaData.getJarName()));
 				} else {
 					// plugin is activated, thus do nothing here
 				}
@@ -142,6 +137,25 @@ public class MetaDataLoader {
 				// no need to consider
 			}
 		}
+	}
+
+	private String getIdFromJarName(final String jarName)
+	{
+		int pos = jarName.indexOf('-');
+		
+		if (pos > 1)
+		{
+			return jarName.substring(0, pos);
+		}
+
+		pos = jarName.indexOf('.');
+
+		if (pos > 1)
+		{
+			return jarName.substring(0, pos);
+		}
+		
+		return jarName;
 	}
 
 	private String removeVersionFromFilename(final String jarName) {

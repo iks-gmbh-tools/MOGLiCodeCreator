@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoDummy;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationData;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationData;
 
 public class DataHelper {
 

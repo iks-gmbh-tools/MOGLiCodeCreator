@@ -1,0 +1,6 @@
+Boni2BignetData
+[misc={}, anfrageDatum=2014-07-07T12:00:00.000+02:00, businessStatusCode=null
+ratingData=Bewertungsdaten [ratingCode=null, creditRiskCode=006, paymentBehaviourCode=010, ratingNonAvailabilityReasonCode=CON, creditLimitOfPartnerInEuro=10000]
+historiendaten=Historiendaten [foundationDate=UnscharfesDatum [unschaerfeGrad=SCHARF, sortierdatum=Sat Jan 01 00:00:00 CET 2000, stringRepresentation=2000-05-05], firstRegistrationDate=UnscharfesDatum [unschaerfeGrad=SCHARF, sortierdatum=Sat Jan 01 00:00:00 CET 2000, stringRepresentation=2000-08-08]]
+kapitalAngabenFuerKapitalPruefung=Kapitalangaben [eigenkapital=13403.93, eingezahltesKapital=13403.93, kurzfristigeVerbindlichkeiten=13403.93, rechnungsabgrenzungPassiva=13403.93, umlaufvermoegen=13403.93]
+kapitalAngabenFuerHoechstkreditBerechnung=Kapitalangaben [eigenkapital=13403.93, eingezahltesKapital=2924017.16, kurzfristigeVerbindlichkeiten=13403.93, rechnungsabgrenzungPassiva=13403.93, umlaufvermoegen=13403.93, gezeichnetesKapital=null, jahresumsatz=107231.42]]

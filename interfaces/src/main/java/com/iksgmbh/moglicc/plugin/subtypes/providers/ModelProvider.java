@@ -10,10 +10,26 @@ import com.iksgmbh.moglicc.provider.model.standard.Model;
  * @author Reik Oberrath
  * @since 1.0.0
  */
-public interface ModelProvider extends ProviderPlugin {
-
+public interface ModelProvider extends ProviderPlugin 
+{
 	String getModelFileName();
+	
 	String getModelName();
+	
+	/**
+	 * @param pluginId of the calling plugin
+	 * @return model
+	 * @throws MOGLiPluginException
+	 */
 	Model getModel(String pluginId) throws MOGLiPluginException;
+	
+	/**
+	 * @param pluginId of the calling plugin
+	 * @param inputData data needed to build the model (if neccesarry)
+	 *        The specific type needs only to be known by the caller and the implementation of this method. 
+	 * @return model
+	 * @throws MOGLiPluginException
+	 */
+	Model getModel(String pluginId, Object inputData) throws MOGLiPluginException;
 
 }

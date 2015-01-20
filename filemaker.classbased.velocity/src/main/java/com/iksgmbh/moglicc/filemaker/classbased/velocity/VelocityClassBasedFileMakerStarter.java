@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.filemaker.classbased.velocity;
 
-import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.*;
+import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.REPORT_TAB;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,9 +26,9 @@ import com.iksgmbh.moglicc.plugin.subtypes.providers.ClassBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.ImmutableUtil;
@@ -44,10 +44,13 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 
 	public static final String ARTEFACT_COMMON = "commonSubtemplates";
 	public static final String ARTEFACT_JAVABEAN = "MOGLiJavaBean";
-	public static final String ARTEFACT_JAVABEAN_TEST = "MOGLiJavaBeanTest";
+	public static final String ARTEFACT_JAVABEAN_TEST = "MOGLiJavaBean_Test";
 	public static final String ARTEFACT_JAVABEAN_BUILDER = "MOGLiJavaBeanBuilder";
+	public static final String ARTEFACT_JAVABEAN_BUILDER_TEST = "MOGLiJavaBeanBuilder_Test";
 	public static final String ARTEFACT_JAVABEAN_VALIDATOR = "MOGLiJavaBeanValidator";
-	public static final String ARTEFACT_JAVABEAN_VALIDATOR_TEST = "MOGLiJavaBeanValidatorTest";
+	public static final String ARTEFACT_JAVABEAN_VALIDATOR_TEST = "MOGLiJavaBeanValidator_Test";
+	public static final String ARTEFACT_JAVABEAN_FACTORY = "MOGLiJavaBeanFactory";	
+	public static final String ARTEFACT_JAVABEAN_FACTORY_TEST = "MOGLiJavaBeanFactory_Test";
 	public static final String ARTEFACT_MOGLICC_NEW_PLUGIN = "MOGLiCC_NewPluginModel";
 
 	private static final String LOGFILE_LINE_SEPARATOR = "-----";
@@ -69,19 +72,40 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 	final static String[] javabeanBuilderTemplates = {"A_MainTemplate.tpl", "C_withMethods.tpl",
 		                                              "D_cloneWithMethods.tpl", "E_cloneDataObjectMethod.tpl"};
 
+	final static String[] javabeanBuilderTestTemplates = {"A_MainTemplate.tpl", "C_buildEmptyInstanceMethod.tpl", "D_buildExampleInstanceMethod.tpl"};
+
 	final static String[] javabeanValidatorTemplates = {"A_MainTemplate.tpl", "C_Constructor.tpl",
                                                         "D_validateMethod.tpl"};
 
 	final static String[] javabeanValidatorTestTemplates = {"A_MainTemplate.tpl", "C_setupMethod.tpl",
 		                                                    "D_mandatoryTestMethods.tpl", "E_minLengthTestMethods.tpl",
-		                                                    "F_maxLengthTestMethods.tpl"};
+		                                                    "F_maxLengthTestMethods.tpl", "G_multipleErrorMessageTestMethod.tpl",
+		                                                    "H_multipleErrorMessageForNotReachingMinLength.tpl",
+		                                                    "I_multipleErrorMessageForExceedingMaxLength.tpl",
+		                                                    "K_InvalidCharTestMethods.tpl"};
 
-	final static String[] javabeanCommonSubtempates = {"B_ImportStatements.tpl"};
+	final static String[] javabeanCommonSubtempates = {"importDomainModelClasses.tpl", "isJavaTypeDomainObject.tpl", 
+		                                               "isFieldLengthRelevantForJavaType.tpl", "setContentLargerThanMaxLengthToField.tpl", 
+		                                               "setContentSmallerThanMinLengthToField.tpl"};
 
+	final static String[] javabeanFactoryTestTempates = {"A_MainTemplate.tpl", "B_buildReturnsFirstMethod.tpl", "C_buildReturnsAllMethod.tpl", 
+		                                                 "D_buildReturnsInstanceWithAllFieldsAtMaxLength.tpl",
+		                                                 "E_buildReturnsInstanceWithAllFieldsAtMinLength.tpl",
+													     "G_buildReturnsInstanceWithAllSupportedFieldsExceedingMaxLength.tpl",
+													     "H_buildReturnsInstanceWithAllSupportedFieldsNotReachingMinLength.tpl"};
+	
+	final static String[] javabeanFactoryTempates = {"A_MainTemplate.tpl", "B1_createInstanceWithAllFieldsAtMaxLength.tpl", 
+		                                             "B2_createInstanceWithAllFieldsAtMinLength.tpl",
+		                                             "C_buildObjectMethod.tpl", "D_buildDataPool.tpl",
+		                                             "E_buildCutFieldContentMethod.tpl", "F_buildAddToFieldContentMethod.tpl",
+		                                             "G_buildCreateInstanceWithAllSupportedFieldsExceedingMaxLength.tpl",
+		                                             "H_buildCreateInstanceWithAllSupportedFieldsNotReachingMinLength.tpl"};
+	
 	final static String[] MOGLiCCNewPluginSubtempates = {"A_MainTemplate.tpl", "B_ClassDefinitionLine.tpl", "C_generatorVariables.tpl",
 		                                                 "D_unpackDefaultInputData.tpl", "E_getMetaInfoValidatorList.tpl",
 		                                                 "F_unpackPluginHelpFiles.tpl", "G_getModel.tpl",
 		                                                 "H_engineMethods.tpl", "I_generatorMethods.tpl"};
+
 
 	private InfrastructureService infrastructure;
 	private IOEncodingHelper encodingHelper;
@@ -382,10 +406,13 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 		defaultData.addFlatFolder(ARTEFACT_JAVABEAN, javabeanTemplates);
 		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_TEST, javabeanTestTemplates);
 		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_BUILDER, javabeanBuilderTemplates);
+		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_BUILDER_TEST, javabeanBuilderTestTemplates);
 		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_VALIDATOR, javabeanValidatorTemplates);
 		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_VALIDATOR_TEST, javabeanValidatorTestTemplates);
+		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_FACTORY, javabeanFactoryTempates);
+		defaultData.addFlatFolder(ARTEFACT_JAVABEAN_FACTORY_TEST, javabeanFactoryTestTempates);		
 		defaultData.addFlatFolder(ARTEFACT_MOGLICC_NEW_PLUGIN, MOGLiCCNewPluginSubtempates);
-
+		
 		defaultData.addRootFile(PLUGIN_PROPERTIES_FILE);
 		defaultData.addRootFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
 
@@ -466,7 +493,7 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 		final String standardReport = GeneratorReportUtil.getShortReport(standardReportData);
 
 		if (! StringUtils.isEmpty(standardReport)) {
-			return standardReport;
+			return standardReport.trim();
 		}	
 
 		return "From " + standardReportData.numberOfAllInputArtefacts + " input artefact(s), have been " 

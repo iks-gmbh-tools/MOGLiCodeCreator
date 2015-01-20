@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLevel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoDummy;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationData;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationData;
 
 
 public class NumOccurMetaInfoValidatorUnitTest  {

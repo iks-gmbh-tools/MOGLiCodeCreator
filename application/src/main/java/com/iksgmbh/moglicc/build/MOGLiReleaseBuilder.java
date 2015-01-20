@@ -52,7 +52,8 @@ public class MOGLiReleaseBuilder {
 	public static final List<String> CORE_MODULES = ImmutableUtil.getImmutableListOf(
 			                          "global", "common", "core", "interfaces");  // basic mandatory modules for release
 	public static final List<String> PLUGIN_MODULES = ImmutableUtil.getImmutableListOf(
-			                          "provider.model.standard", "provider.engine.velocity",
+			                          "provider.model.standard", "provider.model.standard.excel",
+			                          "provider.engine.velocity",
 			                          "lineinserter.modelbased.velocity",
 			                          "filemaker.classbased.velocity",
 			                          "treebuilder.modelbased.velocity");  // optional modules, but relevant for release
@@ -61,6 +62,11 @@ public class MOGLiReleaseBuilder {
 			                          "inttest");  // only necassary for the development infrastructure
 	public static final List<String> THIRD_PARTY_LIBRARIES = ImmutableUtil.getImmutableListOf(
             "org/apache/velocity/velocity/1.7/velocity-1.7.jar",
+            "org/apache/poi/poi/3.10-FINAL/poi-3.10-FINAL.jar",
+            "org/apache/poi/poi-ooxml/3.10-FINAL/poi-ooxml-3.10-FINAL.jar",
+            "org/apache/poi/poi-ooxml-schemas/3.10-FINAL/poi-ooxml-schemas-3.10-FINAL.jar",
+            "org/apache/xmlbeans/xmlbeans/2.4.0/xmlbeans-2.4.0.jar",
+            "dom4j/dom4j/1.6.1-osgi/dom4j-1.6.1-osgi.jar",
             "commons-lang/commons-lang/2.4/commons-lang-2.4.jar",
             "commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar");  //mandatory for release
 

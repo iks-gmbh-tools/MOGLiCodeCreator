@@ -1,0 +1,1 @@
+Boni2Parameter [bix=149, boniKlasse=1, krediturteil=11, zahlungsweise=29, hoechstkrediturteil=19, hoechstkreditvorschlag=250000]

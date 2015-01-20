@@ -7,12 +7,12 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.iksgmbh.helper.AnnotationParser;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants;
 import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpMetaInfo;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpMetaInfo;
 import com.iksgmbh.moglicc.test.StandardModelProviderTestParent;
-import com.iksgmbh.helper.AnnotationParser;
 
 public class MetaInfoParserUnitTest extends StandardModelProviderTestParent {
 

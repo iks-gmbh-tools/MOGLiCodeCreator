@@ -307,6 +307,10 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	@Override
 	public String getProviderReport()
 	{
+		if (callCountsModelBased == 0)
+		{
+			return "not used for code generation";
+		}
 		return callCountsModelBased + " times called for model based generation: "
 			   + FileUtil.getSystemLineSeparator()
 			   + modelBasedReportEntries.toString().trim()
