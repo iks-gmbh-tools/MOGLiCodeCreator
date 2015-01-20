@@ -1,20 +1,23 @@
 ***************************   P R O V I D E R   R E P O R T   ********************************
 
-1 from 2 provider plugins ecexuted successfully.
+2 from 3 provider plugins ecexuted successfully.
 
 ----------------------------------------------------------------------------------------------
 
-Report for StandardModelProvider:
+Report for ExcelStandardModelProvider:
 
-Error parsing model file: MOGLiCC_JavaBeanModel.txt
-
-----------------------------------------------------------------------------------------------
-
-Report for VelocityEngineProvider:
-
-0 times called for model based generation: 
-
-
-0 times called for class based generation:
-
-**************************************  E N D  ***********************************************
+not used for code generation
+ 
+ ----------------------------------------------------------------------------------------------
+ 
+ Report for StandardModelProvider:
+ 
+ Error parsing model file: MOGLiCC_JavaBeanModel.txt
+ 
+ ----------------------------------------------------------------------------------------------
+ 
+ Report for VelocityEngineProvider:
+ 
+ not used for code generation
+ 
+ **************************************  E N D  ***********************************************

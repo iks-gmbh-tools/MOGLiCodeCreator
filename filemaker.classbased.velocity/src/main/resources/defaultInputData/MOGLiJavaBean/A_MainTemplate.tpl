@@ -5,7 +5,7 @@
 
 package ${classDescriptor.package};
 '
-#parse("commonSubtemplates/B_ImportStatements.tpl")
+#parse("commonSubtemplates/importDomainModelClasses.tpl")
 '
 /**
  * JavaBean class of the MOGLiCC JavaBean Group

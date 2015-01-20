@@ -10,7 +10,7 @@ import java.util.Set;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpModel;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpModel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoCounter;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
@@ -78,18 +78,11 @@ public class StatisticsFileCreator {
 
 	private void appendWarningForUnusedMetaInfos(final StringBuffer sb) throws MOGLiPluginException {
 		final String sep = FileUtil.getSystemLineSeparator();
-		final List<MetaInfo> allMetaInfos = model.getAllMetaInfos();
-		final List<String> uniqueUnusedMetaInfoMessages = new ArrayList<String>();
-		for (final MetaInfo metaInfo : allMetaInfos) {
-			if (metaInfo.getPluginList().size() == 0) {
-				uniqueUnusedMetaInfoMessages.add("'" + metaInfo.getName() + "' in " 
-						+ metaInfo.getHierarchyLevel().name() + "Level");
-			}
-		}
+		final List<String> uniqueUnusedMetaInfoMessages = getUniqueUnusedMetaInfoMessages();
 		if (uniqueUnusedMetaInfoMessages.size() > 0) {
 			sb.append(sep).append(sep).append("WARNING:").append(sep);
-			sb.append("Following MetaInfos defined in '" + modelProvider.getModelFile().getName() 
-					   + "' are unused:");
+			sb.append("For following MetaInfos defined in '" + modelProvider.getModelFile().getName() 
+					   + "' no validation rule exists:"); 
 			sb.append(sep);
 			int counter = 0;
 			for (final String entry : uniqueUnusedMetaInfoMessages) {
@@ -98,6 +91,19 @@ public class StatisticsFileCreator {
 				if (counter < uniqueUnusedMetaInfoMessages.size()) sb.append(sep);
 			}
 		}
+	}
+
+	private List<String> getUniqueUnusedMetaInfoMessages()
+	{
+		final List<MetaInfo> allMetaInfos = model.getAllMetaInfos();
+		final List<String> uniqueUnusedMetaInfoMessages = new ArrayList<String>();
+		for (final MetaInfo metaInfo : allMetaInfos) {
+			if (metaInfo.getPluginList().size() == 0) {
+				uniqueUnusedMetaInfoMessages.add("'" + metaInfo.getName() + "' in " 
+						+ metaInfo.getHierarchyLevel().name() + "Level");
+			}
+		}
+		return uniqueUnusedMetaInfoMessages;
 	}
 
 	private void appendPluginInformation(final StringBuffer sb) {

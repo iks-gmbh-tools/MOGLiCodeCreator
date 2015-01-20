@@ -1,8 +1,8 @@
 package com.iksgmbh.moglicc.demo.validator.types;
 
-import com.iksgmbh.moglicc.demo.validator.FieldValidationResult;
-import com.iksgmbh.moglicc.demo.validator.FieldValidationResult.Status;
-import com.iksgmbh.moglicc.demo.validator.FieldValidator;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult.Status;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidator;
 
 public class MaxLengthValidator extends FieldValidator {
 	
@@ -30,7 +30,7 @@ public class MaxLengthValidator extends FieldValidator {
 			if (actualLength > maxLength) {
 				return new FieldValidationResult(Status.ERROR, this.getClass().getSimpleName() + ": " + 
 						                                       "Max Length for field '" + 
-			                                                   fieldName + "' (" + maxLength + ") exceeded: " + actualLength);
+			                                                   fieldName + "' (" + maxLength + ") is exceeded by current value '" + value + "'.");
 			}
 		} else {
 			return new FieldValidationResult(Status.ERROR, this.getClass().getSimpleName() + ": " +  

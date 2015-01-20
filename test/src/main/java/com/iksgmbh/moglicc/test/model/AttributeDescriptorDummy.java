@@ -65,4 +65,16 @@ public class AttributeDescriptorDummy implements AttributeDescriptor {
 		return false;
 	}
 
+	@Override
+	public List<MetaInfo> getMetaInfosWithNameStartingWith(String prefix)
+	{
+		return null;
+	}
+
+	@Override
+	public boolean isValueNotAvailable(String metaInfoValue)
+	{
+		return false;
+	}
+
 }

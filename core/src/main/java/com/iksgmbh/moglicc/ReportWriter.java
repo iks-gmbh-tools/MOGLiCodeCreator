@@ -1,6 +1,7 @@
 package com.iksgmbh.moglicc;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.iksgmbh.moglicc.plugin.subtypes.ProviderPlugin;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.StringUtil;
 
 /**
  * Helper to create generatorReportFile, providerReportFile and MOGLiCC-resultFile.
@@ -26,6 +28,7 @@ public class ReportWriter
 	
 	private List<MOGLiPlugin> plugins;
 	private List<PluginMetaData> pluginMetaDataList;
+	private List<String> idsOfDeactivatedPlugins;
 	private String shortReportHeader;
 	private String workspace;
 	private Status status;
@@ -37,7 +40,22 @@ public class ReportWriter
 		this.plugins = plugins;
 		this.pluginMetaDataList = pluginMetaDataList;
 		this.workspace = workspace;
+		
+		findDeactivatedPlugins();
 		this.shortReportHeader = buildShortReportHeader();
+	}
+	
+	private void findDeactivatedPlugins()
+	{
+		idsOfDeactivatedPlugins = new ArrayList<String>();
+		
+		for (final PluginMetaData pluginMetaData : pluginMetaDataList) 
+		{
+			if ( MOGLiTextConstants.TEXT_DEACTIVATED_PLUGIN_INFO.equals(pluginMetaData.getInfoMessage()) )
+			{
+				idsOfDeactivatedPlugins.add(pluginMetaData.getId());
+			}
+		}
 	}
 	
 	public String getShortReportHeader()
@@ -238,17 +256,21 @@ public class ReportWriter
 	{
 		final int numberOfSuccessfullyExecutedPlugins = countNumberOfAllSuccessfullyExecutedPlugins();
 		final int numberOfNotExecutedPlugins = countNumberOfNotExecutedPlugins();
+		final int numberOfDeactivatedPlugins = idsOfDeactivatedPlugins.size();
 		final StringBuffer toReturn = new StringBuffer("");
 		
-		toReturn.append("Workspace used: " + workspace);
+		toReturn.append("Workspace: " + workspace);
 		toReturn.append(FileUtil.getSystemLineSeparator());
-		toReturn.append("Model read from file: " + getModelFileName());
+		toReturn.append("Model file: " + getModelFileName());
 		toReturn.append(FileUtil.getSystemLineSeparator());
 		toReturn.append(FileUtil.getSystemLineSeparator());
 
-		if (numberOfNotExecutedPlugins == 0) {
-			toReturn.append("All " + numberOfSuccessfullyExecutedPlugins + " plugins executed successfully.");
+		if ( numberOfNotExecutedPlugins == 0) {
+			toReturn.append("Execution of all " + numberOfSuccessfullyExecutedPlugins + " plugins successful.");
 			status = Status.OK;
+		} else if ( (numberOfNotExecutedPlugins - numberOfDeactivatedPlugins) == 0) {
+				toReturn.append("Execution of all " + numberOfSuccessfullyExecutedPlugins + " activated plugins successful.");
+				status = Status.OK;
 		} else {
 			toReturn.append(numberOfSuccessfullyExecutedPlugins + " plugin(s) executed successfully.");
 			toReturn.append(FileUtil.getSystemLineSeparator());
@@ -256,6 +278,11 @@ public class ReportWriter
 			status = Status.ERROR;
 		}
 
+		if (numberOfDeactivatedPlugins > 0)
+		{
+			toReturn.append(FileUtil.getSystemLineSeparator());
+			toReturn.append("WARNING: The following plugin(s) are deactivated in the workspace properties: " + StringUtil.concat(idsOfDeactivatedPlugins));
+		}
 		toReturn.append(FileUtil.getSystemLineSeparator());
 		toReturn.append("A total of " + countTotalNumberOfGenerations() + " generation events for "
 		                  + countTotalNumberOfGeneratedArtefacts() + " output artefact(s) have been performed.");
@@ -307,6 +334,7 @@ public class ReportWriter
 		}
 		return counter;
 	}
+		
 
 	private int countTotalNumberOfGenerations() {
 		int counter = 0;
@@ -349,8 +377,13 @@ public class ReportWriter
 		String toReturn = "  ";
 		if (plugins != null && plugins.size() > 0) {
 			final List<ModelProvider> modelProviders = plugins.get(0).getInfrastructure().getPluginsOfType(ModelProvider.class);
-			for (final ModelProvider modelProvider : modelProviders) {
-				toReturn += modelProvider.getModelFileName() + ", ";  // in case their are more than one modelProviders
+			for (final ModelProvider modelProvider : modelProviders) 
+			{
+				final String modelFileName = modelProvider.getModelFileName();
+				if (! StringUtils.isEmpty(modelFileName))
+				{
+					toReturn += modelFileName + ", ";  // in case their are more than one modelProviders
+				}
 			}
 			toReturn = toReturn.substring(0, toReturn.length() - 2);
 		}
@@ -380,6 +413,11 @@ public class ReportWriter
 				return p1.getId().compareTo(p2.getId());
 			}
 		});
+	}
+
+	List<String> getIdsOfDeactivatedPlugins()
+	{
+		return idsOfDeactivatedPlugins;
 	}
 
 }

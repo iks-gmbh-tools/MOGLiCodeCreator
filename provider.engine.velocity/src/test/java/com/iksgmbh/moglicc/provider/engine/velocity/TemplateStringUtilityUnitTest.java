@@ -39,4 +39,21 @@ public class TemplateStringUtilityUnitTest extends VelocityEngineProviderTestPar
 		assertEquals("replacedString", "com/iksgmbh/moglicc/provider/engine/velocity", replacedString);
 	}
 
+	@Test
+	public void returnsCommaSeparatedStringToStringArray() 
+	{
+		// prepare test
+		final String s = "a a, b b, c c";
+		
+		// call functionality under test
+		final String[] result = TemplateStringUtility.commaSeparatedStringToStringArray(s);
+
+		// verify test result
+		assertEquals("result length", 3, result.length);
+		assertEquals("result[0]", "a a", result[0]);
+		assertEquals("result[1]", "b b", result[1]);
+		assertEquals("result[2]", "c c", result[2]);
+	}
+
+	
 }

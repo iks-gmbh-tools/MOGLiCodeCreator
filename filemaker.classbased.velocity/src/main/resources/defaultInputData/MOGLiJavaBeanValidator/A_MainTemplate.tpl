@@ -3,20 +3,17 @@
 @CreateNew true # creates target dir if not existing and overwrites target file if existing
 @NameOfValidModel MOGLiCC_JavaBeanModel
 
-package ${classDescriptor.package};
+package ${classDescriptor.package}.validator;
 '
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 '
-import com.iksgmbh.moglicc.demo.validator.FieldValidationException;
-import com.iksgmbh.moglicc.demo.validator.FieldValidator;
-import com.iksgmbh.moglicc.demo.validator.JavaBeanValidator;
-import com.iksgmbh.moglicc.demo.validator.types.MandatoryFieldValidator;
-import com.iksgmbh.moglicc.demo.validator.types.MaxLengthValidator;
-import com.iksgmbh.moglicc.demo.validator.types.MinLengthValidator;
+import ${classDescriptor.package}.${classDescriptor.simpleName};
+import ${classDescriptor.package}.validator.helper.*;
+import ${classDescriptor.package}.validator.types.*;
 '
-#parse("commonSubtemplates/B_ImportStatements.tpl")
+#parse("commonSubtemplates/importDomainModelClasses.tpl")
 '
 /**
  * Validator class of the MOGLiCC JavaBean Group for JavaBean '${classDescriptor.simpleName}.java'

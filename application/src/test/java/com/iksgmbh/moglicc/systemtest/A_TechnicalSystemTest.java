@@ -145,7 +145,7 @@ public class A_TechnicalSystemTest extends __AbstractSystemTest {
 		final File workspaceInputDir = new File(workspaceDir, MOGLiSystemConstants.DIR_INPUT_FILES);
 		assertChildrenNumberInDirectory(workspaceInputDir, getNumberOfPlugins() - 1); // -1 due to EngineProvider having no input dir
 		final File workspaceOutputDir = new File(workspaceDir, MOGLiSystemConstants.DIR_OUTPUT_FILES);
-		assertChildrenNumberInDirectory(workspaceOutputDir, getNumberOfPlugins() - 1); // -1 due to EngineProvider having no output dir
+		assertChildrenNumberInDirectory(workspaceOutputDir, getNumberOfPlugins() - 2); // -1 due to EngineProvider and ExcelStandardModelProvider having no output dir
 
 		// cleanup
 		FileUtil.deleteDirWithContent(workspaceDir.getParentFile());
@@ -190,8 +190,9 @@ public class A_TechnicalSystemTest extends __AbstractSystemTest {
 		executeMogliApplication();
 
 		// cleanup critical stuff before possible test failures
-		assertFileContainsEntry(applicationLogfile, "All " + getNumberOfJarFilesToExpectPluginsDir()
-				                                   + " plugins executed successfully");
+		
+		assertFileContainsEntry(applicationLogfile, "Execution of all " + getNumberOfJarFilesToExpectPluginsDir()
+				                                   + " plugins successful.");
 	}
 
 	@Test

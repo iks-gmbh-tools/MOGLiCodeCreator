@@ -1,8 +1,8 @@
 package com.iksgmbh.moglicc.demo.validator.types;
 
-import com.iksgmbh.moglicc.demo.validator.FieldValidationResult;
-import com.iksgmbh.moglicc.demo.validator.FieldValidationResult.Status;
-import com.iksgmbh.moglicc.demo.validator.FieldValidator;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult.Status;
+import com.iksgmbh.moglicc.demo.validator.helper.FieldValidator;
 
 public class MandatoryFieldValidator extends FieldValidator {
 

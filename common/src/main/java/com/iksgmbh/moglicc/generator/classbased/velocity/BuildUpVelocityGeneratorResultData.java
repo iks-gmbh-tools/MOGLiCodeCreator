@@ -93,7 +93,6 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		}
 	}
 
-	
 	private void checkForMissingMetaInfos() {
 		final List<String> allPropertiesValues = getAllPropertiesValues();
 		for (final String value : allPropertiesValues) {

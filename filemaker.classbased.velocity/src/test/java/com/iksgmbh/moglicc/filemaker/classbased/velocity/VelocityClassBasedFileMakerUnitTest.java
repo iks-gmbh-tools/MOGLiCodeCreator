@@ -18,8 +18,8 @@ import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResult
 import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
@@ -38,10 +38,7 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 		super.setup();
 		
 		applicationTempDir.mkdirs();
-		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(),
-		            VelocityClassBasedFileMakerStarter.PLUGIN_PROPERTIES_FILE);
-		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
-		
+		generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), VelocityClassBasedFileMakerStarter.PLUGIN_PROPERTIES_FILE);
 		giveSystemTimeToExecute();
 	}
 
@@ -49,6 +46,7 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	public void findsArtefactList() throws MOGLiPluginException 
 	{
 		// prepare test		
+		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, "");
 		giveSystemTimeToExecute();
 
 		// call functionality under test
@@ -61,7 +59,7 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 			sb.append(System.getProperty("line.separator"));
 			System.out.println(artefactName);
 		}
-		assertEquals("Unexpected artefact list: " + sb.toString(), 7, artefactList.size());
+		assertEquals("Unexpected artefact list: " + sb.toString(), 10, artefactList.size());
 	}
 
 	@Test
@@ -131,7 +129,10 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	}
 
 	private VelocityFileMakerResultData buildVelocityGeneratorResultData(final String targetFileName,
-			final String targetdir, final String content, final boolean createNew) {
+																		 final String targetdir, 
+																		 final String content, 
+																		 final boolean createNew) 
+	{
 		final BuildUpGeneratorResultData buildUpGeneratorResultData = new BuildUpGeneratorResultData();
 		buildUpGeneratorResultData.setGeneratedContent(content);
 		final VelocityFileMakerResultData toReturn =
@@ -359,7 +360,7 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 		final File subdir = new File(infrastructure.getPluginInputDir(), ".svn");
 		subdir.mkdirs();
 		assertFileExists(subdir);
-		MOGLiFileUtil.createNewFileWithContent(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE);
+		MOGLiFileUtil.appendToFile(generatorPropertiesFile, ".svn=" + ArtefactListUtil.IGNORE );
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example",
 				"package com.iksgmbh.test", true);
