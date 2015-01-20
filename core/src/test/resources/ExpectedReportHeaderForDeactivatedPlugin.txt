@@ -1,0 +1,6 @@
+Workspace: DummyWorkspace
+Model file: DummyModelFile.xyz
+
+Execution of all 1 activated plugins successful.
+WARNING: The following plugin(s) are deactivated in the workspace properties: ModelProviderDummy
+A total of 11 generation events for 2 output artefact(s) have been performed.

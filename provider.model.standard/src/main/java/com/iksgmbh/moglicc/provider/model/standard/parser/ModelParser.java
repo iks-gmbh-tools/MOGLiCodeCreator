@@ -16,11 +16,11 @@ import com.iksgmbh.data.Annotation;
 import com.iksgmbh.helper.AnnotationParser;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpAttributeDescriptor;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpClassDescriptor;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpMetaInfo;
+import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpModel;
 import com.iksgmbh.moglicc.provider.model.standard.exceptions.ModelParserException;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpAttributeDescriptor;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpClassDescriptor;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpMetaInfo;
-import com.iksgmbh.moglicc.provider.model.standard.impl.BuildUpModel;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 import com.iksgmbh.utils.StringUtil;
 

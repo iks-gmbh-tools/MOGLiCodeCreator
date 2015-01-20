@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,11 +18,12 @@ import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResult
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.lineinserter.modelbased.velocity.VelocityLineInserterResultData.KnownInserterPropertyNames;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.StringUtil;
 
 public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLineInserterTestParent {
 
@@ -706,4 +708,76 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		assertEquals("report", FileUtil.getFileContent(expected), report);
 	}
 
+	@Test
+	public void insertsBelowOnlyIfTextToInsertDoesNotExistBelowIndicatorInOldContent() throws MOGLiPluginException {
+		// prepare test
+		final String insertBelowIndicatorLine = "-";
+		final String[] oldContentArray =  {
+				"111",
+				"222",
+				"-",
+				"666",
+				"777"
+		};
+		final List<String> oldContent = Arrays.asList( oldContentArray );
+		final String contentToInsert = "444" + System.getProperty("line.separator") + "555";
+		
+		// call functionality under test
+		final String result1 = velocityModelBasedLineInserter.insertBelow(oldContent, contentToInsert, insertBelowIndicatorLine);
+		final List<String> oldContent2 = StringUtil.getLinesFromText(result1);
+		final String result2 = velocityModelBasedLineInserter.insertBelow(oldContent2, contentToInsert, insertBelowIndicatorLine);
+		
+		// verify test result
+		final String[] expectedContentArray =  {
+				"111",
+				"222",
+				insertBelowIndicatorLine,
+				"444",
+				"555",
+				"666",
+				"777"
+		};
+		final String expected = StringUtil.buildTextFromLines(Arrays.asList(expectedContentArray));
+
+		assertEquals("unexpected result", expected.trim(), result1.trim());
+		assertEquals("Line Inserter did insert twice", expected.trim(), result2.trim());
+	}
+
+	@Test
+	public void insertsAboveOnlyIfTextToInsertDoesNotExistAboveTheIndicatorInOldContent() throws MOGLiPluginException {
+		// prepare test
+		final String insertAboveIndicatorLine = "-";
+		final String[] oldContentArray =  {
+				"111",
+				"222",
+				insertAboveIndicatorLine,
+				"666",
+				"777"
+		};
+		final List<String> oldContent1 = Arrays.asList( oldContentArray );
+		final String contentToInsert = "333" + System.getProperty("line.separator") + "444";
+		
+		// call functionality under test
+		final String result1 = velocityModelBasedLineInserter.insertAbove(oldContent1, contentToInsert, insertAboveIndicatorLine);
+		System.err.println(result1);
+		final List<String> oldContent2 = StringUtil.getLinesFromText(result1);
+		System.err.println(oldContent2);
+		final String result2 = velocityModelBasedLineInserter.insertAbove(oldContent2, contentToInsert, insertAboveIndicatorLine);
+		
+		// verify test result
+		final String[] expectedContentArray =  {
+				"111",
+				"222",
+				"333",
+				"444",
+				insertAboveIndicatorLine,
+				"666",
+				"777"
+		};
+		final String expected = StringUtil.buildTextFromLines(Arrays.asList(expectedContentArray));
+
+		assertEquals("unexpected result", expected.trim(), result1.trim());
+		assertEquals("Line Inserter did insert twice", expected.trim(), result2.trim());
+	}
+	
 }

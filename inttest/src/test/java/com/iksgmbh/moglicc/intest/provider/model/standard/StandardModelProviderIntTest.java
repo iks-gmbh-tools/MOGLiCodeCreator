@@ -13,23 +13,29 @@ import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.intest.IntTestParent;
 import com.iksgmbh.moglicc.provider.model.standard.StandardModelProviderStarter;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
+import com.iksgmbh.utils.StringUtil;
 
 public class StandardModelProviderIntTest extends IntTestParent {
 
 	@Test
-	public void createsStatisticsFile() throws MOGLiPluginException {
-		// call functionality under test
+	public void createsStatisticsFile() throws Exception {
+		// prepare test
+		List<String> fileContentAsList = FileUtil.getFileContentAsList(modelFile);
+		fileContentAsList = StringUtil.replaceLineInList(fileContentAsList, "  metainfo useExtensionPlugin ExcelStandardModelProvider", "  metainfo useExtensionPlugin none");
+		FileUtil.createNewFileWithContent(modelFile, fileContentAsList);
+		
+		// call functionality under test 
 		standardModelProviderStarter.doYourJob();
 
 		// verify test result
 		final InfrastructureService infrastructure = standardModelProviderStarter.getInfrastructure();
 		final File file = new File(infrastructure.getPluginOutputDir(), StandardModelProviderStarter.FILENAME_STATISTICS_FILE);
 		assertFileExists(file);
-		final File expectedFile = getTestFile("ExpectedModelStatistics.txt");
+		final File expectedFile = getTestFile("ExpectedModelStatisticsWithoutExcelData.txt");
 		assertFileEquals(expectedFile, file);
 	}
 
@@ -98,6 +104,11 @@ public class StandardModelProviderIntTest extends IntTestParent {
 
 	@Test
 	public void validatesModelByTheDefaultMetaInfoValidators() throws Exception {
+		// prepare test
+		List<String> fileContentAsList = FileUtil.getFileContentAsList(modelFile);
+		fileContentAsList = StringUtil.replaceLineInList(fileContentAsList, "  metainfo useExtensionPlugin ExcelStandardModelProvider", "  metainfo useExtensionPlugin none");
+		FileUtil.createNewFileWithContent(modelFile, fileContentAsList);
+		
 		// call functionality under test
 		standardModelProviderStarter.doYourJob();
 
@@ -440,4 +451,29 @@ public class StandardModelProviderIntTest extends IntTestParent {
 			FileUtil.deleteDirWithContent(standardModelProviderStarter.getInfrastructure().getPluginInputDir());
 		}
 	}
+	
+	@Test
+	public void createsWarningForNoProviderInProviderExtension() throws Exception {
+		// prepare test
+		final InfrastructureService infrastructure = standardModelProviderStarter.getInfrastructure();
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "TestModel.txt");
+		FileUtil.createNewFileWithContent(testModelFile, "model TestModel" + FileUtil.getSystemLineSeparator() +
+                                                         "metainfo " + StandardModelProviderStarter.USE_EXTENSION_PLUGIN_ID + 
+                                                         " VelocityEngineProvider");
+		final File testPropertiesFile = new File(infrastructure.getPluginInputDir(),
+				                                 StandardModelProviderStarter.PLUGIN_PROPERTIES_FILE);
+		FileUtil.createNewFileWithContent(testPropertiesFile, "modelfile=TestModel.txt");
+		standardModelProviderStarter.doYourJob();
+		
+
+		// call functionality under test
+		standardModelProviderStarter.getModel("");
+
+		// verify test result
+		final String logfileContent = FileUtil.getFileContent(infrastructure.getPluginLogFile());
+		final String expected = "Warning: Model MetaInfo 'useExtensionPlugin' does not call a ModelProvider plugin <VelocityEngineProvider>!";
+		assertStringContains(logfileContent, expected);
+		assertStringContains(standardModelProviderStarter.getProviderReport(), expected);
+	}
+	
 }

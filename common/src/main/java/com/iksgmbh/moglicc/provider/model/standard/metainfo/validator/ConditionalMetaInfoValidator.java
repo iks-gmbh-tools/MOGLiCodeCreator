@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationCondition;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationData;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationCondition;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationData;
 
 /**
  * Validation result is false if the defined conditions are false.

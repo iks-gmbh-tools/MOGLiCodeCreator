@@ -1,6 +1,6 @@
 package com.iksgmbh.moglicc.treebuilder.modelbased.velocity;
 
-import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.*;
+import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.REPORT_TAB;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,9 +32,9 @@ import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
+import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.data.ArtefactProperties;
 import com.iksgmbh.moglicc.treebuilder.modelbased.velocity.data.VelocityTreeBuilderResultData;
 import com.iksgmbh.utils.FileUtil;
@@ -56,21 +56,20 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 	public static final String PLUGIN_PROPERTIES_FILE = "generator.properties";
 	public static final String MOGLICC_NEW_PLUGIN_PROJECT = "MOGLiCC_NewPluginProject";
 	public static final String MOGLICC_JAVA_BEAN_PROJECT = "MOGLiCC_JavaBeanProject";
-	public static final String DEMO_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT
-                                                 + "/src/main/java/com/iksgmbh/moglicc/demo";
-	public static final String VALIDATOR_TYPES_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT
-			                                                + "/src/main/java/com/iksgmbh/moglicc/demo/validator/types";
-	public static final String VALIDATOR_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT
-                                                      + "/src/main/java/com/iksgmbh/moglicc/demo/validator";
+	public static final String DEMO_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/com/iksgmbh/moglicc/demo";
+	public static final String VALIDATOR_TYPES_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/com/iksgmbh/moglicc/demo/validator/types";
+	public static final String VALIDATOR_HELPER_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/com/iksgmbh/moglicc/demo/validator/helper";
 	public static final String FILENAME_ARTEFACT_PROPERTIES = "artefact.properties";
 	public static final String MAIN_TEMPLATE_IDENTIFIER = "Main";
 
 	private static final String[] childrenMOGLiCCNewPluginProject = {"pom.xml", "artefact.properties", "readme.md"};
 	private static final String[] childrenMOGLiCCJavaBeanProject = {"pom.xml", "artefact.properties"};
 
-	private static final String[] children_MAIN_SOURCE_DIR = {"main.java"};
+	private static final String[] children_UTILS_SOURCE_DIR = {"ClassOverviewPrinter.java", "MOGLiFactoryUtils.java", "CollectionsStringUtils.java"};
 
 	private static final String[] children_VALIDATOR_TYPES_SOURCE_DIR = {"MandatoryFieldValidator.java",
+                                                                         "InvalidCharFieldValidator.java",
+                                                                         "ValidCharFieldValidator.java",
 		                                                                 "MaxLengthValidator.java",
 		                                                                 "MinLengthValidator.java"};
 	private static final String[] children_VALIDATOR_SOURCE_DIR = {"FieldValidationException.java",
@@ -414,8 +413,8 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 		defaultData.addFlatFolder(MOGLICC_NEW_PLUGIN_PROJECT, childrenMOGLiCCNewPluginProject);
 		defaultData.addFlatFolder(MOGLICC_JAVA_BEAN_PROJECT, childrenMOGLiCCJavaBeanProject);
 		defaultData.addFlatFolder(VALIDATOR_TYPES_SOURCE_DIR, children_VALIDATOR_TYPES_SOURCE_DIR);
-		defaultData.addFlatFolder(VALIDATOR_SOURCE_DIR, children_VALIDATOR_SOURCE_DIR);
-		defaultData.addFlatFolder(DEMO_SOURCE_DIR + "/main", children_MAIN_SOURCE_DIR);
+		defaultData.addFlatFolder(VALIDATOR_HELPER_SOURCE_DIR, children_VALIDATOR_SOURCE_DIR);
+		defaultData.addFlatFolder(DEMO_SOURCE_DIR + "/utils", children_UTILS_SOURCE_DIR);
 
 		defaultData.addSubDir(MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java");
 		defaultData.addSubDir(MOGLICC_JAVA_BEAN_PROJECT + "/src/main/resources");

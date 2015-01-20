@@ -374,6 +374,53 @@ public class FileUtil {
 		return FileUtil.getFileContent(resource, "/" + filename);
 	}
 
+	public static void writeBinaryResourceWithContentFromClassPath(final Class<?> clazz, 
+			                                                       final String pathToResource, 
+			                                                       String targetFileName) throws IOException
+	{
+		final InputStream resource = clazz.getClassLoader().getResourceAsStream(pathToResource);
+		if (resource == null) {
+			throw new RuntimeException("Cannot find resource '" + pathToResource + "'");
+		}
+
+		
+		if (targetFileName == null)
+		{
+			final int pos = pathToResource.lastIndexOf('/');
+			
+			if (pos > -1) {
+				targetFileName = pathToResource.substring(pos + 1);
+			} else {
+				targetFileName = pathToResource;
+			}
+		}
+
+		FileOutputStream to = null;
+		try {
+			to = new FileOutputStream(new File(targetFileName));
+			byte[] buffer = new byte[4096];
+			int bytesRead;
+
+			while ((bytesRead = resource.read(buffer)) != -1)
+				to.write(buffer, 0, bytesRead); // write
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			if (resource != null)
+				try {
+					resource.close();
+				} catch (IOException e) {
+					;
+				}
+			if (to != null)
+				try {
+					to.close();
+				} catch (IOException e) {
+					;
+				}
+		}
+	}
+	
 	public static List<String> getNamesOfSubdirs(final File dir) {
 		if (dir.isFile()) {
 			return null;
