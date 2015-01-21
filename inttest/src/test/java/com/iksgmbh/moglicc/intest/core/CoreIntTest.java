@@ -22,7 +22,6 @@ import com.iksgmbh.moglicc.provider.model.standard.TextConstants;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.moglicc.utils.MOGLiLogUtil;
 import com.iksgmbh.utils.FileUtil;
-import com.iksgmbh.utils.StringUtil;
 
 public class CoreIntTest extends IntTestParent {
 

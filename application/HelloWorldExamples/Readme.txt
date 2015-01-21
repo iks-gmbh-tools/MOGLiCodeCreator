@@ -1,0 +1,1 @@
+To run the Hello Word examples, replace your current input directory of your MOGLiCC workspace by the this input directory and run MOGLiCC.

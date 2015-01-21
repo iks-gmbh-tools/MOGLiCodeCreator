@@ -4,11 +4,17 @@
 
 Just another code generator? - NO! - It's THE Lightweight autogeneration tool! 
 
-It is a small standalone Tool for a quick start into model based development!
+It's provides inserting into existing files, making complete new files and building trees of files within the file system.
 
-It's written in Java but made to generate more than only Java code.  
+It's a small standalone Tool for a quick start into model based development!
 
-You find the lastest release build under application/releasedBuilds.
+It's easy to learn, to apply and to integrate in your IDE.
+
+It's quick in execution.
+
+It's failsafe because it supports Reverse Engineering: re-generate your artefacts as your wish.
+
+It's written in Java but made to generate all kinds of text documents.
 
 * * *
 
@@ -29,7 +35,12 @@ License: **All Rights Reserved**
 
 travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.png?branch=master)](https://travis-ci.org/iks-github/MOGLiCodeCreator)
 
-Current version: **1.4.0**
+Current version: **1.5.0**
+
+**Changes to 1.4.0**
+- New Feature: New Plugin 'provider.model.standard.excel' for reading test data from excel files
+- Portability: Also running von Mac OS and Ubuntu.
+- A number of smaller improvements (see milestone 1.5.0 https://github.com/iks-github/MOGLiCodeCreator/issues)
 
 **Changes to 1.3.0**
 - New Feature: Generation of a report dir containing the report files "generator.report", "provider.report" and "short.report"
