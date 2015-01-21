@@ -240,6 +240,6 @@ public class VersionReplacer {
 	public static void main(String[] args) {
 		//setVersionInPomsBackToOldValue();
 		final MOGLiReleaseBuilder releaseBuilder = new MOGLiReleaseBuilder();
-		VersionReplacer.doYourJob(null, "1.4.0-SNAPSHOT", releaseBuilder.getPomFiles());
+		VersionReplacer.doYourJob("1.5.0-SNAPSHOT", "1.6.0-SNAPSHOT", releaseBuilder.getPomFiles());
 	}
 }

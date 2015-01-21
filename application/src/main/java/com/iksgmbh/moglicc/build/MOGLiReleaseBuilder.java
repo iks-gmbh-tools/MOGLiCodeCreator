@@ -231,6 +231,7 @@ public class MOGLiReleaseBuilder {
 			final String filename = getModuleParentDir(mavenModuleList.get(i)).getAbsolutePath()
 			              + "/target/" + artefactGroup + "." + mavenModuleList.get(i) + "-"
 			              +  getVersion(VERSION_TYPE.Release) + ".jar";
+			
 			jarFiles[i] = new File(filename);
 		}
 		return jarFiles;
