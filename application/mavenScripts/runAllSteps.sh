@@ -1,10 +1,7 @@
 #!/bin/sh
 
-<<<<<<< HEAD
-=======
 export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=512m" 
 
->>>>>>> development
 ################################################################
 #                                                              #
 #  WARNING: Do not modify or save this file under Windows.     #
@@ -23,19 +20,6 @@ echo "*     *****         of the MOGLiCC workspace                *****"
 echo "*     *****                                                 *****"
 echo "*     ***********************************************************"
 echo "*     ***********************************************************"
-<<<<<<< HEAD
-
-
-sh step1ExecUnitTestsAndBuildModules.sh
-
-echo "*"
-echo "*"
-echo "*"
-echo "*"
-
-
-sh step2BuildApplicationModule.sh
-=======
 echo "*"
 echo "*"
 
@@ -77,7 +61,6 @@ echo "*     Starting step 2 (mvn clean install on module 'parent'): building and
 echo "*     Please wait until step 2 is finished successfully!"
 echo "*"
 sh step2ExecUnitTestsAndBuildModules.sh
->>>>>>> development
 
 echo "*"
 echo "*"
@@ -85,12 +68,9 @@ echo "*"
 echo "*"
 
 
-<<<<<<< HEAD
-=======
 echo "*      Starting step 3 (mvn clean test on module 'inttest'): perform integration tests"
 echo "*      Please wait until step 3 is finished successfully!"
 echo "*"
->>>>>>> development
 sh step3ExecIntegrationTests.sh
 
 
@@ -99,13 +79,9 @@ echo "*"
 echo "*"
 echo "*"
 
-<<<<<<< HEAD
-
-=======
 echo "*      Starting step 4 (mvn clean install test -Dtest=BuildReleaseAndTestSystem): building and system testing the release candidate (the MOGLiCC product)"
 echo "*      Please wait until step 4 is finished successfully!"
 echo "*"
->>>>>>> development
 sh step4BuildReleaseAndExecSystemTests.sh
 
 
