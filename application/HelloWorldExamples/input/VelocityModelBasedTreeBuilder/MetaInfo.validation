@@ -1,0 +1,11 @@
+# model level MetaInfos
+|MetaInfo| projectDir            |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| projectRootPath       |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| CreateNew             |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| NACEVersion           |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| KonnektorType         |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| PartnerName           |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| Partnerland           |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| PartnerID             |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| internalformat        |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
+|MetaInfo| KonnektorTypeVersion  |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
