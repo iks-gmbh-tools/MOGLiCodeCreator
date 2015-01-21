@@ -25,22 +25,10 @@ echo "*     ***********************************************************"
 echo "*     ***********************************************************"
 echo "*"
 echo "*"
-<<<<<<< HEAD
-echo "*"
-echo "*"
-=======
 echo "Press [Enter] to continue..."
 read enter
->>>>>>> development
 
 cd ../../inttest
 mvn clean test
 
-<<<<<<< HEAD
-echo "*"
-echo "*"
-echo "Press [Enter] to continue..."
-read enter
-=======
->>>>>>> development
 

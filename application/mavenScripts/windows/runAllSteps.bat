@@ -10,14 +10,6 @@ echo *     ***********************************************************
 echo *     ***********************************************************
 echo *
 echo *
-<<<<<<< HEAD
-
-
-echo *     Starting step 1
-echo *     Please wait until step 1 is finished!
-echo *
-start step1ExecUnitTestsAndBuildModules.bat
-=======
 echo *     ***********************************************************
 echo *     ***********************************************************
 echo *     *                                                         *
@@ -39,7 +31,6 @@ echo *      Starting step 1 (mvn clean install -Dtest=BuildTestExecutor): buildi
 echo *      Please wait until step 1 is finished successfully!
 echo *
 start step1TestReleaseBuilderSources.bat
->>>>>>> development
 pause
 
 
@@ -48,17 +39,10 @@ echo *
 echo *
 
 
-<<<<<<< HEAD
-echo *      Starting step 2
-echo *      Please wait until step 2 is finished!
-echo *
-start step2BuildApplicationModule.bat
-=======
 echo *     Starting step 2 (mvn clean install on module 'parent'): building and unit-testing the sources of product
 echo *     Please wait until step 2 is finished successfully!
 echo *
 start step2ExecUnitTestsAndBuildModules.bat
->>>>>>> development
 pause
 
 
@@ -67,13 +51,8 @@ echo *
 echo *
 
 
-<<<<<<< HEAD
-echo *      Starting step 3
-echo *      Please wait until step 3 is finished!
-=======
 echo *      Starting step 3 (mvn clean test on module 'inttest'): perform integration tests
 echo *      Please wait until step 3 is finished successfully!
->>>>>>> development
 echo *
 start step3ExecIntegrationTests.bat
 pause
@@ -84,13 +63,8 @@ echo *
 echo *
 
 
-<<<<<<< HEAD
-echo *      Starting step 4
-echo *      Please wait until step 4 is finished!
-=======
 echo *      Starting step 4 (mvn clean install test -Dtest=BuildReleaseAndTestSystem): building and system testing the release candidate (the MOGLiCC product)
 echo *      Please wait until step 4 is finished successfully!
->>>>>>> development
 echo *
 start step4BuildReleaseAndExecSystemTests.bat
 pause
