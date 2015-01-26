@@ -98,11 +98,17 @@
 				'		if ( ! StringUtils.isEmpty( value ) )
 				'			builder = builder.with$AttributeName( new Double( value ) );
 
-			#elseif ($javaType == "java.math.BigDecimal") 
+			#elseif ($javaType == "java.math.BigDecimal" || $javaType == "BigDecimal") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
 				'			builder = builder.with$AttributeName( new BigDecimal( "" + value ) );
+
+			#elseif ($javaType == "org.joda.time.DateTime" || $javaType == "DateTime") 
+			
+				'		value = getValue("$AttributeName", index);
+				'		if ( ! StringUtils.isEmpty( value ) )
+				'			builder = builder.with$AttributeName( dateTimeFormatter.parseDateTime( value ) );
 				
 			#elseif ($javaType == "String[]") 
 			

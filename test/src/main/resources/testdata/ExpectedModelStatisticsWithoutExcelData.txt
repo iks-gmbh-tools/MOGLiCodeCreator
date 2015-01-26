@@ -12,6 +12,7 @@ Plugin 'VelocityClassBasedFileMaker' uses the following MetaInfo elements:
 'Misc1' in Attribute level
 'Misc2' in Attribute level
 'ValidChars' in Attribute level
+'dateTimeFormat' in Model level
 'eclipseProjectDir' in Model level
 'extends' in Class level
 'implements' in Class level

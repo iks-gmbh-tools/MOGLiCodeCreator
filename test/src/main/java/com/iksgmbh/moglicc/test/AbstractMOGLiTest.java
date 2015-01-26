@@ -317,6 +317,7 @@ public abstract class AbstractMOGLiTest {
 		final String actualFileContent = TestUtil.getFileContent(f);
 		System.err.println(actualFileContent);
 		final boolean entryFound = actualFileContent.contains(entry);
+		System.out.println(actualFileContent);
 		assertFalse("Expected Entry was found in file: " + entry
 				+ "\nFile: " + f.getAbsolutePath(), entryFound);
 	}

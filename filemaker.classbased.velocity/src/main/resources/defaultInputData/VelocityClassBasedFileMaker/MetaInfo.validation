@@ -54,6 +54,7 @@
 |MetaInfo| eclipseProjectDir |is valid to occur| 0-1 |time(s) for| model |in| MOGLiCC_JavaBeanModel |.| # optional - alternatively defined as optional validator
 |MetaInfo| projectName |is valid to occur| 0-1 |time(s) for| model |in| MOGLiCC_JavaBeanModel |.| 
 |MetaInfo| useExtensionPlugin |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
+|MetaInfo| dateTimeFormat |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
 
 # class validators
 |MetaInfo| implements  |is valid to occur| any |time(s) for| classes    |in| MOGLiCC_JavaBeanModel |.|   

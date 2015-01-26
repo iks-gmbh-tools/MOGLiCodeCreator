@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #########################################################################################################
 # This model file illustrates the usage of the model definition DSL of the StandardModelProvider plugin.
 #
@@ -55,61 +54,3 @@ model HelloWorldAdvancedExample
 	  attribute greetingPattern
 		metainfo first how
 		metainfo second who
-=======
-#########################################################################################################
-# This model file illustrates the usage of the model definition DSL of the StandardModelProvider plugin.
-#
-# Three hierarchy levels exist in which elements can be defined: 'model', 'class' and 'attribute'.
-# Elements in each level are only defined by a name.
-# A model file must contain exactly one model element.
-# The name of a class must be fully qualified and unique within the model.
-# The name of a attribute must be unique for its class.
-#
-# For elements in each level so-called 'MetaInfos' can be assigned in any number.
-# A MetaInfo consists of a non-unique name and a value.
-#
-# Elements in each level and each of their MetaInfos can be adressed from the template files.
-#
-# For values that are repreatedly used within thisfile (such as a path to domain objects), 
-# variables can be defined consisting of a key-value-pair. 
-# Variables are only adressable within the model file by using its key as placeholder: <<variableKey>>. 
-#
-#########################################################################################################
-
-
-# model file internal variables
-variable domain moglicc
-variable DomainClassPath com.iksgmbh.<<domain>>
-
-model HelloWorldAdvancedExample
-
-  # common meta-information
-  metainfo targetDir C:/temp/moglicc	              
-  metainfo DomainClassPath <<DomainClassPath>>
-  
-  class <<DomainClassPath>>.HelloWorldGreeting1
-	  metainfo comment "Hello World example 2 for the MOGLi Code Creator."
-	  metainfo comment "This examples demonstrates the file maker function."
-		
-	  attribute Hello
-		metainfo type String
-
-	  attribute World
-		metainfo type String
-		
-	  attribute finalChar
-		metainfo type Char
-		metainfo value !
-  
-  class <<DomainClassPath>>.HelloWorldGreeting2
-		
-	  attribute how
-		metainfo print Hello
-
-	  attribute who
-		metainfo print World
-		
-	  attribute greetingPattern
-		metainfo first how
-		metainfo second who
->>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc

@@ -7,6 +7,9 @@ package ${classDescriptor.package}.factory;
 '
 import static org.junit.Assert.*;
 '
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormat;
+'
 import java.util.*;
 '
 import org.junit.*;
@@ -23,7 +26,9 @@ import ${classDescriptor.package}.validator.*;
 */
 public class ${classDescriptor.simpleName}FactoryUnitTest 
 {
-
+'
+'	private final static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("$model.getMetaInfoValueFor("dateTimeFormat")");
+'
 #parse("B_buildReturnsFirstMethod.tpl")
 
 '	

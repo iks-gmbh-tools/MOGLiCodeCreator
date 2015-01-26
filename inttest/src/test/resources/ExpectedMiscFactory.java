@@ -1,5 +1,6 @@
 package com.iksgmbh.moglicc.demo.factory;
 
+import org.joda.time.DateTime;
 import java.lang.Boolean;
 import java.util.List;
 import java.lang.Long;
@@ -10,10 +11,13 @@ import java.lang.Double;
 import java.util.HashSet;
 import java.lang.Character;
 import java.math.BigDecimal;
-import com.iksgmbh.moglicc.demo.Person;
 import java.util.Arrays;
+import com.iksgmbh.moglicc.demo.Person;
 import java.lang.Byte;
 import java.util.*;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormat;
+
 import com.iksgmbh.moglicc.demo.Misc;
 import com.iksgmbh.moglicc.demo.builder.MiscBuilder;
 import com.iksgmbh.moglicc.demo.factory.MiscFactory;
@@ -29,6 +33,8 @@ import org.apache.commons.lang.StringUtils;
 */
 public class MiscFactory
 {
+	private final static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss:SSS");
+
 	public static final int DEFAULT_MAX_LENGTH_STRING_VALUE = 1000;
 	public static final int DEFAULT_MAX_LENGTH_NUMBER_VALUE = 8;
 	public static final int DEFAULT_MIN_LENGTH_STRING_VALUE = 0;
@@ -130,6 +136,7 @@ public class MiscFactory
 		instance.setFloatWrapper(null);
 		instance.setDoubleWrapper(null);
 		instance.setBigDecimal(null);
+		instance.setDateTime(null);
 		instance.setListOfLongs(null);
 		instance.setStringList(null);
 		instance.setStringArray(null);
@@ -563,6 +570,10 @@ public class MiscFactory
 		if ( ! StringUtils.isEmpty( value ) )
 			builder = builder.withBigDecimal( new BigDecimal( "" + value ) );
 
+		value = getValue("DateTime", index);
+		if ( ! StringUtils.isEmpty( value ) )
+			builder = builder.withDateTime( dateTimeFormatter.parseDateTime( value ) );
+
 		builder = builder.withListOfLongs( CollectionsStringUtils.commaSeparatedStringToLongList( getValue("ListOfLongs", index) ) );
 
 		builder = builder.withStringList( CollectionsStringUtils.commaSeparatedStringToStringList( getValue("StringList", index) ) );
@@ -665,6 +676,11 @@ public class MiscFactory
 		bigDecimalList.add("123.4322");
 		bigDecimalList.add("123.4323");
 		dataPool.put("BigDecimal", bigDecimalList);
+
+		final List<String> dateTimeList = new ArrayList<String>();
+		dateTimeList.add("15.12.2013 18:39:11:231");
+		dateTimeList.add("25.10.2008 12:00:59:999");
+		dataPool.put("DateTime", dateTimeList);
 
 		final List<String> listOfLongsList = new ArrayList<String>();
 		listOfLongsList.add("1, 2, 3");

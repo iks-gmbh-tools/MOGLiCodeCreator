@@ -23,7 +23,8 @@ public class TextConstants {
 	public static final String TEXT_NO_MODELFILE_FOUND = "No modelfile found";
 	public static final String TEXT_NO_MODEL_FILE_LOADED = "No model file loaded!";
 	public static final String TEXT_PARSE_ERROR_FOUND = "Error parsing model file";
-	public static final String TEXT_MODEL_BREAKS_METAINFO_VALIDATORS = "Model breaks at least one MetaInfoValidation setting. See logfile of model provider for more information!";
+	public static final String TEXT_MODEL_BREAKS_METAINFO_VALIDATORS = "Model breaks at least one MetaInfoValidation setting." + 
+	                           System.getProperty("line.separator") + "See file 'reports/provider.report' for more information!";
 	public static final String TEXT_METAINFO_VALIDATION_ERROR_OCCURRED = "Error validating MetaInfos: ";
 
 	public static final String TEXT_MODEL_NOT_EXISTS = "Model file does not exist";
