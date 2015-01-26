@@ -207,4 +207,29 @@ public class MetainfoValidationIntTest extends IntTestParent {
 		assertFileContainsNoEntry(logFile, "Warning:");
 	}
 
+	
+	@Test
+	public void writesMetainfoValidationExceptionInReportFile() throws Exception {
+		
+		// prepare test
+		final File dir = velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir();
+		final File validationFile = new File(dir, MetaInfoValidationUtil.FILENAME_VALIDATION);
+		final String validationRule = "|MetaInfo| JavaType  |is valid to occur| 2 |time(s) for| attributes |in| MOGLiCC_JavaBeanModel |.|";
+		FileUtil.createNewFileWithContent(validationFile, validationRule);
+		standardModelProviderStarter.doYourJob();
+		
+		// call functionality under test
+		try {
+			velocityClassBasedFileMakerStarter.doYourJob();
+			fail("Expected exception was not thrown!");
+		} 
+		catch (Exception e) 
+		{
+			// verify test result
+			final String report = standardModelProviderStarter.getProviderReport();
+			assertStringContains(report, "MetaInfo 'JavaType' was found too few times");
+		}
+		 
+	}
+	
 }

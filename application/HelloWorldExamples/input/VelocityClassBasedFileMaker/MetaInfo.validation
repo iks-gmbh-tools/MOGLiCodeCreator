@@ -1,13 +1,5 @@
-<<<<<<< HEAD
 # model level MetaInfos
 |MetaInfo| projectDir            |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
 
 # class level MetaInfos
 
-=======
-# model level MetaInfos
-|MetaInfo| projectDir            |is valid to occur|  1  |time(s) for| model |in| CTL_KonnektorModel |.|
-
-# class level MetaInfos
-
->>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc

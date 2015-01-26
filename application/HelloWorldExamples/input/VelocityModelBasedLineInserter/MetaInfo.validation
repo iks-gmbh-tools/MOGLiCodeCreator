@@ -1,14 +1,6 @@
-<<<<<<< HEAD
 # This file the is the place to define MetaInfoValidators for all MetoInfos used by the VelocityModelBasedInserter.
 # These validators are executed by the StandardModelProvider to validate the MetaInfos
 # used in its model file and to build a statistics file on the MetaInfo usage.
 # The statistics file is useful to find MetaInfoValidators or MetaInfos
 # that are not (any more) in use.
-=======
-# This file the is the place to define MetaInfoValidators for all MetoInfos used by the VelocityModelBasedInserter.
-# These validators are executed by the StandardModelProvider to validate the MetaInfos
-# used in its model file and to build a statistics file on the MetaInfo usage.
-# The statistics file is useful to find MetaInfoValidators or MetaInfos
-# that are not (any more) in use.
->>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
 #

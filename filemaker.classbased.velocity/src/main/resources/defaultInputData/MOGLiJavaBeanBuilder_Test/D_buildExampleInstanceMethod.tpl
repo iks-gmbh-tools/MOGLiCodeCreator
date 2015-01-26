@@ -66,9 +66,13 @@
 			
 				'		builder = builder.with${AttributeName}(new Long(${ExampleData}));
 
-			#elseif ( $javaType == "java.math.BigDecimal" )
+			#elseif ( $javaType == "java.math.BigDecimal" || $javaType == "BigDecimal" )
 			
 				'		builder = builder.with${AttributeName}( new BigDecimal("" + ${ExampleData}) );
+				
+			#elseif ( $javaType == "org.joda.time.DateTime" || $javaType == "DateTime" )
+			
+				'		builder = builder.with${AttributeName}( dateTimeFormatter.parseDateTime( "${ExampleData}" ) );
 				
 			#else
 			
@@ -117,6 +121,10 @@
 			
 				'		assertEquals("$attributeName", "$ExampleData", instance.get${AttributeName}());
 
+			#elseif ( $javaType == "org.joda.time.DateTime" || $javaType == "DateTime" )
+			
+				'		assertEquals("$attributeName", dateTimeFormatter.parseDateTime( "${ExampleData}" ), instance.get${AttributeName}());
+				
 			#else
 			
 				'		assertEquals("$attributeName", "$ExampleData", "" + instance.get${AttributeName}());

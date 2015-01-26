@@ -8,6 +8,9 @@ package ${classDescriptor.package}.factory;
 #parse("commonSubtemplates/importDomainModelClasses.tpl")
 import java.util.*;
 
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormat;
+'
 import ${classDescriptor.package}.${classDescriptor.simpleName};
 import ${classDescriptor.package}.builder.${classDescriptor.simpleName}Builder;
 import ${classDescriptor.package}.factory.${classDescriptor.simpleName}Factory;
@@ -23,6 +26,8 @@ import org.apache.commons.lang.StringUtils;
 */
 public class ${classDescriptor.simpleName}Factory 
 {
+'	private final static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("$model.getMetaInfoValueFor("dateTimeFormat")");
+'
 '	public static final int DEFAULT_MAX_LENGTH_STRING_VALUE = 1000;
 '	public static final int DEFAULT_MAX_LENGTH_NUMBER_VALUE = 8;
 '	public static final int DEFAULT_MIN_LENGTH_STRING_VALUE = 0;
@@ -221,14 +226,14 @@ public class ${classDescriptor.simpleName}Factory
 '	}
 '
 
-#parse("D_buildDataPool.tpl")
-
-'
-
 #parse("G_buildCreateInstanceWithAllSupportedFieldsExceedingMaxLength.tpl")
 
 '
 
 #parse("H_buildCreateInstanceWithAllSupportedFieldsNotReachingMinLength.tpl")		
+
+'
+
+#parse("D_buildDataPool.tpl")
 
 }

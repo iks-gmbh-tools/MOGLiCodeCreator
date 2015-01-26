@@ -37,6 +37,11 @@ public class MOGLiFactoryUtils {
 		{
 			toReturn += "" + toAppend;
 			toAppend++;
+			
+			if (toAppend == 10)
+			{
+				toAppend = 0;
+			}
 		}
 		
 		return new Long( toReturn ).longValue();

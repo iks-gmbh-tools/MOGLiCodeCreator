@@ -1,5 +1,6 @@
 package com.iksgmbh.moglicc.demo;
 
+import org.joda.time.DateTime;
 import java.lang.Boolean;
 import java.util.List;
 import java.lang.Long;
@@ -10,8 +11,8 @@ import java.lang.Double;
 import java.util.HashSet;
 import java.lang.Character;
 import java.math.BigDecimal;
-import com.iksgmbh.moglicc.demo.Person;
 import java.util.Arrays;
+import com.iksgmbh.moglicc.demo.Person;
 import java.lang.Byte;
 
 /**
@@ -38,6 +39,7 @@ public class Misc extends Person
 	private Float floatWrapper;
 	private Double doubleWrapper;
 	private BigDecimal bigDecimal;
+	private DateTime dateTime;
 	private List<Long> listOfLongs;
 	private List<String> stringList;
 	private String[] stringArray;
@@ -124,6 +126,11 @@ public class Misc extends Person
 	public void setBigDecimal(final BigDecimal bigDecimal)
 	{
 		this.bigDecimal = bigDecimal;
+	}
+
+	public void setDateTime(final DateTime dateTime)
+	{
+		this.dateTime = dateTime;
 	}
 
 	public void setListOfLongs(final List<Long> listOfLongs)
@@ -233,6 +240,11 @@ public class Misc extends Person
 		return bigDecimal;
 	}
 
+	public DateTime getDateTime()
+	{
+		return dateTime;
+	}
+
 	public List<Long> getListOfLongs()
 	{
 		return listOfLongs;
@@ -280,6 +292,7 @@ public class Misc extends Person
 				+ "floatWrapper = " + floatWrapper + ", "
 				+ "doubleWrapper = " + doubleWrapper + ", "
 				+ "bigDecimal = " + bigDecimal + ", "
+				+ "dateTime = " + dateTime + ", "
 				+ "listOfLongs = " + listOfLongs + ", "
 				+ "stringList = " + stringList + ", "
 				+ "stringArray = " + Arrays.toString(stringArray) + ", "
@@ -394,6 +407,15 @@ public class Misc extends Person
 			if (! bigDecimal.equals(other.bigDecimal))
 				   return false;
 		}
+		if (dateTime == null)
+		{
+			if (other.dateTime != null)
+				return false;
+		} else
+		{
+			if (! dateTime.equals(other.dateTime))
+				   return false;
+		}
 		if (listOfLongs == null)
 		{
 			if (other.listOfLongs != null)
@@ -440,7 +462,7 @@ public class Misc extends Person
 		final int prime = 31;
 		int result = 1;
 
-               result = prime * result + ((text == null) ? 0 : 3556653);
+                result = prime * result + ((text == null) ? 0 : 3556653);
  		result = prime * result + (ready ? 1231 : 1237);
 		result = prime * result + primitivChar;
 		result = prime * result + numberByte;
@@ -449,19 +471,20 @@ public class Misc extends Person
  		result = prime * result + Float.floatToIntBits(numberFloat);
 		long temp = Double.doubleToLongBits(numberDouble);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-               result = prime * result + ((booleanWrapper == null) ? 0 : -63687861);
-               result = prime * result + ((charWrapper == null) ? 0 : 80559197);
-               result = prime * result + ((byteWrapper == null) ? 0 : 1668153963);
-               result = prime * result + ((intWrapper == null) ? 0 : -1142847068);
-               result = prime * result + ((longWrapper == null) ? 0 : -5877129);
-               result = prime * result + ((floatWrapper == null) ? 0 : -815539561);
-               result = prime * result + ((doubleWrapper == null) ? 0 : 1558176642);
-               result = prime * result + ((bigDecimal == null) ? 0 : -554856911);
-               result = prime * result + ((listOfLongs == null) ? 0 : -1260473502);
-               result = prime * result + ((stringList == null) ? 0 : -1573317553);
-		result = prime * result + Arrays.hashCode(stringArray);
-               result = prime * result + ((hashSet == null) ? 0 : 697516148);
-               result = prime * result + ((instanceVariable == null) ? 0 : 1081501233);
+                result = prime * result + ((booleanWrapper == null) ? 0 : -63687861);
+                result = prime * result + ((charWrapper == null) ? 0 : 80559197);
+                result = prime * result + ((byteWrapper == null) ? 0 : 1668153963);
+                result = prime * result + ((intWrapper == null) ? 0 : -1142847068);
+                result = prime * result + ((longWrapper == null) ? 0 : -5877129);
+                result = prime * result + ((floatWrapper == null) ? 0 : -815539561);
+                result = prime * result + ((doubleWrapper == null) ? 0 : 1558176642);
+                result = prime * result + ((bigDecimal == null) ? 0 : -554856911);
+                result = prime * result + ((dateTime == null) ? 0 : 1792749467);
+                result = prime * result + ((listOfLongs == null) ? 0 : -1260473502);
+                result = prime * result + ((stringList == null) ? 0 : -1573317553);
+				 result = prime * result + Arrays.hashCode(stringArray);
+                result = prime * result + ((hashSet == null) ? 0 : 697516148);
+                result = prime * result + ((instanceVariable == null) ? 0 : 1081501233);
 
 		return result;
 	}

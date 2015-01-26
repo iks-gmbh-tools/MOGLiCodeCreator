@@ -41,6 +41,10 @@
 			
 				'		assertEquals("$AttributeName of type $javaType", "$testDataMetaInfoValue", result.get(0).get${AttributeName}() );
 				
+			#elseif ( $javaType == "org.joda.time.DateTime" || $javaType == "DateTime" )
+			
+				'		assertEquals("$AttributeName of type $javaType", dateTimeFormatter.parseDateTime( "$testDataMetaInfoValue" ), result.get(0).get${AttributeName}() );
+
 			#else
 			
 				'		assertEquals("$AttributeName of type $javaType", "$testDataMetaInfoValue", "" + result.get(0).get${AttributeName}() );
