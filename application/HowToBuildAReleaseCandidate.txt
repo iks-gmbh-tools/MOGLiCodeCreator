@@ -3,10 +3,9 @@ I Preconditions for Release
 1. All Unit- (UnitTestExecutor.java), Integration- (tests in project 'inttest') and Systemtests (UnitTestExecutor.java) are known to be green.
 2. All sources relevant for the release have been merged to the master branch in the iks-github repository.
 3. The master branch is actually checkout out!
-4. Check for correct version settings in following three files:
+4. Check for correct version settings in following files:
    a) application/src/main/resources/build.properties,
    b) readme.md in root
-   c) core/src/main/resources/MOGLi_Code_Creator.htm
 5. All htm-files are kown to be UTF-coded (in case of doubt check with Notepad++).
 
 
@@ -21,6 +20,7 @@ II Perform the Release
    b) Execute 'mvn install' on the parent project - this unit tests and creates the binaries.
    c) Execute integration tests (Start 'Run as JUnit Test' on the project 'inttest').
    d) Execute 'BuildReleaseAndTestSystem.java' as JUnit test. This builds the release candidate and executes the system tests automatically on it.
+   For different test results between scripted and manual test execution, assure that Java VM used is the same!
 4. Verify that in 'application/releaseBuilds' the Release Candidate can be found.
    If not check that property 'testRun' is 'false' in file 'application/src/main/resources/build.properties'.
 5. In file 'application/src/main/resources/build.properties' set property 'testRun' back to 'true'.
@@ -31,13 +31,9 @@ II Perform the Release
  
 III Finishing steps
 
-1. Open 'application/target/releaseDir/SystemTestDir/help/MOGLi Code Creator.htm' in a web browser and check
-   a) Is the file readable? If not, encoding of file in repository is not UTF-8!
-   b) Is MOGLiCC version correct?
-   c) Are all links working?
-2. Perform the complete quality assurance of II 3 again, to check that the new versions (set in II 6) are set correctly.
-3. Check that a tag for the current release was automatically created - if not do it manually (pattern: vX.Y.Z).
-4. Commit the current sources in the master branch with comment 'Release X.Y.Z' and push them to the github remote repository
-5. Eventually merge the new changes to other branches such as 'development'
+1. Perform the complete quality assurance of II 3 again, to check that the new versions (set in II 6) are set correctly.
+2. Commit the current sources in the master branch with comment 'Release X.Y.Z' and push them to the github remote repository
+3. Create a tag for the current release ('git tag vX.Y.Z').
+4. Eventually merge the new changes to other branches such as 'development'
 
 

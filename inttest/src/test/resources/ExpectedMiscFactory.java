@@ -594,6 +594,41 @@ public class MiscFactory
 		return MiscFactory.dataPool.get(firstKey).size();
 	}
 
+	/**
+	 * Calls createInstanceWithAllFieldsAtMaxLength and addToFieldContent to fields of supported JavaType
+	 * (these are: byte, Byte, int, Integer, double, Double, String, java.math.BigDecimal,
+    * if MaxLength-metainfo is defined for the corresponding attribute in the data model.
+	 * @return instance that causes validation exceptions for the supported fields.
+	 */
+	public static Misc createInstanceWithAllSupportedFieldsExceedingMaxLength()
+	{
+		final Misc toReturn = createInstanceWithAllFieldsAtMaxLength();
+
+		addToFieldContent(toReturn, "Text", "9");
+		addToFieldContent(toReturn, "NumberByte", "9");
+		addToFieldContent(toReturn, "ByteWrapper", "9");
+		addToFieldContent(toReturn, "LongWrapper", "9");
+		addToFieldContent(toReturn, "BigDecimal", "9");
+
+		return toReturn;
+	}
+
+	/**
+	 * Calls createInstanceWithAllFieldsAtMinLength and cutFieldContent to fields of supported JavaType
+	 * (these are; byte, Byte, int, Integer, double, Double, String, java.math.BigDecimal),
+	 * if MinLength-metainfo is defined for the corresponding attribute in the data model.
+	 * @return instance that causes validation exceptions for the corresponding fields.
+	 */
+	public static Misc createInstanceWithAllSupportedFieldsNotReachingMinLength()
+	{
+		final Misc toReturn = createInstanceWithAllFieldsAtMinLength();
+
+		cutFieldContent(toReturn, "Text", 1);
+		cutFieldContent(toReturn, "BigDecimal", 1);
+
+		return toReturn;
+	}
+
 	static
 	{
 		// fill data pool
@@ -733,39 +768,4 @@ public class MiscFactory
 		minLengths.put("BigDecimal", new Integer( 3 ));
 	}
 
-
-	/**
-	 * Calls createInstanceWithAllFieldsAtMaxLength and addToFieldContent to fields of supported JavaType
-	 * (these are: byte, Byte, int, Integer, double, Double, String, java.math.BigDecimal,
-    * if MaxLength-metainfo is defined for the corresponding attribute in the data model.
-	 * @return instance that causes validation exceptions for the supported fields.
-	 */
-	public static Misc createInstanceWithAllSupportedFieldsExceedingMaxLength()
-	{
-		final Misc toReturn = createInstanceWithAllFieldsAtMaxLength();
-
-		addToFieldContent(toReturn, "Text", "9");
-		addToFieldContent(toReturn, "NumberByte", "9");
-		addToFieldContent(toReturn, "ByteWrapper", "9");
-		addToFieldContent(toReturn, "LongWrapper", "9");
-		addToFieldContent(toReturn, "BigDecimal", "9");
-
-		return toReturn;
-	}
-
-	/**
-	 * Calls createInstanceWithAllFieldsAtMinLength and cutFieldContent to fields of supported JavaType
-	 * (these are; byte, Byte, int, Integer, double, Double, String, java.math.BigDecimal),
-	 * if MinLength-metainfo is defined for the corresponding attribute in the data model.
-	 * @return instance that causes validation exceptions for the corresponding fields.
-	 */
-	public static Misc createInstanceWithAllSupportedFieldsNotReachingMinLength()
-	{
-		final Misc toReturn = createInstanceWithAllFieldsAtMinLength();
-
-		cutFieldContent(toReturn, "Text", 1);
-		cutFieldContent(toReturn, "BigDecimal", 1);
-
-		return toReturn;
-	}
 }

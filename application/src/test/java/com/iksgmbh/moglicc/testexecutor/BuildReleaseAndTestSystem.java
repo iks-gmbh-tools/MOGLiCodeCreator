@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 // Builds first release candidate and second executes system tests on it
 
 @RunWith(ClasspathSuite.class)
-@ClassnameFilters({".*TestPropertiesActivator", ".*TechnicalSystemTest"})
+@ClassnameFilters({".*TestPropertiesActivator", ".*SystemTest"})
 public class BuildReleaseAndTestSystem {
 
 }

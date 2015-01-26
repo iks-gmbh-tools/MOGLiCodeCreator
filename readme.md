@@ -38,9 +38,8 @@ travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.pn
 Current version: **1.5.1**
 
 **Changes to 1.5.0**
-- New Feature: Provider report now with validation error messages (if occurred)
-- New Feature: Factory classes in the MOGLiCC JavaBean Group now support org.joda.time.DateTime
-- Bugfix: TreeBuilder build artefact now correctly in its default output directory
+- Bugfix: Provider report now with validation error messages (if occurred)
+- Bugfix: Factory classes in the MOGLiCC JavaBean Group now support org.joda.time.DateTime
 
 **Changes to 1.4.0**
 - New Feature: New Plugin 'provider.model.standard.excel' for reading test data from excel files

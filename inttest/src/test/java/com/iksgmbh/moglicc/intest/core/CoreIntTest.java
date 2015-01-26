@@ -38,7 +38,7 @@ public class CoreIntTest extends IntTestParent {
 	 *       It is used to debug a problem with production data!
 	 * @throws IOException 
 	 **/
-	@Test  // comment this line out when building a MOGLiCC release
+	//@Test  // comment this line out when building a MOGLiCC release
 	public void runWithExternalInputData() throws IOException {
 		// prepare test
 		initTestRootDir();
