@@ -78,7 +78,7 @@ public class ModelParser {
 			} else if (variableParser.hasCorrectPrefix(line)) {
 				parseVariableLine(lineCounter, line);
 			} else {
-				errorList.add(INVALID_INFORMATION + " in line " + lineCounter + "!");
+				errorList.add(INVALID_INFORMATION.trim() + " in line " + lineCounter + "!");
 			}
 
 		}

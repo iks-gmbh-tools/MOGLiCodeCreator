@@ -24,6 +24,7 @@ public class ${classDescriptor.simpleName}
 		
 '	}
 }
+<<<<<<< HEAD
 
 
 
@@ -32,3 +33,5 @@ public class ${classDescriptor.simpleName}
 
 
 
+=======
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412

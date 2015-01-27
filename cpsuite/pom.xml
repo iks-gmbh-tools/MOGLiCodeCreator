@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -40,6 +43,9 @@
 	</build>
 	    
 =======
+=======
+>>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -80,5 +86,55 @@
 		</plugins>
 	</build>
 	    
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
+=======
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>cpsuite</groupId>
+	<artifactId>cpsuite</artifactId>
+	<version>1.2.6</version>
+
+    <name>Johannes Link's cpsuite</name>
+
+    <description>
+        This is a rebundling of Johannes Link's cpsuite utility. 
+        It is used by MOGLiCC to run multiproject suites of unit test in the application project. 
+    </description>
+
+    <url>http://johanneslink.net/projects/cpsuite.jsp</url>
+    
+    <dependencies>
+    	<dependency>
+        	<groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+        </dependency>
+    </dependencies>
+    
+	<build>
+		<finalName>${project.groupId}.${project.artifactId}-${project.version}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<optimize>false</optimize>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	    
+<<<<<<< HEAD
+=======
+>>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 >>>>>>> originReikOberrath/master
 </project>

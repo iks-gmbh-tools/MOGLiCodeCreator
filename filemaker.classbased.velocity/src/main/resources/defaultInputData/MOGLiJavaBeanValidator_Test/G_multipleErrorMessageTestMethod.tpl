@@ -8,7 +8,16 @@
 
 	#set( $AttributeName = $TemplateStringUtility.firstToUpperCase($attributeDescriptor.name) )
 	#set( $javaType = $TemplateJavaUtility.getSimpleClassName( $attributeDescriptor.getMetaInfoValueFor("JavaType") ) )
+<<<<<<< HEAD
 	#if ( $attributeDescriptor.doesHaveMetaInfo("Mandatory", "true") )
+=======
+	
+	#if ( $TemplateJavaUtility.isPrimitiveTypeWrapper($javaType) )
+	
+		# do nothing
+		
+	#elseif ( $attributeDescriptor.doesHaveMetaInfo("Mandatory", "true") )
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 	
 		'		testData.set${AttributeName}(null);
 

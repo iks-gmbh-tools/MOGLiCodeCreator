@@ -22,5 +22,9 @@ model Hello_World_Example_Simple
  
 		attribute greeting
 			metainfo toPrint "Hello World"
+<<<<<<< HEAD
 			
 			
+=======
+			
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412

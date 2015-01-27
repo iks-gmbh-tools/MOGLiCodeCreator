@@ -12,6 +12,10 @@ Plugin 'VelocityClassBasedFileMaker' uses the following MetaInfo elements:
 'Misc1' in Attribute level
 'Misc2' in Attribute level
 'ValidChars' in Attribute level
+<<<<<<< HEAD
+=======
+'dateTimeFormat' in Model level
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 'eclipseProjectDir' in Model level
 'extends' in Class level
 'implements' in Class level
@@ -69,4 +73,8 @@ For following MetaInfos defined in 'MOGLiCC_JavaBeanModel.txt' no validation rul
 'Address2' in AttributeLevel
 'Address3' in AttributeLevel
 'Address4' in AttributeLevel
+<<<<<<< HEAD
 'Address5' in AttributeLevel
+=======
+'Address5' in AttributeLevel
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412

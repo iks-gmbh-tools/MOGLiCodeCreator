@@ -362,7 +362,11 @@ public class ModelEnricher
 			return true;
 		}
 		
+<<<<<<< HEAD
 		// ROTATION_MODE_ATTRIBUTE_IN_ROWS (this is default)
+=======
+		// ROTATION MODE: ATTRIBUTE IN ROWS (this is default)
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 		return false;
 	}
 
