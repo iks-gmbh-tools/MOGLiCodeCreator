@@ -12,25 +12,21 @@ import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.OSUtil;
 
 /**
- * Helfer, um den Namespace von Eclipse-Projekten in einem Workspace zu ändern, z.B.
- * von "de.creditreform.aaa.orbis.client.rcp" in "de.iks.orbis.client".
+ * Helper, to rename namespaces of all Eclipse projects within the workspace, e.g.
+ * from "de.iks.exampleA.frontend" in "com.iks.exampleB.client".
  *
- * Dafür sind drei unterschiedliche Dinge zu tun:
- * 1. Die Namen der Projektverzeichnisse müssen geändert werden.
- * 2. Die Package-Struktur innerhalb des src-Verzeichnisses muss geändert werden.
- * 3. In allen Dateien, die in ihrem Namen oder ihren Inhalt den Namespace enthalten,
- * 	  muss dieser geändert werden.
+ * For this purpose, the following three steps are performed:
+ * 1. Names of directories in the file system are modified.
+ * 2. The 'package' instructions within the java files are changed.
+ * 3. All occurrences files of the old namespace (e.g. in configuration files or java comments) are replaced.
  *
- * Hinweise:
- * 1. Es wird grundsätzlich immer der ganze Workspace ersetzt.
- * 2. Die Bezeichnung des Namespace beginnt immer mit der obersten Ebene z.B. de oder com.
- * 3. Die Bezeichnung des Namespace hört immer auf der "untersten Ebene" auf.
- * 4. Die unterste Ebene des Namespaces endet auf dem letzten gemeinsamen Abschnitt der Projektnamen, z.B. client oder rcp.
- * 5. In der Verzeichnis-Hierarchie gibt es auf der oben genannten "untersten Ebene" des Namespaces noch
- *    keine Dateien, sondern erst in tieferen Verzeichnis-Ebenen.
- * 6. Existiert das Verzeichnis des Ziel-Workspaces nicht, wird es erzeugt.
- * 7. Ist das Verzeichnis des Ziel-Workspaces nicht leer, wird es automatisch geleert werden (siehe initTarget).
- * 8. Der Quell-Workspace wird grundsaetzlich nicht veraendert!
+ * Note:
+ * 1. Always, the whole workspace is modified.
+ * 2. Namespaces beginn always with the highest level, e.g. 'de' or 'com'.
+ * 3. Namespaces end on the last common part, that all project names in the workspace share.
+ * 4. In the file system, each project contains a folder that corresponds the namespace. It must not contain files. Only its subfolders can contain files.
+ * 5. Not existing target folders will be created.
+ * 6. Existing target files will be deleted (see initTarget).
  *
  * @author OberratR
  */

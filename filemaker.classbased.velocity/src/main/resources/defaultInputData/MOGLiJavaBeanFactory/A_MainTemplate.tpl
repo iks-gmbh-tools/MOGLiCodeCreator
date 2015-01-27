@@ -8,6 +8,12 @@ package ${classDescriptor.package}.factory;
 #parse("commonSubtemplates/importDomainModelClasses.tpl")
 import java.util.*;
 
+<<<<<<< HEAD
+=======
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormat;
+'
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 import ${classDescriptor.package}.${classDescriptor.simpleName};
 import ${classDescriptor.package}.builder.${classDescriptor.simpleName}Builder;
 import ${classDescriptor.package}.factory.${classDescriptor.simpleName}Factory;
@@ -23,6 +29,11 @@ import org.apache.commons.lang.StringUtils;
 */
 public class ${classDescriptor.simpleName}Factory 
 {
+<<<<<<< HEAD
+=======
+'	private final static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("$model.getMetaInfoValueFor("dateTimeFormat")");
+'
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 '	public static final int DEFAULT_MAX_LENGTH_STRING_VALUE = 1000;
 '	public static final int DEFAULT_MAX_LENGTH_NUMBER_VALUE = 8;
 '	public static final int DEFAULT_MIN_LENGTH_STRING_VALUE = 0;
@@ -221,6 +232,7 @@ public class ${classDescriptor.simpleName}Factory
 '	}
 '
 
+<<<<<<< HEAD
 #parse("D_buildDataPool.tpl")
 
 '
@@ -230,5 +242,16 @@ public class ${classDescriptor.simpleName}Factory
 '
 
 #parse("H_buildCreateInstanceWithAllSupportedFieldsNotReachingMinLength.tpl")		
+=======
+#parse("G_buildCreateInstanceWithAllSupportedFieldsExceedingMaxLength.tpl")
+
+'
+
+#parse("H_buildCreateInstanceWithAllSupportedFieldsNotReachingMinLength.tpl")		
+
+'
+
+#parse("D_buildDataPool.tpl")
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 
 }

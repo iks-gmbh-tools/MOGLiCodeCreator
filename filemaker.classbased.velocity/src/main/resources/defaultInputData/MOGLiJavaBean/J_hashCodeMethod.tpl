@@ -10,7 +10,7 @@
 	
 	#if ( $TemplateJavaUtility.isJavaMetaTypeArray($javaType) )
 
-'		result = prime * result + Arrays.hashCode($attributeName);
+'				 result = prime * result + Arrays.hashCode($attributeName);
 	
 	#elseif ( $TemplateJavaUtility.isJavaMetaTypePrimitive($javaType) )
 	
@@ -18,7 +18,7 @@
 	
 	#else
 	
-'               result = prime * result + (($attributeName == null) ? 0 : $attributeName.hashCode());
+'                result = prime * result + (($attributeName == null) ? 0 : $attributeName.hashCode());
 
 	#end
 

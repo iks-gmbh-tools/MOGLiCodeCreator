@@ -29,6 +29,10 @@ variable alphanumericCharset "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVW
 model MOGLiCC_JavaBeanModel
   metainfo eclipseProjectDir <applicationRootDir>
   metainfo projectName MOGLiCC_JavaBeanProject
+<<<<<<< HEAD
+=======
+  metainfo dateTimeFormat "dd.MM.yyyy HH:mm:ss:SSS"
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
   metainfo useExtensionPlugin ExcelStandardModelProvider
 
 class <<DomainPath>>.Person
@@ -208,6 +212,15 @@ class <<DomainPath>>.Misc
     metainfo MinLength 3
     metainfo MaxLength 9
 
+<<<<<<< HEAD
+=======
+  attribute dateTime
+    metainfo JavaType org.joda.time.DateTime
+    metainfo ExampleData "05.03.2010 08:59:01:001"
+    metainfo Misc1 "15.12.2013 18:39:11:231"
+    metainfo Misc2 "25.10.2008 12:00:59:999"
+
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
    attribute listOfLongs
     metainfo JavaType java.util.List<Long>
     metainfo ExampleData "1, 2"

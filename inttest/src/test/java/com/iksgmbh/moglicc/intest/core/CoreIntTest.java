@@ -37,7 +37,7 @@ public class CoreIntTest extends IntTestParent {
 	 * NOTE: This method represents no regular integration test!
 	 *       It is used to debug a problem with production data!
 	 * @throws IOException 
-	 *  */
+	 **/
 	//@Test  // comment this line out when building a MOGLiCC release
 	public void runWithExternalInputData() throws IOException {
 		// prepare test
@@ -46,9 +46,16 @@ public class CoreIntTest extends IntTestParent {
 		//copyExternalInputDataIntoMOGLiCCWorkspace("C:\\dev\\sources\\ctlbignet2boni\\src\\test\\resources\\MOGLiCodeCreator");
 		//copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//sources//ctlcrmoglicc//work//workspaces//ctlFluxJob");
 		//copyExternalInputDataIntoMOGLiCCWorkspace("C:\\dev\\sources\\ctlbignet2boni\\src\\test\\resources\\MOGLiCodeCreator");
+<<<<<<< HEAD
 		copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/ReikOberrath_Master_final/application/target/releaseDir/SystemTestDir");
 		                                           
 		//copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//MOGLiCC//ReikOberrath_Master//application//target//releaseDir//SystemTestDir");
+=======
+		//copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//MOGLiCC//ReikOberrath_Master//application//target//releaseDir//SystemTestDir");
+		//copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/ReikOberrath_Master_final/application/target/releaseDir/SystemTestDir");
+		copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//MOGLiCC//drumdibum//workspaces//standard");
+		
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 
 		// call functionality under test
 		MOGLiCodeCreator.main(args);

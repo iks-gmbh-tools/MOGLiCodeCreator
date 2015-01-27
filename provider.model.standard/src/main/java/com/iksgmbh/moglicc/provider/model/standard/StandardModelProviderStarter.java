@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import com.iksgmbh.helper.AnnotationParser;
 import com.iksgmbh.moglicc.core.InfrastructureService;
@@ -521,6 +522,29 @@ public class StandardModelProviderStarter implements ModelProvider {
 			}
 			
 		}
+		
+		if (! validationErrorMessages.isEmpty())
+		{
+			sb.append(FileUtil.getSystemLineSeparator());
+			sb.append("Following validation error(s) occurred:");
+			sb.append(FileUtil.getSystemLineSeparator());
+			
+			final Set<String> keySet = validationErrorMessages.keySet();
+			for (String pluginId : keySet) 
+			{
+				final List<String> list = validationErrorMessages.get(pluginId);
+				
+				sb.append("Vendor of validation rule: " + pluginId);
+				sb.append(FileUtil.getSystemLineSeparator());
+				
+				for (String errorMessage : list) {
+					sb.append("   " + errorMessage);
+					sb.append(FileUtil.getSystemLineSeparator());
+				}
+			}
+			
+		}
+		
 		return sb.toString();
 	}
 

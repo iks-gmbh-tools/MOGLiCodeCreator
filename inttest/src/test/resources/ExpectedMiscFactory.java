@@ -1,5 +1,9 @@
 package com.iksgmbh.moglicc.demo.factory;
 
+<<<<<<< HEAD
+=======
+import org.joda.time.DateTime;
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 import java.lang.Boolean;
 import java.util.List;
 import java.lang.Long;
@@ -10,10 +14,20 @@ import java.lang.Double;
 import java.util.HashSet;
 import java.lang.Character;
 import java.math.BigDecimal;
+<<<<<<< HEAD
 import com.iksgmbh.moglicc.demo.Person;
 import java.util.Arrays;
 import java.lang.Byte;
 import java.util.*;
+=======
+import java.util.Arrays;
+import com.iksgmbh.moglicc.demo.Person;
+import java.lang.Byte;
+import java.util.*;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormat;
+
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 import com.iksgmbh.moglicc.demo.Misc;
 import com.iksgmbh.moglicc.demo.builder.MiscBuilder;
 import com.iksgmbh.moglicc.demo.factory.MiscFactory;
@@ -29,6 +43,11 @@ import org.apache.commons.lang.StringUtils;
 */
 public class MiscFactory
 {
+<<<<<<< HEAD
+=======
+	private final static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss:SSS");
+
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 	public static final int DEFAULT_MAX_LENGTH_STRING_VALUE = 1000;
 	public static final int DEFAULT_MAX_LENGTH_NUMBER_VALUE = 8;
 	public static final int DEFAULT_MIN_LENGTH_STRING_VALUE = 0;
@@ -130,6 +149,10 @@ public class MiscFactory
 		instance.setFloatWrapper(null);
 		instance.setDoubleWrapper(null);
 		instance.setBigDecimal(null);
+<<<<<<< HEAD
+=======
+		instance.setDateTime(null);
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 		instance.setListOfLongs(null);
 		instance.setStringList(null);
 		instance.setStringArray(null);
@@ -563,6 +586,13 @@ public class MiscFactory
 		if ( ! StringUtils.isEmpty( value ) )
 			builder = builder.withBigDecimal( new BigDecimal( "" + value ) );
 
+<<<<<<< HEAD
+=======
+		value = getValue("DateTime", index);
+		if ( ! StringUtils.isEmpty( value ) )
+			builder = builder.withDateTime( dateTimeFormatter.parseDateTime( value ) );
+
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 		builder = builder.withListOfLongs( CollectionsStringUtils.commaSeparatedStringToLongList( getValue("ListOfLongs", index) ) );
 
 		builder = builder.withStringList( CollectionsStringUtils.commaSeparatedStringToStringList( getValue("StringList", index) ) );
@@ -583,6 +613,44 @@ public class MiscFactory
 		return MiscFactory.dataPool.get(firstKey).size();
 	}
 
+<<<<<<< HEAD
+=======
+	/**
+	 * Calls createInstanceWithAllFieldsAtMaxLength and addToFieldContent to fields of supported JavaType
+	 * (these are: byte, Byte, int, Integer, double, Double, String, java.math.BigDecimal,
+    * if MaxLength-metainfo is defined for the corresponding attribute in the data model.
+	 * @return instance that causes validation exceptions for the supported fields.
+	 */
+	public static Misc createInstanceWithAllSupportedFieldsExceedingMaxLength()
+	{
+		final Misc toReturn = createInstanceWithAllFieldsAtMaxLength();
+
+		addToFieldContent(toReturn, "Text", "9");
+		addToFieldContent(toReturn, "NumberByte", "9");
+		addToFieldContent(toReturn, "ByteWrapper", "9");
+		addToFieldContent(toReturn, "LongWrapper", "9");
+		addToFieldContent(toReturn, "BigDecimal", "9");
+
+		return toReturn;
+	}
+
+	/**
+	 * Calls createInstanceWithAllFieldsAtMinLength and cutFieldContent to fields of supported JavaType
+	 * (these are; byte, Byte, int, Integer, double, Double, String, java.math.BigDecimal),
+	 * if MinLength-metainfo is defined for the corresponding attribute in the data model.
+	 * @return instance that causes validation exceptions for the corresponding fields.
+	 */
+	public static Misc createInstanceWithAllSupportedFieldsNotReachingMinLength()
+	{
+		final Misc toReturn = createInstanceWithAllFieldsAtMinLength();
+
+		cutFieldContent(toReturn, "Text", 1);
+		cutFieldContent(toReturn, "BigDecimal", 1);
+
+		return toReturn;
+	}
+
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 	static
 	{
 		// fill data pool
@@ -666,6 +734,14 @@ public class MiscFactory
 		bigDecimalList.add("123.4323");
 		dataPool.put("BigDecimal", bigDecimalList);
 
+<<<<<<< HEAD
+=======
+		final List<String> dateTimeList = new ArrayList<String>();
+		dateTimeList.add("15.12.2013 18:39:11:231");
+		dateTimeList.add("25.10.2008 12:00:59:999");
+		dataPool.put("DateTime", dateTimeList);
+
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 		final List<String> listOfLongsList = new ArrayList<String>();
 		listOfLongsList.add("1, 2, 3");
 		listOfLongsList.add("1, 2, 3, 4");
@@ -717,6 +793,7 @@ public class MiscFactory
 		minLengths.put("BigDecimal", new Integer( 3 ));
 	}
 
+<<<<<<< HEAD
 
 	/**
 	 * Calls createInstanceWithAllFieldsAtMaxLength and addToFieldContent to fields of supported JavaType
@@ -753,3 +830,6 @@ public class MiscFactory
 		return toReturn;
 	}
 }
+=======
+}
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
