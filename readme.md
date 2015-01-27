@@ -76,8 +76,6 @@ Current version: **1.5.0**
 - New model file 'MOGLiCC-Plugin' added to the StandardModelProvider
 - New artefact 'MOGLiCC-Plugin" added to the VelocityClassBasedGenerator 
 
-**Changes to 1.0.0**
-- empty output file bug fixed
 
 * * *
 
