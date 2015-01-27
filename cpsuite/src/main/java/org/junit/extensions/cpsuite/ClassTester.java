@@ -1,5 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 /*
  * @author Johannes Link (business@johanneslink.net)
  * 
@@ -18,6 +20,7 @@ public interface ClassTester {
 =======
 =======
 >>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 /*
  * @author Johannes Link (business@johanneslink.net)
  * 
@@ -35,6 +38,9 @@ public interface ClassTester {
 	boolean searchInJars();
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
+=======
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 =======
 /*
  * @author Johannes Link (business@johanneslink.net)
@@ -51,6 +57,9 @@ public interface ClassTester {
 	boolean acceptInnerClass();
 
 	boolean searchInJars();
+<<<<<<< HEAD
+=======
 >>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 >>>>>>> originReikOberrath/master
 }

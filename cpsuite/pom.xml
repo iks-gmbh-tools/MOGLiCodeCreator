@@ -1,5 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -43,6 +45,7 @@
 =======
 =======
 >>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -85,6 +88,9 @@
 	    
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
+=======
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 =======
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -126,6 +132,9 @@
 		</plugins>
 	</build>
 	    
+<<<<<<< HEAD
+=======
 >>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 >>>>>>> originReikOberrath/master
 </project>

@@ -1,5 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 /*
  * @author Johannes Link (business@johanneslink.net)
  * 
@@ -28,6 +30,7 @@ public class AcceptAllTester implements ClassTester {
 =======
 =======
 >>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 /*
  * @author Johannes Link (business@johanneslink.net)
  * 
@@ -55,6 +58,9 @@ public class AcceptAllTester implements ClassTester {
 
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
+=======
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 =======
 /*
  * @author Johannes Link (business@johanneslink.net)
@@ -81,6 +87,9 @@ public class AcceptAllTester implements ClassTester {
 		return true;
 	}
 
+<<<<<<< HEAD
+=======
 >>>>>>> 9fc3cbd437cf194e6ad0560123dd6958fe55cdfc
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
 >>>>>>> originReikOberrath/master
 }

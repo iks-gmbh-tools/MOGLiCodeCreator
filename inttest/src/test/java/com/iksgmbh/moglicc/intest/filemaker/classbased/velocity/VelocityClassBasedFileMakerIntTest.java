@@ -1,11 +1,14 @@
 package com.iksgmbh.moglicc.intest.filemaker.classbased.velocity;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
 
 import com.iksgmbh.moglicc.MOGLiSystemConstants;
+import com.iksgmbh.moglicc.ReportWriter;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.intest.IntTestParent;

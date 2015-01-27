@@ -32,5 +32,13 @@ goto End
 echo Problem: No JVM available because no java executable was found in %JAVA_HOME% !
 
 :End
+<<<<<<< HEAD
+<<<<<<< HEAD
+echo Done with batch script.
+=======
+echo Done with MOGLiCC batch script.
+>>>>>>> development
+=======
 echo Done with MOGLiCC batch script.
 
+>>>>>>> 656c84c58ad794ed34c58c30ecc9bf656c921412
