@@ -2,6 +2,7 @@ package com.iksgmbh.moglicc.provider.engine.velocity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -92,13 +93,17 @@ public class TemplateJavaUtility {
 		return toReturn;
 	}
 	
-	public static HashSet<String> searchForImportClasses(final ClassDescriptor classDescriptor) {
+	public static List<String> searchForImportClasses(final ClassDescriptor classDescriptor) {
 		final HashSet<String> importClasses = new HashSet<String>();
 		final List<MetaInfo> allMetaInfos = classDescriptor.getAllMetaInfos();
+		
 		for (final MetaInfo metaInfo : allMetaInfos) {
 			checkTypeOfValue(importClasses, metaInfo.getValue());
 		}
-		return importClasses;
+		
+		final List<String> toReturn = new ArrayList<String>(importClasses); 
+		Collections.sort(toReturn);
+		return toReturn;
 	}
 
 

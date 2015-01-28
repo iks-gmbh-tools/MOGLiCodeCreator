@@ -1,6 +1,6 @@
 #set( $superClass = $classDescriptor.getMetaInfoValueFor("extends") )
 #set( $superClassSimpleName = $TemplateJavaUtility.getSimpleClassName($superClass) )
-#set( $interfaceList = $classDescriptor.createAllFromDataPoolMetaInfoValuesFor("implements") )
+#set( $interfaceList = $classDescriptor.getAllMetaInfoValuesFor("implements") )
 #set( $interfaceSimpleNameList = $TemplateJavaUtility.getSimpleClassName($interfaceList) )
 #set( $interfaceSimpleNames = $TemplateStringUtility.toCommaSeparatedString($interfaceSimpleNameList) )
 
@@ -8,7 +8,7 @@
 
      #if ( $TemplateStringUtility.isListEmpty($interfaceList) )
      
-     	public class ${classDescriptor.simpleName} extends $superClassSimpleName
+     	public class ${classDescriptor.simpleName} extends $superClassSimpleName 
      	
      #else
      

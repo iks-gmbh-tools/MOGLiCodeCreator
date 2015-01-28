@@ -36,4 +36,5 @@ III Finishing steps
 3. Commit the current sources in the master branch with comment (git commit -a -m 'Release X.Y.Z') and push them to the github remote repository
 4. Eventually merge the new changes to other branches such as 'development'
 5. Set new version in Github-Wiki: https://github.com/iks-github/MOGLiCodeCreator/wiki
+6. Draft a new Release Entry: https://github.com/iks-github/MOGLiCodeCreator/releases with the release notes defined in II 1.
 

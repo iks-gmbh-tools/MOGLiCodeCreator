@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParen
 		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("Person", attributeDescriptor, metaInfo);
 		
 		// call functionality under test
-		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		final List<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
 		
 		// verify test result
 		assertEquals("number of class names", 2, searchForClassNames.size());
@@ -43,7 +43,7 @@ public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParen
 		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("Person", attributeDescriptor, metaInfo);
 		
 		// call functionality under test
-		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		final List<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
 		
 		// verify test result
 		assertEquals("number of class names", 2, searchForClassNames.size());
@@ -60,7 +60,7 @@ public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParen
 		new ClassNameData("de.test.Address");
 		
 		// call functionality under test
-		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		final List<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
 		
 		// verify test result
 		assertEquals("number of class names", 2, searchForClassNames.size());
@@ -76,7 +76,7 @@ public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParen
 		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("Person", attributeDescriptor, metaInfo);
 		
 		// call functionality under test
-		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		final List<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
 		
 		// verify test result
 		assertEquals("number of class names", 2, searchForClassNames.size());
@@ -92,7 +92,7 @@ public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParen
 		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("ClassName", attributeDescriptor, metaInfo);
 		
 		// call functionality under test
-		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		final List<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
 		
 		// verify test result
 		assertEquals("number of class names", 2, searchForClassNames.size());
@@ -107,7 +107,7 @@ public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParen
 		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("ClassName", attributeDescriptor, metaInfo);
 		
 		// call functionality under test
-		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		final List<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
 		
 		// verify test result
 		assertEquals("number of class names", 3, searchForClassNames.size());
@@ -123,7 +123,7 @@ public class TemplateJavaUtilityUnitTest extends VelocityEngineProviderTestParen
 		final ClassDescriptor classDescriptor = new ClassDescriptorDummy("ClassName", attributeDescriptor, metaInfo);
 		
 		// call functionality under test
-		final HashSet<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
+		final List<String> searchForClassNames = TemplateJavaUtility.searchForImportClasses(classDescriptor);
 		
 		// verify test result
 		assertEquals("number of class names", 3, searchForClassNames.size());

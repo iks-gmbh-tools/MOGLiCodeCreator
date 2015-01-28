@@ -32,6 +32,7 @@ public class CmdUtil {
 		try {
 			Process execProcess= Runtime.getRuntime().exec(cmdstart, getEnvParams(), parentProject);
 			messages = readMessagesFromExecProcess(execProcess);
+			Thread.sleep(100); // give time to read messages
 		}
 		catch (Exception e) {
 			String errorMessage = "Aufruf von '" + exeCommand + "' in '" + parentProject.getAbsolutePath() + "' fehlgeschlagen!";
@@ -51,11 +52,12 @@ public class CmdUtil {
 
 	public static String getMessageFromStream(InputStream is) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		String line = reader.readLine();
+		String line = "no content";
 		StringBuffer message = new StringBuffer();
 		while (line != null) {
-			message.append("\r\n" + line);
 			line = reader.readLine();
+			if (line != null)
+				message.append("\r\n" + line);
 		}
 		return message.toString();
 	}

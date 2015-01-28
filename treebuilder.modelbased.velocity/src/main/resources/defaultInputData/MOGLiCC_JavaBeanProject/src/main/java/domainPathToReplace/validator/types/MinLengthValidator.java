@@ -1,8 +1,8 @@
-package com.iksgmbh.moglicc.demo.validator.types;
+package <domainPathToReplace>.validator.types;
 
-import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult;
-import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult.Status;
-import com.iksgmbh.moglicc.demo.validator.helper.FieldValidator;
+import <domainPathToReplace>.validator.helper.FieldValidationResult;
+import <domainPathToReplace>.validator.helper.FieldValidationResult.Status;
+import <domainPathToReplace>.validator.helper.FieldValidator;
 
 
 public class MinLengthValidator extends FieldValidator {

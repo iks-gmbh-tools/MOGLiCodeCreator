@@ -6,7 +6,7 @@ Workspace: ../inttest/target/TestDir
 Model file: MOGLiCC_JavaBeanModel.txt, MOGLiCC_JavaBeanModel_Testdaten.xlsx
 
 Execution of all 6 plugins successful.
-A total of 61 generation events for 10 output artefact(s) have been performed.
+A total of 74 generation events for 10 output artefact(s) have been performed.
 
 ExcelStandardModelProvider: Model MOGLiCC_JavaBeanModel with 4 classes has been called 2 times.
 StandardModelProvider: Model MOGLiCC_JavaBeanModel with 4 classes has been called 3 times.
@@ -14,6 +14,6 @@ VelocityEngineProvider: Velocity engine started for 15 calls.
 
 VelocityClassBasedFileMaker: From 9 input artefact(s), have been 8 used to make 32 files.
 VelocityModelBasedLineInserter: From 1 input artefact(s), have been 1 used to create 1 file(s) and to perform 3 insertion(s).
-VelocityModelBasedTreeBuilder: From 2 input artefact(s), have been 1 used to perform 25 generation events.
+VelocityModelBasedTreeBuilder: From 2 input artefact(s), have been 1 used to perform 38 generation events.
 
 ######################  End  ######################

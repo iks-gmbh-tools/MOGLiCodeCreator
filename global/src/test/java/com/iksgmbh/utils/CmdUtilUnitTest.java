@@ -33,6 +33,7 @@ public class CmdUtilUnitTest {
 				CmdUtil.execWindowCommand(dir, execCommand, true);
 			} catch (RuntimeException e) {
 				assertTrue("Wrong Error message!", e.getMessage().trim().startsWith("Der Befehl \"unknown\" ist entweder falsch geschrieben oder"));
+				System.err.println(e.getMessage());
 				assertTrue("Wrong Error message!", e.getMessage().trim().endsWith("konnte nicht gefunden werden."));
 				return;
 			}

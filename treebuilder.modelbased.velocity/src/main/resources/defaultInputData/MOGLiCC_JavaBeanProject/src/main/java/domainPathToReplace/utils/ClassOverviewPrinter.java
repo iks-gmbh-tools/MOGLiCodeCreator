@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.demo.utils;
+package <domainPathToReplace>.utils;
 
 import java.io.File;
 import java.util.ArrayList;

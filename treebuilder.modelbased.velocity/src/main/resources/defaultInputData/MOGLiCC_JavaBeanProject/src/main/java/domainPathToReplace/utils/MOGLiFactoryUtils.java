@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.demo.utils;
+package <domainPathToReplace>.utils;
 
 public class MOGLiFactoryUtils {
 

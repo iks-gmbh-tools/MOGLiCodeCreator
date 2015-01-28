@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.demo.validator.types;
+package <domainPathToReplace>.validator.types;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.CharSet;
 
-import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult;
-import com.iksgmbh.moglicc.demo.validator.helper.FieldValidationResult.Status;
-import com.iksgmbh.moglicc.demo.validator.helper.FieldValidator;
+import <domainPathToReplace>.validator.helper.FieldValidationResult;
+import <domainPathToReplace>.validator.helper.FieldValidationResult.Status;
+import <domainPathToReplace>.validator.helper.FieldValidator;
 
 public class ValidCharFieldValidator extends FieldValidator {
 

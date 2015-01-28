@@ -31,6 +31,7 @@ model MOGLiCC_JavaBeanModel
   metainfo projectName MOGLiCC_JavaBeanProject
   metainfo dateTimeFormat "dd.MM.yyyy HH:mm:ss:SSS"
   metainfo useExtensionPlugin ExcelStandardModelProvider
+  metainfo namespace <<DomainPath>>
 
 class <<DomainPath>>.Person
 
@@ -65,6 +66,7 @@ class <<DomainPath>>.Person
 class <<DomainPath>>.Member
   metainfo extends <<DomainPath>>.Person
   metainfo implements java.io.Serializable
+  metainfo implements Cloneable
 
     attribute membershipNumber
     metainfo JavaType int

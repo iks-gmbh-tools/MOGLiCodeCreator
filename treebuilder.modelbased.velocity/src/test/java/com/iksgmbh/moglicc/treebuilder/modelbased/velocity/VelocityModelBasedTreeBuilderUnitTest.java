@@ -162,7 +162,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 		final String generationReport = unifyFilePath(treeBuilderGenerator.getGeneratorReport());
 		assertStringContains(generationReport, "pom.xml  (file existed already in the targetDir and was preserved - " +
 				                               "the generated file is available in the plugin's output dir)");
-		final String expected = "src/main/java/com/iksgmbh/moglicc/demo/utils/ClassOverviewPrinter.java";
+		final String expected = "src/main/java/domainPathToReplace/utils/ClassOverviewPrinter.java";
 		assertStringContains(generationReport, expected + FileUtil.getSystemLineSeparator());  
 	}
 

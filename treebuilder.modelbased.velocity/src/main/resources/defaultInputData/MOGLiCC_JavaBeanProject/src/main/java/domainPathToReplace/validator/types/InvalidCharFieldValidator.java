@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.demo.validator.types;
+package <domainPathToReplace>.validator.types;
 
 import java.util.ArrayList;
 import java.util.List;

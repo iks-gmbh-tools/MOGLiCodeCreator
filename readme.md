@@ -35,7 +35,11 @@ License: **All Rights Reserved**
 
 travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.png?branch=master)](https://travis-ci.org/iks-github/MOGLiCodeCreator)
 
-Current version: **1.5.1**
+Current version: **1.5.2**
+
+**Changes to 1.5.1**
+- Bugfix: MOGLiCC JavaBean Group now supports to configure an arbitrary namespace
+- Bugfix: MOGLiCC JavaBean Group now handles "implements" metainfos correct
 
 **Changes to 1.5.0**
 - Bugfix: Provider report now with validation error messages (if occurred)

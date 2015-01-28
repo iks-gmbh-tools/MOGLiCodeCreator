@@ -1,4 +1,4 @@
-package com.iksgmbh.moglicc.demo.validator.helper;
+package <domainPathToReplace>.validator.helper;
 
 public abstract class FieldValidator {
 	

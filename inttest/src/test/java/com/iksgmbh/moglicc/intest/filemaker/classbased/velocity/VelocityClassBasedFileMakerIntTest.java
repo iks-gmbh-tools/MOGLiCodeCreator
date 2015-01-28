@@ -344,5 +344,22 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		// verify test result
 		assertFileDoesNotExist(resultFile);
 	}
+
+	@Test
+	public void createsMemberClassImplementingCloneableAndSerializable() throws Exception {
+		// prepare test
+		standardModelProviderStarter.doYourJob();
+
+		// call functionality under test
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// verified if no exception was thrown
+		final File result = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginOutputDir()
+				                     + "/MOGLiJavaBean", "Member.java");
+		assertFileExists(result);
+		assertFileContainsEntry(result, "implements Serializable, Cloneable");
+		assertFileContainsEntry(result, "private static final long serialVersionUID = ");
+		assertFileContainsEntry(result, "public Object clone()");
+	}
 	
 }

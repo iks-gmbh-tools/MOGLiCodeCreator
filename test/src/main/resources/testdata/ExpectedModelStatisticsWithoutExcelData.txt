@@ -16,6 +16,7 @@ Plugin 'VelocityClassBasedFileMaker' uses the following MetaInfo elements:
 'eclipseProjectDir' in Model level
 'extends' in Class level
 'implements' in Class level
+'namespace' in Model level
 'projectName' in Model level
 'useExtensionPlugin' in Model level
 

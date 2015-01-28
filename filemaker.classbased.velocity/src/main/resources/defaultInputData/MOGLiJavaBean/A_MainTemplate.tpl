@@ -34,7 +34,7 @@ package ${classDescriptor.package};
 
 '
 
-#if ( $classDescriptor.doesHaveMetaInfo( "implements", "java.lang.Cloneable") )
+#if ( $classDescriptor.doesHaveMetaInfo( "implements", "Cloneable") )
 
 	#parse("K_cloneMethod.tpl")
 

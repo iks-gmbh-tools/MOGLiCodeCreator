@@ -2,7 +2,7 @@
 
 All 3 generator plugins executed successfully.
 Model used is 'MOGLiCC_JavaBeanModel'.
-A total of 61 generation events for 10 output artefact(s) have been performed.
+A total of 74 generation events for 10 output artefact(s) have been performed.
 
 ----------------------------------------------------------------------------------------------
 
@@ -78,10 +78,10 @@ MOGLiCC_NewPluginProject
 
    Report for input artefact 'MOGLiCC_JavaBeanProject':
 
-   Tree artefact generated in: C:\dev\MOGLiCC\ReikOberrath_Master\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
+   Tree artefact generated in: C:\data\Reik\dev\eclipse\workspaces\MOGLiCodeCreatorWithRemoteToIksGithub\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
    6 folders have been created.
    13 files have been created.
-   6 file modifications were performed.
+   19 file modifications were performed.
 
    Created subdirectories: 
       \src\main\java\com\iksgmbh\moglicc\demo\utils
@@ -112,8 +112,10 @@ MOGLiCC_NewPluginProject
       Placeholder 'mavenProjectName' replaced by 'MOGLiJavaBean Artifacts' in file 'pom.xml'
       Placeholder 'mavenProjectDescription' replaced by 'An example project to demonstrate both, the file structure generator and the artifacts of the MOGLiJavaBeanGroup' in file 'pom.xml'
       Placeholder 'class ClassOverviewPrinter' replaced by 'class MOGLiCC_JavaBeanProjectClassOverviewPrinter' in file 'ClassOverviewPrinter.java'
+      Placeholder '<domainPathToReplace>' replaced by 'com.iksgmbh.moglicc.demo' in file 'ClassOverviewPrinter.java'CollectionsStringUtils.java'MOGLiFactoryUtils.java'FieldValidationException.java'FieldValidationResult.java'FieldValidator.java'JavaBeanValidator.java'InvalidCharFieldValidator.java'MandatoryFieldValidator.java'MaxLengthValidator.java'MinLengthValidator.java'ValidCharFieldValidator.java'
 
    Performed file renamings:
-      File 'ClassOverviewPrinter.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '..\inttest\target\TestDir\output\VelocityModelBasedTreeBuilder\MOGLiCC_JavaBeanProject\src\main\java\com\iksgmbh\moglicc\demo\utils'
+      File 'ClassOverviewPrinter.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '..\inttest\target\TestDir\output\VelocityModelBasedTreeBuilder\MOGLiCC_JavaBeanProject\src\main\java\domainPathToReplace\utils'
+      Directory 'domainPathToReplace' renamed to 'demo' in directory '..\inttest\target\TestDir\output\VelocityModelBasedTreeBuilder\MOGLiCC_JavaBeanProject\src\main\java'
 
 **************************************  E N D  ***********************************************

@@ -56,9 +56,9 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 	public static final String PLUGIN_PROPERTIES_FILE = "generator.properties";
 	public static final String MOGLICC_NEW_PLUGIN_PROJECT = "MOGLiCC_NewPluginProject";
 	public static final String MOGLICC_JAVA_BEAN_PROJECT = "MOGLiCC_JavaBeanProject";
-	public static final String DEMO_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/com/iksgmbh/moglicc/demo";
-	public static final String VALIDATOR_TYPES_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/com/iksgmbh/moglicc/demo/validator/types";
-	public static final String VALIDATOR_HELPER_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/com/iksgmbh/moglicc/demo/validator/helper";
+	public static final String DEMO_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/domainPathToReplace";
+	public static final String VALIDATOR_TYPES_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/domainPathToReplace/validator/types";
+	public static final String VALIDATOR_HELPER_SOURCE_DIR = MOGLICC_JAVA_BEAN_PROJECT + "/src/main/java/domainPathToReplace/validator/helper";
 	public static final String FILENAME_ARTEFACT_PROPERTIES = "artefact.properties";
 	public static final String MAIN_TEMPLATE_IDENTIFIER = "Main";
 
