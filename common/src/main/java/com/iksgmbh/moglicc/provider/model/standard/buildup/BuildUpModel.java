@@ -21,6 +21,7 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaModelObject;
 public class BuildUpModel extends MetaModelObject implements Model {
 	
 	private HashMap<String, HashSet<String>> metaInfoNamesForPluginIds;
+	private HashMap<String, String> variables;
 	private List<ClassDescriptor> classDescriptorList;
 	private String name;
 	
@@ -131,6 +132,22 @@ public class BuildUpModel extends MetaModelObject implements Model {
 		}
 		
 		return null;
+	}
+
+	public void addVariable(final String variableKey, 
+			                final String variableValue)
+	{
+		variables.put(variableKey, variableValue);
+	}
+
+	public HashMap<String, String> getVariables()
+	{
+		return variables;
+	}
+	
+	public void setVariables(final HashMap<String, String>  variables)
+	{
+		this.variables = variables;
 	}
 
 }

@@ -6,7 +6,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -503,5 +505,23 @@ public class ExcelStandardModelProviderStarterUnitTest extends ExcelStandardMode
 		assertEquals("metainfo name", "Abbr. 2", model.getClassDescriptorList().get(0)
                                                       .getAttributeDescriptorList().get(1)
                                                       .getMetaInfosWithNameStartingWith("Abbr. 2").get(0).getName());	
-	}	
+	}
+	
+	@Test
+	public void replacesVariablePlaceholderInPropertyKeys() throws Exception
+	{
+		// arrange
+		Properties pluginProperties = excelStandardModelProvider.readPluginProperties();
+		pluginProperties.put("<<toBeReplacedKey>>", "value");
+		final HashMap<String, String> variables = new HashMap<String, String>();
+		variables.put("<<toBeReplacedKey>>", "replacedKey");
+		
+		// act
+		final Properties replacedProperties = excelStandardModelProvider.doVariableReplacements(variables);
+		
+		// assert
+		assertEquals("value of replaced property key", "value", replacedProperties.get("replacedKey"));
+		
+	}
+	
 }

@@ -100,9 +100,14 @@ public class ModelEnricher
 		for (final ClassDescriptor classDescriptor : model.getClassDescriptorList()) 
 		{
 			if (classDescriptor.getFullyQualifiedName().equals(className))
-			{
 				return true;
-			}
+			
+			if (className.endsWith(classDescriptor.getSimpleName()))
+				providerReport.append(System.getProperty("line.separator")).append("WARNING: "
+						               + "Class '" + classDescriptor.getSimpleName() + "' is defined in the model of the StandardModelProvider "
+						               + "and in the Excel data with a different package!").append(System.getProperty("line.separator"))
+						               .append(System.getProperty("line.separator"));
+					
 		}
 		
 		return false;

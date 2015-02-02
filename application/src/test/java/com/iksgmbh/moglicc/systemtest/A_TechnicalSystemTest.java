@@ -151,7 +151,7 @@ public class A_TechnicalSystemTest extends __AbstractSystemTest {
 	}
 
 	@Test
-	@Ignore // TODO: due to a very strange behaviour when executing under window the method reader.readline() in CmdUtil.getMessageFromStream: system freezes totally
+	//@Ignore // TODO: possible, very strange behaviour when executing under window the method reader.readline() in CmdUtil.getMessageFromStream: system freezes totally
 	public void createsEmergencyLogFileIfDefinedWorkspaceDirCannotBeCreated() {
 		// prepare test
 		initApplicationPropertiesWith("workspace=");

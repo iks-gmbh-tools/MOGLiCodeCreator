@@ -3,8 +3,11 @@ package com.iksgmbh.moglicc.provider.model.standard.excel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
@@ -159,7 +162,7 @@ public class ExcelStandardModelProviderStarter implements ModelProvider {
 				buildUpModel = (BuildUpModel) inputData;
 				providerReport.append(System.getProperty("line.separator") + System.getProperty("line.separator"));
 				
-				final ExcelData excelData = ExcelDataProvider.doYourJob(getPluginProperties(), 
+				final ExcelData excelData = ExcelDataProvider.doYourJob(getPluginProperties(buildUpModel.getVariables()), 
 						                                                buildUpModel.getName(),
 						                                                infrastructure.getPluginInputDir());
 				excelFilename = excelData.excelFile.getName();
@@ -181,13 +184,42 @@ public class ExcelStandardModelProviderStarter implements ModelProvider {
 	}
 
 
-	private Properties getPluginProperties()
+	private Properties getPluginProperties(final HashMap<String, String> variables)
 	{
 		if (pluginProperties == null)
 		{
 			readPluginProperties();
 		}
+		
+		doVariableReplacements(variables);
+		
 		return pluginProperties;
+	}
+
+	Properties doVariableReplacements(final HashMap<String, String> variables)
+	{
+		if (variables  != null)  
+		{
+			final Set<String> variableKeys = variables.keySet();
+			final Properties replacedProperties = new Properties();
+			final Enumeration<Object> elements = pluginProperties.keys();
+			
+			while (elements.hasMoreElements())
+			{
+				final String origPropertyKey = (String) elements.nextElement();
+				String replacedPropertyKey = origPropertyKey;
+				
+				for (String variableKey : variableKeys) {
+					replacedPropertyKey = replacedPropertyKey.replace(variableKey, variables.get(variableKey));
+				}
+				
+				replacedProperties.put(replacedPropertyKey, pluginProperties.get(origPropertyKey));
+			}
+			
+			pluginProperties = replacedProperties;
+		}
+		
+		return pluginProperties;  // for test purpose
 	}
 
 	@Override

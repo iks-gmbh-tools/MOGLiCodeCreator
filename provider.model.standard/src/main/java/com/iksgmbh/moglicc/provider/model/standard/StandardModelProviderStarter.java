@@ -123,7 +123,7 @@ public class StandardModelProviderStarter implements ModelProvider {
 							validationErrorOccurred = true;
 							final String errorMessage = metaInfoValidator.getValidationErrorMessage()
 									                    + " for attribute '" + attributeDescriptor.getName() + "'"
-									                    + " of class '" + classDescriptor.getSimpleName() + "'"
+									                    + " of class '" + classDescriptor.getFullyQualifiedName() + "'"
 									                    + getModelString(metaInfoValidator);
 							infrastructure.getPluginLogger().logWarning(errorMessage);
 							addValidationErrorMessage(metaInfoValidator.getVendorPluginId(), errorMessage);

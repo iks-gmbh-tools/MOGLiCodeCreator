@@ -173,7 +173,8 @@ public class MetainfoValidationIntTest extends IntTestParent {
 			assertEquals("Error message", TextConstants.TEXT_MODEL_BREAKS_METAINFO_VALIDATORS, e.getMessage());
 
 			final String expected = "MetaInfo 'numeric-format' was found too many times (expected: 0, actual: 1) " +
-					                "for attribute 'netValue' of class 'Invoice' in model 'ConditionIsFalseTest'";
+					                "for attribute 'netValue' of class 'com.example.Invoice' in model 'ConditionIsFalseTest'";
+			System.out.println(standardModelProviderStarter.getProviderReport());
 			assertFileContainsEntry(logFile, expected);
 		}
 
@@ -191,7 +192,7 @@ public class MetainfoValidationIntTest extends IntTestParent {
 			assertEquals("Error message", TextConstants.TEXT_MODEL_BREAKS_METAINFO_VALIDATORS, e.getMessage());
 
 			final String expected = "MetaInfo 'numeric-format' was found too many times (expected: 0, actual: 1) for attribute " +
-					                "'taxId' of class 'Invoice' in model 'ConditionIsFalseTest'";
+					                "'taxId' of class 'com.example.Invoice' in model 'ConditionIsFalseTest'";
 			assertFileContainsEntry(logFile, expected);
 		}
 

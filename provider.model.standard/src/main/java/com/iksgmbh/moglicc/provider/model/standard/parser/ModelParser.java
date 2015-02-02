@@ -82,7 +82,10 @@ public class ModelParser {
 			}
 
 		}
+		
 		checkForErrors();
+		
+		buildUpModel.setVariables(variableMap);
 		return buildUpModel;
 	}
 	
@@ -91,7 +94,8 @@ public class ModelParser {
 		{
 			final String replacedLine = doVariableReplacement(line, lineCounter);
 			final Annotation variableData = variableParser.parse(replacedLine);
-			variableMap.put(variableData.getName(), variableData.getAdditionalInfo());
+			final String placeholder = VARIABLE_START_INDICATOR + variableData.getName() + VARIABLE_END_INDICATOR;
+			variableMap.put(placeholder, variableData.getAdditionalInfo());
 		} catch (MOGLiPluginException e)
 		{
 			errorList.add("Problem in line " + lineCounter + ": " + e.getMessage());
@@ -130,8 +134,7 @@ public class ModelParser {
 		final Set<String> keySet = variableMap.keySet();
 		for (final String key : keySet)
 		{
-			final String placeholder = VARIABLE_START_INDICATOR + key + VARIABLE_END_INDICATOR;
-			line = line.replace(placeholder, variableMap.get(key));
+			line = line.replace(key, variableMap.get(key));
 		}
 		
 		verifyReplacement(line, lineCounter);

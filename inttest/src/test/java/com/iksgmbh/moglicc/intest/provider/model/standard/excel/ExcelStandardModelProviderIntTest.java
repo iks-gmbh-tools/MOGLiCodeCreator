@@ -42,4 +42,27 @@ public class ExcelStandardModelProviderIntTest extends IntTestParent
 		assertEquals("Attribute number", "M\u00fcller", model.getClassDescriptorList().get(2).getAttributeDescriptorList().get(1).getMetaInfoValueFor("Person1"));
 	}
 
+	@Test
+	public void createsWarningInReportForClassesMismatchingInPackage() throws Exception 
+	{
+		// prepare test
+		final InfrastructureService infrastructure = standardModelProviderStarter.getInfrastructure();
+		final File testModelFile = new File(infrastructure.getPluginInputDir(), "MOGLiCC_JavaBeanModel.txt");
+		FileUtil.createNewFileWithContent(testModelFile, "model MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
+                                                         "metainfo " + StandardModelProviderStarter.USE_EXTENSION_PLUGIN_ID + 
+                                                         " ExcelStandardModelProvider" + FileUtil.getSystemLineSeparator() +
+                                                         FileUtil.getSystemLineSeparator() + "class any.other.package.Person");
+
+		standardModelProviderStarter.doYourJob();
+
+		// call functionality under test
+		excelStandardModelProviderStarter.doYourJob();
+		standardModelProviderStarter.getModel("");
+		
+		// verify test result
+		final String report = excelStandardModelProviderStarter.getProviderReport();
+		System.err.println(report);
+		assertStringContains(report, "WARNING: Class 'Person' is defined in the model of the StandardModelProvider and in the Excel data with a different package!");
+	}
+	
 }
