@@ -18,7 +18,7 @@
 	
 	#else
 	
-'                result = prime * result + (($attributeName == null) ? 0 : $attributeName.hashCode());
+'                result = prime * result + (($attributeName == null) ? 0 : ${attributeName}.hashCode());
 
 	#end
 

@@ -43,7 +43,7 @@ public class ExcelStandardModelProviderStarter implements ModelProvider {
 	public static final String RENAME_ATTRIBUTE_METAINFO_OCCURRENCE = ".rename.AttributeMetaInfo.Occurrence.";
 	public static final String RENAME_ATTRIBUTE_NAME_OCCURRENCE = ".rename.AttributeName.Occurrence.";
 	public static final String ERROR_PREFIX = "Problem with model read from " + PLUGIN_ID + ": ";
-	public static final String MATRIX_PATTERN = "<modelName>.matrix.1=<sheet>#<colNumber>:<rowNumber>";
+	public static final String MATRIX_PATTERN = "<modelName>.matrix.1=<sheet>#<colum>:<rowNumber>";
 	public static final String MATRIX_PATTERN_EXTENDED = "<modelName>.matrix.1=<sheet>#<colNumber>:<rowNumber> > <minAttributeIndex>-<maxAttributeIndex>";
 	public static final String OCCURRENCE_RENAMING_PATTERN = "<modelName>?<oldname>.<numberOfOccurrence>=<newName>"; 
 	public static final String OCCURRENCE_METAINFO_RENAMING_PATTERN = OCCURRENCE_RENAMING_PATTERN.replace("?", RENAME_ATTRIBUTE_METAINFO_OCCURRENCE); 

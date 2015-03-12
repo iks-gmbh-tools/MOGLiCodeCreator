@@ -168,7 +168,7 @@ public class ExcelDataProvider
 	}
 
 
-	private String parseCellData(String cellData, final ExcelData excelMetaData) throws MOGLiPluginException
+	String parseCellData(String cellData, final ExcelData excelMetaData) throws MOGLiPluginException
 	{
 		final String[] splitResult1 = cellData.split(">");
 		String toReturn = null;
@@ -184,6 +184,13 @@ public class ExcelDataProvider
 			final String matrixDef = excelMetaData.matrixDefinitions.get(excelMetaData.getIndexOfLastMatrix());
 			throw new MOGLiPluginException(ExcelStandardModelProviderStarter.ERROR_PREFIX + "Invalid Excel Data. Expected something like " + 
 			                               MATRIX_PATTERN + ". " + "Please correct " + "defined matrix <" + matrixDef + ">.");
+		}
+		
+		final char columnId = splitResult2[0].toUpperCase().charAt(0);
+		if (Character.isLetter( columnId ))
+		{
+			int asciiByteValue = (byte) columnId;
+			splitResult2[0] = "" + ( asciiByteValue - 64); // transform in column number
 		}
 
 		Integer colNo = null;

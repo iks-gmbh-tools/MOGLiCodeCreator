@@ -1,7 +1,6 @@
 package com.iksgmbh.moglicc.provider.model.standard.excel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.File;
 
@@ -25,6 +24,41 @@ public class ExcelDataProviderUnitTest extends ExcelStandardModelProviderTestPar
 		System.out.println(testdatafile.getAbsolutePath());
 		assertFileExists(testdatafile);
 	}
+	
+	@Test
+	public void parsesCellDataWithNumbers() throws Exception
+	{
+		// arrange
+		final ExcelStandardModelProviderStarter excelStandardModelProviderStarter = new ExcelStandardModelProviderStarter();
+		excelStandardModelProviderStarter.setInfrastructure(infrastructure);
+		final ExcelDataProvider excelDataProvider = new ExcelDataProvider(excelStandardModelProviderStarter.readPluginProperties());
+		final ExcelData excelMetaData = new ExcelData();
+		
+		// act 
+		excelDataProvider.parseCellData("1:2", excelMetaData);
+		
+		// assert 
+		assertEquals("colNo", 1, excelMetaData.firstCells.get(new Integer(0)).colNo);
+		assertEquals("rowNo", 2, excelMetaData.firstCells.get(new Integer(0)).rowNo);
+	}
+	
+	@Test
+	public void parsesCellDataWithLetters() throws Exception
+	{
+		// arrange
+		final ExcelStandardModelProviderStarter excelStandardModelProviderStarter = new ExcelStandardModelProviderStarter();
+		excelStandardModelProviderStarter.setInfrastructure(infrastructure);
+		final ExcelDataProvider excelDataProvider = new ExcelDataProvider(excelStandardModelProviderStarter.readPluginProperties());
+		final ExcelData excelMetaData = new ExcelData();
+		
+		// act 
+		excelDataProvider.parseCellData("F:12", excelMetaData);
+		
+		// assert 
+		assertEquals("colNo", 6, excelMetaData.firstCells.get(new Integer(0)).colNo);
+		assertEquals("rowNo", 12, excelMetaData.firstCells.get(new Integer(0)).rowNo);
+	}
+	
 	
 	@Test
 	public void readsExcelMetaDataFromPluginProperties() throws MOGLiPluginException

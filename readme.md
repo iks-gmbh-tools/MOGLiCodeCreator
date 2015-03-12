@@ -35,7 +35,11 @@ License: **All Rights Reserved**
 
 travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.png?branch=master)](https://travis-ci.org/iks-github/MOGLiCodeCreator)
 
-Current version: **1.5.2**
+Current version: **1.5.3**
+
+**Changes to 1.5.2**
+- Bugfix: MOGLiCC JavaBean Group bugfixed: hash-Method of JavaBean corrected
+- Bugfix: provider.model.standard.excel allows to use letters to define columns
 
 **Changes to 1.5.1**
 - Bugfix: MOGLiCC JavaBean Group now supports to configure an arbitrary namespace
