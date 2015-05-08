@@ -1,36 +1,110 @@
+REM Windows Start Script of MOGLiCC
+
 echo off
-echo Executing MOGLiCodeCreator...
+
 set "workspaceDir=%~1"
 set classpath=".\lib\*;.\lib\plugins\*"
-set SCRIPT_JAVA_HOME_BIN="C:\Programme\Java\jdk1.8.0\bin"
+set SystemJavaHome=%JAVA_HOME%
+set SystemJavaHomeBin=%SystemJavaHome%\bin
 
-if "%JAVA_HOME%" == "" goto Java_Home_Not_Set
-echo JAVA_HOME is defined as environmental variable: %JAVA_HOME%
-if not exist "%JAVA_HOME%\java.exe" goto no_JavaExe_in_JAVA_HOME
-echo java.exe found in %JAVA_HOME%
-"%JAVA_HOME%\java" -cp %classpath% com.iksgmbh.moglicc.MOGLiCodeCreator %workspaceDir%
+REM To avoid using the JAVA_HOME system variable, remove 'REM' from the following line and set the correct path where a java.exe can be found
+rem set ScriptJavaHomeBin="C:\Programs\java\jdk1.8.0\bin"
+
+echo Executing MOGLiCodeCreator...
+echo .
+
+
+
+REM Check 1 (ScriptJavaHomeBin defined?) 
+
+echo Checking local ScriptJavaHomeBin variable...
+echo .
+if "%ScriptJavaHomeBin%" == "" goto ScriptJavaHomeBin_Not_OK
+echo Local ScriptJavaHomeBin variable is defined: (%ScriptJavaHomeBin%)
+echo .
+goto check_ScriptJavaHomeBin
+
+
+
+REM Check 2a (java in ScriptJavaHomeBin available?)
+:check_ScriptJavaHomeBin
+if not exist %ScriptJavaHomeBin%\java.exe goto ScriptJavaHomeBin_Not_OK
+echo java.exe found in %ScriptJavaHomeBin%
+echo .
+goto ExeJavaInScriptJavaHomeBin
+
+ 
+REM Check 2b (system variable Java_Home defined?) 
+
+:ScriptJavaHomeBin_Not_OK
+echo Local script variable of JavaHome not correct defined. Checking system variable JAVA_HOME...
+echo .
+if "%SystemJavaHome%" == "" goto NoJavaExeFound
+echo JAVA_HOME is defined as system variable: %SystemJavaHome%
+echo .
+goto Check_SystemJavaHome_Exe
+
+
+
+REM Check 3 (java in SystemJavaHome available)
+
+:Check_SystemJavaHome_Exe
+if not exist "%SystemJavaHome%\java.exe" goto SystemJavaHome_Exe_not_Found
+echo java.exe found in %SystemJavaHome%
+goto ExeJavaInSystemJavaHome
+
+
+:SystemJavaHome_Exe_not_Found
+echo java.exe NOT found in SystemJavaHome. Checking ScriptJavaHomeBin (%SystemJavaHomeBin%)...
+echo .
+if not exist "%SystemJavaHomeBin%\java.exe" goto SystemJavaHomeBin_Exe_not_Found
+goto ExeJavaInSystemJavaHomeBin
+
+
+
+REM Check 4 (java in SystemJavaHomeBin available)
+
+:SystemJavaHomeBin_Exe_not_Found
+echo PROBLEM:  java.exe NOT found in %SystemJavaHomeBin%. 
+echo .
+goto NoJavaExeFound
+
+
+REM Execution Commands
+
+:ExeJavaInSystemJavaHome
+echo Using %SystemJavaHome%\java.exe
+echo .
+echo .
+echo .
+"%SystemJavaHome%"\java -cp %classpath% com.iksgmbh.moglicc.MOGLiCodeCreator %workspaceDir%
 goto End
 
-:Java_Home_Not_Set
-echo Warning: Environmental variable 'JAVA_HOME' is not set! Trying script setting...
-if not exist %SCRIPT_JAVA_HOME_BIN%\java.exe goto Script_Java_Home_Bin_Not_OK
-echo java.exe found in %SCRIPT_JAVA_HOME_BIN%
-%SCRIPT_JAVA_HOME_BIN%\java -cp %classpath% com.iksgmbh.moglicc.MOGLiCodeCreator %workspaceDir%
+:ExeJavaInSystemJavaHomeBin
+echo Using %SystemJavaHomeBin%\java.exe
+echo .
+echo .
+echo .
+"%SystemJavaHomeBin%"\java -cp %classpath% com.iksgmbh.moglicc.MOGLiCodeCreator %workspaceDir%
 goto End
 
-:no_JavaExe_in_JAVA_HOME
-if not exist %JAVA_HOME%\bin\java.exe goto Java_Home_Bin_Not_OK
-echo java.exe found in %JAVA_HOME%\bin
-%JAVA_HOME%\bin\java -cp %classpath% com.iksgmbh.moglicc.MOGLiCodeCreator %workspaceDir%
+:ExeJavaInScriptJavaHomeBin
+echo Using %ScriptJavaHomeBin%\java.exe
+echo .
+echo .
+echo .
+"%ScriptJavaHomeBin%"\java -cp %classpath% com.iksgmbh.moglicc.MOGLiCodeCreator %workspaceDir%
 goto End
 
-:Script_Java_Home_Bin_Not_OK
-echo Problem: No JVM available because no java executable was found in %SCRIPT_JAVA_HOME_BIN% !
-goto End
 
-:Java_Home_Bin_Not_OK
-echo Problem: No JVM available because no java executable was found in %JAVA_HOME% !
+REM Closing Commands
+
+:NoJavaExeFound
+echo PROBLEM:  No java.exe found. Define correctly either the local variable 'ScriptJavaHomeBin' in this script or the system variable JAVA_HOME.
+pause
+goto End
 
 :End
-echo Done with MOGLiCC batch script.
-
+echo .
+echo End of MOGLiCC batch script reached.
+echo .

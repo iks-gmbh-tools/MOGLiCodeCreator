@@ -12,7 +12,7 @@
 			
 			#if ( $isJavaTypeDomainObject.equals( "true" ) )
 			
-				'		builder = builder.with${AttributeName}( ${javaType}Factory.getById("$ExampleData") );
+				'		builder = builder.with${AttributeName}( ${javaType}Factory.createById("$ExampleData") );
 			
 			#elseif ( $javaType == "String[]" )
 					
@@ -95,7 +95,7 @@
 			
 			#if ( $isJavaTypeDomainObject.equals( "true" ) )
 			
-				'		assertEquals("$attributeName", ${javaType}Factory.getById("$ExampleData"), instance.get${AttributeName}() );
+				'		assertEquals("$attributeName", ${javaType}Factory.createById("$ExampleData"), instance.get${AttributeName}() );
 			
 			#elseif ( $javaType == "String[]" )
 					

@@ -41,6 +41,11 @@ public class ${classDescriptor.simpleName}Factory
 '	private static final String OBJECT_ID = "objectID";
 '	private static final Random randomizer = new Random(new Date().getTime());
 '
+'  /**
+'   * Returns value used by the MaxLengthValidator.
+'   * @param fieldname name of a field of the ${classDescriptor.simpleName} class.
+'   * @return value of the maximum field length allowed in the named field
+'   */
 '	public static Integer getMaxLength(final String fieldname)
 '	{
 '		final Integer toReturn = maxLengths.get(fieldname);
@@ -51,6 +56,11 @@ public class ${classDescriptor.simpleName}Factory
 '		return maxLengths.get(fieldname);
 '	}
 '
+'  /**
+'   * Returns value used by the MinLengthValidator.
+'   * @param fieldname name of a field of the ${classDescriptor.simpleName} class.
+'   * @return value of the minimum field length allowed in the named field
+'   */
 '	public static Integer getMinLength(final String fieldname)
 '	{
 '		final Integer toReturn = minLengths.get(fieldname);
@@ -106,14 +116,22 @@ public class ${classDescriptor.simpleName}Factory
 		#end
 '	}
 '
+'   /**
+'    * Removes from an instance created by the first address of the data pool all content of optional fields.
+'    * @return ${classDescriptor.simpleName} object
+'    */
 '	public static ${classDescriptor.simpleName} createInstanceOnlyWithMandatoryFields()
 '	{
-'		final ${classDescriptor.simpleName} toReturn = getByIndex(0);
+'		final ${classDescriptor.simpleName} toReturn = createByIndex(0);
 '		removeAllDataFromOptionalFields(toReturn);
 '		return toReturn;
 '	}
 
 '
+'   /**
+'    * Creates all instances available in the data pool of this factory class.
+'    * @return List of ${classDescriptor.simpleName} objects.
+'    */
 '	public static List<${classDescriptor.simpleName}> createAllFromDataPool()
 '	{
 '		final Object[] fields = dataPool.keySet().toArray();
@@ -146,7 +164,7 @@ public class ${classDescriptor.simpleName}Factory
 '	 * @param num index of ${classDescriptor.simpleName} object to provide
 '	 * @return the (<index>+1)th object in the pool
 '	 */
-'	public static ${classDescriptor.simpleName} getByIndex(final int index)
+'	public static ${classDescriptor.simpleName} createByIndex(final int index)
 '	{
 '		final int dataPoolNum = getNumberOfTestObjectsInDataPool();
 '		if (index > dataPoolNum)
@@ -161,14 +179,14 @@ public class ${classDescriptor.simpleName}Factory
 '	 * @param id of wanted Person object 
 '	 * @return Person object identified by its object id
 '	 */
-'	public static ${classDescriptor.simpleName} getById(final String objectId)
+'	public static ${classDescriptor.simpleName} createById(final String objectId)
 '	{
 '		final List<String> ids = dataPool.get( OBJECT_ID );
 '		int indexCounter = 0;
 '		for (final String id : ids) {
 '			if ( id.equals(objectId) )
 '			{
-'				return getByIndex(indexCounter);
+'				return createByIndex(indexCounter);
 '			}
 '			indexCounter++;
 '		}

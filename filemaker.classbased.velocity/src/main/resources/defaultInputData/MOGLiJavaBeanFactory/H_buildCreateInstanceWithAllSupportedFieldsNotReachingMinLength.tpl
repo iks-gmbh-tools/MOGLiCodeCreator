@@ -1,5 +1,5 @@
 '	/**
-'	 * Calls createInstanceWithAllFieldsAtMinLength and cutFieldContent to fields of supported JavaType
+'	 * Calls createInstanceWithAllFieldsAtMinLength and cutFromFieldContent to fields of supported JavaType
 '	 * (these are; byte, Byte, int, Integer, double, Double, String, java.math.BigDecimal),
 '	 * if MinLength-metainfo is defined for the corresponding attribute in the data model.
 '	 * @return instance that causes validation exceptions for the corresponding fields.
@@ -23,7 +23,7 @@
     
 		#set( $AttributeName = $TemplateStringUtility.firstToUpperCase($attributeDescriptor.name) ) 
 	    
-		'		cutFieldContent(toReturn, "$AttributeName", 1);
+		'		cutFromFieldContent(toReturn, "$AttributeName", 1);
 		
 		#set( $counter = $counter + 1 )
 		

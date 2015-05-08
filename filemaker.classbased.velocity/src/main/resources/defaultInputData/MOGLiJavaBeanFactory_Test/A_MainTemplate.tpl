@@ -96,14 +96,14 @@ public class ${classDescriptor.simpleName}FactoryUnitTest
 '	
 '	@Test
 '	public void returnsByIndex() {
-'		final ${classDescriptor.simpleName} result = ${classDescriptor.simpleName}Factory.getByIndex(0);
+'		final ${classDescriptor.simpleName} result = ${classDescriptor.simpleName}Factory.createByIndex(0);
 '		assertNotNull("Not null expected for ", result);
 '	}
 '
 '	@Test
 '	public void thowsExceptionForIndexOutOfRange() {
 '		try {
-'			${classDescriptor.simpleName}Factory.getByIndex(1000000000);
+'			${classDescriptor.simpleName}Factory.createByIndex(1000000000);
 '			fail("Expected exception was not thrown!");
 '		} catch (Exception e) {
 '			assertEquals("Error message", "Error: Cannot provide the 1000000000th ${classDescriptor.simpleName} object. " +
