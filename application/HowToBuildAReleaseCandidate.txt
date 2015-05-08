@@ -33,8 +33,8 @@ III Finishing steps
 
 1. Perform the complete quality assurance of II 3 again, to check that the new versions (set in II 6) are set correctly.
    When using the maven scripts, make sure you execute "mvn clean install" on the parent. Otherwise artefacts will not be found.
-2. Create a tag for the current release (git tag vX.Y.Z).
-3. Add new files (git add .) and then commit the current sources in the master branch with comment (git commit -a -m 'Release X.Y.Z').
+2. Add new files (git add .) and then commit the current sources in the master branch with comment (git commit -a -m 'Release X.Y.Z').
+3. Create a tag for the current release (git tag vX.Y.Z).
 4. Push changes to the github remote repository and verify the github repository that in 'application/releaseBuilds' the Release Candidate can be found. 
 5. Eventually merge the new changes to other branches such as 'development', add, commit and push.
 5. Set new version in Github-Wiki: https://github.com/iks-github/MOGLiCodeCreator/wiki
