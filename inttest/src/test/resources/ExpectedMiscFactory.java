@@ -48,6 +48,11 @@ public class MiscFactory
 	private static final String OBJECT_ID = "objectID";
 	private static final Random randomizer = new Random(new Date().getTime());
 
+  /**
+   * Returns value used by the MaxLengthValidator.
+   * @param fieldname name of a field of the Misc class.
+   * @return value of the maximum field length allowed in the named field
+   */
 	public static Integer getMaxLength(final String fieldname)
 	{
 		final Integer toReturn = maxLengths.get(fieldname);
@@ -58,6 +63,11 @@ public class MiscFactory
 		return maxLengths.get(fieldname);
 	}
 
+  /**
+   * Returns value used by the MinLengthValidator.
+   * @param fieldname name of a field of the Misc class.
+   * @return value of the minimum field length allowed in the named field
+   */
 	public static Integer getMinLength(final String fieldname)
 	{
 		final Integer toReturn = minLengths.get(fieldname);
@@ -143,13 +153,21 @@ public class MiscFactory
 		instance.setHashSet(null);
 	}
 
+   /**
+    * Removes from an instance created by the first address of the data pool all content of optional fields.
+    * @return Misc object
+    */
 	public static Misc createInstanceOnlyWithMandatoryFields()
 	{
-		final Misc toReturn = getByIndex(0);
+		final Misc toReturn = createByIndex(0);
 		removeAllDataFromOptionalFields(toReturn);
 		return toReturn;
 	}
 
+   /**
+    * Creates all instances available in the data pool of this factory class.
+    * @return List of Misc objects.
+    */
 	public static List<Misc> createAllFromDataPool()
 	{
 		final Object[] fields = dataPool.keySet().toArray();
@@ -182,7 +200,7 @@ public class MiscFactory
 	 * @param num index of Misc object to provide
 	 * @return the (<index>+1)th object in the pool
 	 */
-	public static Misc getByIndex(final int index)
+	public static Misc createByIndex(final int index)
 	{
 		final int dataPoolNum = getNumberOfTestObjectsInDataPool();
 		if (index > dataPoolNum)
@@ -197,14 +215,14 @@ public class MiscFactory
 	 * @param id of wanted Person object
 	 * @return Person object identified by its object id
 	 */
-	public static Misc getById(final String objectId)
+	public static Misc createById(final String objectId)
 	{
 		final List<String> ids = dataPool.get( OBJECT_ID );
 		int indexCounter = 0;
 		for (final String id : ids) {
 			if ( id.equals(objectId) )
 			{
-				return getByIndex(indexCounter);
+				return createByIndex(indexCounter);
 			}
 			indexCounter++;
 		}
@@ -230,7 +248,7 @@ public class MiscFactory
 	/**
 	 * Cuts the content of the named field by the numberCharToCut value if the content is not null.
 	 */
-	public static void cutFieldContent(final Misc instance, final String fieldname, final int numberCharToCut)
+	public static void cutFromFieldContent(final Misc instance, final String fieldname, final int numberCharToCut)
 	{
 		if ( "Text".equals(fieldname) )
 		{
@@ -583,7 +601,7 @@ public class MiscFactory
 		builder = builder.withHashSet( CollectionsStringUtils.commaSeparatedStringToHashSet( getValue("HashSet", index) ) );
 
 		value = getValue("InstanceVariable", index);
-		final Person instanceVariable = PersonFactory.getById( value );
+		final Person instanceVariable = PersonFactory.createById( value );
 		builder = builder.withInstanceVariable( instanceVariable );
 
 		return builder.build();
@@ -614,7 +632,7 @@ public class MiscFactory
 	}
 
 	/**
-	 * Calls createInstanceWithAllFieldsAtMinLength and cutFieldContent to fields of supported JavaType
+	 * Calls createInstanceWithAllFieldsAtMinLength and cutFromFieldContent to fields of supported JavaType
 	 * (these are; byte, Byte, int, Integer, double, Double, String, java.math.BigDecimal),
 	 * if MinLength-metainfo is defined for the corresponding attribute in the data model.
 	 * @return instance that causes validation exceptions for the corresponding fields.
@@ -623,8 +641,8 @@ public class MiscFactory
 	{
 		final Misc toReturn = createInstanceWithAllFieldsAtMinLength();
 
-		cutFieldContent(toReturn, "Text", 1);
-		cutFieldContent(toReturn, "BigDecimal", 1);
+		cutFromFieldContent(toReturn, "Text", 1);
+		cutFromFieldContent(toReturn, "BigDecimal", 1);
 
 		return toReturn;
 	}

@@ -140,7 +140,7 @@
 				
 				#set( $attributeName = $TemplateStringUtility.firstToLowerCase($attributeDescriptor.name) )
 				 
-				'		final $javaType $attributeName = ${javaType}Factory.getById( value );
+				'		final $javaType $attributeName = ${javaType}Factory.createById( value );
 				'		builder = builder.with${AttributeName}( $attributeName );
 			
 			#end

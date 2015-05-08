@@ -15,7 +15,7 @@
 
 			#if ( $isJavaTypeDomainObject.equals( "true" ) )
 	
-				'		          .with${AttributeName}( ${javaType}Factory.getById( "${ExampleData}" ) )
+				'		          .with${AttributeName}( ${javaType}Factory.createById( "${ExampleData}" ) )
 	
 			#elseif ( $javaType == "String" )
 	

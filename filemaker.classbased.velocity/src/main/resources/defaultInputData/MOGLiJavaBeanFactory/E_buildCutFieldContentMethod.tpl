@@ -1,7 +1,7 @@
 '	/**
 '	 * Cuts the content of the named field by the numberCharToCut value if the content is not null. 
 '	 */
-'	public static void cutFieldContent(final ${classDescriptor.simpleName} instance, final String fieldname, final int numberCharToCut)
+'	public static void cutFromFieldContent(final ${classDescriptor.simpleName} instance, final String fieldname, final int numberCharToCut)
 '	{
 
 #foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)

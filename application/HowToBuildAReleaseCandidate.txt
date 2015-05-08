@@ -21,7 +21,7 @@ II Perform the Release
    c) Execute integration tests (Start 'Run as JUnit Test' on the project 'inttest').
    d) Execute 'BuildReleaseAndTestSystem.java' as JUnit test. This builds the release candidate and executes the system tests automatically on it.
    For different test results between scripted and manual test execution, assure that Java VM used is the same!
-4. Verify that in 'application/releaseBuilds' the Release Candidate can be found.
+4. Verify your workspace that in 'application/releaseBuilds' the Release Candidate can be found.
    If not check that property 'testRun' is 'false' in file 'application/src/main/resources/build.properties'.
 5. In file 'application/src/main/resources/build.properties' set property 'testRun' back to 'true'.
    This allows test runs of the release process executed automatically by 'BuildReleaseAndTestSystem.java'.
@@ -32,9 +32,11 @@ II Perform the Release
 III Finishing steps
 
 1. Perform the complete quality assurance of II 3 again, to check that the new versions (set in II 6) are set correctly.
+   When using the maven scripts, make sure you execute "mvn clean install" on the parent. Otherwise artefacts will not be found.
 2. Create a tag for the current release (git tag vX.Y.Z).
-3. Commit the current sources in the master branch with comment (git commit -a -m 'Release X.Y.Z') and push them to the github remote repository
-4. Eventually merge the new changes to other branches such as 'development'
+3. Add new files (git add .) and then commit the current sources in the master branch with comment (git commit -a -m 'Release X.Y.Z').
+4. Push changes to the github remote repository and verify the github repository that in 'application/releaseBuilds' the Release Candidate can be found. 
+5. Eventually merge the new changes to other branches such as 'development', add, commit and push.
 5. Set new version in Github-Wiki: https://github.com/iks-github/MOGLiCodeCreator/wiki
 6. Draft a new Release Entry: https://github.com/iks-github/MOGLiCodeCreator/releases with the release notes defined in II 1.
 

@@ -35,7 +35,12 @@ License: **All Rights Reserved**
 
 travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.png?branch=master)](https://travis-ci.org/iks-github/MOGLiCodeCreator)
 
-Current version: **1.5.3**
+Current version: **1.5.4**
+
+**Changes to 1.5.3**
+- Bugfix: Classpath handling in start scripts improved
+- Bugfix: API of the Factory classes of the MOGLiCC JavaBean Group cleaned
+- Bugfix: help and readme files updated
 
 **Changes to 1.5.2**
 - Bugfix: MOGLiCC JavaBean Group bugfixed: hash-Method of JavaBean corrected

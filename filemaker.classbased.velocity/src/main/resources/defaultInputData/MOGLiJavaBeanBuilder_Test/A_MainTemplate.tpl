@@ -54,7 +54,7 @@ public class ${classDescriptor.simpleName}BuilderUnitTest {
 			
 			#if ( $isJavaTypeDomainObject.equals( "true" ) )
 
-				'		final $javaType instance${javaType} = ${javaType}Factory.getById("$ExampleData"); 
+				'		final $javaType instance${javaType} = ${javaType}Factory.createById("$ExampleData"); 
 				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( instance${javaType} );
 				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( instance${javaType} );
 			

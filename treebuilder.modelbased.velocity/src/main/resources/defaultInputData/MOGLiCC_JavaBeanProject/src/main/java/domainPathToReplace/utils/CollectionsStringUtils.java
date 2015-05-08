@@ -1,6 +1,7 @@
 package <domainPathToReplace>.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -88,8 +89,11 @@ public class CollectionsStringUtils
 			return "";
 		}
 		
+		final List<String> list = new ArrayList<String>(hashSet);
+		Collections.sort(list);
+		
 		final StringBuffer sb = new StringBuffer();
-		for (final String s : hashSet) {
+		for (final String s : list) {
 			sb.append(s).append(", ");
 		}
 		final String toReturn = sb.toString();

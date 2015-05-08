@@ -15,7 +15,7 @@
 			
 			#if ( $isJavaTypeDomainObject.equals( "true" ) )
 			
-				'		assertEquals("$AttributeName of type $javaType", ${javaType}Factory.getById("$testDataMetaInfoValue").toString(), result.get(0).get${AttributeName}().toString());
+				'		assertEquals("$AttributeName of type $javaType", ${javaType}Factory.createById("$testDataMetaInfoValue").toString(), result.get(0).get${AttributeName}().toString());
 			
 			#elseif ( $javaType == "String[]" )
 					
