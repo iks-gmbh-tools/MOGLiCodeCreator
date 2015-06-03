@@ -44,7 +44,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 
 		// verify test result
 		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
-		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBean/Misc.java");
+		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBean/_Misc.java");
 		assertFileExists(file);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedMisc.java");
 		assertFileEquals(expectedFile, file);
@@ -60,7 +60,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 
 		// verify test result
 		final InfrastructureService infrastructure = velocityClassBasedFileMakerStarter.getInfrastructure();
-		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBeanFactory/MiscFactory.java");
+		final File file = new File(infrastructure.getPluginOutputDir(), "MOGLiJavaBeanFactory/_MiscFactory.java");
 		assertFileExists(file);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "ExpectedMiscFactory.java");
 		assertFileEquals(expectedFile, file);

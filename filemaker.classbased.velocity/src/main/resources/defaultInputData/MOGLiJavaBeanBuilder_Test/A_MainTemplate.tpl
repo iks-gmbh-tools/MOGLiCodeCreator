@@ -31,11 +31,22 @@ public class ${classDescriptor.simpleName}BuilderUnitTest {
 '	private final static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("$model.getMetaInfoValueFor("dateTimeFormat")");
 '
 
+#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+
+#if ( $useJavaBeanRegistry == "true" )
+
+	'
+	'	@Before
+	'	public void setup()
+	'	{
+	'		MOGLiCCJavaBeanRegistry.clear();
+	'	}
+	'
+	
+#end
+
 #parse("C_buildEmptyInstanceMethod.tpl")
 
-'
-
-#parse("D_buildExampleInstanceMethod.tpl")
 
 '
 
@@ -57,31 +68,7 @@ public class ${classDescriptor.simpleName}BuilderUnitTest {
 				'		final $javaType instance${javaType} = ${javaType}Factory.createById("$ExampleData"); 
 				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( instance${javaType} );
 				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( instance${javaType} );
-			
-			#elseif ( $javaType == "String[]" )
-
-				'		final String[] strArr${AttributeName} = CollectionsStringUtils.commaSeparatedStringToStringArray( "$ExampleData" );
-				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( strArr${AttributeName} );
-				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( strArr${AttributeName} );
-			
-			#elseif ( $javaType == "java.util.HashSet<String>" )
-			
-				'		final HashSet<String> strHashSet${AttributeName} = CollectionsStringUtils.commaSeparatedStringToHashSet( "$ExampleData" );
-				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( strHashSet${AttributeName} );
-				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( strHashSet${AttributeName} );
-						
-			#elseif ( $javaType == "java.util.List<String>" )
-			
-				'		final List<String> strList${AttributeName} = CollectionsStringUtils.commaSeparatedStringToStringList( "$ExampleData" );
-				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( strList${AttributeName} );
-				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( strList${AttributeName} );
-						
-			#elseif ( $javaType == "java.util.List<Long>" )
-			
-				'		final List<Long> list${AttributeName} = CollectionsStringUtils.commaSeparatedStringToLongList( "$ExampleData" );
-				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( list${AttributeName} );
-				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( list${AttributeName} );
-						
+									
 			#elseif ( $javaType == "String" )
 			
 				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}("$ExampleData");
@@ -132,6 +119,61 @@ public class ${classDescriptor.simpleName}BuilderUnitTest {
 				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( dateTimeFormatter.parseDateTime( "${ExampleData}" ) );
 				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( dateTimeFormatter.parseDateTime( "${ExampleData}" ) );
 				
+			#elseif ( $javaType == "String[]" )
+
+				'		final String[] strArr${AttributeName} = CollectionsStringUtils.commaSeparatedStringToStringArray( "$ExampleData" );
+				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( strArr${AttributeName} );
+				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( strArr${AttributeName} );
+			
+			#elseif ( $javaType == "java.util.HashSet<String>" )
+			
+				'		final HashSet<String> strHashSet${AttributeName} = CollectionsStringUtils.commaSeparatedStringToHashSet( "$ExampleData" );
+				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( strHashSet${AttributeName} );
+				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( strHashSet${AttributeName} );
+				
+			#elseif ( $TemplateJavaUtility.isJavaMetaTypeGeneric($javaType) )
+			
+		    	#set( $CollectionType = $TemplateJavaUtility.getCollectionMetaType($javaType) ) 
+			 	
+				#if ($CollectionType == "java.util.List")
+
+		    		#set( $ElementType = $TemplateJavaUtility.getCollectionElementType($javaType) )
+					
+					#if ($ElementType == "Long")
+					
+				'		final List<Long> list${AttributeName} = CollectionsStringUtils.commaSeparatedStringToLongList( "$ExampleData" );
+				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( list${AttributeName} );
+				'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( list${AttributeName} );
+		    		
+		    		#elseif	($ElementType == "String")
+		    		
+						'		final List<String> strList${AttributeName} = CollectionsStringUtils.commaSeparatedStringToStringList( "$ExampleData" );
+						'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( strList${AttributeName} );
+						'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( strList${AttributeName} );
+		    		
+		    		#else
+		    		
+		    			#set( $elementType = $TemplateStringUtility.firstToLowerCase($ElementType) ) 
+		    		
+						'		final List<String> strList${AttributeName} = CollectionsStringUtils.commaSeparatedStringToStringList( "$ExampleData" );
+						'		final java.util.List<${ElementType}> ${elementType}List = new ArrayList<${ElementType}>();
+						'		for (final String element : strList${AttributeName}) {
+						'			${ElementType} instanceById = ${ElementType}Factory.createById(element);
+						'			if ( instanceById != null)
+						'				${elementType}List.add(${ElementType}Factory.createById(element));
+						'		}						
+						'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}( ${elementType}List );
+						'		${classDescriptor.simpleName}Builder builder3 = builder1.with${AttributeName}( ${elementType}List );
+						
+						 
+		    		#end
+				
+				#else
+				
+						'		// Unkown CollectionType: $collectionType 
+					
+				#end 
+			
 			#else
 			
 				'		${classDescriptor.simpleName}Builder builder2 = builder1.cloneWith${AttributeName}($ExampleData);

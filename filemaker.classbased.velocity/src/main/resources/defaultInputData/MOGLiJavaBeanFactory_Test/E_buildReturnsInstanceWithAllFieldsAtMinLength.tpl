@@ -3,6 +3,8 @@
 '		final ${classDescriptor.simpleName} instance = ${classDescriptor.simpleName}Factory.createInstanceWithAllFieldsAtMinLength();
 '		assertNotNull("Not null expected for ", instance);
 
+		#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+
 		#foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)
 		
 			#set( $AttributeName = $TemplateStringUtility.firstToUpperCase($attributeDescriptor.name) ) 
@@ -12,7 +14,16 @@
 			
 			#if ( $isJavaTypeDomainObject.equals( "true" ) )
 		     
-				'		assertEquals("$AttributeName of type String", ${javaType}Factory.createInstanceWithAllFieldsAtMinLength(), instance.get${AttributeName}() );
+
+				#if ( $useJavaBeanRegistry == "true")
+				
+					'		assertEquals("$AttributeName of type String", ${javaType}Factory.createByIndex(1), instance.get${AttributeName}() );
+				
+				#else
+				
+					'		assertEquals("$AttributeName of type String", ${javaType}Factory.createInstanceWithAllFieldsAtMinLength(), instance.get${AttributeName}() );
+		    		
+				#end
 		     
 		    #elseif ($javaType == "String")
 		    

@@ -25,7 +25,7 @@
 
 #if ( $counter == 0 )
 
-	// the meta model contains for class '${classDescriptor.simpleName}' no attribute with metainfo 'MaxLength', therefore is no test in this method possible 
+'		// the meta model contains for class '${classDescriptor.simpleName}' no attribute with metainfo 'MaxLength', therefore is no test in this method possible 
 	
 #else
 

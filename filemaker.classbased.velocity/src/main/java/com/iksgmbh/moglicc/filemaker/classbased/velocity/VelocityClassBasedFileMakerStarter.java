@@ -56,13 +56,12 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 	private static final String LOGFILE_LINE_SEPARATOR = "-----";
 
 	final static String[] javabeanTemplates = {
-		    "A_MainTemplate.tpl",         "E_Variables.tpl",
-		    "G_GetterMethods.tpl",        "F_SetterMethods.tpl",     "C_ClassDefinitionLine.tpl",
-			"D_Serializable.tpl",         "H_toStringMethod.tpl",    "J_hashCodeMethod.tpl",
-			"I_equalsMethod.tpl",         "I1_equalsArrayTypes.tpl", "I2_equalsPrimitiveTypes.tpl",
-			"I3_equalsStandardTypes.tpl", "J_hashCodeMethod.tpl",    "J2_hashCodePrimitiveTypes.tpl",
-			"K_cloneMethod.tpl",          "K1_cloneArrayType.tpl",   "K2_cloneCollectionType.tpl",
-			"K3_cloneStandardType.tpl"};
+		    "A_MainTemplate.tpl",         "B_ClassJavaDoc.tpl",            "C_ClassDefinitionLine.tpl",
+			"D_Serializable.tpl",         "E_Variables.tpl",               "F_SetterMethods.tpl",
+			"G_GetterMethods.tpl",        "H_toStringMethod.tpl",          "I_equalsMethod.tpl",         
+			"I1_equalsArrayTypes.tpl",    "I2_equalsPrimitiveTypes.tpl",   "I3_equalsStandardTypes.tpl",      			
+			"J_hashCodeMethod.tpl",       "J2_hashCodePrimitiveTypes.tpl", "K_cloneMethod.tpl",      
+			"K1_cloneArrayType.tpl",	  "K2_cloneCollectionType.tpl",    "K3_cloneStandardType.tpl" };
 
 	final static String[] javabeanTestTemplates = {"A_MainTemplate.tpl", "C_setupMethod.tpl",
                                                    "D_testEqualsMethods.tpl", "E_testHashcodeMethods.tpl",
@@ -72,7 +71,7 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 	final static String[] javabeanBuilderTemplates = {"A_MainTemplate.tpl", "C_withMethods.tpl",
 		                                              "D_cloneWithMethods.tpl", "E_cloneDataObjectMethod.tpl"};
 
-	final static String[] javabeanBuilderTestTemplates = {"A_MainTemplate.tpl", "C_buildEmptyInstanceMethod.tpl", "D_buildExampleInstanceMethod.tpl"};
+	final static String[] javabeanBuilderTestTemplates = {"A_MainTemplate.tpl", "C_buildEmptyInstanceMethod.tpl"};
 
 	final static String[] javabeanValidatorTemplates = {"A_MainTemplate.tpl", "C_Constructor.tpl",
                                                         "D_validateMethod.tpl"};
@@ -86,20 +85,23 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 
 	final static String[] javabeanCommonSubtempates = {"importDomainModelClasses.tpl", "isJavaTypeDomainObject.tpl", 
 		                                               "isFieldLengthRelevantForJavaType.tpl", "setContentLargerThanMaxLengthToField.tpl", 
-		                                               "setContentSmallerThanMinLengthToField.tpl"};
+		                                               "setContentSmallerThanMinLengthToField.tpl", "generateListOfDomainObjectsFromExampleDataOrDataPool.tpl",
+		                                               "checkForJavaTypeListOfDomainObjects.tpl" };
 
 	final static String[] javabeanFactoryTestTempates = {"A_MainTemplate.tpl", "B_buildReturnsFirstMethod.tpl", "C_buildReturnsAllMethod.tpl", 
 		                                                 "D_buildReturnsInstanceWithAllFieldsAtMaxLength.tpl",
 		                                                 "E_buildReturnsInstanceWithAllFieldsAtMinLength.tpl",
 													     "G_buildReturnsInstanceWithAllSupportedFieldsExceedingMaxLength.tpl",
-													     "H_buildReturnsInstanceWithAllSupportedFieldsNotReachingMinLength.tpl"};
+													     "H_buildReturnsInstanceWithAllSupportedFieldsNotReachingMinLength.tpl",
+													     "I_buildReturnsExampleDataInstance.tpl"};
 	
 	final static String[] javabeanFactoryTempates = {"A_MainTemplate.tpl", "B1_createInstanceWithAllFieldsAtMaxLength.tpl", 
 		                                             "B2_createInstanceWithAllFieldsAtMinLength.tpl",
-		                                             "C_buildObjectMethod.tpl", "D_buildDataPool.tpl",
+		                                             "C_buildObjectMethod.tpl", "C_buildObjectMethodWithRegistry.tpl", "D_buildDataPool.tpl",
 		                                             "E_buildCutFieldContentMethod.tpl", "F_buildAddToFieldContentMethod.tpl",
 		                                             "G_buildCreateInstanceWithAllSupportedFieldsExceedingMaxLength.tpl",
-		                                             "H_buildCreateInstanceWithAllSupportedFieldsNotReachingMinLength.tpl"};
+		                                             "H_buildCreateInstanceWithAllSupportedFieldsNotReachingMinLength.tpl",
+		                                             "I_buildCreateExampleInstanceMethod.tpl"};
 	
 	final static String[] MOGLiCCNewPluginSubtempates = {"A_MainTemplate.tpl", "B_ClassDefinitionLine.tpl", "C_generatorVariables.tpl",
 		                                                 "D_unpackDefaultInputData.tpl", "E_getMetaInfoValidatorList.tpl",
@@ -261,12 +263,12 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 	}
 
 	private void generateReportLines(final List<VelocityFileMakerResultData> resultList, final String artefact) {
-		standardReportData.numberOfOutputArtefacts++;
 		generationReport.append(FileUtil.getSystemLineSeparator());
 		generationReport.append(GeneratorReportUtil.getArtefactReportLine(artefact));
 		generationReport.append(FileUtil.getSystemLineSeparator());
 
 		for (final VelocityFileMakerResultData resultData : resultList) {
+			standardReportData.numberOfOutputArtefacts++;
 			generationCounter++;
 			if (resultData.wasExistingTargetPreserved()) {
 				generationReport.append("      ");

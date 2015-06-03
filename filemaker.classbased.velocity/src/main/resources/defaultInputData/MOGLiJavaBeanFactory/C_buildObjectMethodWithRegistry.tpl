@@ -1,6 +1,7 @@
-'	private static ${classDescriptor.simpleName} buildObject(final int index)
+'	private static ${classDescriptor.simpleName} buildObject(int index)
 '	{
-'		${classDescriptor.simpleName}Builder builder = new ${classDescriptor.simpleName}Builder();
+'		final ${classDescriptor.simpleName} javaBean = new ${classDescriptor.simpleName}();
+'		MOGLiCCJavaBeanRegistry.register(getObjectIdFromIndex(index), javaBean);
 '		String value = null;
 '		
 		#foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)
@@ -14,110 +15,110 @@
 		    
 				'		value = getValue("$AttributeName", index);
 				'		final $javaType $attributeName = ${javaType}.valueOf( value );
-				'		builder = builder.with$AttributeName( $attributeName );
+				'		javaBean.set$AttributeName( $attributeName );
 		    
 		    
 		    #elseif ($javaType == "String")
 		    
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( value );
+				'			javaBean.set$AttributeName( value );
 			
 			#elseif ($javaType == "boolean")
 		    
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Boolean( value ).booleanValue() );
+				'			javaBean.set$AttributeName( new Boolean( value ).booleanValue() );
 
 			#elseif ($javaType == "char") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( value.charAt(0) );
+				'			javaBean.set$AttributeName( value.charAt(0) );
 
 			#elseif ($javaType == "byte") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Byte( value ).byteValue() );
+				'			javaBean.set$AttributeName( new Byte( value ).byteValue() );
 				
 			#elseif ($javaType == "long") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Long( value ).longValue() );
+				'			javaBean.set$AttributeName( new Long( value ).longValue() );
 				
 			#elseif ($javaType == "int") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Integer( value ).intValue() );
+				'			javaBean.set$AttributeName( new Integer( value ).intValue() );
 				
 			#elseif ($javaType == "float") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Float( value ).floatValue() );
+				'			javaBean.set$AttributeName( new Float( value ).floatValue() );
 				
 			#elseif ($javaType == "double") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Double( value ).doubleValue() );
+				'			javaBean.set$AttributeName( new Double( value ).doubleValue() );
 				
 			#elseif ($javaType == "Boolean")
 		    
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Boolean( value ) );
+				'			javaBean.set$AttributeName( new Boolean( value ) );
 
 			#elseif ($javaType == "Character") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( value.charAt(0) );
+				'			javaBean.set$AttributeName( value.charAt(0) );
 
 			#elseif ($javaType == "Byte") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Byte( value ) );
+				'			javaBean.set$AttributeName( new Byte( value ) );
 				
 			#elseif ($javaType == "Long") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Long( value ) );
+				'			javaBean.set$AttributeName( new Long( value ) );
 				
 			#elseif ($javaType == "Integer") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Integer( value ) );
+				'			javaBean.set$AttributeName( new Integer( value ) );
 				
 			#elseif ($javaType == "Float") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Float( value ) );
+				'			javaBean.set$AttributeName( new Float( value ) );
 				
 			#elseif ($javaType == "Double") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new Double( value ) );
+				'			javaBean.set$AttributeName( new Double( value ) );
 
 			#elseif ($javaType == "java.math.BigDecimal" || $javaType == "BigDecimal") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( new BigDecimal( "" + value ) );
+				'			javaBean.set$AttributeName( new BigDecimal( "" + value ) );
 
 			#elseif ($javaType == "org.joda.time.DateTime" || $javaType == "DateTime") 
 			
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
-				'			builder = builder.with$AttributeName( dateTimeFormatter.parseDateTime( value ) );
+				'			javaBean.set$AttributeName( dateTimeFormatter.parseDateTime( value ) );
 				
 			#elseif ( $TemplateJavaUtility.isPrimitiveTypeWrapper($javaType) )
 			
@@ -125,16 +126,16 @@
 				
 				#set( $javaTypeSimple = $TemplateJavaUtility.getSimpleClassName($javaType) )
 
-				'		builder = builder.with${AttributeName}( $javaTypeSimple.valueOf( value ) );
+				'		javaBean.set${AttributeName}( $javaTypeSimple.valueOf( value ) );
 				
 			#elseif ($javaType == "String[]") 
 			
-				'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringArray( getValue("$AttributeName", index) ) );
+				'		javaBean.set$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringArray( getValue("$AttributeName", index) ) );
 				
 				
 			#elseif ($javaType == "java.util.HashSet<String>") 
 			
-				'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToHashSet( getValue("$AttributeName", index) ) );
+				'		javaBean.set$AttributeName( CollectionsStringUtils.commaSeparatedStringToHashSet( getValue("$AttributeName", index) ) );
 				
 			#elseif ( $TemplateJavaUtility.isJavaMetaTypeGeneric($javaType) )
 			
@@ -146,11 +147,11 @@
 					
 					#if ($ElementType == "Long")
 					
-						'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToLongList( getValue("$AttributeName", index) ) );
+						'		javaBean.set$AttributeName( CollectionsStringUtils.commaSeparatedStringToLongList( getValue("$AttributeName", index) ) );
 		    		
 		    		#elseif	($ElementType == "String")
 		    		
-						'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringList( getValue("$AttributeName", index) ) );
+						'		javaBean.set$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringList( getValue("$AttributeName", index) ) );
 		    		
 		    		#else
 		    		
@@ -162,7 +163,7 @@
 						'		for (final String element : ${elementType}ListElements) {
 						'			${elementType}List.add(${ElementType}Factory.createById(element));
 						'		}						
-						'		builder = builder.with$AttributeName( ${elementType}List );
+						'		javaBean.set$AttributeName( ${elementType}List );
 						
 						 
 		    		#end
@@ -180,7 +181,7 @@
 				#set( $attributeName = $TemplateStringUtility.firstToLowerCase($attributeDescriptor.name) )
 				 
 				'		final $javaType $attributeName = ${javaType}Factory.createById( value );
-				'		builder = builder.with${AttributeName}( $attributeName );
+				'		javaBean.set${AttributeName}( $attributeName );
 			
 			#end
 			
@@ -188,5 +189,5 @@
 			
 		#end
 
-'		return builder.build();
+'		return javaBean;
 '	}

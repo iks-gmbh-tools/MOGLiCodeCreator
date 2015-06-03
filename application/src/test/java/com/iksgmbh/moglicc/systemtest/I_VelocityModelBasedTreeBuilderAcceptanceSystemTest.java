@@ -52,13 +52,13 @@ public class I_VelocityModelBasedTreeBuilderAcceptanceSystemTest extends __Abstr
 		assertChildrenNumberInDirectory(resultDir, 2);		
 		
 		final File demoDir = new File(resultDir, "src/main/java/com/iksgmbh/moglicc/demo");
-		assertChildrenNumberInDirectory(demoDir, 8);
+		assertChildrenNumberInDirectory(demoDir, 10);
 		final File builderDir = new File(demoDir, "builder");
-		assertChildrenNumberInDirectory(builderDir, 4);
+		assertChildrenNumberInDirectory(builderDir, 6);
 		final File factoryDir = new File(demoDir, "factory");
-		assertChildrenNumberInDirectory(factoryDir, 4);
+		assertChildrenNumberInDirectory(factoryDir, 6);
 		final File validatorDir = new File(demoDir, "validator");
-		assertChildrenNumberInDirectory(validatorDir, 6);
+		assertChildrenNumberInDirectory(validatorDir, 8);
 		final File typesDir = new File(validatorDir, "types");
 		assertChildrenNumberInDirectory(typesDir, 5);
 		final File helperDir = new File(validatorDir, "helper");
@@ -67,13 +67,13 @@ public class I_VelocityModelBasedTreeBuilderAcceptanceSystemTest extends __Abstr
 		assertFileExists(resourcesDir);
 		
 		final File testDemoDir = new File(resultDir, "src/test/java/com/iksgmbh/moglicc/demo");
-		assertChildrenNumberInDirectory(testDemoDir, 7);
+		assertChildrenNumberInDirectory(testDemoDir, 9);
 		final File testBuilderDir = new File(testDemoDir, "builder");
-		assertChildrenNumberInDirectory(testBuilderDir, 4);
+		assertChildrenNumberInDirectory(testBuilderDir, 6);
 		final File testFactoryDir = new File(testDemoDir, "factory");
-		assertChildrenNumberInDirectory(testFactoryDir, 4);
+		assertChildrenNumberInDirectory(testFactoryDir, 6);
 		final File testValidatorDir = new File(testDemoDir, "validator");
-		assertChildrenNumberInDirectory(testValidatorDir, 4);
+		assertChildrenNumberInDirectory(testValidatorDir, 6);
 		final File testResourcesDir = new File(resultDir, "src/test/resources");
 		assertFileExists(testResourcesDir);		
 	}

@@ -3,18 +3,50 @@
 '	 */
 '	public static ${classDescriptor.simpleName} createInstanceWithAllFieldsAtMaxLength()
 '	{
-'		final ${classDescriptor.simpleName} toReturn = new ${classDescriptor.simpleName}();
+
+		#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+	
+'		final ${classDescriptor.simpleName} toReturn = createInstanceWithExampleData();
 '
+
 		#foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)
 		
 			#set( $AttributeName = $TemplateStringUtility.firstToUpperCase($attributeDescriptor.name) ) 
 		    #set( $javaType = $attributeDescriptor.getMetaInfoValueFor("JavaType") )
 
 			#parse("commonSubtemplates/isJavaTypeDomainObject.tpl")
+			#parse("commonSubtemplates/checkForJavaTypeListOfDomainObjects.tpl")
+				
+			#if ( $isJavaTypeListOfDomainObjects == "true" )
+				
+				'
+				'		final List<${ElementType}> list${AttributeName} = new ArrayList<${ElementType}>();
+				
+				
+				#if ( $useJavaBeanRegistry == "true")
+				
+					'		list${AttributeName}.add( ${ElementType}Factory.createInstanceWithExampleData() );   // Using minimum length in referenced domain objects not necessary!
+				
+				#else
+				
+					'		list${AttributeName}.add( ${ElementType}Factory.createInstanceWithAllFieldsAtMaxLength() );
+		    		
+				#end
+				
+				
+		    	'		toReturn.set${AttributeName}( list${AttributeName} );
 			
-			#if ( $isJavaTypeDomainObject.equals( "true" ) )
-		    
-		    	'		toReturn.set${AttributeName}( ${javaType}Factory.createInstanceWithAllFieldsAtMaxLength() );
+			#elseif ( $isJavaTypeDomainObject.equals( "true" ) )
+			
+				#if ( $useJavaBeanRegistry == "true")
+				
+					'		toReturn.set${AttributeName}( ${javaType}Factory.createInstanceWithExampleData() );  // Using minimum length in referenced domain objects not necessary! 
+				
+				#else
+				
+		    		'		toReturn.set${AttributeName}( ${javaType}Factory.createInstanceWithAllFieldsAtMaxLength() );
+		    		
+				#end
 		     
 		    #elseif ($javaType == "String")
 		    

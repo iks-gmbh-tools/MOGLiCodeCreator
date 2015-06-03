@@ -1,7 +1,7 @@
 #if ($javaType == "String")
-'		clone.$attributeName = new String(${attributeName});
+'		if (this.${attributeName} != null) clone.$attributeName = new String(${attributeName});
 
 #else
-'		clone.$attributeName = ($javaType)this.${attributeName}.clone();  // probably, here is need of manual adaptation
+'		if (this.${attributeName} != null) clone.$attributeName = ($javaType)this.${attributeName}.clone();  // probably, here is need of manual adaptation
 
 #end

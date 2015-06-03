@@ -9,7 +9,7 @@
 	#set( $AttributeName = $TemplateStringUtility.firstToUpperCase($attributeDescriptor.name) )
 	#set( $javaType = $TemplateJavaUtility.getSimpleClassName( $attributeDescriptor.getMetaInfoValueFor("JavaType") ) )
 	
-	#if ( $TemplateJavaUtility.isPrimitiveTypeWrapper($javaType) )
+	#if ( $TemplateJavaUtility.isPrimitiveType($javaType) )
 	
 		# do nothing
 		
@@ -41,34 +41,34 @@
 
 #end
 
-'
-'		try {
-'			${classDescriptor.simpleName}Validator.doYourJob(testData);
-'			fail("Expected exception not thrown!");
-'		} catch (Exception e) {
-'			System.err.println(e.getMessage());
 
-			#if ( $counter == 1 )
+#if ( $counter == 0 )
 
-				'			assertTrue("unexpected error message", e.getMessage().startsWith("A validation error exists for '$classDescriptor.simpleName'"));
-			
-			#else
-			
-				'			assertTrue("unexpected error message", e.getMessage().startsWith("$counter validation errors exist for '$classDescriptor.simpleName'"));
+	'		// there is no validation defined for attributes in class '${classDescriptor.simpleName}'
+
+#else
+
+	'
+	'		try {
+	'			${classDescriptor.simpleName}Validator.doYourJob(testData);
+	'			fail("Expected exception not thrown!");
+	'		} catch (Exception e) {
+	'			System.err.println(e.getMessage());
+	
+				#if ( $counter == 1 )
+	
+					'			assertTrue("unexpected error message", e.getMessage().startsWith("A validation error exists for '$classDescriptor.simpleName'"));
 				
-			#end
-			
-'			return;
-'		}
+				#else
+				
+					'			assertTrue("unexpected error message", e.getMessage().startsWith("$counter validation errors exist for '$classDescriptor.simpleName'"));
+					
+				#end
+				
+	'			return;
+	'		}
+	'		fail("Expected exception not thrown!");
 
-	#if ( $counter == 0 )
-	
-		// there is no validation definfed for $classDescriptor.simpleName
-	
-	#else
-	
-		'		fail("Expected exception not thrown!");
-
-	#end
+#end
 
 '	}

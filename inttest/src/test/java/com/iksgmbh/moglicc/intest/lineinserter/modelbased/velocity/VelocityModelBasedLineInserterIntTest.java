@@ -44,7 +44,7 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 		// verify test result in target directory read from template file
 		file = new File(applicationRootDir + "/example", "BeanFactory.java");
 		List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
-		assertEquals("Line number", 28, fileContentAsList.size());
+		assertEquals("Line number", 36, fileContentAsList.size());
 	}
 
 	@Test

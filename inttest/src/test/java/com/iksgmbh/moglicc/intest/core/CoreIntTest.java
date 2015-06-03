@@ -252,7 +252,8 @@ public class CoreIntTest extends IntTestParent {
 		final File resultFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
 		assertFileExists(resultFile);
 		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedReports/ExpectedErrorReport.txt");
-		assertFileEquals(expectedFile , resultFile);	}	
+		assertFileEquals(expectedFile , resultFile);	
+	}	
 	
 	@Test
 	public void createsNoErrorReportFileForStatusOK() {

@@ -1,8 +1,17 @@
 '	@Test
 '	public void returnsFirst() {
+'
+'		if ( ${classDescriptor.simpleName}Factory.getNumberOfTestObjectsInDataPool() == 0 )
+'		{
+'			return;  // Test not possible due to missing data
+'		}
+'
 '		final List<${classDescriptor.simpleName}> result = ${classDescriptor.simpleName}Factory.createFirstFromDataPool(1);
 '		assertNotNull("Not null expected for ", result);
 '		assertEquals("result", 1, result.size());
+'
+		#set( $useFirstFromDataPool = "true" )
+		#parse("commonSubtemplates/generateListOfDomainObjectsFromExampleDataOrDataPool.tpl")
 
 		#foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)
 		
@@ -26,16 +35,38 @@
 			
 				'		assertEquals("size of $AttributeName", CollectionsStringUtils.commaSeparatedStringToHashSet("$testDataMetaInfoValue").size(), result.get(0).get${AttributeName}().size() );
 				'		assertEquals("$AttributeName of type $javaType", "$testDataMetaInfoValue", CollectionsStringUtils.stringHashSetToCommaSeparatedString( result.get(0).get${AttributeName}() ));
-						
-			#elseif ( $javaType == "java.util.List<String>" )
+
+			#elseif ( $TemplateJavaUtility.isJavaMetaTypeGeneric($javaType) )
 			
-				'		assertEquals("size of $AttributeName", CollectionsStringUtils.commaSeparatedStringToStringList("$testDataMetaInfoValue").size(), result.get(0).get${AttributeName}().size() );
-				'		assertEquals("$AttributeName of type $javaType", "$testDataMetaInfoValue", CollectionsStringUtils.stringListToCommaSeparatedString( result.get(0).get${AttributeName}() ));
+		    	#set( $CollectionType = $TemplateJavaUtility.getCollectionMetaType($javaType) ) 
+			 	
+				#if ($CollectionType == "java.util.List")
+	
+		    		#set( $ElementType = $TemplateJavaUtility.getCollectionElementType($javaType) )
 					
-			#elseif ( $javaType == "java.util.List<Long>" )
-			
-				'		assertEquals("size of $AttributeName", CollectionsStringUtils.commaSeparatedStringToLongList("$testDataMetaInfoValue").size(), result.get(0).get${AttributeName}().size() );
-				'		assertEquals("$AttributeName of type $javaType", "$testDataMetaInfoValue", CollectionsStringUtils.listOfLongsToCommaSeparatedString( result.get(0).get${AttributeName}() ));
+					#if ($ElementType == "Long")
+					
+						'		assertEquals("size of $AttributeName", CollectionsStringUtils.commaSeparatedStringToLongList("$testDataMetaInfoValue").size(), result.get(0).get${AttributeName}().size() );
+						'		assertEquals("$AttributeName of type $javaType", "$testDataMetaInfoValue", CollectionsStringUtils.listOfLongsToCommaSeparatedString( result.get(0).get${AttributeName}() ));
+		    		
+		    		#elseif	($ElementType == "String")
+		    		
+						'		assertEquals("size of $AttributeName", CollectionsStringUtils.commaSeparatedStringToStringList("$testDataMetaInfoValue").size(), result.get(0).get${AttributeName}().size() );
+						'		assertEquals("$AttributeName of type $javaType", "$testDataMetaInfoValue", CollectionsStringUtils.stringListToCommaSeparatedString( result.get(0).get${AttributeName}() ));
+		    		
+		    		#else
+		    		
+		    			#set( $elementType = $TemplateStringUtility.firstToLowerCase($ElementType) ) 
+		    		
+						'		assertEquals("$AttributeName of type $javaType", ${elementType}List, result.get(0).get${AttributeName}() );						
+						 
+		    		#end
+				
+				#else
+				
+						'		// Unkown CollectionType: $collectionType 
+					
+				#end 
 					
 			#elseif ( $javaType == "String" )
 			

@@ -8,6 +8,14 @@ public class BeanFactory {
 		return new Person();
 	}
 
+	public static Contact getContact() {;
+		return new Contact();
+	}
+
+	public static Office getOffice() {;
+		return new Office();
+	}
+
 	public static Member getMember() {;
 		return new Member();
 	}
@@ -16,8 +24,8 @@ public class BeanFactory {
 		return new Address();
 	}
 
-	public static Misc getMisc() {;
-		return new Misc();
+	public static _Misc get_Misc() {;
+		return new _Misc();
 	}
 
 /** This is the EndReplace Marker for the MOGLi Code Creator - Do not modify this line! */
