@@ -42,6 +42,7 @@ Current version: **1.5.5**
 - Improvement: MOGLiCCJavaBeanRegistry introduced to handle reciprocal referencing between domain classes
 - Improvement: Template code refactored
 - Bugfix: Generation of clone-Method corrected
+- Bugfix: Generation report (number of output artefacts corrected)
 
 **Changes to 1.5.3**
 - Bugfix: Classpath handling in start scripts improved
