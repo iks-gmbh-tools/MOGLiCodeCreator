@@ -6,34 +6,48 @@ All 3 provider plugins executed successfully.
 
 Report for ExcelStandardModelProvider:
 
-Model MOGLiCC_JavaBeanModel with 4 classes has been called 1 times.
+Model MOGLiCC_JavaBeanModel with 6 classes has been called 1 times.
 
 
-Class com.iksgmbh.moglicc.demo.Address built with 5 attributes.
-    Attribute country built with 5 metainfos.
-    Attribute Postcode built with 5 metainfos.
-    Attribute city built with 5 metainfos.
-    Attribute Street built with 5 metainfos.
-    Attribute streetNumber built with 5 metainfos.
-Class com.iksgmbh.moglicc.demo.Member built with 1 attributes.
+Class com.iksgmbh.moglicc.demo.Address built with 4 attributes.
+    Attribute country built with 7 metainfos.
+    Attribute Postcode built with 7 metainfos.
+    Attribute city built with 7 metainfos.
+    Attribute Street built with 7 metainfos.
+Class com.iksgmbh.moglicc.demo.Contact built with 3 attributes.
+    Attribute person built with 4 metainfos.
+    Attribute mobile built with 4 metainfos.
+    Attribute email built with 4 metainfos.
+Class com.iksgmbh.moglicc.demo.Member built with 4 attributes.
     Attribute membershipNumber built with 5 metainfos.
-Class com.iksgmbh.moglicc.demo.Person built with 4 attributes.
+    Attribute active built with 5 metainfos.
+    Attribute role built with 5 metainfos.
+    Attribute offices built with 5 metainfos.
+Class com.iksgmbh.moglicc.demo.Office built with 4 attributes.
+    Attribute name built with 2 metainfos.
+    Attribute type built with 2 metainfos.
+    Attribute address built with 2 metainfos.
+    Attribute members built with 2 metainfos.
+Class com.iksgmbh.moglicc.demo.Person built with 5 attributes.
     Attribute firstname built with 4 metainfos.
     Attribute lastname built with 4 metainfos.
     Attribute age built with 4 metainfos.
-    Attribute address built with 4 metainfos.
+    Attribute contact built with 4 metainfos.
+    Attribute addresses built with 4 metainfos.
 
 ----------------------------------------------------------------------------------------------
 
 Report for StandardModelProvider:
 
-Model MOGLiCC_JavaBeanModel with 4 classes has been called 3 times.
+Model MOGLiCC_JavaBeanModel with 6 classes has been called 3 times.
 
 Classes in model:
 com.iksgmbh.moglicc.demo.Person
+com.iksgmbh.moglicc.demo.Contact
+com.iksgmbh.moglicc.demo.Office
 com.iksgmbh.moglicc.demo.Member
 com.iksgmbh.moglicc.demo.Address
-com.iksgmbh.moglicc.demo.Misc
+com.iksgmbh.moglicc.demo._Misc
 
 Plugins called for the model:
 VelocityModelBasedTreeBuilder

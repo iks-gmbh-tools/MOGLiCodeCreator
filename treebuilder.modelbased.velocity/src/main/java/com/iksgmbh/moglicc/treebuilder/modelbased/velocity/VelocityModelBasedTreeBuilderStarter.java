@@ -65,7 +65,11 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 	private static final String[] childrenMOGLiCCNewPluginProject = {"pom.xml", "artefact.properties", "readme.md"};
 	private static final String[] childrenMOGLiCCJavaBeanProject = {"pom.xml", "artefact.properties"};
 
-	private static final String[] children_UTILS_SOURCE_DIR = {"ClassOverviewPrinter.java", "MOGLiFactoryUtils.java", "CollectionsStringUtils.java"};
+	private static final String[] children_UTILS_SOURCE_DIR = {"ClassOverviewPrinter.java", 
+		                                                       "MOGLiFactoryUtils.java", 
+		                                                       "CollectionsStringUtils.java",
+		                                                       "MOGLiCCJavaBeanRegistry.java",
+		                                                       "MOGLiCCJavaBean.java"};
 
 	private static final String[] children_VALIDATOR_TYPES_SOURCE_DIR = {"MandatoryFieldValidator.java",
                                                                          "InvalidCharFieldValidator.java",

@@ -55,7 +55,7 @@ goto ExeJavaInSystemJavaHome
 
 
 :SystemJavaHome_Exe_not_Found
-echo java.exe NOT found in SystemJavaHome. Checking ScriptJavaHomeBin (%SystemJavaHomeBin%)...
+echo java.exe NOT found in SystemJavaHome. Checking SystemJavaHomeBin (%SystemJavaHomeBin%)...
 echo .
 if not exist "%SystemJavaHomeBin%\java.exe" goto SystemJavaHomeBin_Exe_not_Found
 goto ExeJavaInSystemJavaHomeBin

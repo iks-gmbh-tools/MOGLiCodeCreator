@@ -1,7 +1,22 @@
 
 '	@Before
-'	public void setup() {
+'	public void setup() 
+'	{
+
+#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+
+#if ( $useJavaBeanRegistry == "true" )
+
+	'		MOGLiCCJavaBeanRegistry.clear();
+	'
+	
+#end
+
 '		final ${classDescriptor.simpleName}Builder builder = new ${classDescriptor.simpleName}Builder();
+'
+		#set( $useExampleData = "true" )
+		#parse("commonSubtemplates/generateListOfDomainObjectsFromExampleDataOrDataPool.tpl")
+		
 '		testData = builder
 
 		#foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)
@@ -28,14 +43,37 @@
 			#elseif ( $javaType == "java.util.HashSet<String>" )
 			
 				'		          .with$AttributeName( CollectionsStringUtils.commaSeparatedStringToHashSet( "${ExampleData}" ) )
-						
-			#elseif ( $javaType == "java.util.List<String>" )
-			
-				'		          .with$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringList( "${ExampleData}" ) )
 				
-			#elseif ( $javaType == "java.util.List<Long>" )
+			#elseif ( $TemplateJavaUtility.isJavaMetaTypeGeneric($javaType) )
 			
+		    	#set( $CollectionType = $TemplateJavaUtility.getCollectionMetaType($javaType) ) 
+			 	
+				#if ($CollectionType == "java.util.List")
+	
+		    		#set( $ElementType = $TemplateJavaUtility.getCollectionElementType($javaType) )
+					
+					#if ($ElementType == "Long")
+					
 				'		          .with$AttributeName( CollectionsStringUtils.commaSeparatedStringToLongList( "${ExampleData}" ) )
+		    		
+		    		#elseif	($ElementType == "String")
+		    		
+				'		          .with$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringList( "${ExampleData}" ) )
+		    		
+		    		#else
+		    		
+		    			#set( $elementType = $TemplateStringUtility.firstToLowerCase($ElementType) ) 
+		    		
+				'		          .with$AttributeName( ${elementType}List )
+						
+						 
+		    		#end
+				
+				#else
+				
+						'		// Unkown CollectionType: $collectionType 
+					
+				#end 
 				
 			#elseif ( $javaType == "byte" )
 			

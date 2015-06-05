@@ -34,12 +34,13 @@ public class ExcelStandardModelProviderIntTest extends IntTestParent
 		
 		// verify test result
 		assertNotNull("Not null expected for ", model);
-		assertEquals("Model size", 3, model.getSize());
-		assertEquals("Attribute number", 5, model.getClassDescriptorList().get(0).getAttributeDescriptorList().size());
-		assertEquals("Attribute number", 1, model.getClassDescriptorList().get(1).getAttributeDescriptorList().size());
-		assertEquals("Attribute number", 4, model.getClassDescriptorList().get(2).getAttributeDescriptorList().size());
-		assertEquals("Attribute number", 5, model.getClassDescriptorList().get(0).getAttributeDescriptorList().get(0).getAllMetaInfos().size());
-		assertEquals("Attribute number", "M\u00fcller", model.getClassDescriptorList().get(2).getAttributeDescriptorList().get(1).getMetaInfoValueFor("Person1"));
+		assertEquals("Number of classes", 5, model.getSize());
+		
+		assertEquals("Attribute number for class 1", 4, model.getClassDescriptorList().get(0).getAttributeDescriptorList().size());
+		assertEquals("Attribute number for class 2", 3, model.getClassDescriptorList().get(1).getAttributeDescriptorList().size());
+		assertEquals("Attribute number for class 3", 4, model.getClassDescriptorList().get(2).getAttributeDescriptorList().size());
+		assertEquals("Attribute number for class 4", 4, model.getClassDescriptorList().get(3).getAttributeDescriptorList().size());
+		assertEquals("Attribute number for class 5", 5, model.getClassDescriptorList().get(4).getAttributeDescriptorList().size());
 	}
 
 	@Test

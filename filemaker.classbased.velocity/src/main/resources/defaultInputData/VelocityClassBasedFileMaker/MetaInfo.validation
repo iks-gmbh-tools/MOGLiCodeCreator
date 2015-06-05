@@ -56,10 +56,14 @@
 |MetaInfo| useExtensionPlugin |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
 |MetaInfo| dateTimeFormat |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
 |MetaInfo| namespace |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
+|MetaInfo| useJavaBeanRegistry |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
 
 # class validators
 |MetaInfo| implements  |is valid to occur| any |time(s) for| classes    |in| MOGLiCC_JavaBeanModel |.|   
-|MetaInfo| extends     |is| optional            |for| classes    |in| MOGLiCC_JavaBeanModel |.| # must not occur or only once
+|MetaInfo| Enum        |is valid to occur| any |time(s) for| classes    |in| MOGLiCC_JavaBeanModel |.|   
+|MetaInfo| JavaDocLine |is valid to occur| any |time(s) for| classes    |in| MOGLiCC_JavaBeanModel |.|   
+|MetaInfo| extends                 |is| optional            |for| classes    |in| MOGLiCC_JavaBeanModel |.| # must not occur or only once
+|MetaInfo| generateStandardJavaDoc |is| optional            |for| classes    |in| MOGLiCC_JavaBeanModel |.| # must not occur or only once
 
 # attribute validators
 |MetaInfo| JavaType    |is valid to occur| 1   |time(s) for| attributes |in| MOGLiCC_JavaBeanModel |.| 

@@ -1,6 +1,19 @@
 '	// ===============  getter methods  ===============
 '
 
+#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+
+#if ( $useJavaBeanRegistry == "true" )
+
+	'	public String getRegistryId()
+	'	{
+	'		return registryId;
+	'	}
+	'
+	
+#end
+
+
 #foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)
 
 #set( $attributeName = $TemplateStringUtility.firstToLowerCase($attributeDescriptor.name) )

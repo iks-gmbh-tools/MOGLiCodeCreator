@@ -11,9 +11,34 @@ import org.apache.commons.lang.StringUtils;
 
 public class TemplateStringUtility {
 
-	public static boolean contains(String text, String searchString) {
+	public static void addToList(final List<String> list, 
+			                     final String newElement) 
+	{
+		list.add(newElement);
+	}
+
+	public static boolean contains(String text, String searchString) 
+	{
+		if (searchString == null) return false;
+		
 		return text.contains(searchString);
 	}
+	
+	public static boolean contains(List<String> texts, String searchString) 
+	{
+		if (texts == null) return false;
+		
+		for (String text : texts) 
+		{
+			if (contains(text, searchString))
+			{
+				return true;
+			}
+			
+		}
+		return false;
+	}
+	
 
 	public boolean isStringValueSet(String s) {
 		return s != null;

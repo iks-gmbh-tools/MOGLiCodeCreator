@@ -42,7 +42,7 @@ public class C_ScenarioSystemTest extends __AbstractSystemTest {
 		assertFileExists(targetDir);
 		final FolderContent folderContent = new FolderContent(targetDir, null);
 		assertEquals("folder number", 25, folderContent.getFolders().size());
-		assertEquals("total file number", 45, folderContent.getFiles().size());
+		assertEquals("total file number", 63, folderContent.getFiles().size());
 	}
 
 	@Test

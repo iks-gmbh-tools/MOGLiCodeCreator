@@ -33,6 +33,18 @@ public class ${classDescriptor.simpleName}Factory
 '	public static final int DEFAULT_MIN_LENGTH_STRING_VALUE = 0;
 '	public static final int DEFAULT_MIN_LENGTH_NUMBER_VALUE = 1;
 '	public static final int NO_VALUE_AVAILABLE_IN_MODEL = -1;
+
+#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+
+#if ( $useJavaBeanRegistry == "true")
+
+'
+'	private static final String REGISTRY_ID_MAX_FIELD_CONTENT = "${classDescriptor.simpleName}InstanceWithMaxFieldContent";
+'	private static final String REGISTRY_ID_MIN_FIELD_CONTENT = "${classDescriptor.simpleName}InstanceWithMinFieldContent";
+
+#end
+
+
 '
 '	static final HashMap<String, List<String>> dataPool = new HashMap<String, List<String>>();
 '	static final HashMap<String, Integer> maxLengths = new HashMap<String, Integer>();
@@ -73,6 +85,8 @@ public class ${classDescriptor.simpleName}Factory
 '	
 
 #parse("B1_createInstanceWithAllFieldsAtMaxLength.tpl")
+
+'
 
 #parse("B2_createInstanceWithAllFieldsAtMinLength.tpl")
 
@@ -122,7 +136,7 @@ public class ${classDescriptor.simpleName}Factory
 '    */
 '	public static ${classDescriptor.simpleName} createInstanceOnlyWithMandatoryFields()
 '	{
-'		final ${classDescriptor.simpleName} toReturn = createByIndex(0);
+'		final ${classDescriptor.simpleName} toReturn = createInstanceWithExampleData();
 '		removeAllDataFromOptionalFields(toReturn);
 '		return toReturn;
 '	}
@@ -167,11 +181,32 @@ public class ${classDescriptor.simpleName}Factory
 '	public static ${classDescriptor.simpleName} createByIndex(final int index)
 '	{
 '		final int dataPoolNum = getNumberOfTestObjectsInDataPool();
+'		if (dataPoolNum == 0)
+'		{
+'			throw new RuntimeException("Cannot create any instance: Data pool is empty.");
+'		}
+'
 '		if (index > dataPoolNum)
 '		{
 '			throw new RuntimeException("Error: Cannot provide the " + index + "th ${classDescriptor.simpleName} object. Pool contains only "
 '                                     + dataPoolNum + " objects.");
 '		}
+
+
+		#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+
+		#if ( $useJavaBeanRegistry == "true" )
+
+			'		
+			'		final String objectId = getObjectIdFromIndex(index);
+			'		if (MOGLiCCJavaBeanRegistry.isBeanRegistered(objectId))
+			'		{
+			'			return (${classDescriptor.simpleName}) MOGLiCCJavaBeanRegistry.getJavaBean(objectId);
+			'		}
+			'
+		#end
+
+
 '		return buildObject(index);
 '	}
 '
@@ -181,16 +216,14 @@ public class ${classDescriptor.simpleName}Factory
 '	 */
 '	public static ${classDescriptor.simpleName} createById(final String objectId)
 '	{
-'		final List<String> ids = dataPool.get( OBJECT_ID );
-'		int indexCounter = 0;
-'		for (final String id : ids) {
-'			if ( id.equals(objectId) )
-'			{
-'				return createByIndex(indexCounter);
-'			}
-'			indexCounter++;
+'		final int index = getIndexFromId(objectId);
+'		
+'		if (index == -1)
+'		{
+'			return null;
 '		}
-'		return null;
+'		
+'		return createByIndex(index);
 '	}
 '
 '	/**
@@ -217,6 +250,38 @@ public class ${classDescriptor.simpleName}Factory
 '   // *************************************************************************
 '   // ***************************  private methods  ***************************
 '   // *************************************************************************
+'
+'	private static String getObjectIdFromIndex(int index)
+'	{
+'		return dataPool.get( OBJECT_ID ).get(index);
+'	}
+'
+'	private static int getIndexFromId(final String objectId)
+'	{
+'		final List<String> ids = dataPool.get( OBJECT_ID );
+'		if (ids.size() == 0)
+'		{
+'			final int dataPoolNum = getNumberOfTestObjectsInDataPool();
+'			if (dataPoolNum == 0)
+'			{
+'				throw new RuntimeException("Cannot create any instance: Data pool is empty.");
+'			}
+'
+'			throw new RuntimeException("Cannot create any instance: Unknown object id "
+'			                           + OBJECT_ID + ".");
+'		}
+'
+'		int indexCounter = 0;
+'		for (final String id : ids) {
+'			if ( id.equals(objectId) )
+'			{
+'				return indexCounter;
+'			}
+'			indexCounter++;
+'		}
+'		
+'		return -1;
+'	}
 '	
 '	private static String getValue(final String field, final int index)
 '	{
@@ -235,7 +300,18 @@ public class ${classDescriptor.simpleName}Factory
 '	}
 '
 
-#parse("C_buildObjectMethod.tpl")
+#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+
+#if ( $useJavaBeanRegistry == "true" )
+
+	#parse("C_buildObjectMethodWithRegistry.tpl")
+	
+#else
+
+	#parse("C_buildObjectMethod.tpl")
+	
+#end
+
 
 '
 '	static int getNumberOfTestObjectsInDataPool()  {
@@ -253,5 +329,9 @@ public class ${classDescriptor.simpleName}Factory
 '
 
 #parse("D_buildDataPool.tpl")
+
+'
+
+#parse("I_buildCreateExampleInstanceMethod.tpl")
 
 }

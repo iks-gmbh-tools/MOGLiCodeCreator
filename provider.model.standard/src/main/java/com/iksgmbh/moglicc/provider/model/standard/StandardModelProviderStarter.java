@@ -50,8 +50,10 @@ public class StandardModelProviderStarter implements ModelProvider {
 	public static final String PLUGIN_PROPERTIES_FILE = "_model.properties";
 	public static final String FILENAME_STATISTICS_FILE = "ModelStatistics.txt";
 	public static final String FILENAME_STANDARD_MODEL_FILE = "MOGLiCC_JavaBeanModel.txt";
+	public static final String FILENAME_STANDARD_MODEL_FILE2 = "MOGLiCC_JavaBeanModel_without_JavaBeanRegistry.txt";
 	public static final String USE_EXTENSION_PLUGIN_ID = "useExtensionPlugin";
-	private static final String FILENAME_NEW_PLUGIN_MODEL_FILE = "MOGLiCC_NewPluginModel.txt";
+	public static final String FILENAME_NEW_PLUGIN_MODEL_FILE = "MOGLiCC_NewPluginModel.txt";
+	
 
 	private InfrastructureService infrastructure;
 	private boolean jobStarted = false;
@@ -448,6 +450,7 @@ public class StandardModelProviderStarter implements ModelProvider {
 		
 		defaultData.addFile(PLUGIN_PROPERTIES_FILE);
 		defaultData.addFile(FILENAME_STANDARD_MODEL_FILE);
+		defaultData.addFile(FILENAME_STANDARD_MODEL_FILE2);
 		defaultData.addFile(FILENAME_NEW_PLUGIN_MODEL_FILE);
 		
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());

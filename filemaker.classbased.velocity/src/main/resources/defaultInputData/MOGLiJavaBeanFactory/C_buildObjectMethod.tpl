@@ -2,13 +2,22 @@
 '	{
 '		${classDescriptor.simpleName}Builder builder = new ${classDescriptor.simpleName}Builder();
 '		String value = null;
-		
+'		
 		#foreach($attributeDescriptor in $classDescriptor.attributeDescriptorList)
 
 			#set( $AttributeName = $TemplateStringUtility.firstToUpperCase($attributeDescriptor.name) ) 
+			#set( $attributeName = $TemplateStringUtility.firstToLowerCase($attributeDescriptor.name) ) 
 		    #set( $javaType = $attributeDescriptor.getMetaInfoValueFor("JavaType") ) 
+			#set( $enumList = $classDescriptor.getAllMetaInfoValuesFor("Enum") )
 		    
-		    #if ($javaType == "String")
+		    #if ( $TemplateStringUtility.contains($enumList, $javaType) )
+		    
+				'		value = getValue("$AttributeName", index);
+				'		final $javaType $attributeName = ${javaType}.valueOf( value );
+				'		builder = builder.with$AttributeName( $attributeName );
+		    
+		    
+		    #elseif ($javaType == "String")
 		    
 				'		value = getValue("$AttributeName", index);
 				'		if ( ! StringUtils.isEmpty( value ) )
@@ -110,22 +119,6 @@
 				'		if ( ! StringUtils.isEmpty( value ) )
 				'			builder = builder.with$AttributeName( dateTimeFormatter.parseDateTime( value ) );
 				
-			#elseif ($javaType == "String[]") 
-			
-				'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringArray( getValue("$AttributeName", index) ) );
-				
-			#elseif ($javaType == "java.util.HashSet<String>") 
-			
-				'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToHashSet( getValue("$AttributeName", index) ) );
-				
-			#elseif ($javaType == "java.util.List<String>")
-			 
-				'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringList( getValue("$AttributeName", index) ) );
-				
-			#elseif ($javaType == "java.util.List<Long>")
-			 
-				'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToLongList( getValue("$AttributeName", index) ) );
-				
 			#elseif ( $TemplateJavaUtility.isPrimitiveTypeWrapper($javaType) )
 			
 				'		value = getValue("$AttributeName", index);
@@ -133,6 +126,52 @@
 				#set( $javaTypeSimple = $TemplateJavaUtility.getSimpleClassName($javaType) )
 
 				'		builder = builder.with${AttributeName}( $javaTypeSimple.valueOf( value ) );
+				
+			#elseif ($javaType == "String[]") 
+			
+				'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringArray( getValue("$AttributeName", index) ) );
+				
+				
+			#elseif ($javaType == "java.util.HashSet<String>") 
+			
+				'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToHashSet( getValue("$AttributeName", index) ) );
+				
+			#elseif ( $TemplateJavaUtility.isJavaMetaTypeGeneric($javaType) )
+			
+		    	#set( $CollectionType = $TemplateJavaUtility.getCollectionMetaType($javaType) ) 
+			 	
+				#if ($CollectionType == "java.util.List")
+
+		    		#set( $ElementType = $TemplateJavaUtility.getCollectionElementType($javaType) )
+					
+					#if ($ElementType == "Long")
+					
+						'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToLongList( getValue("$AttributeName", index) ) );
+		    		
+		    		#elseif	($ElementType == "String")
+		    		
+						'		builder = builder.with$AttributeName( CollectionsStringUtils.commaSeparatedStringToStringList( getValue("$AttributeName", index) ) );
+		    		
+		    		#else
+		    		
+		    			#set( $elementType = $TemplateStringUtility.firstToLowerCase($ElementType) ) 
+		    		
+						'		value = getValue("$AttributeName", index);
+						'		final List<String> ${elementType}ListElements = CollectionsStringUtils.commaSeparatedStringToStringList(value);
+						'		final java.util.List<${ElementType}> ${elementType}List = new ArrayList<${ElementType}>();
+						'		for (final String element : ${elementType}ListElements) {
+						'			${elementType}List.add(${ElementType}Factory.createById(element));
+						'		}						
+						'		builder = builder.with$AttributeName( ${elementType}List );
+						
+						 
+		    		#end
+				
+				#else
+				
+					'		// Unkown CollectionType: $collectionType 
+					
+				#end				
 			
 			#else
 

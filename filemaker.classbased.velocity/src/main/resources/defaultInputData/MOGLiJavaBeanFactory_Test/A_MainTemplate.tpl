@@ -29,6 +29,20 @@ public class ${classDescriptor.simpleName}FactoryUnitTest
 '
 '	private final static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("$model.getMetaInfoValueFor("dateTimeFormat")");
 '
+#set( $useJavaBeanRegistry = $model.getMetaInfoValueFor("useJavaBeanRegistry") )
+
+#if ( $useJavaBeanRegistry == "true" )
+
+	'
+	'	@Before
+	'	public void setup()
+	'	{
+	'		MOGLiCCJavaBeanRegistry.clear();
+	'	}
+	'
+	
+#end
+
 #parse("B_buildReturnsFirstMethod.tpl")
 
 '	
@@ -96,12 +110,20 @@ public class ${classDescriptor.simpleName}FactoryUnitTest
 '	
 '	@Test
 '	public void returnsByIndex() {
+'		if ( ${classDescriptor.simpleName}Factory.getNumberOfTestObjectsInDataPool() == 0 )
+'		{
+'			return;  // Test not possible due to missing data
+'		}
 '		final ${classDescriptor.simpleName} result = ${classDescriptor.simpleName}Factory.createByIndex(0);
 '		assertNotNull("Not null expected for ", result);
 '	}
 '
 '	@Test
 '	public void thowsExceptionForIndexOutOfRange() {
+'		if ( ${classDescriptor.simpleName}Factory.getNumberOfTestObjectsInDataPool() == 0 )
+'		{
+'			return;  // Test not possible due to missing data
+'		}
 '		try {
 '			${classDescriptor.simpleName}Factory.createByIndex(1000000000);
 '			fail("Expected exception was not thrown!");
@@ -113,6 +135,12 @@ public class ${classDescriptor.simpleName}FactoryUnitTest
 '	
 '	@Test
 '	public void returnsRandom() {
+'
+'		if ( ${classDescriptor.simpleName}Factory.getNumberOfTestObjectsInDataPool() == 0 )
+'		{
+'			return;  // Test not possible due to missing data
+'		}
+'
 '		final ${classDescriptor.simpleName} result = ${classDescriptor.simpleName}Factory.createRandomFromDataPool();
 '		assertNotNull("Not null expected for ", result);
 '	}
@@ -123,5 +151,9 @@ public class ${classDescriptor.simpleName}FactoryUnitTest
 '
 
 #parse("H_buildReturnsInstanceWithAllSupportedFieldsNotReachingMinLength.tpl")		
+
+'
+
+#parse("I_buildReturnsExampleDataInstance.tpl")
 
 }

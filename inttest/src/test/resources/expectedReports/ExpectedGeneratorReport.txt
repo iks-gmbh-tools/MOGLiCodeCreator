@@ -2,7 +2,7 @@
 
 All 3 generator plugins executed successfully.
 Model used is 'MOGLiCC_JavaBeanModel'.
-A total of 74 generation events for 10 output artefact(s) have been performed.
+A total of 94 generation events for 50 output artefact(s) have been performed.
 
 ----------------------------------------------------------------------------------------------
 
@@ -13,51 +13,67 @@ MOGLiCC_NewPluginModel
 
    Report for input artefact 'MOGLiJavaBean':
       Person.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      Contact.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      Office.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       Member.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       Address.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
-      Misc.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      _Misc.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
 
    Report for input artefact 'MOGLiJavaBeanBuilder':
       PersonBuilder.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      ContactBuilder.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      OfficeBuilder.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       MemberBuilder.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       AddressBuilder.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
-      MiscBuilder.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      _MiscBuilder.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
 
    Report for input artefact 'MOGLiJavaBeanBuilder_Test':
       PersonBuilderUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      ContactBuilderUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      OfficeBuilderUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       MemberBuilderUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       AddressBuilderUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
-      MiscBuilderUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      _MiscBuilderUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
 
    Report for input artefact 'MOGLiJavaBeanFactory':
       PersonFactory.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      ContactFactory.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      OfficeFactory.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       MemberFactory.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       AddressFactory.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
-      MiscFactory.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      _MiscFactory.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
 
    Report for input artefact 'MOGLiJavaBeanFactory_Test':
       PersonFactoryUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      ContactFactoryUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      OfficeFactoryUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       MemberFactoryUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       AddressFactoryUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
-      MiscFactoryUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      _MiscFactoryUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
 
    Report for input artefact 'MOGLiJavaBeanValidator':
       PersonValidator.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      ContactValidator.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      OfficeValidator.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       MemberValidator.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
       AddressValidator.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
-      MiscValidator.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
+      _MiscValidator.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/main/java/<package>
 
    Report for input artefact 'MOGLiJavaBeanValidator_Test':
       PersonValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      ContactValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      OfficeValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       MemberValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       AddressValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
-      MiscValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      _MiscValidatorUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
 
    Report for input artefact 'MOGLiJavaBean_Test':
       PersonUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      ContactUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      OfficeUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       MemberUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
       AddressUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
-      MiscUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
+      _MiscUnitTest.java was created in <applicationRootDir>/MOGLiCC_JavaBeanProject/src/test/java/<package>
 
 ----------------------------------------------------------------------------------------------
 
@@ -67,7 +83,7 @@ Report for input artefact 'BeanFactory':
       BeanFactory.java was created in <applicationRootDir>/example
       1 line(s) inserted by a above-instruction into BeanFactory.java in directory <applicationRootDir>/example
       1 line(s) inserted by a below-instruction into BeanFactory.java in directory <applicationRootDir>/example
-      12 line(s) inserted by a replace-instruction into BeanFactory.java in directory <applicationRootDir>/example
+      18 line(s) inserted by a replace-instruction into BeanFactory.java in directory <applicationRootDir>/example
 
 ----------------------------------------------------------------------------------------------
 
@@ -78,10 +94,10 @@ MOGLiCC_NewPluginProject
 
    Report for input artefact 'MOGLiCC_JavaBeanProject':
 
-   Tree artefact generated in: C:\data\Reik\dev\eclipse\workspaces\MOGLiCodeCreatorWithRemoteToIksGithub\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
+   Tree artefact generated in: C:\dev\MOGLiCC\iks-github\inttest\..\inttest\target\TestDir\MOGLiCC_JavaBeanProject
    6 folders have been created.
-   13 files have been created.
-   19 file modifications were performed.
+   15 files have been created.
+   21 file modifications were performed.
 
    Created subdirectories: 
       \src\main\java\com\iksgmbh\moglicc\demo\utils
@@ -94,6 +110,8 @@ MOGLiCC_NewPluginProject
    Created files: 
       \pom.xml
       \src\main\java\com\iksgmbh\moglicc\demo\utils\CollectionsStringUtils.java
+      \src\main\java\com\iksgmbh\moglicc\demo\utils\MOGLiCCJavaBean.java
+      \src\main\java\com\iksgmbh\moglicc\demo\utils\MOGLiCCJavaBeanRegistry.java
       \src\main\java\com\iksgmbh\moglicc\demo\utils\MOGLiCC_JavaBeanProjectClassOverviewPrinter.java
       \src\main\java\com\iksgmbh\moglicc\demo\utils\MOGLiFactoryUtils.java
       \src\main\java\com\iksgmbh\moglicc\demo\validator\helper\FieldValidationException.java
@@ -112,7 +130,7 @@ MOGLiCC_NewPluginProject
       Placeholder 'mavenProjectName' replaced by 'MOGLiJavaBean Artifacts' in file 'pom.xml'
       Placeholder 'mavenProjectDescription' replaced by 'An example project to demonstrate both, the file structure generator and the artifacts of the MOGLiJavaBeanGroup' in file 'pom.xml'
       Placeholder 'class ClassOverviewPrinter' replaced by 'class MOGLiCC_JavaBeanProjectClassOverviewPrinter' in file 'ClassOverviewPrinter.java'
-      Placeholder '<domainPathToReplace>' replaced by 'com.iksgmbh.moglicc.demo' in file 'ClassOverviewPrinter.java'CollectionsStringUtils.java'MOGLiFactoryUtils.java'FieldValidationException.java'FieldValidationResult.java'FieldValidator.java'JavaBeanValidator.java'InvalidCharFieldValidator.java'MandatoryFieldValidator.java'MaxLengthValidator.java'MinLengthValidator.java'ValidCharFieldValidator.java'
+      Placeholder '<domainPathToReplace>' replaced by 'com.iksgmbh.moglicc.demo' in file 'ClassOverviewPrinter.java'CollectionsStringUtils.java'MOGLiCCJavaBean.java'MOGLiCCJavaBeanRegistry.java'MOGLiFactoryUtils.java'FieldValidationException.java'FieldValidationResult.java'FieldValidator.java'JavaBeanValidator.java'InvalidCharFieldValidator.java'MandatoryFieldValidator.java'MaxLengthValidator.java'MinLengthValidator.java'ValidCharFieldValidator.java'
 
    Performed file renamings:
       File 'ClassOverviewPrinter.java' renamed to 'MOGLiCC_JavaBeanProjectClassOverviewPrinter.java' in directory '..\inttest\target\TestDir\output\VelocityModelBasedTreeBuilder\MOGLiCC_JavaBeanProject\src\main\java\domainPathToReplace\utils'
