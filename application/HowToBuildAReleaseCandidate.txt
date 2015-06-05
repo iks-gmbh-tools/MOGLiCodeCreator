@@ -6,7 +6,7 @@ I Preconditions for Release
 4. Check for correct version settings in following files:
    a) application/src/main/resources/build.properties,
    b) readme.md in root
-5. All htm-files are kown to be UTF-coded (in case of doubt check with Notepad++).
+5. All htm-files are known to be UTF-coded (in case of doubt, check with Notepad++).
 
 
 

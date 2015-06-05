@@ -35,24 +35,30 @@ License: **All Rights Reserved**
 
 travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.png?branch=master)](https://travis-ci.org/iks-github/MOGLiCodeCreator)
 
-Current version: **1.5.4**
+Current version: **1.5.5**
+
+**Changes to 1.5.4**
+- Improvement: Domain Model extended to higher complexity for demonstration purpose
+- Improvement: MOGLiCCJavaBeanRegistry introduced to handle reciprocal referencing between domain classes
+- Improvement: Template code refactored
+- Bugfix: Generation of clone-Method corrected
 
 **Changes to 1.5.3**
 - Bugfix: Classpath handling in start scripts improved
-- Bugfix: API of the Factory classes of the MOGLiCC JavaBean Group cleaned
-- Bugfix: help and readme files updated
+- Improvement: API of the Factory classes of the MOGLiCC JavaBean Group cleaned
+- Improvement: help and readme files updated
 
 **Changes to 1.5.2**
 - Bugfix: MOGLiCC JavaBean Group bugfixed: hash-Method of JavaBean corrected
-- Bugfix: provider.model.standard.excel allows to use letters to define columns
+- Improvement: provider.model.standard.excel allows to use letters to define columns
 
 **Changes to 1.5.1**
-- Bugfix: MOGLiCC JavaBean Group now supports to configure an arbitrary namespace
+- Improvement: MOGLiCC JavaBean Group now supports to configure an arbitrary namespace
 - Bugfix: MOGLiCC JavaBean Group now handles "implements" metainfos correct
 
 **Changes to 1.5.0**
-- Bugfix: Provider report now with validation error messages (if occurred)
-- Bugfix: Factory classes in the MOGLiCC JavaBean Group now support org.joda.time.DateTime
+- Improvement: Provider report now with validation error messages (if occurred)
+- Improvement: Factory classes in the MOGLiCC JavaBean Group now support org.joda.time.DateTime
 
 **Changes to 1.4.0**
 - New Feature: New Plugin 'provider.model.standard.excel' for reading test data from excel files
@@ -104,9 +110,9 @@ Versioning convention: major.minor.revision
 
 major:    will change for basic framework modification
 
-minor:    will change for new features
+minor:    will change for new features and larger improvements
 
-revision: will change for bug fixes
+revision: will change for bug fixes and smaller improvements
 
 
 * * *
