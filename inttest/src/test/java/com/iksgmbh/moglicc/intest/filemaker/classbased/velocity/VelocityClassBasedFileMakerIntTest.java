@@ -31,7 +31,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		assertFileDoesNotExist(file);
 		final String generationReport = velocityClassBasedFileMakerStarter.getGeneratorReport();
 		System.out.println(generationReport);
-		assertStringEquals("generationReport", "9 input artefact(s) found. No classes in model. Nothing to do.", generationReport);
+		assertStringEquals("generationReport", "10 input artefact(s) found. No classes in model. Nothing to do.", generationReport);
 	}
 
 	@Test
@@ -360,6 +360,42 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		assertFileContainsEntry(result, "implements Serializable, Cloneable");
 		assertFileContainsEntry(result, "private static final long serialVersionUID = ");
 		assertFileContainsEntry(result, "public Object clone()");
+	}
+
+	@Test
+	public void replacesNumberSignInTheGeneratedOutput() throws Exception 
+	{
+		// prepare test
+		final String targetFileName = "shellScript.sh";
+		final String artefactName = "ShellScriptTestArtefact";
+		final File artefactTemplateDir = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), artefactName);
+		FileUtil.deleteDirWithContent(artefactTemplateDir.getParentFile());
+		artefactTemplateDir.mkdirs();
+		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
+		
+		final String templateFileContent = "@CreateNew true"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetFileName " + targetFileName
+				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetDir "
+				+ MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
+				+ "/target"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@ReplaceToNumberSign rem"
+				+ FileUtil.getSystemLineSeparator()
+				+ "rem This is a comment.";
+		MOGLiFileUtil.createNewFileWithContent(testTemplate, templateFileContent);
+		final File resultFile = new File(applicationRootDir, "target/" + targetFileName);
+		resultFile.delete();
+		assertFileDoesNotExist(resultFile);
+
+
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// verify test result
+		assertFileContainsEntry(resultFile, "# This is a comment");
 	}
 	
 }

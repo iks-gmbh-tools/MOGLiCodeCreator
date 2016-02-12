@@ -53,6 +53,7 @@ public class StandardModelProviderStarter implements ModelProvider {
 	public static final String FILENAME_STANDARD_MODEL_FILE2 = "MOGLiCC_JavaBeanModel_without_JavaBeanRegistry.txt";
 	public static final String USE_EXTENSION_PLUGIN_ID = "useExtensionPlugin";
 	public static final String FILENAME_NEW_PLUGIN_MODEL_FILE = "MOGLiCC_NewPluginModel.txt";
+	public static final String FILENAME_MOGLYDICK_MODEL_FILE = "Moglydick.txt";
 	
 
 	private InfrastructureService infrastructure;
@@ -295,7 +296,6 @@ public class StandardModelProviderStarter implements ModelProvider {
 	    final String braceSymbol = getMetaInfoBraceSymbol();
 		infrastructure.getPluginLogger().logInfo("Brace symbol used: " + braceSymbol);
 
-
 		try 
 		{
 			buildUpModel = ModelParser.doYourJob(fileContentAsList, braceSymbol);
@@ -452,6 +452,7 @@ public class StandardModelProviderStarter implements ModelProvider {
 		defaultData.addFile(FILENAME_STANDARD_MODEL_FILE);
 		defaultData.addFile(FILENAME_STANDARD_MODEL_FILE2);
 		defaultData.addFile(FILENAME_NEW_PLUGIN_MODEL_FILE);
+		defaultData.addFile(FILENAME_MOGLYDICK_MODEL_FILE);
 		
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;

@@ -2,7 +2,6 @@ package com.iksgmbh.moglicc.generator.classbased.velocity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -102,38 +101,6 @@ public class BuildUpVelocityGeneratorResultDataUnitTest
 
 		// verify test result
 		assertEquals("overwrite", true, createNew);
-	}
-
-	@Test
-	public void returnsTargetDirAsFileWithPackageReadFromGeneratedContent() throws MOGLiPluginException
-	{
-		// prepare test
-		buildResultData(" foo\npackage de.test;\n bar", "temp/" + VelocityGeneratorResultData.PACKAGE_IDENTIFIER, "filename", true);
-
-		// call functionality under test
-		String targetDir = velocityGeneratorResultData.getTargetDirAsFile(null, "").getAbsolutePath();
-		
-		// verify test result
-		targetDir = targetDir.replace('\\', '/');
-		assertTrue("Unexpected targetDir", targetDir.endsWith("/temp/de/test"));
-	}
-
-	@Test
-	public void throwsExceptionIfPackageNotFoundInGeneratedContent()
-	{
-		// prepare test
-		buildResultData(" foo\npackag de.test;\n bar", "temp/" + VelocityGeneratorResultData.PACKAGE_IDENTIFIER, "filename", false);
-
-		// call functionality under test
-		try {
-			velocityGeneratorResultData.getTargetDirAsFile(null, "").getAbsolutePath();
-		} catch (MOGLiPluginException e) {
-			assertEquals(e.getMessage(), VelocityGeneratorResultData.TEXT_PACKAGE_NOT_FOUND);
-			return;
-		}
-		
-		fail("Expected exception not thrown!");
-
 	}
 
 	@Test

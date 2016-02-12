@@ -47,6 +47,11 @@ public class BuildUpClassDescriptor extends MetaModelObject implements ClassDesc
 	public String getSimpleName() {
 		return classnameData.getSimpleClassName();
 	}
+	
+	@Override
+	public String getName() {
+		return classnameData.getSimpleClassName();
+	}	
 
 	@Override
 	public String getPackage() {

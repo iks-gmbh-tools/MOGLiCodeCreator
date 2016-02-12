@@ -1,5 +1,7 @@
 package com.iksgmbh.moglicc.provider.engine.velocity;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
+import com.iksgmbh.utils.FileUtil;
 
 public class TemplateStringUtility {
 
@@ -166,4 +170,24 @@ public class TemplateStringUtility {
 		return StringUtils.replace(containerString, toReplace, replacement);
 	}
 
+	/**
+	 * Reads text file content using UTF-8 encoding.
+	 * @param filename
+	 * @return List of strings or empty list (if file does not exist)
+	 * @throws IOException
+	 */
+	public static List<String> getTextFileContent(final String filename) throws IOException {
+		
+		final File file = new File(filename);
+		
+		if (file.exists())
+		{
+			return FileUtil.getFileContentAsList(file);
+		}
+		
+		final List<String> toReturn = new ArrayList<String>();
+		toReturn.add("ERROR: File " + file.getAbsolutePath() + " not found!");
+		return toReturn;
+	}
+	
 }

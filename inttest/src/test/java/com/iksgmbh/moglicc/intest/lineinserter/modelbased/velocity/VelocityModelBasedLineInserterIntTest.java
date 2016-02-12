@@ -276,4 +276,42 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 		assertFileExists(resultFile);
 	}
 
+	@Test
+	public void replacesNumberSignInTheGeneratedOutput() throws Exception 
+	{
+		// prepare test
+		final String modelName = "TestModel";
+		final String targetFileName = "shellScript.sh";
+
+		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator()
+				+ "  metainfo includesDB false"
+				+ FileUtil.getSystemLineSeparator() + "class de.Test1";
+		prepareModelFile(modelName, modelFileContent);
+
+		final String templateFileContent = "@CreateNew true"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetFileName " + targetFileName
+				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetDir "
+				+ MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
+				+ "/target"
+				+ FileUtil.getSystemLineSeparator()
+				+ "@ReplaceToNumberSign rem"
+				+ FileUtil.getSystemLineSeparator()
+				+ "rem This is a comment.";
+		prepareTemplateFile(templateFileContent);
+
+		final File resultFile = new File(applicationRootDir, "target/" + targetFileName);
+		resultFile.delete();
+		assertFileDoesNotExist(resultFile);
+
+
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityModelBasedLineInserterStarter.doYourJob();
+
+		// verify test result
+		assertFileContainsEntry(resultFile, "# This is a comment");
+	}
+	
 }

@@ -41,19 +41,33 @@ public class VelocityLineInserterResultData extends BuildUpVelocityGeneratorResu
 	}
 
 	public String getReplaceStartIndicator() {
-		return getProperty(KnownInserterPropertyNames.ReplaceStart.name());
+		return removeQuotes(getProperty(KnownInserterPropertyNames.ReplaceStart.name()));
 	}
 
 	public String getReplaceEndIndicator() {
-		return getProperty(KnownInserterPropertyNames.ReplaceEnd.name());
+		return removeQuotes(getProperty(KnownInserterPropertyNames.ReplaceEnd.name()));
 	}
 
 	public String getInsertBelowIndicator() {
-		return getProperty(KnownInserterPropertyNames.InsertBelow.name());
+		return removeQuotes(getProperty(KnownInserterPropertyNames.InsertBelow.name()));
 	}
 
 	public String getInsertAboveIndicator() {
-		return getProperty(KnownInserterPropertyNames.InsertAbove.name());
+		return removeQuotes(getProperty(KnownInserterPropertyNames.InsertAbove.name()));
+	}
+	
+	private String removeQuotes(final String s) {
+		if (s == null || s.length() <3)
+		{
+			return null;
+		}
+		if ( (s.startsWith("'") && s.endsWith("'"))
+			 || 
+			 (s.startsWith("\"") && s.endsWith("\"")))
+		{
+			return s.substring(1, s.length()-1);
+		}
+		return s;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
+#set( $packagePath = $TemplateStringUtility.replaceAllIn(${classDescriptor.package}, ".", "/") ) 
+
 @TargetFileName ${classDescriptor.simpleName}.java # Name of output file with extension but without path
-@TargetDir $model.getMetaInfoValueFor("eclipseProjectDir")/$model.getMetaInfoValueFor("projectName")/src/main/java/<package>
+@TargetDir $model.getMetaInfoValueFor("eclipseProjectDir")/$model.getMetaInfoValueFor("projectName")/src/main/java/$packagePath
 @CreateNew true # creates target dir if not existing and overwrites target file if existing
 @NameOfValidModel MOGLiCC_JavaBeanModel
 

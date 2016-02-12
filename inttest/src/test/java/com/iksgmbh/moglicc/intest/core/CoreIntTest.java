@@ -43,7 +43,7 @@ public class CoreIntTest extends IntTestParent {
 		// prepare test
 		initTestRootDir();
 		
-		copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//MOGLiCC//iks-github//application//target//releaseDir//SystemTestDir");
+		copyExternalInputDataIntoMOGLiCCWorkspace("C://data//Reik//dev//AnimatedComicStrip");
 		//copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/iks-github/application/target/releaseDir/SystemTestDir");
 		
 		// call functionality under test
@@ -303,45 +303,5 @@ public class CoreIntTest extends IntTestParent {
 		assertFileExists(emergencyLogFile);
 		assertFileContainsEntry(emergencyLogFile, "ERROR: Error creating workspaceDir");
 	}
-
-
-	@Test
-	public void createsExplainingReportEntryForMissingPackageOfJavaBeanClass() throws IOException {
-		// prepare test
-		initTestRootDir();
-		MOGLiCodeCreator.main(args);  // unpack default stuff
-
-		// test1
-		MOGLiFileUtil.createNewFileWithContent(modelFile, "model MOGLiCC_JavaBeanModel" + System.getProperty("line.separator") + "class NoPackageClassName");
-		MOGLiCodeCreator.main(args);
-		giveSystemTimeToExecute(2000);
-		File errorReportFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
-		assertFileExists(errorReportFile);
-		final String errorReportFileContent1 = FileUtil.getFileContent(errorReportFile);
-		
-		// test1
-		MOGLiFileUtil.createNewFileWithContent(modelFile, "model MOGLiCC_JavaBeanModel" + System.getProperty("line.separator") + "class a.smallLetterInTheBeginninClassName");
-		MOGLiCodeCreator.main(args);
-		giveSystemTimeToExecute(2000);
-		assertFileExists(errorReportFile);
-		errorReportFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
-		final String errorReportFileContent2 = FileUtil.getFileContent(errorReportFile);
-		
-		// test3
-		MOGLiFileUtil.createNewFileWithContent(modelFile, "model MOGLiCC_JavaBeanModel" + System.getProperty("line.separator") + "class a.CorrectClassName");
-		MOGLiCodeCreator.main(args);
-		giveSystemTimeToExecute(2000);
-		errorReportFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
-		assertFileExists(errorReportFile);
-		errorReportFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
-		final String errorReportFileContent3 = FileUtil.getFileContent(errorReportFile);
-		
-		// verify test result
-		final File expected = new File(getProjectTestResourcesDir(), "ExpectedReportErrorFileForMissingPackage.txt");
-		final String expectedErrorMessage = FileUtil.getFileContent(expected);
-		assertStringContains(errorReportFileContent1, expectedErrorMessage); 
-		assertStringContains(errorReportFileContent2, expectedErrorMessage); 
-		assertStringDoesNotContain(errorReportFileContent3, expectedErrorMessage); 
-	}	
 
 }

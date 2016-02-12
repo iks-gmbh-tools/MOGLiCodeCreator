@@ -275,7 +275,6 @@ public class MOGLiReleaseBuilder {
 	 * Returns list of all known Maven modules in the Mogli workspace
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	List<String> getListOfAllMavenModules() {
 		return ImmutableUtil.getImmutableListFromLists(DEVELOPMENT_MODULES, PLUGIN_MODULES, CORE_MODULES);
 	}

@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -407,4 +408,40 @@ public class ModelParserUnitTest extends StandardModelProviderTestParent {
 		assertEquals("Metainfo", "int", attributeDescriptor.getMetaInfoValueFor("JavaType"));
 	}	
 
+	@Test
+	public void usesVariablesThatAreDefinedAtTheEndOfTheModelFile() throws ModelParserException {
+		// prepare test
+		final List<String> fileContentAsList = new ArrayList<String>();
+		fileContentAsList.add("model test");
+		fileContentAsList.add("metainfo targetdir <<dir>>");
+		fileContentAsList.add("class aName");
+		fileContentAsList.add("variable dir directory");
+		
+		// call functionality under test	
+		final Model model = modelParser.parse(fileContentAsList);
+		
+		// verify test result
+		assertNotNull(model);
+		assertEquals("Metainfo", "directory", model.getMetaInfoValueFor("targetdir"));
+	}	
+
+	@Test
+	public void handlesBracesProblemForMoreThanOneVariableReplacementsWithBracesPerLine() throws ModelParserException {
+		// prepare test
+		final List<String> fileContentAsList = new ArrayList<String>();
+		fileContentAsList.add("model test");
+		fileContentAsList.add("metainfo displaytext \" <<text1>><<text2>> kurzer <<text3>> \"");
+		fileContentAsList.add("class aName");
+		fileContentAsList.add("variable text1 \" Das \"");
+		fileContentAsList.add("variable text3 \" ein Text. \"");
+		fileContentAsList.add("variable text2 \" ist \"");
+		
+		// call functionality under test	
+		final Model model = modelParser.parse(fileContentAsList);
+		
+		// verify test result
+		assertNotNull(model);
+		assertEquals("Metainfo", "  Das  ist  kurzer  ein Text.  ", model.getMetaInfoValueFor("displaytext"));
+	}	
+	
 }

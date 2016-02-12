@@ -57,6 +57,8 @@
 |MetaInfo| dateTimeFormat |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
 |MetaInfo| namespace |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
 |MetaInfo| useJavaBeanRegistry |is| optional |for| model |in| MOGLiCC_JavaBeanModel |.| 
+|MetaInfo| dynamicAreaWidth |is| mandatory |for| model |in| AnimatedConsoleComicStrip |.| 
+|MetaInfo| dynamicAreaHeight |is| mandatory |for| model |in| AnimatedConsoleComicStrip |.| 
 
 # class validators
 |MetaInfo| implements  |is valid to occur| any |time(s) for| classes    |in| MOGLiCC_JavaBeanModel |.|   
@@ -75,3 +77,4 @@
 |MetaInfo| InvalidChars|is| optional           |for| attributes         |in| MOGLiCC_JavaBeanModel |.| 
 |MetaInfo| Misc1       |is| optional           |for| attributes         |in| MOGLiCC_JavaBeanModel |.| 
 |MetaInfo| Misc2       |is| optional           |for| attributes         |in| MOGLiCC_JavaBeanModel |.| 
+

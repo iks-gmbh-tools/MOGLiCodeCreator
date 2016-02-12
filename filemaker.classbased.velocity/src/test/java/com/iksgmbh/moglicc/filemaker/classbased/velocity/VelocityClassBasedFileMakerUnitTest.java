@@ -59,7 +59,7 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 			sb.append(System.getProperty("line.separator"));
 			System.out.println(artefactName);
 		}
-		assertEquals("Unexpected artefact list: " + sb.toString(), 10, artefactList.size());
+		assertEquals("Unexpected artefact list: " + sb.toString(), 11, artefactList.size());
 	}
 
 	@Test
@@ -295,63 +295,6 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 
 		// verify test result
 		assertFileExists(targetFile);
-	}
-
-	@Test
-	public void generatesTargetFileInPackageSubDirThatAlreadyExists() throws MOGLiPluginException {
-		// prepare test
-		final String targetFileName = "targetFile.txt";
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/"
-				                                          + VelocityGeneratorResultData.PACKAGE_IDENTIFIER,
-				"package com.iksgmbh.test;", false);
-		prepareResultData(resultData);
-		final File targetDirAsFile = new File(PROJECT_ROOT_DIR + TEST_SUBDIR + "/example/com/iksgmbh/test");
-		targetDirAsFile.mkdirs();
-		final File targetFile = new File(targetDirAsFile, targetFileName);
-		targetFile.delete();
-		assertFileDoesNotExist(targetFile);
-
-		// call functionality under test
-		velocityClassBasedGenerator.doYourJob();
-
-		// verify test result
-		assertFileExists(targetFile);
-	}
-
-	@Test
-	public void generatesTargetFileInPackageSubDirThatMustBeCreated() throws MOGLiPluginException {
-		// prepare test
-		final String targetFileName = "targetFile.txt";
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/<package>",
-				"package com.iksgmbh.test;", true);
-		prepareResultData(resultData);
-		final File dir = new File(PROJECT_ROOT_DIR + TEST_SUBDIR + "/example");
-		FileUtil.deleteDirWithContent(dir);
-		assertFileDoesNotExist(dir);
-
-		// call functionality under test
-		velocityClassBasedGenerator.doYourJob();
-
-		// verify test result
-		final File targetFile = new File(dir, "com/iksgmbh/test");
-		assertFileExists(targetFile);
-	}
-
-	@Test
-	public void throwsExceptionIfPackageForTargetDirIsNotContainedInGeneratedContent() throws MOGLiPluginException {
-		// prepare test
-		final String targetFileName = "targetFile.txt";
-		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "example/<package>",
-				"package com.iksgmbh.test", true);
-		prepareResultData(resultData);
-
-		// call functionality under test
-		try {
-			velocityClassBasedGenerator.doYourJob();
-			fail("Expected exception not thrown!");
-		} catch (MOGLiPluginException e) {
-			assertStringContains(e.getMessage(), VelocityGeneratorResultData.TEXT_PACKAGE_NOT_FOUND);
-		}
 	}
 
 	@Test

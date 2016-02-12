@@ -18,6 +18,29 @@ public class VariableParser extends AnnotationParser {
 		if (toReturn.getAdditionalInfo() == null) {
 			throw new MOGLiPluginException(TextConstants.INVALID_INFORMATION + "for variable '" + toReturn.getName() + "'");
 		}
+		
+		String additionalInfo = toReturn.getAdditionalInfo();
+		
+		if (additionalInfo.startsWith(MetaModelConstants.UPPERCASE_IDENTIFIER))
+		{
+			int charsToCut = MetaModelConstants.UPPERCASE_IDENTIFIER.length();
+			additionalInfo = additionalInfo.substring(charsToCut).toUpperCase();
+			toReturn.setAdditionalInfo(additionalInfo);
+		}
+
+		if (additionalInfo.startsWith(MetaModelConstants.LOWERCASE_IDENTIFIER))
+		{
+			int charsToCut = MetaModelConstants.LOWERCASE_IDENTIFIER.length();
+			additionalInfo = additionalInfo.substring(charsToCut).toLowerCase();
+			toReturn.setAdditionalInfo(additionalInfo);
+		}
+		
+		if (additionalInfo.startsWith("\"") && additionalInfo.endsWith("\""))
+		{
+			additionalInfo = additionalInfo.substring(1, additionalInfo.length()-1);
+			toReturn.setAdditionalInfo(additionalInfo);
+		}
+		
 		return toReturn;
 	}
 

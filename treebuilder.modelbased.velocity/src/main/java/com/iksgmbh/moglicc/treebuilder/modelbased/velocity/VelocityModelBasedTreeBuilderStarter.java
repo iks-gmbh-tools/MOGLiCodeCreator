@@ -156,7 +156,7 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 				throw e;
 			}
 
-			if (velocityResult.skipGeneration()) {
+			if (velocityResult.isGenerationToSkip()) {
 				standardReportData.skippedArtefacts.add(artefact);
 				infrastructure.getPluginLogger().logInfo("Generation of file '" + velocityResult.getTargetFileName()
                         + "' was skipped as configured for artefact " + artefact + ".");

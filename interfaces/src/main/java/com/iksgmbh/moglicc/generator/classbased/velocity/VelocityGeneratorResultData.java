@@ -15,8 +15,6 @@ import com.iksgmbh.moglicc.generator.GeneratorResultData;
  */
 public interface VelocityGeneratorResultData extends GeneratorResultData {
 
-	static final String PACKAGE = "package";
-	static final String PACKAGE_IDENTIFIER = "<" + PACKAGE + ">";  // REFACTOREME: This is a special solution for generating a JavaBean - the mechanism that uses this identifier should be done somewhere else  
 	static final String ROOT_IDENTIFIER = MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER;
 
 	static final String NO_TARGET_FILE_NAME = "TargetFileName not defined.";
@@ -26,14 +24,8 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	public static final String TEXT_TARGET_DIR_IS_A_FILE = "Defined target directory is no directory";
 	public static final String TEXT_TARGET_FILE_NOT_FOUND = "Defined target file does not exist";
 	public static final String TEXT_TARGET_FILE_IS_A_DIRECTORY = "Defined target file is no file";
-	public static final String TEXT_PACKAGE_NOT_FOUND = "The placeholder '" + PACKAGE + "' cannot be not replaced, because no information about the package is available. " 
-	                                                     + System.getProperty("line.separator") + 
-	                                                     "Typical reason is, that for generating a JavaBean at least one class is used which is not "
-	                                                     + "fully qualified (missing package or no leading capital letter). "
-	                                                     + System.getProperty("line.separator")  
-	                                                     + "Please check the classes defined in the model file.";
 
-	enum KnownGeneratorPropertyNames { TargetDir, TargetFileName, CreateNew, NameOfValidModel, OutputEncodingFormat, SkipGeneration };
+	enum KnownGeneratorPropertyNames { TargetDir, TargetFileName, CreateNew, NameOfValidModel, OutputEncodingFormat, SkipGeneration, ReplaceToNumberSign };
 
 	String getTargetDir();
 
@@ -49,7 +41,7 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	 * Provides information whether the code supposed to create has to be ignored for generation
 	 * @return false if creation of target file is suppressed
 	 */
-	boolean skipGeneration();
+	boolean isGenerationToSkip();
 
 
 	/**
@@ -72,6 +64,11 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	 * @return name of charset uses to create output files
 	 */
 	String getOutputEncodingFormat();
+	
+	/**
+	 * @return information which substring is to be replaced in the generated output to the number sign # before writing the output to file
+	 */
+	String getNumberSignReplacement();
 
 	/**
 	 * Replaces dynamically PACKAGE_IDENTIFIER and ROOT_IDENTIFIER with real values

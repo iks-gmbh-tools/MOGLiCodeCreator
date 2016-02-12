@@ -1,8 +1,11 @@
 package com.iksgmbh.moglicc.provider.engine.velocity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.junit.Test;
@@ -55,5 +58,38 @@ public class TemplateStringUtilityUnitTest extends VelocityEngineProviderTestPar
 		assertEquals("result[2]", "c c", result[2]);
 	}
 
+	@Test
+	public void readsFileContentFromTextFile() throws IOException 
+	{
+		// prepare test
+		final String filename = getProjectTestResourcesDir() + "testFileToRead.txt";
+		
+		// call functionality under test
+		final List<String> result = TemplateStringUtility.getTextFileContent(filename);
+
+		// verify test result
+		assertEquals("result length", 5, result.size());
+		assertEquals("line 1", "1", result.get(0));
+		assertEquals("line 2", "", result.get(1));
+		assertEquals("line 3", "2", result.get(2));
+		assertEquals("line 4", "", result.get(3));
+		assertEquals("line 5", "3", result.get(4));
+	}
+
+	@Test
+	public void returnsErrorMessageAsSingleElementIfFileToReadWasNotFound() throws IOException 
+	{
+		// prepare test
+		final String filename = "notExisting.txt";
+		
+		// call functionality under test
+		final List<String> result = TemplateStringUtility.getTextFileContent(filename);
+
+		// verify test result
+		assertNotNull("not null expected", result);
+		assertEquals("result length", 1, result.size());
+		assertStringContains(result.get(0), "File");
+		assertStringContains(result.get(0), "not found");
+	}
 	
 }

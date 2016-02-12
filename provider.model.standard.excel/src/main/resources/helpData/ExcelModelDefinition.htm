@@ -14,15 +14,15 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <o:DocumentProperties>
   <o:Author>Oberrath, Reik</o:Author>
   <o:LastAuthor>Oberrath, Reik</o:LastAuthor>
-  <o:Revision>7</o:Revision>
+  <o:Revision>8</o:Revision>
   <o:Created>2013-06-12T08:11:00Z</o:Created>
-  <o:LastSaved>2015-01-22T13:53:00Z</o:LastSaved>
+  <o:LastSaved>2016-02-10T11:47:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
-  <o:Words>103</o:Words>
-  <o:Characters>653</o:Characters>
-  <o:Lines>5</o:Lines>
+  <o:Words>116</o:Words>
+  <o:Characters>736</o:Characters>
+  <o:Lines>6</o:Lines>
   <o:Paragraphs>1</o:Paragraphs>
-  <o:CharactersWithSpaces>755</o:CharactersWithSpaces>
+  <o:CharactersWithSpaces>851</o:CharactersWithSpaces>
   <o:Version>14.00</o:Version>
  </o:DocumentProperties>
  <o:OfficeDocumentSettings>
@@ -35,6 +35,7 @@ href="ExcelModelDefinition-Dateien/colorschememapping.xml">
 <!--[if gte mso 9]><xml>
  <w:WordDocument>
   <w:Zoom>110</w:Zoom>
+  <w:GrammarState>Clean</w:GrammarState>
   <w:TrackMoves>false</w:TrackMoves>
   <w:TrackFormatting/>
   <w:HyphenationZone>21</w:HyphenationZone>
@@ -314,24 +315,20 @@ div.WordSection1
 
 <p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
 mso-ansi-language:EN-US'>The<b style='mso-bidi-font-weight:normal'>
-ExcelStandardModelProvider </b></span><span lang=EN-US style='mso-ansi-language:
-EN-US'>(since v1.5.0) </span><span lang=EN-US style='font-size:14.0pt;
-line-height:115%;mso-ansi-language:EN-US'>can extent the function of the <b
-style='mso-bidi-font-weight:normal'>StandardModelProvider</b>.<o:p></o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
-mso-ansi-language:EN-US'>The<b style='mso-bidi-font-weight:normal'> </b>ExcelStandardModelProvider</span><span
+ExcelStandardModelProvider </b>extends the <b style='mso-bidi-font-weight:normal'>StandardModelProvider</b>
+cannot be used alone. The<b style='mso-bidi-font-weight:normal'> </b>ExcelStandardModelProvider</span><span
 lang=EN-US style='mso-ansi-language:EN-US'> </span><span lang=EN-US
-style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>can read
-class data from an excel file and add them to the model of the
-StandardModelProvider.<o:p></o:p></span></p>
+style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>reads class
+data from an excel file and adds them to the model of the
+StandardModelProvider. The Excel data may represent one or more complete new
+classes or new attributes to classes existing in the standard model. <o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
-mso-ansi-language:EN-US'>To use this functionality add the MetaInfo
-“useExtensionPlugin ExcelStandardModelProvider” on model level to your model
-file. This will cause the StandardModelProvider to use the
-ExcelStandardModelProvider to read the class data from the excel file defined
-in the _excel.properties of the ExcelStandardModelProvider.<o:p></o:p></span></p>
+mso-ansi-language:EN-US'>To use this functionality add the MetaInfo “metainfo useExtensionPlugin
+ExcelStandardModelProvider” to your standard model. This will cause the
+StandardModelProvider to trigger the ExcelStandardModelProvider reading the
+excel file defined in the file <i style='mso-bidi-font-style:normal'>_excel.properties</i>
+of the ExcelStandardModelProvider.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
 mso-ansi-language:EN-US'>For details see <a

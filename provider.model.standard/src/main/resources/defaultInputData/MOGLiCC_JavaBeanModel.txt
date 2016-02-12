@@ -1,20 +1,27 @@
 #########################################################################################################
 # This model file illustrates the usage of the model definition DSL of the StandardModelProvider plugin.
 #
-# A model is defined by the three hierarchy levels 'model', 'class' and 'attribute'.
-# All elements in each level must define a name - the only concretely predefined data.
-# The name of a class must be fully qualified and unique within the model.
-# The name of a attribute must be unique for its class.
+# A model for the StandardModelProvider is constructed out of classes, attributes and metainfos. 
+# The MOGLiCC meta model consists of the three hierarchy levels model, class and attribute. 
+# A model file must contain exactly one model. The name of a class (for a java class it should also contain 
+# the qualified path) must be unique within the model. The name of an attribute must be unique for its class.
 #
-# The data of the elements in each level can be enriched by MetaInfo elements in any number.
-# A MetaInfo elements consists of a non-unique name and a value.
+# Each element (model, class or attribute) is defined by its name - the only concretely predefined data value. 
+# The data of each element in each hierarchy level can be enriched by MetaInfo elements in any number. 
+# A MetaInfo element consists of a non-unique name and a value.
+#
+# For repreatedly used values (such as paths to domain objects) variables can be defined. A variable consists 
+# of a key-value-pair. The key can be used as placeholder: <<variableKey>>. When the model file is parsed all 
+# placeholders are replaced by its variable value. Variables can be defined anywhere in the model file, e.g. 
+# at the end of the model file. Variables values may contain placeholders of other variables, that are 
+# mentioned above in the model file. If needed upper and lower case conversion is possible:
+#
+# variable v1 "One Two Three"
+# variable v2 toUPPERCase: <<v1>>  # this results in "ONE TWO THREE"
+# variable v3 toLowerCase: <<v1>>  # this results in "one two three"
 #
 # Information which plugin uses which MetaInfo is presented in a statistics file
 # that is written into the plugin output directory of the StandardModelProvider plugin.
-#
-# For repreatedly used values such as path to domain objects, variables consisting of key-values-pairs 
-# can be defined. The key of a variable can be used as placeholder: <<variableKey>>. When this model file
-# is parsed all placeholders are replaced by its variable value. For an example see below.
 #
 # The MOGLiCC_JavaBeanModel provides data for the MOGLiCC JavaBean templates. Model data and templates are
 # used to create the MOGLiCC JavaBean artefacts. These are NOT designed for manual modification.

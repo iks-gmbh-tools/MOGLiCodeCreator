@@ -10,6 +10,13 @@ public interface ClassDescriptor extends MetaInfoSupport {
 	 * @return simple name of class read from model file
 	 */
 	String getSimpleName();
+	
+	/**
+	 * @return simple name of class read from model file.
+	 *         Analog to the corresponding model and attribute method.
+	 */
+	String getName();
+	
 
 	/**
 	 * @return package to which class belongs

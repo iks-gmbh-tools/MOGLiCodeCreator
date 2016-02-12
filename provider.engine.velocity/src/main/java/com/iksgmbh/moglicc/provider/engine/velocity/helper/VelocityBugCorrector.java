@@ -36,7 +36,11 @@ public class VelocityBugCorrector {
 		final String fileExtension = cutFileExtension(line);
 		
 		if (fileExtension == null) {
-			return;
+			return;  // a file extension does not exist 
+		}
+		
+		if (fileExtension.contains("$")) {
+			return; // the file extension has to be resolved
 		}
 		
 		final String targetFileName = buildUpGeneratorResultData.getProperty(targetFileNameId);

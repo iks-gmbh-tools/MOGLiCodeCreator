@@ -96,4 +96,10 @@ public class ClassDescriptorDummy implements ClassDescriptor {
 	{
 		return false;
 	}
+
+	@Override
+	public String getName()
+	{
+		return null;
+	}
 }

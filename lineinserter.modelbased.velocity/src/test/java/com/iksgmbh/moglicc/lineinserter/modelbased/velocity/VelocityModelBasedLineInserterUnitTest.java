@@ -53,7 +53,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		final List<String> artefactList = velocityModelBasedLineInserter.getArtefactList();
 
 		// verify test result
-		assertEquals("artefact number", 1, artefactList.size());
+		assertEquals("artefact number", 2, artefactList.size());
 	}
 
 	@Test
@@ -262,6 +262,26 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		final File expectedFile = new File(getProjectTestResourcesDir(), "expectedInsertBelowResultContent.txt");
 		assertFileEquals(expectedFile, targetFile);
 	}
+	
+	@Test
+	public void usesInsertBelowMarkerInQuotes() throws MOGLiPluginException {
+		// prepare test
+		velocityModelBasedLineInserter = new VelocityModelBasedLineInserterStarter();
+		velocityModelBasedLineInserter.setInfrastructure(createInfrastructure(new File(getProjectTestResourcesDir(), "applicationTestInputDir")));
+		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
+				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
+				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertBelow.name(), "\"TO BE replaced\"");
+		velocityEngineProvider.setVelocityGeneratorResultData(resultData);
+		assertFileExists(targetFile);
+		assertFileDoesNotContainEntry(targetFile, "ContentToInsert");
+
+		// call functionality under test
+		velocityModelBasedLineInserter.doYourJob();
+
+		// verify test result
+		assertFileContainsEntry(targetFile, "ContentToInsert");
+	}
+	
 
 	@Test
 	public void replacesGeneratedContentInTemplateTargetFile() throws MOGLiPluginException {

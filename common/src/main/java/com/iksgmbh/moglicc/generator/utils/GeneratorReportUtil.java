@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.utils.FileUtil;
 
@@ -136,4 +137,21 @@ public class GeneratorReportUtil
 		public List<String> invalidInputArtefacts = new ArrayList<String>();  // TODO testfaelle für drei varianten
 
 	}
+	
+	public static String getTargetDirToDisplay(final InfrastructureService pluginInfrastructure,
+			                                   final String dir)
+    {
+		if (dir == null)
+		{
+			try
+			{
+				return pluginInfrastructure.getPluginOutputDir().getCanonicalPath();
+			} catch (Exception e)
+			{
+				return pluginInfrastructure.getPluginOutputDir().getAbsolutePath();
+			}
+		} else {
+			return dir;
+		}
+    }
 }

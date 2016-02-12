@@ -3,8 +3,6 @@ package com.iksgmbh.moglicc.generator.classbased.velocity;
 import java.io.File;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.iksgmbh.moglicc.data.BuildUpGeneratorResultData;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.GeneratorResultData;
@@ -44,9 +42,9 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 
 	@Override
-	public boolean skipGeneration() {
+	public boolean isGenerationToSkip() {
 		final String value = getProperty(KnownGeneratorPropertyNames.SkipGeneration.name());
-		return doesStringRepresentBooleanTrue(value) || doesStringRepresentBooleanNotFalse(value);
+		return isStringRepresentBooleanTrue(value) || isStringRepresentBooleanNotFalse(value);
 	}
 
 	@Override
@@ -60,19 +58,24 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 
 	@Override
+	public String getNumberSignReplacement() {
+		return getProperty(KnownGeneratorPropertyNames.ReplaceToNumberSign.name());
+	}
+	
+	@Override
 	public boolean isTargetToBeCreatedNewly() {
 		final String value = getProperty(KnownGeneratorPropertyNames.CreateNew.name());
-		return doesStringRepresentBooleanTrue(value);
+		return isStringRepresentBooleanTrue(value);
 	}
 
-	private boolean doesStringRepresentBooleanTrue(final String value) {
+	private boolean isStringRepresentBooleanTrue(final String value) {
 		if (value == null) {
 			return false;  // default
 		}
 		return "true".equals(value.toLowerCase().trim());
 	}
 
-	private boolean doesStringRepresentBooleanNotFalse(final String value) {
+	private boolean isStringRepresentBooleanNotFalse(final String value) {
 		if (value == null) {
 			return false;  // default
 		}
@@ -118,7 +121,6 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		if (targetDir == null) {
 			return null;
 		}
-		targetDir = replacePackageString(targetDir);
 		targetDir = addParentDirAsString(applicationRootDir, pathAdaption, targetDir);
 		final File targetDirAsFile = new File(targetDir);
 		checkTargetDir(targetDirAsFile);
@@ -160,19 +162,6 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		}
 	}
 
-
-	private String replacePackageString(final String dir) throws MOGLiPluginException {
-		String packageString = "";
-		if (dir.endsWith(PACKAGE_IDENTIFIER)) {
-			packageString = searchPackageInGeneratedContent().replace('.', '/');
-			if (StringUtils.isBlank(packageString)) {
-				throw new MOGLiPluginException(TEXT_PACKAGE_NOT_FOUND);
-			}
-		}
-		String targetDir = getTargetDir().replace(PACKAGE_IDENTIFIER, packageString);
-		return targetDir;
-	}
-
 	private String addParentDirAsString(final String applicationRootDir,
 			final String pathAdaption, String targetDir) {
 		if (targetDir.startsWith(ROOT_IDENTIFIER)) {
@@ -189,10 +178,6 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		return targetDir;
 	}
 
-	private String searchPackageInGeneratedContent() {
-		return searchTextInGeneratedContentBetween(PACKAGE, ";");
-	}
-
 	public boolean wasExistingTargetPreserved() {
 		return existingTargetPreserved;
 	}
@@ -200,4 +185,5 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	public void setExistingTargetPreserved(final boolean existingTargetPreserved) {
 		this.existingTargetPreserved = existingTargetPreserved;
 	}
+		
 }

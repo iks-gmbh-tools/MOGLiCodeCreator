@@ -6,6 +6,7 @@ import static com.iksgmbh.moglicc.lineinserter.modelbased.velocity.TextConstants
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,7 @@ import com.iksgmbh.moglicc.plugin.subtypes.generators.Inserter;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
+import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineData.ExecutionMode;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
@@ -37,6 +39,7 @@ import com.iksgmbh.utils.StringUtil;
 public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfoValidatorVendor {
 
 	public static final String BEAN_FACTORY_DIR = "BeanFactory";
+	public static final String CONSOLE_COMIC_STRIP_DIR = "ConsoleComicStrip";
 	public static final String PLUGIN_ID = "VelocityModelBasedLineInserter";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
 	public static final String ENGINE_PROVIDER_ID = "VelocityEngineProvider";
@@ -51,7 +54,9 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 	private int createdCounter = 0;
 	private StringBuffer reportForCurrentArtefact = new StringBuffer();
 	private StringBuffer generationReport = new StringBuffer();
-	final GeneratorStandardReportData standardReportData = new GeneratorStandardReportData();
+	private GeneratorStandardReportData standardReportData = new GeneratorStandardReportData();
+	private HashSet<String> artefactsInReport = new HashSet<String>();
+	private VelocityLineInserterResultData preparationVelocityResult;
 
 	@Override
 	public void setInfrastructure(final InfrastructureService infrastructure) {
@@ -89,13 +94,12 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 		for (final String artefact : list) 
 		{
 			reportForCurrentArtefact = new StringBuffer(); 
-			generateArtefactReportHeader(artefact);
 			final File templateDir = new File(infrastructure.getPluginInputDir(), artefact);
 			final List<String> mainTemplates = findMainTemplates(templateDir);
 			targetFileOfCurrentArtefact = null;
 			for (final String mainTemplate : mainTemplates) {
 				infrastructure.getPluginLogger().logInfo("-");
-				final String targetFileReadFromMainTemplate = applyModelToArtefactTemplate(artefact, templateDir, mainTemplate);
+				final String targetFileReadFromMainTemplate = applyModelToArtefactTemplate(artefact, templateDir, mainTemplate);				
 				validateTargetFileOfCurrentArtefact(artefact, targetFileReadFromMainTemplate);
 			}
 			generationReport.append(reportForCurrentArtefact);
@@ -130,51 +134,20 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 		reportForCurrentArtefact.append(FileUtil.getSystemLineSeparator());
 	}
 
-	private String applyModelToArtefactTemplate(final String artefact, final File templateDir,
+	private String applyModelToArtefactTemplate(final String artefact, 
+			                                    final File templateDir,
 			                                    final String mainTemplate) throws MOGLiPluginException
 	{
-		final VelocityLineInserterResultData velocityResult;
-		try
-		{
-			velocityResult = doInsertsByCallingVelocityEngineProvider(artefact, templateDir, mainTemplate);
-		} catch (MOGLiPluginException e)
-		{
-			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
-			throw e;
-		}		
+		final boolean doFullGeneration = doesModelAndTemplateMatch(artefact, templateDir, mainTemplate);
 		
-		try
-		{
-			velocityResult.validatePropertyKeys(artefact);
-		} catch (MOGLiPluginException e)
-		{
-			standardReportData.invalidInputArtefacts.add(artefact + " has invalid property keys: " + e.getMessage());
-			throw e;
-		}
-
-
-		if (! ModelMatcherGeneratorUtil.doesItMatch(velocityResult, standardReportData.model.getName())) 
-		{
-			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '"
-                                                    + velocityResult.getNameOfValidModel() + "' as valid model.");
-			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + standardReportData.model.getName() + "'.");
-
+		if ( ! doFullGeneration ) {
 			return null;
 		}
 		
-		standardReportData.numberOfModelMatchingInputArtefacts++;
+		validateResult(artefact, preparationVelocityResult);
+		final VelocityLineInserterResultData velocityResult = doFullGeneration(artefact, templateDir, mainTemplate);			
 
-		try
-		{
-			velocityResult.validatePropertyForMissingMetaInfoValues(artefact);
-		} catch (MOGLiPluginException e)
-		{
-			standardReportData.invalidInputArtefacts.add(artefact + " uses invalid metainfos: " + e.getMessage());
-			throw e;
-		}
-
-
-		if (velocityResult.skipGeneration()) {
+		if (velocityResult.isGenerationToSkip()) {
 			infrastructure.getPluginLogger().logInfo("Generation of file '" + velocityResult.getTargetFileName()
 							                         + "' was skipped as configured for artefact " + artefact + ".");
 			standardReportData.skippedArtefacts.add(velocityResult.getTargetFileName());
@@ -182,6 +155,19 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 			return null;
 		}
 
+		handleNumberSignReplacements(velocityResult, velocityResult.getNumberSignReplacement());
+		generateOutput(artefact, velocityResult);
+		generateReportForResult(artefact, velocityResult);
+		infrastructure.getPluginLogger().logInfo("Generated content for artefact '" + artefact
+				+ "' inserted into " + velocityResult.getTargetDir() + "/" + velocityResult.getTargetFileName());
+		
+		return velocityResult.getTargetDir() + "/" + velocityResult.getTargetFileName();
+	}
+
+	private void generateOutput(final String artefact,
+							    final VelocityLineInserterResultData velocityResult)
+							    throws MOGLiPluginException 
+	{
 		encodingHelper = IOEncodingHelper.getInstance(EncodingUtils.getValidOutputEncodingFormat(velocityResult.getOutputEncodingFormat(),
 				                                      infrastructure.getPluginLogger()));
 		try
@@ -193,25 +179,116 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 			standardReportData.invalidInputArtefacts.add("Cannot write output artefact for input artefact '" + artefact + "': " + e.getMessage());
 			throw e;
 		}
-		
-		generateReportForResult(velocityResult);
-		infrastructure.getPluginLogger().logInfo("Generated content for artefact '" + artefact
-				+ "' inserted into " + velocityResult.getTargetDir() + "/" + velocityResult.getTargetFileName());
-		return velocityResult.getTargetDir() + "/" + velocityResult.getTargetFileName();
 	}
 
-	private VelocityLineInserterResultData doInsertsByCallingVelocityEngineProvider(final String artefact, final File templateDir,
-			                                                                    final String mainTemplate) throws MOGLiPluginException {
+	private VelocityLineInserterResultData doFullGeneration(final String artefact, 
+			                                                final File templateDir,
+			                                                final String mainTemplate) throws MOGLiPluginException 
+	{
+		standardReportData.numberOfModelMatchingInputArtefacts++;
+		
+		final VelocityLineInserterResultData velocityResult;
+		try
+		{
+			velocityResult = doInsertsByCallingVelocityEngineProvider(artefact, templateDir, mainTemplate, 
+					                                                  ExecutionMode.FULL_GENERATION);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
+			throw e;
+		}
+		
+		return velocityResult;
+	}
+	
+	private void handleNumberSignReplacements(final VelocityLineInserterResultData velocityResult,
+		                                      final String numberSignReplacement)
+	{
+		if (numberSignReplacement != null)
+		{
+			String generatedContent = velocityResult.getGeneratedContent();
+			generatedContent = StringUtils.replace(generatedContent, numberSignReplacement, "#");
+			velocityResult.setGeneratedContent(generatedContent);
+		}
+	}
+	
+
+	private boolean doesModelAndTemplateMatch(final String artefact, 
+											  final File templateDir,
+											  final String mainTemplate) throws MOGLiPluginException 
+	{
+		try
+		{
+			preparationVelocityResult = doInsertsByCallingVelocityEngineProvider(artefact, templateDir, mainTemplate, 
+					                                                             ExecutionMode.ONLY_PREPARATION);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
+			throw e;
+		}		
+
+		if (! ModelMatcherGeneratorUtil.doesItMatch(preparationVelocityResult, standardReportData.model.getName())) 
+		{
+			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '"
+                                                    + preparationVelocityResult.getNameOfValidModel() + "' as valid model.");
+			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + standardReportData.model.getName() + "'.");
+
+			if (! standardReportData.nonModelMatchingInputArtefacts.contains(artefact))
+				  standardReportData.nonModelMatchingInputArtefacts.add(artefact);
+			
+			return false;
+		}
+		
+		return true;
+	}
+
+	private void validateResult(final String artefact,
+							    final VelocityLineInserterResultData velocityResult)
+							    throws MOGLiPluginException 
+	{
+		try
+		{
+			preparationVelocityResult.validatePropertyKeys(artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add(artefact + " has invalid property keys: " + e.getMessage());
+			throw e;
+		}
+		
+		try
+		{
+			velocityResult.validatePropertyForMissingMetaInfoValues(artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add(artefact + " uses invalid metainfos: " + e.getMessage());
+			throw e;
+		}
+	}
+
+	private VelocityLineInserterResultData doInsertsByCallingVelocityEngineProvider(final String artefact, 
+			                                                                        final File templateDir,
+			                                                                        final String mainTemplate,
+			                                                                        final ExecutionMode mode) 
+			                                                                        throws MOGLiPluginException 
+	{
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, standardReportData.model, PLUGIN_ID);
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(mainTemplate);
+		engineData.setExecutionMode(mode);
 
 		final VelocityLineInserterResultData result = insert(engineData);
 		return result;
 	}
 
-	private void generateReportForResult(final VelocityLineInserterResultData resultData) 
+	private void generateReportForResult(final String artefact, 
+			                             final VelocityLineInserterResultData resultData) 
 	{
+		if ( ! artefactsInReport.contains(artefact) )
+		{
+			generateArtefactReportHeader(artefact);
+			artefactsInReport.add(artefact);
+		}		
+		
 		final String generatedContent = resultData.getGeneratedContent().trim();
 		final int numLines = StringUtil.getLinesFromText(generatedContent).size();
 
@@ -220,7 +297,7 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 			reportForCurrentArtefact.append("      ");
 			reportForCurrentArtefact.append(resultData.getTargetFileName());
 			reportForCurrentArtefact.append(" was created in ");
-			reportForCurrentArtefact.append(resultData.getTargetDir());
+			reportForCurrentArtefact.append(GeneratorReportUtil.getTargetDirToDisplay(infrastructure, resultData.getTargetDir()));
 			reportForCurrentArtefact.append(FileUtil.getSystemLineSeparator());
 			return;
 		} else if (resultData.wasExistingTargetPreserved()) {
@@ -487,13 +564,15 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 	public boolean unpackDefaultInputData() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("initDefaultInputData");
 
-
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR, PLUGIN_ID);
 
-		final String[] templates = {"BeanFactoryClassMain.tpl",               "BeanFactoryReplaceTemplateMain.tpl",
-				                    "BeanFactoryInsertAboveTemplateMain.tpl", "BeanFactoryInsertBelowTemplateMain.tpl"};
-		defaultData.addFlatFolder(BEAN_FACTORY_DIR, templates);
+		final String[] beanFactoryTemplates = {"BeanFactoryClassMain.tpl",               "BeanFactoryReplaceTemplateMain.tpl",
+				                               "BeanFactoryInsertAboveTemplateMain.tpl", "BeanFactoryInsertBelowTemplateMain.tpl"};
+		defaultData.addFlatFolder(BEAN_FACTORY_DIR, beanFactoryTemplates);
 
+		final String[] consoleComicStripTemplates = {"CreateMainScriptTemplate.tpl", "InsertIntoMainTemplate.tpl"};
+		defaultData.addFlatFolder(CONSOLE_COMIC_STRIP_DIR, consoleComicStripTemplates);
+		
 		defaultData.addRootFile(PLUGIN_PROPERTIES_FILE);
 		defaultData.addRootFile(MetaInfoValidationUtil.FILENAME_VALIDATION);
 

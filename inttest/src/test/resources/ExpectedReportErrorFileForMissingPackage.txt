@@ -1,3 +1,0 @@
-Problem for plugin 'VelocityClassBasedFileMaker': The placeholder 'package' cannot be not replaced, because no information about the package is available. 
-Typical reason is, that for generating a JavaBean at least one class is used which is not fully qualified (missing package or no leading capital letter). 
-Please check the classes defined in the model file.

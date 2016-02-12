@@ -59,6 +59,7 @@ public class ModelParser {
 	}
 
 	BuildUpModel parse(List<String> fileContentAsList) throws ModelParserException {
+		parseVariableDeclarations(fileContentAsList);
 		int lineCounter = 0;
 		for (String line : fileContentAsList) {
 			lineCounter++;
@@ -76,7 +77,7 @@ public class ModelParser {
 			} else if (modelNameParser.hasCorrectPrefix(line)) {
 				parseModelLine(lineCounter, line);
 			} else if (variableParser.hasCorrectPrefix(line)) {
-				parseVariableLine(lineCounter, line);
+				// nothing to do here
 			} else {
 				errorList.add(INVALID_INFORMATION.trim() + " in line " + lineCounter + "!");
 			}
@@ -89,6 +90,16 @@ public class ModelParser {
 		return buildUpModel;
 	}
 	
+	private void parseVariableDeclarations(List<String> fileContentAsList) {
+		int lineCounter = 0;
+		for (String line : fileContentAsList) {
+			lineCounter++;
+			if (variableParser.hasCorrectPrefix(line)) {
+				parseVariableLine(lineCounter, line);
+			} 			
+		}
+	}
+
 	private void parseVariableLine(final int lineCounter, final String line) {
 		try
 		{
@@ -130,12 +141,23 @@ public class ModelParser {
 		}
 	}
 
-	private String doVariableReplacement(String line, final int lineCounter) {
+	private String doVariableReplacement(String line, final int lineCounter) 
+	{		
 		final Set<String> keySet = variableMap.keySet();
 		for (final String key : keySet)
 		{
-			line = line.replace(key, variableMap.get(key));
+			String value = variableMap.get(key);
+			if (value.startsWith("\"") && value.endsWith("\"")) {
+				// for more than one replacements with variables (whose value are defined with braces) 
+				// a parsing problem exist for all AnnotationParsers: 
+				// two braces come into exists in the middle of the replaced line
+				// These artificial double braces are removed here 
+				
+				value = value.substring(1, value.length()-1);
+			}
+			line = line.replace(key, value);
 		}
+		//line = "\""+line + "\"";		
 		
 		verifyReplacement(line, lineCounter);
 		return line;
