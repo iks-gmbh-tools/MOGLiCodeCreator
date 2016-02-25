@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.generator.classbased.velocity;
 
 import java.io.File;
@@ -44,7 +59,9 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	@Override
 	public boolean isGenerationToSkip() {
 		final String value = getProperty(KnownGeneratorPropertyNames.SkipGeneration.name());
-		return isStringRepresentBooleanTrue(value) || isStringRepresentBooleanNotFalse(value);
+		return isStringRepresentBooleanTrue(value) 
+			   || isStringRepresentBooleanNotFalse(value)
+			   || isTrueComparisonExpression(value);
 	}
 
 	@Override
@@ -81,6 +98,33 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 		}
 		return "not false".equals(value.toLowerCase().trim());
 	}
+	
+	private boolean isTrueComparisonExpression(final String value) 
+	{
+		if (value == null) {
+			return false;  // default
+		}
+		
+		if (value.contains("=="))
+		{
+			final String[] result = value.split("==");
+			final String expression1 = result[0].trim();
+			final String expression2 = result[1].trim();
+			return expression1.equals(expression2);
+		}
+
+		if (value.contains("!="))
+		{
+			final String[] result = value.split("!=");
+			final String expression1 = result[0].trim();
+			final String expression2 = result[1].trim();
+			return ! expression1.equals(expression2);
+		}
+		
+		return false;
+	}
+
+	
 
 	@Override
 	public void validatePropertyKeys(final String artefact) throws MOGLiPluginException {
@@ -115,8 +159,10 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 
 
 	@Override
-	public File getTargetDirAsFile(final String applicationRootDir, final String pathAdaption)
-	            throws MOGLiPluginException {
+	public File getTargetDirAsFile(final String applicationRootDir, 
+			                       final String pathAdaption)
+			                       throws MOGLiPluginException 
+	{
 		String targetDir = getTargetDir();
 		if (targetDir == null) {
 			return null;
@@ -143,11 +189,13 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 
 	@Override
-	public File getTargetFile(final String applicationRootDir, final String pathAdaptation) throws MOGLiPluginException {
+	public File getTargetFile(final String applicationRootDir, final String pathAdaptation) throws MOGLiPluginException 
+	{
 		final File targetDirAsFile = getTargetDirAsFile(applicationRootDir, pathAdaptation);
 		if (targetDirAsFile == null) {
 			return null;
 		}
+		
 		final File toReturn = new File(targetDirAsFile, getTargetFileName());
 		checkTargetFile(toReturn);
 		return toReturn;

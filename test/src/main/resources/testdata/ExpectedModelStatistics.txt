@@ -29,7 +29,7 @@ Plugin 'VelocityModelBasedTreeBuilder' uses the following MetaInfo elements:
 'projectName' in Model level
 
 WARNING:
-For following MetaInfos defined in 'MOGLiCC_JavaBeanModel.txt' no validation rule exists:
+For following MetaInfos defined in 'MavenProjectWithJavaDomainModel.txt' no validation rule exists:
 'Person1' in AttributeLevel
 'Person2' in AttributeLevel
 'Person3' in AttributeLevel

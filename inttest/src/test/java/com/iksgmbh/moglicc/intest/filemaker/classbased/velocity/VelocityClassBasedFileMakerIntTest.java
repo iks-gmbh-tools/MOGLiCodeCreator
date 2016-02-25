@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.intest.filemaker.classbased.velocity;
 
 import java.io.File;
@@ -131,6 +146,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
 				                                             "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
 				                                             "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
+				                                             "@NameOfValidModel DemoModel" + FileUtil.getSystemLineSeparator() +
 				                                             "ßüäöÜÄÖ $model.getMetaInfoValueFor(\"umlauts\")");
 		assertFileExists(templateFile);
 
@@ -151,7 +167,8 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final File templateFile = prepareOutputEncodingFormatTest();
 		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
-                "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example");
+                "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
+                "@NameOfValidModel MOGLiCC_JavaBeanModel");
 
 		// call functionality under test
 		velocityClassBasedFileMakerStarter.doYourJob();
@@ -178,6 +195,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
                 "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
+                "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
                 "@OutputEncodingFormat bubu");
 
 		// call functionality under test
@@ -194,6 +212,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		MOGLiFileUtil.createNewFileWithContent(templateFile, "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@TargetFileName Umlauts.txt" + FileUtil.getSystemLineSeparator() +
                 "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
+                "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
                 "@OutputEncodingFormat UTF-16");
 
 		// call functionality under test
@@ -228,6 +247,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final String templateFileContent = "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                                            "@TargetFileName ${classDescriptor.simpleName}.java" + FileUtil.getSystemLineSeparator() +
                                            "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
+                                           "@NameOfValidModel "  + modelName + FileUtil.getSystemLineSeparator() +
                                            "@SkipGeneration $classDescriptor.doesHaveAnyMetaInfosWithName(\"nonPersistent\")";
 
 		executeSkipGenerationTest(modelName, modelFileContent, templateFileContent);
@@ -246,6 +266,7 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final String templateFileContent = "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                                            "@TargetFileName ${classDescriptor.simpleName}.java" + FileUtil.getSystemLineSeparator() +
                                            "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
+                                           "@NameOfValidModel " + modelName + FileUtil.getSystemLineSeparator() +
                                            "@SkipGeneration NOT $classDescriptor.getMetaInfoValueFor(\"databaseRelevant\")";
 
 		executeSkipGenerationTest(modelName, modelFileContent, templateFileContent);
@@ -375,14 +396,11 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		
 		final String templateFileContent = "@CreateNew true"
 				+ FileUtil.getSystemLineSeparator()
-				+ "@TargetFileName " + targetFileName
-				+ FileUtil.getSystemLineSeparator()
-				+ "@TargetDir "
-				+ MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
-				+ "/target"
-				+ FileUtil.getSystemLineSeparator()
-				+ "@ReplaceToNumberSign rem"
-				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetFileName " + targetFileName + FileUtil.getSystemLineSeparator()
+				+ "@TargetDir " + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
+				+ "/target" + FileUtil.getSystemLineSeparator() +
+				"@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator()
+				+ "@ReplaceToNumberSign rem" + FileUtil.getSystemLineSeparator()
 				+ "rem This is a comment.";
 		MOGLiFileUtil.createNewFileWithContent(testTemplate, templateFileContent);
 		final File resultFile = new File(applicationRootDir, "target/" + targetFileName);

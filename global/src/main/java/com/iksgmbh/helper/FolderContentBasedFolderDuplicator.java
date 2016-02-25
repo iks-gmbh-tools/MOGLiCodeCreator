@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.helper;
 
 import java.io.File;
@@ -29,17 +44,18 @@ public class FolderContentBasedFolderDuplicator {
 	}
 
 	public HashMap<String, FileCreationStatus> duplicateTo(final File targetDir) {
-		return duplicateTo(targetDir, true);
+		return duplicateTo(targetDir, false);
 	}
 
-	public HashMap<String, FileCreationStatus> duplicateTo(final File targetDir, final boolean createNew) {
+	public HashMap<String, FileCreationStatus> duplicateTo(final File targetDir, final boolean preserveFiles) {
 		final List<File> folders = folderContent.getFolders();
 		createTargetDirectories(targetDir, folders);
-		return createTargetFiles(targetDir, folders, createNew);
+		return createTargetFiles(targetDir, folders, preserveFiles);
 	}
 
-	private HashMap<String, FileCreationStatus> createTargetFiles(final File targetDir, final List<File> folders,
-			                                            final boolean createNew)
+	private HashMap<String, FileCreationStatus> createTargetFiles(final File targetDir, 
+			                                                      final List<File> folders,
+			                                                      final boolean preserveFiles)
 	{
 		final HashMap<String, FileCreationStatus> result = new HashMap<String, FileCreationStatus>();
 		for (final File folder : folders) {
@@ -48,11 +64,11 @@ public class FolderContentBasedFolderDuplicator {
 				final String nameWithoutOldPath = cutOldPath(file);
 				final File newFile = new File(targetDir.getAbsolutePath(), nameWithoutOldPath);
 				if (newFile.exists()) {
-					if (createNew) {
+					if (preserveFiles) {
+						result.put(newFile.getAbsolutePath(), FileCreationStatus.EXISTING_FILE_PRESERVED);
+					} else {
 						FileUtil.copyBinaryFile(file, newFile);  // is also ok for text files
 						result.put(newFile.getAbsolutePath(), FileCreationStatus.EXISTING_FILE_OVERWRITTEN);
-					} else {
-						result.put(newFile.getAbsolutePath(), FileCreationStatus.EXISTING_FILE_PRESERVED);
 					}
 				} else {
 					FileUtil.copyBinaryFile(file, newFile);  // is also ok for text files
@@ -63,7 +79,9 @@ public class FolderContentBasedFolderDuplicator {
 		return result;
 	}
 
-	protected void createTargetDirectories(final File targetDir, final List<File> folders) {
+	protected void createTargetDirectories(final File targetDir, 
+			                               final List<File> folders) 
+	{
 		for (final File folder : folders) {
 			final String nameWithoutOldPath = cutOldPath(folder);
 			final File newFolder = new File(targetDir.getAbsolutePath(), nameWithoutOldPath);

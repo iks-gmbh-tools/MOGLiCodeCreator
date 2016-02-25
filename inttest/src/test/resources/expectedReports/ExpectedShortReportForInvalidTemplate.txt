@@ -3,18 +3,18 @@
 Status: ERROR
 
 Workspace: ../inttest/target/TestDir
-Model file: MOGLiCC_JavaBeanModel.txt, MOGLiCC_JavaBeanModel_Testdaten.xlsx
+Model file: MavenProjectWithJavaDomainModel.txt, MavenProjectWithJavaDomainModel_Testdaten.xlsx
 
 5 plugin(s) executed successfully.
 1 plugin(s) not or erroneously executed!
-A total of 46 generation events for 2 output artefact(s) have been performed.
+A total of 42 generation events for 1 output artefact(s) have been performed.
 
 ExcelStandardModelProvider: Model MOGLiCC_JavaBeanModel with 6 classes has been called 2 times.
 StandardModelProvider: Model MOGLiCC_JavaBeanModel with 6 classes has been called 3 times.
-VelocityEngineProvider: Velocity engine started for 15 calls.
+VelocityEngineProvider: Velocity engine started for 11 calls.
 
 VelocityClassBasedFileMaker: Error parsing artefact properties for artefact 'MOGLiJavaBean': Header attribute 'nonsense' in line 1 of main template of artefact 'MOGLiJavaBean' needs additional information.
-VelocityModelBasedLineInserter: From 2 input artefact(s), have been 1 used to create 1 file(s) and to perform 3 insertion(s).
+VelocityModelBasedLineInserter: No model matching input artefact found. Nothing to do.
 VelocityModelBasedTreeBuilder: From 2 input artefact(s), have been 1 used to perform 42 generation events.
 
 ######################  End  ######################

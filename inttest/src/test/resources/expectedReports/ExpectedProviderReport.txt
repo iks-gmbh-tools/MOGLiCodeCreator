@@ -58,19 +58,15 @@ VelocityModelBasedLineInserter
 
 Report for VelocityEngineProvider:
 
-12 times called for model based generation: 
+8 times called for model based generation: 
 from VelocityModelBasedTreeBuilder on main template 'MOGLiCC_JavaBeanProject' on template 'artefact.properties'
 from VelocityModelBasedTreeBuilder on main template 'MOGLiCC_NewPluginProject' on template 'artefact.properties'
-from VelocityModelBasedLineInserter on main template 'BeanFactory' on template 'BeanFactoryClassMain.tpl'
-from VelocityModelBasedLineInserter on main template 'BeanFactory' on template 'BeanFactoryClassMain.tpl'
-from VelocityModelBasedLineInserter on main template 'BeanFactory' on template 'BeanFactoryInsertAboveTemplateMain.tpl'
-from VelocityModelBasedLineInserter on main template 'BeanFactory' on template 'BeanFactoryInsertAboveTemplateMain.tpl'
-from VelocityModelBasedLineInserter on main template 'BeanFactory' on template 'BeanFactoryInsertBelowTemplateMain.tpl'
-from VelocityModelBasedLineInserter on main template 'BeanFactory' on template 'BeanFactoryInsertBelowTemplateMain.tpl'
-from VelocityModelBasedLineInserter on main template 'BeanFactory' on template 'BeanFactoryReplaceTemplateMain.tpl'
-from VelocityModelBasedLineInserter on main template 'BeanFactory' on template 'BeanFactoryReplaceTemplateMain.tpl'
 from VelocityModelBasedLineInserter on main template 'ConsoleComicStrip' on template 'CreateMainScriptTemplate.tpl'
 from VelocityModelBasedLineInserter on main template 'ConsoleComicStrip' on template 'InsertIntoMainTemplate.tpl'
+from VelocityModelBasedLineInserter on main template 'XMLBuilder' on template 'CreateTargetFileMain.tpl'
+from VelocityModelBasedLineInserter on main template 'XMLBuilder' on template 'InsertCustomerDataMain.tpl'
+from VelocityModelBasedLineInserter on main template 'XMLBuilder' on template 'InsertItemsMain.tpl'
+from VelocityModelBasedLineInserter on main template 'XMLBuilder' on template 'ReplaceAdvertisingDataMain.tpl'
 
 18 times called for class based generation:
 from VelocityClassBasedFileMaker for artefact 'ConsoleComicStrip' on main template 'A_MainTemplate.tpl'

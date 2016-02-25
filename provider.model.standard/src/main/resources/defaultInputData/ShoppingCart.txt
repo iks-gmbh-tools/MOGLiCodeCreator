@@ -1,0 +1,82 @@
+variable namespace xyz
+
+model XMLBuilder
+  metainfo nameSpacePrefix <<namespace>>
+  metainfo xmlns xmlns:<<namespace>>="http://www.w3.org/XYZ/html5/"
+  
+class Customer
+  metainfo name "Pete Pepper"
+  metainfo age 33
+	 
+	attribute address 
+	  metainfo street "1234th Avenue"
+	  metainfo city Minitropolis
+	  metainfo country Wonderland
+	  
+	attribute BankAccount 
+	  metainfo number 12345678
+	  metainfo company WorldBank
+	
+class BlueRay-Player
+  metainfo bought true
+	
+	attribute producer 
+		metainfo name CheapAndCool
+		metainfo location China
+		
+	attribute type 
+		metainfo code HH123
+		metainfo decription Luxury Edition
+	
+	attribute price 
+		metainfo amount 99.90€ 
+		metainfo VATincluded false
+		
+class Bubblegum
+  metainfo bought true
+  
+    attribute type 
+    	metainfo color green  
+        metainfo taste mint
+    
+    attribute price 
+		metainfo amount 0.10€
+		metainfo VATincluded true
+    
+class Spacecraft
+  metainfo type "Current Advertising"
+  metainfo bought true
+
+    attribute speed 
+    	metainfo m/s 299,792,485
+    	metainfo description "speed of light"
+    
+    attribute price 
+		metainfo amount 1,000,000,000,000,000€
+		metainfo VATincluded false
+    
+class Lollipop
+  metainfo type "Current Advertising"
+	
+    attribute type 
+    	metainfo color red  
+        metainfo taste cherry
+    
+    attribute price 
+		metainfo amount 0.09€
+		metainfo VATincluded true
+	
+class DVD-Player
+  metainfo type "Current Advertising"
+	
+	attribute producer 
+		metainfo name CheapAndCool
+		metainfo location Taiwan
+		
+	attribute type 
+		metainfo code HH234
+	
+	attribute price 
+		metainfo amount 19.90€
+		metainfo VATincluded true
+	

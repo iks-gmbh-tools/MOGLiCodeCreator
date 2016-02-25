@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.provider.model.standard.parser;
 
 import static org.junit.Assert.assertEquals;
@@ -64,7 +79,7 @@ public class VariableParserUnitTest  extends StandardModelProviderTestParent
 		// verify test result
 		assertNotNull("Not null expected", result);
 		assertEquals("key", "testVariable", result.getName());
-		assertEquals("value", " TO BE CONVERTED TO UPPERCASE", result.getAdditionalInfo());
+		assertEquals("value", "\" TO BE CONVERTED TO UPPERCASE\"", result.getAdditionalInfo());
 	}
 	
 	@Test
@@ -79,7 +94,7 @@ public class VariableParserUnitTest  extends StandardModelProviderTestParent
 		// verify test result
 		assertNotNull("Not null expected", result);
 		assertEquals("key", "testVariable", result.getName());
-		assertEquals("value", " to be converted to lowercase", result.getAdditionalInfo());
+		assertEquals("value", "\" to be converted to lowercase\"", result.getAdditionalInfo());
 	}
 
 	@Test
@@ -94,7 +109,7 @@ public class VariableParserUnitTest  extends StandardModelProviderTestParent
 		// verify test result
 		assertNotNull("Not null expected", result);
 		assertEquals("key", "testVariable", result.getName());
-		assertEquals("value", "This reMains unChanged.", result.getAdditionalInfo());
+		assertEquals("value", "\"This reMains unChanged.\"", result.getAdditionalInfo());
 	}
 	
 }

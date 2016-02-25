@@ -1,0 +1,325 @@
+#########################################################################################################
+# This model file illustrates the usage of the model definition DSL of the StandardModelProvider plugin.
+#
+# A model for the StandardModelProvider is constructed out of classes, attributes and metainfos. 
+# The MOGLiCC meta model consists of the three hierarchy levels model, class and attribute. 
+# A model file must contain exactly one model. The name of a class (for a java class it should also contain 
+# the qualified path) must be unique within the model. The name of an attribute must be unique for its class.
+#
+# Each element (model, class or attribute) is defined by its name - the only concretely predefined data value. 
+# The data of each element in each hierarchy level can be enriched by MetaInfo elements in any number. 
+# A MetaInfo element consists of a non-unique name and a value.
+#
+# For repreatedly used values (such as paths to domain objects) variables can be defined. A variable consists 
+# of a key-value-pair. The key can be used as placeholder: <<variableKey>>. When the model file is parsed all 
+# placeholders are replaced by its variable value. Variables can be defined anywhere in the model file, e.g. 
+# at the end of the model file. Variables values may contain placeholders of other variables, that are 
+# mentioned above in the model file. If needed upper and lower case conversion is possible:
+#
+# variable v1 "One Two Three"
+# variable v2 toUPPERCase: <<v1>>  # this results in "ONE TWO THREE"
+# variable v3 toLowerCase: <<v1>>  # this results in "one two three"
+#
+# Information which plugin uses which MetaInfo is presented in a statistics file
+# that is written into the plugin output directory of the StandardModelProvider plugin.
+#
+# The MOGLiCC_JavaBeanModel provides data for the MOGLiCC JavaBean templates. Model data and templates are
+# used to create the MOGLiCC JavaBean artefacts. These are NOT designed for manual modification.
+# In case you want to have same modified, change the templates, the model data or both, and
+# recreate them by autogeneration.
+#
+#########################################################################################################
+
+
+variable DomainPath com.iksgmbh.moglicc.demo
+variable alphanumericCharset "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZA 01234567890 <>&-.,;!?=()/üöäÜÖÄß"
+
+
+model MOGLiCC_JavaBeanModel
+  metainfo eclipseProjectDir <applicationRootDir>
+  metainfo projectName MOGLiCC_JavaBeanProject
+  metainfo dateTimeFormat "dd.MM.yyyy HH:mm:ss:SSS"
+  metainfo namespace <<DomainPath>>
+  metainfo useExtensionPlugin ExcelStandardModelProvider
+  metainfo useJavaBeanRegistry true                        # allows reciprocal referencing between JavaBeans
+
+
+class <<DomainPath>>.Person
+  metainfo implements java.io.Serializable
+  metainfo implements Cloneable
+  metainfo generateStandardJavaDoc true
+
+  attribute firstname
+    metainfo JavaType String
+    metainfo Mandatory true
+    metainfo ExampleData Hans
+    metainfo MinLength 2
+    metainfo MaxLength 100
+    metainfo ValidChars <<alphanumericCharset>>
+    
+  attribute lastname
+    metainfo JavaType String
+    metainfo Mandatory true
+    metainfo ExampleData Mustermann
+    metainfo MaxLength 80
+    metainfo ValidChars <<alphanumericCharset>>
+
+  attribute age
+    metainfo JavaType int
+    metainfo ExampleData 44
+    metainfo MaxLength 3
+
+  attribute contact
+    metainfo JavaType Contact
+    metainfo Mandatory false
+    metainfo ExampleData "Contact4"
+
+  attribute addresses
+    metainfo JavaType java.util.List<Address>
+    metainfo Mandatory true
+    metainfo ExampleData "Address4"
+
+
+class <<DomainPath>>.Contact
+  metainfo implements java.io.Serializable
+  metainfo implements Cloneable
+  metainfo generateStandardJavaDoc true
+
+  attribute person
+    metainfo JavaType Person
+    metainfo Mandatory true
+    metainfo ExampleData "Person4"
+
+  attribute mobile
+    metainfo JavaType String
+    metainfo Mandatory false
+    metainfo ExampleData "0151 / 12 16 17"
+    metainfo MinLength 8
+    metainfo MaxLength 32
+    metainfo ValidChars <<alphanumericCharset>>
+
+  attribute email
+    metainfo JavaType String
+    metainfo Mandatory false
+    metainfo ExampleData "0151 / 12 16 17"
+    metainfo MinLength 6
+    metainfo MaxLength 40
+    metainfo ValidChars <<alphanumericCharset>>
+
+class <<DomainPath>>.Office
+  metainfo implements java.io.Serializable
+  metainfo implements Cloneable
+  metainfo generateStandardJavaDoc true
+  metainfo Enum "public enum OfficeTypeEnum { HEAD, BRANCH, SUBBRANCH }"
+
+  attribute name
+    metainfo JavaType String
+    metainfo ExampleData "Head Quarter"
+    metainfo MaxLength 32
+    metainfo MinLength 8
+
+  attribute type
+    metainfo JavaType OfficeTypeEnum
+    metainfo ExampleData OfficeTypeEnum.HEAD
+
+  attribute address
+    metainfo JavaType Address
+    metainfo Mandatory true
+    metainfo ExampleData "Address2"
+
+  attribute members
+    metainfo JavaType java.util.List<Member>
+    metainfo Mandatory true
+    metainfo ExampleData "Member3, Member5, Member8"
+
+
+class <<DomainPath>>.Member
+  metainfo extends <<DomainPath>>.Person
+  metainfo implements java.io.Serializable
+  metainfo implements Cloneable
+  metainfo generateStandardJavaDoc true
+  metainfo Enum "public enum MemberRoleEnum { GUEST, STANDARD, CHIEF }"
+
+    attribute membershipNumber
+      metainfo JavaType int
+      metainfo ExampleData 333
+      metainfo MaxLength 8
+
+    attribute active
+      metainfo JavaType boolean
+      metainfo ExampleData true
+    
+    attribute role
+      metainfo JavaType MemberRoleEnum
+      metainfo ExampleData MemberRoleEnum.GUEST
+      
+    attribute offices
+      metainfo JavaType java.util.List<Office>
+      metainfo ExampleData "Office1, Office3"
+      
+
+class <<DomainPath>>.Address
+  metainfo implements java.io.Serializable
+  metainfo implements Cloneable
+  metainfo generateStandardJavaDoc true
+
+  attribute Street
+    metainfo JavaType String
+    metainfo ExampleData Münzstr.
+    metainfo MaxLength 70
+    
+  attribute Postcode
+    metainfo JavaType int
+    metainfo ExampleData 12345
+    metainfo MaxLength 7
+
+  attribute city
+    metainfo JavaType String
+    metainfo ExampleData Münzhausen
+    metainfo MaxLength 90
+
+  attribute country
+    metainfo JavaType String
+    metainfo ExampleData Fantasien
+    metainfo MaxLength 30
+
+
+class <<DomainPath>>._Misc
+  metainfo generateStandardJavaDoc false
+  metainfo JavaDocLine "This class demonstrates that the MOGLiCC JavaBeanGroup supports " 
+  metainfo JavaDocLine "all java types of the attributes in this class."
+
+  attribute text 
+    metainfo JavaType String
+    metainfo ExampleData "Textinhalt 1"
+    metainfo Misc1 "Textinhalt 2"
+    metainfo Misc2 "Textinhalt 3"
+    metainfo MinLength 4
+    metainfo MaxLength 50
+    metainfo InvalidChars €°@#
+
+  attribute ready
+    metainfo JavaType boolean
+    metainfo ExampleData false
+    metainfo Misc1 true
+    metainfo Misc2 false
+     
+  attribute primitivChar
+    metainfo JavaType char
+    metainfo ExampleData c
+    metainfo Misc1 b
+    metainfo Misc2 a 
+    
+  attribute numberByte
+    metainfo JavaType byte
+    metainfo ExampleData 4
+    metainfo MaxLength 1
+    metainfo Misc1 10
+    metainfo Misc2 22
+    
+  attribute numberInt
+    metainfo JavaType int
+    metainfo ExampleData 123
+	metainfo Misc1 20
+	metainfo Misc2 303
+
+  attribute numberLong
+    metainfo JavaType long
+    metainfo ExampleData 123456
+    metainfo Misc1 30
+    metainfo Misc2 2121212
+
+  attribute numberFloat
+    metainfo JavaType float
+    metainfo ExampleData 12.34
+	metainfo Misc1 23.45
+    metainfo Misc2 34.56
+	
+  attribute numberDouble
+    metainfo JavaType double
+    metainfo ExampleData 123.34
+    metainfo Misc1 12.34
+    metainfo Misc2 1234.34
+
+  attribute booleanWrapper
+    metainfo JavaType Boolean
+    metainfo ExampleData false
+    metainfo Misc1 true
+    metainfo Misc2 false
+     
+  attribute charWrapper
+    metainfo JavaType Character
+    metainfo ExampleData C
+    metainfo Misc1 B
+    metainfo Misc2 A
+    
+  attribute byteWrapper
+    metainfo JavaType Byte
+    metainfo ExampleData 3
+    metainfo MaxLength 1
+    metainfo Misc1 10
+    metainfo Misc2 5
+    
+  attribute intWrapper
+    metainfo JavaType Integer
+    metainfo ExampleData 12
+	metainfo Misc1 20
+	metainfo Misc2 74
+
+  attribute longWrapper
+    metainfo JavaType Long
+    metainfo ExampleData 12345
+    metainfo MaxLength 7
+    metainfo Misc1 3000
+    metainfo Misc2 500055
+
+  attribute floatWrapper
+    metainfo JavaType Float
+    metainfo ExampleData 1.343
+	metainfo Misc1 1.343
+	metainfo Misc2 1.343
+	
+  attribute doubleWrapper
+    metainfo JavaType Double
+    metainfo ExampleData 12.345
+    metainfo Misc1 13.345
+    metainfo Misc2 12.343
+        
+  attribute bigDecimal
+    metainfo JavaType java.math.BigDecimal
+    metainfo ExampleData 123.4321
+    metainfo Misc1 123.4322
+    metainfo Misc2 123.4323
+    metainfo MinLength 3
+    metainfo MaxLength 9
+
+  attribute dateTime
+    metainfo JavaType org.joda.time.DateTime
+    metainfo ExampleData "05.03.2010 08:59:01:001"
+    metainfo Misc1 "15.12.2013 18:39:11:231"
+    metainfo Misc2 "25.10.2008 12:00:59:999"
+
+   attribute listOfLongs
+    metainfo JavaType java.util.List<Long>
+    metainfo ExampleData "1, 2"
+	metainfo Misc1 "1, 2, 3"
+	metainfo Misc2 "1, 2, 3, 4"
+
+  attribute stringList
+    metainfo JavaType java.util.List<String>
+    metainfo ExampleData "a aa, b bb"
+    metainfo Misc1 "a a, b b, c c"
+    metainfo Misc2 "a a, b b, c c, d d"
+
+  attribute stringArray
+    metainfo JavaType String[]
+    metainfo ExampleData "aa, bb"
+	metainfo Misc1 "a a, b b, c c"
+	metainfo Misc2 "a a, b b, c c, d d"
+	
+  attribute hashSet
+    metainfo JavaType java.util.HashSet<String>
+    metainfo ExampleData "aa, bb"
+    metainfo Misc1 "a a, b b, c c"
+    metainfo Misc2 "a a, b b, c c, d d"
+ 

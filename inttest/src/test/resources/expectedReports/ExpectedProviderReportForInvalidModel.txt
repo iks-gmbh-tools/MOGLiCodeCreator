@@ -12,7 +12,7 @@ not used for code generation
  
  Report for StandardModelProvider:
  
- Error parsing model file: MOGLiCC_JavaBeanModel.txt
+ Error parsing model file: MavenProjectWithJavaDomainModel.txt
  
  ----------------------------------------------------------------------------------------------
  

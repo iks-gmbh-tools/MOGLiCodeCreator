@@ -41,8 +41,8 @@ Current version: **1.6.0**
 
 **Changes to 1.5.5**
 - Improvement: Licensed under Apache License 2.0
-- Improvement: New templates to generate console comic strips and the model file Moglydick
-- Improvement: Java 1.8 based code
+- Improvement: Fun Feature: New templates to generate console comic strips and the model file Moglydick
+- Improvement: New model file ShoppingCart and templates XMLBuilder to demonstrate the LineInserter feature
 - Improvement: Help files strongly improved
 - Improvement: new TemplateStringUtility method getTextFileContent(String file)
 - Improvement: new features of the ModelParser to parse variables

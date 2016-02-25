@@ -7,6 +7,7 @@ I Preconditions for Release
    a) application/src/main/resources/build.properties,
    b) readme.md in root
 5. All htm-files are known to be UTF-coded (in case of doubt, check with Notepad++).
+6. Execute the JavaFileLicenseIncluder to ensure that all java files contain the license text.
 
 
 

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.treebuilder.modelbased.velocity;
 
 import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.REPORT_TAB;
@@ -9,7 +24,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.iksgmbh.data.FolderContent;
 import com.iksgmbh.helper.FolderContentBasedFileRenamer;
 import com.iksgmbh.helper.FolderContentBasedFileRenamer.RenamingData;
 import com.iksgmbh.helper.FolderContentBasedFolderDuplicator;
@@ -172,14 +186,21 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 				throw e;
 			}
 
-			if (artefactProperties.isTargetToBeCleaned()) {
-				final File artifactTopFolder = getArtifactTopFolder();
+			final File artifactTopFolder = getArtifactTopFolder();
+			velocityResult.checkTargetDir(artifactTopFolder.getParentFile());
+			
+			final boolean overwriteOutputArtefact = velocityResult.isTargetToBeCreatedNewly() || ! artifactTopFolder.exists();
+			
+			if ( overwriteOutputArtefact && artefactProperties.isTargetToBeCleaned()) 
+			{
 				if (artifactTopFolder != null) {					
 					FileUtil.deleteDirWithContent(artifactTopFolder);
+					infrastructure.getPluginLogger().logInfo("Directory cleaned: " + artifactTopFolder.getAbsolutePath());
 				}
 			}
-
-			doYourJobWith(sourceDir, artefact);
+			
+			doYourJobWith(sourceDir, artefact, overwriteOutputArtefact);
+			
 		} else {
 			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '"
 			                                         + velocityResult.getNameOfValidModel() + "' as valid model.");
@@ -214,7 +235,9 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 		return new VelocityTreeBuilderResultData(generatorResultData);
 	}
 
-	private void doYourJobWith(final File sourceDir, final String artefact) throws MOGLiPluginException
+	private void doYourJobWith(final File sourceDir, 
+			                   final String artefact, 
+			                   final boolean overwriteOutputArtefact) throws MOGLiPluginException
 	{
 		final List<String> problems = new ArrayList<String>();
 		final List<String> filesToIgnore = artefactProperties.getExcludes();
@@ -241,17 +264,26 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 		setEncodingHelper(lineReplacer2);
 		lineReplacer2.doYourJob(artefactProperties.getReplacements());
 		problems.addAll(lineReplacer2.getErrorList());
-
-		// copy from outputDir to targetDir
-		final List<String> takeAllFiles = null; // here is no need for ignoring files -> outputFolder contains wanted files only!
-		final FolderContentBasedFolderDuplicator outputFolderDuplicator = new FolderContentBasedFolderDuplicator(pluginOutputDir, takeAllFiles);
-		final File artifactTopFolder = getArtifactTopFolder();
-		HashMap<String, FileCreationStatus> duplicationResultsTargetDir = null;
-		if (artifactTopFolder != null) {
-			// create target dir only when defined
-			duplicationResultsTargetDir = outputFolderDuplicator.duplicateTo(artifactTopFolder, artefactProperties.isCreateNew());
+		
+		HashMap<String, FileCreationStatus> duplicationResults = null;
+		List<File> generatedFolders = inputFolderDuplicator.getFolderContent().getFolders();
+		if ( ! overwriteOutputArtefact ) 
+		{
+			infrastructure.getPluginLogger().logWarning("Target file " + getArtifactTopFolder().getAbsolutePath() + " exists and will not overwritten!");
+			// velocityResult.setExistingTargetPreserved(true);
+		} 
+		else 
+		{
+			// copy from outputDir to targetDir
+			final List<String> takeAllFiles = null; // here is no need for ignoring files -> outputFolder contains wanted files only!
+			final FolderContentBasedFolderDuplicator outputFolderDuplicator = new FolderContentBasedFolderDuplicator(pluginOutputDir, takeAllFiles);
+			final File artifactTopFolder = getArtifactTopFolder();
+			if (artifactTopFolder != null) {
+				// create target dir only when defined
+				duplicationResults = outputFolderDuplicator.duplicateTo(artifactTopFolder, artefactProperties.areExistingFilesToPreserve());
+			}
+			generatedFolders = outputFolderDuplicator.getFolderContent().getFolders();
 		}
-		final FolderContent folderContent = outputFolderDuplicator.getFolderContent();
 
 		if (problems.size() > 0) {
 			throw new MOGLiPluginException("Following problem(s) exist for artefact '" + artefact + "': "
@@ -259,16 +291,13 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 		                                   + StringUtil.buildTextFromLines(problems));
 		}
 
-		final HashMap<String, FileCreationStatus> duplicationResults;
-		if (duplicationResultsTargetDir != null) {
-			duplicationResults = duplicationResultsTargetDir;
-		} else {
+		if (duplicationResults == null) {
 			duplicationResults = duplicationResultsOutputDir; // fall back if targetDir is not defined
 		}
 		
 		generateReportLines(artefact, artefactProperties.getReplacements(),
 							artefactProperties.getFileRenamings(),
-							folderContent.getFolders(), duplicationResults);
+							generatedFolders, duplicationResults, overwriteOutputArtefact);
 
 	}
 
@@ -281,7 +310,8 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 
 	private void generateReportLines(final String artefact, final List<ReplacementData> replacements,
 			                         final List<RenamingData> fileRenamings, final List<File> generatedFolders,
-			                         final HashMap<String, FileCreationStatus> duplicationResults) 
+			                         final HashMap<String, FileCreationStatus> duplicationResults, 
+			                         final boolean overwriteOutputArtefact) 
 	{
 		standardReportData.numberOfOutputArtefacts++;
 		generationReport.append(FileUtil.getSystemLineSeparator());
@@ -295,13 +325,17 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 		File artifactTopFolder = getArtifactTopFolder();
 		if (artifactTopFolder == null) {
 			artifactTopFolder = new File(infrastructure.getPluginOutputDir(), artefact);
-			artefactHeaderReport.append(REPORT_TAB + "No targetFile has beed defined. Therefore, tree artefact is generated only in output directory!");
+			artefactHeaderReport.append(REPORT_TAB + "No target directory has beed defined. Therefore, tree artefact is generated only in output directory!");
+		}
+		if ( ! overwriteOutputArtefact) {
+			artifactTopFolder = new File(infrastructure.getPluginOutputDir(), artefact);
+			artefactHeaderReport.append(REPORT_TAB + "Target directory already exists and must not be created newly. Therefore, tree artefact is generated only in output directory!");
 		}
 		
 		// ARTEFACT DETAIL REPORT
 		
 		// report created subfolders
-		if (generatedFolders.size() > 1) {
+		if (generatedFolders != null && generatedFolders.size() > 1) {
 			artefactDetailReport.append("   Created subdirectories: ");
 			artefactDetailReport.append(FileUtil.getSystemLineSeparator());
 			for (final File folder : generatedFolders) {

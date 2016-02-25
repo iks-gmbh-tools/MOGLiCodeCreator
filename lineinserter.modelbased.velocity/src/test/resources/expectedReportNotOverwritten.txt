@@ -1,3 +1,2 @@
-No model available. No generation done.
    Report for input artefact 'TestArtefact':
       targetFile.txt did already exist and was NOT overwritten in <applicationRootDir>/example      

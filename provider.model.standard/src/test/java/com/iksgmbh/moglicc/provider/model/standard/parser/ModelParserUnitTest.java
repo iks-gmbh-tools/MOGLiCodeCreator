@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.provider.model.standard.parser;
 
 import static com.iksgmbh.moglicc.provider.model.standard.MetaModelConstants.ATTRIBUTE_IDENTIFIER;
@@ -426,7 +441,7 @@ public class ModelParserUnitTest extends StandardModelProviderTestParent {
 	}	
 
 	@Test
-	public void handlesBracesProblemForMoreThanOneVariableReplacementsWithBracesPerLine() throws ModelParserException {
+	public void handlesQuotesProblemForMoreThanOneVariableReplacementsWithBracesPerLine() throws ModelParserException {
 		// prepare test
 		final List<String> fileContentAsList = new ArrayList<String>();
 		fileContentAsList.add("model test");
@@ -442,6 +457,25 @@ public class ModelParserUnitTest extends StandardModelProviderTestParent {
 		// verify test result
 		assertNotNull(model);
 		assertEquals("Metainfo", "  Das  ist  kurzer  ein Text.  ", model.getMetaInfoValueFor("displaytext"));
-	}	
+	}
+	
+	@Test
+	public void removesMiddleQuotes() throws ModelParserException 
+	{
+		// call functionality under test	
+		final String result1 = modelParser.removeMiddleQuotes("metainfo MetaInfoTestName Test without quotes.");
+		final String result2 = modelParser.removeMiddleQuotes("metainfo MetaInfoTestName \"Test with \"\"quotes.\"");
+		final String result3 = modelParser.removeMiddleQuotes("metainfo MetaInfoTestName Another test \"with \"\"quotes.\"");
+		final String result4 = modelParser.removeMiddleQuotes("class Class\"Test\"Name");
+		final String result5 = modelParser.removeMiddleQuotes("metainfo   MetaInfoTestName      \" T e s t  \"");
+		
+		// verify test result
+		assertEquals("Unexpected line", "metainfo MetaInfoTestName Test without quotes.", result1);
+		assertEquals("Unexpected line", "metainfo MetaInfoTestName \"Test with quotes.\"", result2);
+		assertEquals("Unexpected line", "metainfo MetaInfoTestName \"Another test with quotes.\"", result3);
+		assertEquals("Unexpected line", "class \"ClassTestName\"", result4);
+		assertEquals("Unexpected line", "metainfo   MetaInfoTestName      \" T e s t  \"", result5);
+	}
+	
 	
 }

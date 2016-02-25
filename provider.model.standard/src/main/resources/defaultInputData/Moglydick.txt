@@ -56,10 +56,6 @@
 #
 ################################################################################################################################
 
-	
-
-variable dynamicAreaWidth  80
-variable dynamicAreaHeight 30
 
 model ConsoleComicStrip                     	 	# model name is used as name of the main script
   metainfo scriptName MoglyDick              		# script name without extension and without path

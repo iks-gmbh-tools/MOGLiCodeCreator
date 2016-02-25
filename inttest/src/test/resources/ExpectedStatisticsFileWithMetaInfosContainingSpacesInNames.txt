@@ -7,5 +7,5 @@ Plugin 'VelocityClassBasedFileMaker' uses the following MetaInfo elements:
 'comment note' in Class level
 
 WARNING:
-For following MetaInfos defined in 'MOGLiCC_JavaBeanModel.txt' no validation rule exists:
+For following MetaInfos defined in 'MavenProjectWithJavaDomainModel.txt' no validation rule exists:
 'comment note' in ModelLevel

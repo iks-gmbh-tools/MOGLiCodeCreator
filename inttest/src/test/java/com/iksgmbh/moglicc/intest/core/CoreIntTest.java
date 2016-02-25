@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.intest.core;
 
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.FILENAME_LOG_FILE;
@@ -43,7 +58,7 @@ public class CoreIntTest extends IntTestParent {
 		// prepare test
 		initTestRootDir();
 		
-		copyExternalInputDataIntoMOGLiCCWorkspace("C://data//Reik//dev//AnimatedComicStrip");
+		copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//MOGLiCC//XMLBuilder");
 		//copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/iks-github/application/target/releaseDir/SystemTestDir");
 		
 		// call functionality under test
@@ -53,8 +68,8 @@ public class CoreIntTest extends IntTestParent {
 		//final File reportFile = new File(applicationReportDir, SHORT_REPORT_FILE);
 		//final File reportFile = new File(applicationReportDir, GENERATION_REPORT_FILE);
 		//final File reportFile = applicationLogfile;
-		final File reportFile = new File(applicationRootDir, ERROR_REPORT_FILE);
-		System.err.println(FileUtil.getFileContent(reportFile));
+		//final File reportFile = new File(applicationRootDir, ERROR_REPORT_FILE);
+		//System.err.println(FileUtil.getFileContent(reportFile));
 		fail("Do not forget to comment out the test annotation of this method before checking in.");
 	}
 
@@ -205,7 +220,7 @@ public class CoreIntTest extends IntTestParent {
 		reportFile = new File(applicationRootDir, ERROR_REPORT_FILE);
 		assertFileExists(reportFile);
 		assertFileContainsEntry(reportFile, "Problem for plugin 'StandardModelProvider': " +
-				                            "Error parsing model file 'MOGLiCC_JavaBeanModel.txt'");
+				                            "Error parsing model file 'MavenProjectWithJavaDomainModel.txt'");
 	}
 	
 	@Test

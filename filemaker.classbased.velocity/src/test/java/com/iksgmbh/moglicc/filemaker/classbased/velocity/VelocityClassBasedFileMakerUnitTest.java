@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.filemaker.classbased.velocity;
 
 import static org.junit.Assert.assertEquals;
@@ -138,6 +153,8 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 		final VelocityFileMakerResultData toReturn =
 			   new VelocityFileMakerResultData(buildUpGeneratorResultData);
 
+		toReturn.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MockModel");
+		
 		if (targetFileName != null) {
 			toReturn.addProperty(KnownGeneratorPropertyNames.TargetFileName.name(), targetFileName);
 		}
@@ -392,7 +409,7 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 		artefactDir.mkdirs();
 		assertFileExists(artefactDir);
 		final File templateFile = new File(artefactDir, "main.tpl");
-		MOGLiFileUtil.createNewFileWithContent(templateFile, "content of template is not relevant here");
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "content of this file does not play a role here");
 		final String targetFileName = "targetFile.txt";
 		final File targetDir = new File(applicationRootDir, artefactName);
 		FileUtil.deleteDirWithContent(targetDir);
@@ -400,7 +417,7 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 		final File targetFile = new File(targetDir, artefactName);
 		targetFile.createNewFile();
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, artefactName,
-				"TargetFileContent", false);
+				                                                                        "TargetFileContent", false);
 		prepareResultData(resultData);
 
 		// call functionality under test

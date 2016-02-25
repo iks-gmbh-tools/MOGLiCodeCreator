@@ -2,7 +2,7 @@
 
 All 3 generator plugins executed successfully.
 Model used is 'MOGLiCC_JavaBeanModel'.
-A total of 94 generation events for 50 output artefact(s) have been performed.
+A total of 90 generation events for 49 output artefact(s) have been performed.
 
 ----------------------------------------------------------------------------------------------
 
@@ -80,14 +80,11 @@ MOGLiCC_NewPluginModel
 
 VelocityModelBasedLineInserter: 
 
-Following 1 artefact(s) did not match the model used:
-ConsoleComicStrip
+No model matching input artefact found. Nothing to do.
 
-   Report for input artefact 'BeanFactory':
-      BeanFactory.java was created in <applicationRootDir>/example
-      1 line(s) inserted by a above-instruction into BeanFactory.java in directory <applicationRootDir>/example
-      1 line(s) inserted by a below-instruction into BeanFactory.java in directory <applicationRootDir>/example
-      18 line(s) inserted by a replace-instruction into BeanFactory.java in directory <applicationRootDir>/example
+Following 2 artefact(s) did not match the model used:
+ConsoleComicStrip
+XMLBuilder
 
 ----------------------------------------------------------------------------------------------
 

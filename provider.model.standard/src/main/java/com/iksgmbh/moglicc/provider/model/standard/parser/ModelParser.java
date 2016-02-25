@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.provider.model.standard.parser;
 
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.ATTRIBUTE_WITHOUT_CLASS;
@@ -143,24 +158,61 @@ public class ModelParser {
 
 	private String doVariableReplacement(String line, final int lineCounter) 
 	{		
+		String replacedLine = line;
 		final Set<String> keySet = variableMap.keySet();
 		for (final String key : keySet)
 		{
-			String value = variableMap.get(key);
-			if (value.startsWith("\"") && value.endsWith("\"")) {
-				// for more than one replacements with variables (whose value are defined with braces) 
-				// a parsing problem exist for all AnnotationParsers: 
-				// two braces come into exists in the middle of the replaced line
-				// These artificial double braces are removed here 
-				
-				value = value.substring(1, value.length()-1);
-			}
-			line = line.replace(key, value);
+			final String value = variableMap.get(key);
+			replacedLine = replacedLine.replace(key, value);
 		}
-		//line = "\""+line + "\"";		
 		
-		verifyReplacement(line, lineCounter);
-		return line;
+		if (! line.equals(replacedLine)) {
+			replacedLine = removeMiddleQuotes(replacedLine);
+		}
+		
+		verifyReplacement(replacedLine, lineCounter);
+		return replacedLine;
+	}
+
+	/* For multiple replacements in one line combined with variable values that are enclosed by quotes 
+	   a parsing problem exist for all AnnotationParsers: 
+	   Quotes are introduced in the middle of the replaced line. These artificial double quotes are removed here. */ 
+	String removeMiddleQuotes(final String line) 
+	{
+		if (! line.contains("\"")) {
+			return line;
+		}
+		
+		int pos = getPositionForFirstQuote(line);
+		
+		final String replacedLine = line.replace("\"", "");
+		return replacedLine.substring(0, pos) + "\"" + replacedLine.substring(pos) + "\"";
+	}
+
+	private int getPositionForFirstQuote(final String line) 
+	{
+		int pos1 = line.indexOf(" ");
+		
+		if (pos1 == -1) {
+			return line.indexOf("\"");  // this does not happen for valid lines in model files
+		}
+		
+		while (line.charAt(pos1) == ' ') {
+			pos1++; // ignore directly following spaces 
+		}
+		
+		final String lineCut = line.substring(pos1);
+		int pos2 = lineCut.indexOf(" ");
+		
+		if (pos2 == -1) {
+			return pos1;  // this happens for model, class or attribute definition lines
+		}
+		
+		while (lineCut.charAt(pos2) == ' ') {
+			pos2++; // ignore directly following spaces 
+		}
+		
+		return pos1 + pos2; // this happens for variable declaration and metainfo lines
 	}
 
 	private void verifyReplacement(String line, final int lineCounter) {

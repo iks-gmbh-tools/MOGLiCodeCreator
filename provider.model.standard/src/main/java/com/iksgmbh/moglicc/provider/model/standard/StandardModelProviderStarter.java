@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.provider.model.standard;
 
 import static com.iksgmbh.moglicc.provider.model.standard.TextConstants.BRACE_SYMBOL_PROPERTY;
@@ -49,11 +64,12 @@ public class StandardModelProviderStarter implements ModelProvider {
 
 	public static final String PLUGIN_PROPERTIES_FILE = "_model.properties";
 	public static final String FILENAME_STATISTICS_FILE = "ModelStatistics.txt";
-	public static final String FILENAME_STANDARD_MODEL_FILE = "MOGLiCC_JavaBeanModel.txt";
-	public static final String FILENAME_STANDARD_MODEL_FILE2 = "MOGLiCC_JavaBeanModel_without_JavaBeanRegistry.txt";
+	public static final String FILENAME_STANDARD_MODEL_FILE = "MavenProjectWithJavaDomainModel.txt";
+	public static final String FILENAME_STANDARD_MODEL_FILE2 = "MavenProjectWithJavaDomainModel_No_BeanRegistry.txt";
 	public static final String USE_EXTENSION_PLUGIN_ID = "useExtensionPlugin";
 	public static final String FILENAME_NEW_PLUGIN_MODEL_FILE = "MOGLiCC_NewPluginModel.txt";
 	public static final String FILENAME_MOGLYDICK_MODEL_FILE = "Moglydick.txt";
+	public static final String FILENAME_SHOPPINGCART_MODEL_FILE = "ShoppingCart.txt";
 	
 
 	private InfrastructureService infrastructure;
@@ -453,6 +469,7 @@ public class StandardModelProviderStarter implements ModelProvider {
 		defaultData.addFile(FILENAME_STANDARD_MODEL_FILE2);
 		defaultData.addFile(FILENAME_NEW_PLUGIN_MODEL_FILE);
 		defaultData.addFile(FILENAME_MOGLYDICK_MODEL_FILE);
+		defaultData.addFile(FILENAME_SHOPPINGCART_MODEL_FILE);
 		
 		PluginDataUnpacker.doYourJob(defaultData, infrastructure.getPluginInputDir(), infrastructure.getPluginLogger());
 		return true;

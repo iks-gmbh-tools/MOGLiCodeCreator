@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.lineinserter.modelbased.velocity;
 
 import static com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil.REPORT_TAB;
@@ -38,7 +53,7 @@ import com.iksgmbh.utils.StringUtil;
 
 public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfoValidatorVendor {
 
-	public static final String BEAN_FACTORY_DIR = "BeanFactory";
+	public static final String XML_BUILDER_DIR = "XMLBuilder";
 	public static final String CONSOLE_COMIC_STRIP_DIR = "ConsoleComicStrip";
 	public static final String PLUGIN_ID = "VelocityModelBasedLineInserter";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
@@ -566,9 +581,10 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 
 		final PluginPackedData defaultData = new PluginPackedData(this.getClass(), DEFAULT_DATA_DIR, PLUGIN_ID);
 
-		final String[] beanFactoryTemplates = {"BeanFactoryClassMain.tpl",               "BeanFactoryReplaceTemplateMain.tpl",
-				                               "BeanFactoryInsertAboveTemplateMain.tpl", "BeanFactoryInsertBelowTemplateMain.tpl"};
-		defaultData.addFlatFolder(BEAN_FACTORY_DIR, beanFactoryTemplates);
+		final String[] xmlBuilderTemplates = {"CreateTargetFileMain.tpl", "InsertCustomerDataMain.tpl",
+				                              "InsertItemsMain.tpl",      "ReplaceAdvertisingDataMain.tpl",
+				                              "metaInfoListToXmlAttributes.tpl"};
+		defaultData.addFlatFolder(XML_BUILDER_DIR, xmlBuilderTemplates);
 
 		final String[] consoleComicStripTemplates = {"CreateMainScriptTemplate.tpl", "InsertIntoMainTemplate.tpl"};
 		defaultData.addFlatFolder(CONSOLE_COMIC_STRIP_DIR, consoleComicStripTemplates);

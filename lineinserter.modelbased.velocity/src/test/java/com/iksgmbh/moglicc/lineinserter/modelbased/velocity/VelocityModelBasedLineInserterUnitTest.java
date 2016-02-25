@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.lineinserter.modelbased.velocity;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +43,7 @@ import com.iksgmbh.utils.StringUtil;
 public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLineInserterTestParent {
 
 	private static final String TARGET_FILE_TXT = "targetFile.txt";
-	private static final String ARTEFACT_BEAN_FACTORY = "BeanFactory";
+	private static final String ARTEFACT_XMLBUILDER = "XMLBuilder";
 
 	private File targetFile;
 	private File generatorPropertiesFile;
@@ -59,7 +74,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfMainTemplateIsNotFound() {
 		// prepare test
-		final File artefactDir = new File(infrastructure.getPluginInputDir(), ARTEFACT_BEAN_FACTORY);
+		final File artefactDir = new File(infrastructure.getPluginInputDir(), ARTEFACT_XMLBUILDER);
 		FileUtil.deleteDirWithContent(artefactDir);
 		assertFileDoesNotExist(artefactDir);
 		artefactDir.mkdirs();
@@ -85,7 +100,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void findsDefaultMainTemplates() throws MOGLiPluginException {
 		// prepare test
-		final File artefactDir = new File(infrastructure.getPluginInputDir(), ARTEFACT_BEAN_FACTORY);
+		final File artefactDir = new File(infrastructure.getPluginInputDir(), ARTEFACT_XMLBUILDER);
 
 		// call functionality under test
 		 List<String> mainTemplate = velocityModelBasedLineInserter.findMainTemplates(artefactDir);
@@ -115,7 +130,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 				"temp", TARGET_FILE_TXT, KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityEngineProvider.setVelocityGeneratorResultData(resultData);
 		final File targetFile = prepareTargetFile(applicationOutputDir, VelocityModelBasedLineInserterStarter.PLUGIN_ID
-                                                                        + "/" + ARTEFACT_BEAN_FACTORY
+                                                                        + "/" + ARTEFACT_XMLBUILDER
                                                                         + "/" + TARGET_FILE_TXT);
 		assertFileDoesNotExist(targetFile);
 
@@ -137,6 +152,8 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		final VelocityLineInserterResultData toReturn =
 			   new VelocityLineInserterResultData(buildUpGeneratorResultData);
 
+		toReturn.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MockModel");
+		
 		if (targetFileName != null) {
 			toReturn.addProperty(KnownGeneratorPropertyNames.TargetFileName.name(), targetFileName);
 		}
@@ -779,9 +796,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		
 		// call functionality under test
 		final String result1 = velocityModelBasedLineInserter.insertAbove(oldContent1, contentToInsert, insertAboveIndicatorLine);
-		System.err.println(result1);
 		final List<String> oldContent2 = StringUtil.getLinesFromText(result1);
-		System.err.println(oldContent2);
 		final String result2 = velocityModelBasedLineInserter.insertAbove(oldContent2, contentToInsert, insertAboveIndicatorLine);
 		
 		// verify test result

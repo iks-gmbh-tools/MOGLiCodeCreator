@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.treebuilder.modelbased.velocity.data;
 
 import java.util.ArrayList;
@@ -24,8 +39,8 @@ public class ArtefactProperties {
 	private String nameOfValidModel;
 	private String excludeString;
 	private String outputEncodingFormat;
-	private boolean createNew = false;
 	private boolean cleanTarget = false;
+	private boolean preserveFiles = false;
 	private List<ReplacementData> replacements = new ArrayList<ReplacementData>();
 	private List<RenamingData> renamings = new ArrayList<RenamingData>();
 
@@ -60,8 +75,10 @@ public class ArtefactProperties {
 			rootName = value;
 		} else if (KnownGeneratorPropertyNames.NameOfValidModel.name().equalsIgnoreCase(key)) {
 			nameOfValidModel = value;
+		} else if (KnownTreeBuilderPropertyNames.PreserveFiles.name().equalsIgnoreCase(key)) {
+			preserveFiles = value.toLowerCase().equals("true");
 		} else if (KnownGeneratorPropertyNames.CreateNew.name().equalsIgnoreCase(key)) {
-			createNew = value.toLowerCase().equals("true");
+			// do nothing - this flag is already handled - see: VelocityModelBasedTreeBuilderStarter.doYourJobFor
 		} else if (KnownTreeBuilderPropertyNames.CleanTarget.name().equalsIgnoreCase(key)) {
 			cleanTarget = value.toLowerCase().equals("true");
 		} else if (KnownGeneratorPropertyNames.OutputEncodingFormat.name().equalsIgnoreCase(key)) {
@@ -83,8 +100,8 @@ public class ArtefactProperties {
 		return rootName;
 	}
 
-	public boolean isCreateNew() {
-		return createNew;
+	public boolean areExistingFilesToPreserve() {
+		return preserveFiles;
 	}
 
 	public boolean isTargetToBeCleaned() {

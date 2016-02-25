@@ -1,6 +1,21 @@
+/*
+ * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.iksgmbh.moglicc.intest.lineinserter.modelbased.velocity;
 
-import static com.iksgmbh.moglicc.lineinserter.modelbased.velocity.VelocityModelBasedLineInserterStarter.BEAN_FACTORY_DIR;
+import static com.iksgmbh.moglicc.lineinserter.modelbased.velocity.VelocityModelBasedLineInserterStarter.XML_BUILDER_DIR;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -22,8 +37,9 @@ import com.iksgmbh.utils.FileUtil;
 public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 
 	@Test
-	public void createsBeanFactory() throws MOGLiPluginException {
+	public void createsShoppingCardXML() throws MOGLiPluginException {
 		// prepare test
+		createModelPropertiesFileWithContent("modelfile=ShoppingCart.txt");
 		standardModelProviderStarter.doYourJob();
 		velocityEngineProviderStarter.doYourJob();
 
@@ -32,23 +48,23 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 
 		// verify test result in plugin directory
 		final InfrastructureService infrastructure = velocityModelBasedLineInserterStarter.getInfrastructure();
-		File file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
+		File file = new File(infrastructure.getPluginInputDir(), XML_BUILDER_DIR + "/CreateTargetFileMain.tpl");
 		assertFileExists(file);
-		file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
+		file = new File(infrastructure.getPluginInputDir(), XML_BUILDER_DIR + "/CreateTargetFileMain.tpl");
 		assertFileExists(file);
-		file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
+		file = new File(infrastructure.getPluginInputDir(), XML_BUILDER_DIR + "/InsertItemsMain.tpl");
 		assertFileExists(file);
-		file = new File(infrastructure.getPluginOutputDir(), BEAN_FACTORY_DIR + "/BeanFactory.java");
+		file = new File(infrastructure.getPluginInputDir(), XML_BUILDER_DIR + "/ReplaceAdvertisingDataMain.tpl");
 		assertFileExists(file);
 
 		// verify test result in target directory read from template file
-		file = new File(applicationRootDir + "/example", "BeanFactory.java");
+		file = new File(applicationRootDir, "ShoppingCart.xml");
 		List<String> fileContentAsList = MOGLiFileUtil.getFileContentAsList(file);
-		assertEquals("Line number", 36, fileContentAsList.size());
+		assertEquals("Line number", 38, fileContentAsList.size());
 	}
 
 	@Test
-	public void createsArtefactOnlyIfModelIsValid() throws Exception {
+	public void createsOutputArtefactOnlyIfModelIsValid() throws Exception {
 		// prepare test
 		final String artefactName = "TestArtefact";
 		standardModelProviderStarter.doYourJob();
@@ -57,9 +73,8 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 				artefactName);
 		artefactTemplateDir.mkdirs();
 		final File testTemplate = new File(artefactTemplateDir, "Main.tpl");
-		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName Test.txt" +
-														FileUtil.getSystemLineSeparator() +
-														"@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" +
+		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName Test.txt" + FileUtil.getSystemLineSeparator() +
+														"@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER +
 														FileUtil.getSystemLineSeparator() +
                                                         "@NameOfValidModel NotExistingModel" + FileUtil.getSystemLineSeparator() +
 				                                        "Test");
@@ -68,14 +83,12 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 		velocityModelBasedLineInserterStarter.doYourJob();
 
 		// verify test result
-		final File artefactTargetDir = new File(velocityModelBasedLineInserterStarter.getInfrastructure().getPluginOutputDir(),
-				artefactName);
+		final File artefactTargetDir = new File(velocityModelBasedLineInserterStarter.getInfrastructure().getPluginOutputDir(), artefactName);
 		assertFileDoesNotExist(artefactTargetDir);
 
 		// prepare follow up test
-		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName Test.txt" +
-				                                        FileUtil.getSystemLineSeparator() +
-				                                        "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" +
+		FileUtil.createNewFileWithContent(testTemplate, "@TargetFileName Test.txt" + FileUtil.getSystemLineSeparator() +
+				                                        "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER +
 				                                        FileUtil.getSystemLineSeparator() +
                                                         "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
                                                         "Test");
@@ -125,14 +138,16 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 				                                                  + FileUtil.getSystemLineSeparator()
 													                + "@" + KnownGeneratorPropertyNames.TargetDir
 													                + " " + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
-													                + "/" + targetDirString1);
+													                + "/" + targetDirString1 + FileUtil.getSystemLineSeparator()
+													                +"@NameOfValidModel MOGLiCC_JavaBeanModel");
 		final File mainTemplate2 = new File(templateDir, "Main2.tpl");
 		MOGLiFileUtil.createNewFileWithContent(mainTemplate2, "@" + KnownGeneratorPropertyNames.TargetFileName.name()
 												                + " " + filename2
 												                + FileUtil.getSystemLineSeparator()
 												                + "@" + KnownGeneratorPropertyNames.TargetDir
 												                + " " + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
-												                + "/" + targetDirString2);
+												                + "/" + targetDirString2 + FileUtil.getSystemLineSeparator()
+												                +"@NameOfValidModel MOGLiCC_JavaBeanModel");
 
 		// call functionality under test
 		try {
@@ -255,11 +270,10 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 		final String templateFileContent = "@CreateNew true"
 				+ FileUtil.getSystemLineSeparator()
 				+ "@TargetFileName " + "test_$model.getSize()_filename.java # any comment"
-				+ FileUtil.getSystemLineSeparator()
-				+ "@TargetDir "
+				+ FileUtil.getSystemLineSeparator() + "@TargetDir "
 				+ MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
-				+ "/example"
-				+ FileUtil.getSystemLineSeparator()
+				+ "/example" + FileUtil.getSystemLineSeparator()
+				+ "@NameOfValidModel SkipTestModel" + FileUtil.getSystemLineSeparator()
 				+ "@SkipGeneration  NOT $model.getMetaInfoValueFor(\"includesDB\")";
 		prepareTemplateFile(templateFileContent);
 
@@ -290,14 +304,12 @@ public class VelocityModelBasedLineInserterIntTest extends IntTestParent {
 
 		final String templateFileContent = "@CreateNew true"
 				+ FileUtil.getSystemLineSeparator()
-				+ "@TargetFileName " + targetFileName
-				+ FileUtil.getSystemLineSeparator()
+				+ "@TargetFileName " + targetFileName + FileUtil.getSystemLineSeparator()
 				+ "@TargetDir "
 				+ MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER
-				+ "/target"
-				+ FileUtil.getSystemLineSeparator()
-				+ "@ReplaceToNumberSign rem"
-				+ FileUtil.getSystemLineSeparator()
+				+ "/target" + FileUtil.getSystemLineSeparator()
+				+ "@NameOfValidModel TestModel" + FileUtil.getSystemLineSeparator()
+				+ "@ReplaceToNumberSign rem" + FileUtil.getSystemLineSeparator()
 				+ "rem This is a comment.";
 		prepareTemplateFile(templateFileContent);
 

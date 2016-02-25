@@ -17,6 +17,9 @@
 
 		#if ( $attributeDescriptor.doesHaveAnyMetaInfosWithName("ValidChars") )
 			#set( $value = $attributeDescriptor.getMetaInfoValueFor("ValidChars") )
+			
+			!!!!!!! hier get wohl was schief !!!!!!!!!
+			
 	'		validatorList.add(new ValidCharFieldValidator("$attributeName", "$value"));
 		#end
 

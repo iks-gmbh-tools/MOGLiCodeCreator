@@ -3,14 +3,14 @@
 Status: ERROR
 
 Workspace: ../inttest/target/TestDir
-Model file: MOGLiCC_JavaBeanModel.txt
+Model file: MavenProjectWithJavaDomainModel.txt
 
 2 plugin(s) executed successfully.
 4 plugin(s) not or erroneously executed!
 A total of 0 generation events for 0 output artefact(s) have been performed.
 
 ExcelStandardModelProvider: not used for code generation
-StandardModelProvider: Error parsing model file: MOGLiCC_JavaBeanModel.txt
+StandardModelProvider: Error parsing model file: MavenProjectWithJavaDomainModel.txt
 VelocityEngineProvider: Velocity engine started for 0 calls.
 
 VelocityClassBasedFileMaker: Model Error: No model file loaded! No generation done.

@@ -1,6 +1,6 @@
 ############## MOGLiCC ERROR REPORT ###############
 
-Problem for plugin 'StandardModelProvider': Error parsing model file 'MOGLiCC_JavaBeanModel.txt':
+Problem for plugin 'StandardModelProvider': Error parsing model file 'MavenProjectWithJavaDomainModel.txt':
 Invalid information in line 326!
 
 Problem for plugin 'VelocityModelBasedTreeBuilder': No model file loaded!
