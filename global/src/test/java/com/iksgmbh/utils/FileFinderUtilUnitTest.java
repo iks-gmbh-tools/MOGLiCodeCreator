@@ -43,8 +43,7 @@ public class FileFinderUtilUnitTest
 		final List<File> result = FileFinderUtil.findFiles(mainFolder, null, subdirsToIgnore, "java", null);
 		
 		// assert
-		assertEquals("number of java files", 35, result.size());
-		
+		assertFileNumber(35, result);
 	}
 	
 	@Test
@@ -58,8 +57,7 @@ public class FileFinderUtilUnitTest
 		final List<File> result = FileFinderUtil.findFiles(mainFolder, subdirsToSearch, subdirsToIgnore, "java", null);
 		
 		// assert
-		assertEquals("number of java files", 20, result.size());
-		
+		assertFileNumber(20, result);
 	}
 	
 	@Test
@@ -73,7 +71,7 @@ public class FileFinderUtilUnitTest
 		final List<File> result = FileFinderUtil.findFiles(mainFolder, subdirsToSearch, subdirsToIgnore, "java", null);
 		
 		// assert
-		assertEquals("number of java files", 15, result.size());		
+		assertFileNumber(15, result);
 	}
 
 	@Test
@@ -86,7 +84,7 @@ public class FileFinderUtilUnitTest
 		final List<File> result = FileFinderUtil.findFiles(mainFolder, null, subdirsToIgnore, "java", null);
 		
 		// assert
-		assertEquals("number of java files", 20, result.size());		
+		assertFileNumber(20, result);
 	}	
 
 	@Test
@@ -102,7 +100,7 @@ public class FileFinderUtilUnitTest
 		final List<File> result = FileFinderUtil.findFiles(mainFolder, subdirsToSearch, subdirsToIgnore, "java", null);
 		
 		// assert
-		assertEquals("number of java files", 20, result.size());		
+		assertFileNumber(20, result);
 	}	
 	
 	@Test
@@ -112,7 +110,7 @@ public class FileFinderUtilUnitTest
 		final List<File> result = FileFinderUtil.findJavaFilesInMavenStructure(mainFolder);
 		
 		// assert
-		assertEquals("number of java files", 35, result.size());		
+		assertFileNumber(35, result);
 	}
 
 	@Test
@@ -127,7 +125,7 @@ public class FileFinderUtilUnitTest
 		final List<File> result = FileFinderUtil.findFiles(mainFolder, subdirsToSearch, subdirsToIgnore, "java", "Test");
 		
 		// assert
-		assertEquals("number of java files", 15, result.size());		
+		assertFileNumber(15, result);
 	}
 
 	@Test
@@ -137,7 +135,8 @@ public class FileFinderUtilUnitTest
 		final List<File> result = FileFinderUtil.findFiles(mainFolder, null, subdirsToIgnore, null, "Util.");
 		
 		// assert
-		assertEquals("number of java files", 8, result.size());		
+		assertFileNumber(8, result);
+
 	}
 
 	@Test
@@ -148,8 +147,21 @@ public class FileFinderUtilUnitTest
 		final List<File> result2 = FileFinderUtil.findFiles(mainFolder, null, subdirsToIgnore, ".java", "ZipUtilUnitTest");
 		
 		// assert
-		assertEquals("number of java files", 1, result1.size());		
-		assertEquals("number of java files", 1, result2.size());		
+		assertFileNumber(1, result1);
+		assertFileNumber(1, result2);
 	}
-	
+
+	private void assertFileNumber(final int expectedNumber, 
+			                      final List<File> actualFoundFiles)
+	{
+		if (expectedNumber != actualFoundFiles.size())
+		{
+			System.err.println("Unexpected file number:");
+			for (File file : actualFoundFiles)
+			{
+				System.err.println(file.getAbsolutePath());
+			}
+		}
+		assertEquals("number of java files", expectedNumber, actualFoundFiles.size());		
+	}
 }
