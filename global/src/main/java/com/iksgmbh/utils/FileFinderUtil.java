@@ -94,8 +94,8 @@ public class FileFinderUtil
 									final String fileExtension, 
 									final String partOfFileName) 
 		{
-			this.subdirsToSearch = subdirsToSearch;
-			this.subdirsToIgnore = subdirsToIgnore;
+			this.subdirsToSearch = unifyPaths(subdirsToSearch);
+			this.subdirsToIgnore = unifyPaths(subdirsToIgnore);
 			this.partOfFileName = partOfFileName;
 			this.fileExtension = fileExtension;
 			if (fileExtension != null && ! fileExtension.startsWith("."))
@@ -104,6 +104,20 @@ public class FileFinderUtil
 			}
 		}
         
+		private List<String> unifyPaths(final List<String> pathList)
+		{
+			if (pathList == null) return null;
+			
+			final List<String> toReturn = new ArrayList<String>();
+			
+			for (String path : pathList)
+			{
+				toReturn.add(StringUtils.replace(path, "\\", "/"));
+			}
+			
+			return toReturn;
+		}
+
 		@Override
 		public boolean accept(File dir, String name) 
 		{
