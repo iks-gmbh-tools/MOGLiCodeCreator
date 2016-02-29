@@ -547,10 +547,11 @@ List<span style='mso-spacerun:yes'>     </span></span><span lang=EN-US
 style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>v1.6.0<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
-mso-ansi-language:EN-US'>In the header of the main templates for input
-artefacts of this plugin the following artefact properties can be defined (<i
-style='mso-bidi-font-style:normal'>italic</i> properties are specific to this
-generator):<o:p></o:p></span></p>
+mso-ansi-language:EN-US'>In the header of the main templates<b
+style='mso-bidi-font-weight:normal'>*</b> for input artefacts<b
+style='mso-bidi-font-weight:normal'>*</b> of this plugin the following artefact
+properties can be defined (<i style='mso-bidi-font-style:normal'>italic</i>
+properties are specific to this generator):<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>1.&nbsp;<b
@@ -572,9 +573,10 @@ style='mso-bidi-font-weight:normal'>CreateNew</b> –<span class=GramE>&nbsp; If
 not defined, default ‘false’ is used. This should be the standard case for
 insert jobs. If the target folder or the target file does not exist, an error
 is reported. If ‘true’, the existing target file is deleted and a non-existing
-one created (as well as its non-existing target folder). This way, the VelocityModelBasedInserter
-also can also be used as a “model based file maker”! Note, that this property
-cannot be used in combination with Insert or Replace properties.<o:p></o:p></span></p>
+one created (as well as its non-existing target folder). This way, the
+VelocityModelBasedInserter also can also be used as a “model based file maker”!
+Note, that this property cannot be used in combination with Insert or Replace
+properties.<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>4.&nbsp;<b
@@ -640,22 +642,39 @@ Insert or CreateNew properties.<o:p></o:p></span></p>
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>10.&nbsp;<b
 style='mso-bidi-font-weight:normal'><i style='mso-bidi-font-style:normal'>InsertBelow</i></b>
-–&nbsp;Defines a sequence of chars (the marker) to be found in a single line within
-the target file after which the generated content is injected into the target file’s
-content. If the marker is found more than once, the insertion takes please for
-each occurrence of the marker, but only if the generated content is not already
-contained below the marker. Note, that this property cannot be used in
-combination with Insert, Replace or CreateNew properties.<o:p></o:p></span></p>
+–&nbsp;Defines a sequence of chars (the marker) to be found in a single line
+within the target file after which the generated content is injected into the
+target file’s content. If the marker is found more than once, the insertion
+takes please for each occurrence of the marker, but only if the generated
+content is not already contained below the marker. Note, that this property
+cannot be used in combination with Insert, Replace or CreateNew properties.<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>11.&nbsp;<b
 style='mso-bidi-font-weight:normal'><i style='mso-bidi-font-style:normal'>InsertAbove</i></b>
-–&nbsp;Defines a sequence of chars (the marker) to be found in a single line within
-the target file. The generated content is injected into the target file in
-front of this marker. If the marker is found more than once, the insertion
+–&nbsp;Defines a sequence of chars (the marker) to be found in a single line
+within the target file. The generated content is injected into the target file
+in front of this marker. If the marker is found more than once, the insertion
 takes please for each occurrence of the marker, but only if the generated
 content is not already contained above the marker. Note, that this property
 cannot be used in combination with Insert, Replace or CreateNew properties.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
+mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=msolistparagraph0 style='margin-left:0cm'><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:14.0pt;line-height:115%;mso-ansi-language:
+EN-US'>* </span></b><span lang=EN-US style='font-size:14.0pt;line-height:115%;
+mso-ansi-language:EN-US'>An input artefact is a subdirectory in </span><span
+lang=EN-GB style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>&lt;applicationRootDir&gt;/input/VelocityModelBasedLineInserter
+that contains a main template. A main template’s name contains ‘Main’. A main
+template may call other templates. All templates have the file extension tpl.
+Input artefacts of the VelocityModelBasedLineInserter must have at least one
+main template. If more than one main template <span class=GramE>exist</span>,
+they must refer to the same target file. The alphabetical order of input
+artefact subdirectories and of the main templates determines the order of generation
+events!</span><span lang=EN-US style='font-size:14.0pt;line-height:115%;
+mso-ansi-language:EN-US'><o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
 mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
@@ -741,9 +760,9 @@ complex example using the VelocityModelBasedLineInserter, execute MOGLiCC with
 “modelfile=</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> </span><span
 lang=EN-GB style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>ShoppingCart.txt”
 as content of
-&lt;applicationRootDir&gt;/input/StandardModelProvider/_model.properties. This
-will merge the data of the model file with the XMLBuilder-template which you
-can find in the directory &lt;applicationRootDir&gt;/input/
+&lt;applicationRootDir&gt;/input/StandardModelProvider/_model.properties. This will
+merge the data of the model file with the XMLBuilder-template which you can
+find in the directory &lt;applicationRootDir&gt;/input/
 VelocityModelBasedLineInserter.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>

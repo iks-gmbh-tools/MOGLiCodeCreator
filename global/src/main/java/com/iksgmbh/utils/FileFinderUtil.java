@@ -103,21 +103,7 @@ public class FileFinderUtil
 				this.fileExtension = "." + fileExtension;
 			}
 		}
-        
-		private List<String> unifyPaths(final List<String> pathList)
-		{
-			if (pathList == null) return null;
-			
-			final List<String> toReturn = new ArrayList<String>();
-			
-			for (String path : pathList)
-			{
-				toReturn.add(StringUtils.replace(path, "\\", "/"));
-			}
-			
-			return toReturn;
-		}
-
+		
 		@Override
 		public boolean accept(File dir, String name) 
 		{
@@ -132,8 +118,7 @@ public class FileFinderUtil
 				boolean isSubdirToSearch = false;
 				for (String subdir : subdirsToSearch) 
 				{
-					subdir = StringUtils.replace(subdir, "/", "\\");
-					if (dir.getAbsolutePath().contains(subdir)) 
+					if (getUnifiedPath(dir).contains(subdir)) 
 						isSubdirToSearch = true;
 				}
 				
@@ -146,8 +131,7 @@ public class FileFinderUtil
 				boolean isSubdirToSearch = true;
 				for (String subdir : subdirsToIgnore) 
 				{
-					subdir = StringUtils.replace(subdir, "/", "\\");
-					if (dir.getAbsolutePath().contains(subdir)) 
+					if (getUnifiedPath(dir).contains(subdir)) 
 						isSubdirToSearch = false;
 				}
 				
@@ -167,6 +151,33 @@ public class FileFinderUtil
 			return true;
 		}
 		
-	}
+		private String getUnifiedPath(File dir) {
+			String path = dir.getAbsolutePath();
+			return getUnifiedPath(path);
+		}
 		
+		/**
+		 * Transforms possibly occurring Windows specific path separators into uniquely valid path separators.   
+		 */
+		private String getUnifiedPath(final String path) {
+			return StringUtils.replace(path, "\\", "/");
+		}
+        
+		private List<String> unifyPaths(final List<String> pathList)
+		{
+			if (pathList == null) return null;
+			
+			final List<String> toReturn = new ArrayList<String>();
+			
+			for (String path : pathList)
+			{
+				toReturn.add( getUnifiedPath(path) );
+			}
+			
+			return toReturn;
+		}
+
+		
+	}
+			
 }

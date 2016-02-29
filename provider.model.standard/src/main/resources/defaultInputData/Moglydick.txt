@@ -169,9 +169,9 @@ class Intro2
 	metainfo numberOfFrames 4		
 	metainfo secondsToSleepWithEachFrame 2
 
-	metainfo backgroundFillingPatternLine9  "                   Animated Console Comic Strip Pictures                     "	
+	metainfo backgroundFillingPatternLine9  "                     Animated Console Comic Strip Pictures                   "	
 	metainfo backgroundFillingPatternLine10 " "	
-    metainfo backgroundFillingPatternLine11 "                                 present                                     "	
+    metainfo backgroundFillingPatternLine11 "                                   present                                   "	
     metainfo backgroundFillingPatternLine12 " "    
     metainfo backgroundFillingPatternLine13 " "    
     metainfo backgroundFillingPatternLine14 " "    
@@ -985,8 +985,8 @@ class WhaleHuntingFish4
 	metainfo motionSpeedY 0      		    				
 	metainfo numberOfFrames 3
 	
-	metainfo backgroundFillingPatternLine17 " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .-={ -=(. . . . . ."  
-	metainfo backgroundFillingPatternLine18 ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .-=[. . . . . . . "  
+	metainfo backgroundFillingPatternLine17 ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .-={ -=(. . . . . . "  
+	metainfo backgroundFillingPatternLine18 " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .-=[. . . . . . ."  
 	
 	attribute image1
         metainfo spaceholder O                              

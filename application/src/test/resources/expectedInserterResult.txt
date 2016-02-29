@@ -1,36 +1,38 @@
-// This BeanFactory class is newly created by the VelocityModelBasedInserter
-package com.iksgmbh.test;  // this line was inserted above the insertAbove marker
-/** This is the InsertAbove Marker for the MOGLi Code Creator - Do not modify this line! */
-public class BeanFactory {
-
-/** This is the StartReplace Marker for the MOGLi Code Creator - Do not modify this line! */
-	public static Person getPerson() {;
-		return new Person();
-	}
-
-	public static Contact getContact() {;
-		return new Contact();
-	}
-
-	public static Office getOffice() {;
-		return new Office();
-	}
-
-	public static Member getMember() {;
-		return new Member();
-	}
-
-	public static Address getAddress() {;
-		return new Address();
-	}
-
-	public static _Misc get_Misc() {;
-		return new _Misc();
-	}
-
-/** This is the EndReplace Marker for the MOGLi Code Creator - Do not modify this line! */
-
-}
-/** This is the InsertBelow Marker for the MOGLi Code Creator - Do not modify this line! */
-	public static final int i = 0; // this line was inserted above the insertAbove marker
-//End of file
+<?xml version="1.0" encoding="UTF-8"?>
+<xyz:shoppingCart xmlns:xyz=http://www.w3.org/XYZ/html5/>
+<xyz:shoppingCartVersion>1.0</xyz:shoppingCartVersion>
+<xyz:Customer name="Pete Pepper" age="33" >
+	<xyz:address street="1234th Avenue" city="Minitropolis" country="Wonderland" >
+	<xyz:BankAccount number="12345678" company="WorldBank" >
+</xyz:BankAccount>
+<xyz:boughItemList>
+	<xyz:BlueRay-Player>
+		<xyz:producer name="CheapAndCool" location="China" >
+		<xyz:type code="HH123" decription="Luxury" >
+		<xyz:price amount="99.90€" VATincluded="false" >
+	</xyz:BlueRay-Player>
+	<xyz:Bubblegum>
+		<xyz:type color="green" taste="mint" >
+		<xyz:price amount="0.10€" VATincluded="true" >
+	</xyz:Bubblegum>
+	<xyz:Spacecraft>
+		<xyz:speed m/s="299,792,485" description="speed of light" >
+		<xyz:price amount="1,000,000,000,000,000€" VATincluded="false" >
+	</xyz:Spacecraft>
+</xyz:boughItemList>
+<xyz:CurrentAdvertising>
+	<xyz:Spacecraft>
+		<xyz:speed m/s="299,792,485" description="speed of light" >
+		<xyz:price amount="1,000,000,000,000,000€" VATincluded="false" >
+	</xyz:Spacecraft>
+	<xyz:Lollipop>
+		<xyz:type color="red" taste="cherry" >
+		<xyz:price amount="0.09€" VATincluded="true" >
+	</xyz:Lollipop>
+	<xyz:DVD-Player>
+		<xyz:producer name="CheapAndCool" location="Taiwan" >
+		<xyz:type code="HH234" >
+		<xyz:price amount="19.90€" VATincluded="true" >
+	</xyz:DVD-Player>
+</xyz:CurrentAdvertising>
+</xyz:shoppingCart>

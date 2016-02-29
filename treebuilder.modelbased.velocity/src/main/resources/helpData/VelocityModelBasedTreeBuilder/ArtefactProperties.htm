@@ -17,6 +17,7 @@ attributes which you can set for your purposes in the artefact</title>
 href="ArtefactProperties-Dateien/colorschememapping.xml">
 <!--[if gte mso 9]><xml>
  <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
   <w:TrackMoves>false</w:TrackMoves>
   <w:TrackFormatting/>
   <w:HyphenationZone>21</w:HyphenationZone>
@@ -390,6 +391,9 @@ p.msopapdefault, li.msopapdefault, div.msopapdefault
 	font-size:12.0pt;
 	font-family:"Times New Roman","serif";
 	mso-fareast-font-family:"Times New Roman";}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
 .MsoChpDefault
 	{mso-style-type:export-only;
 	mso-default-props:yes;
@@ -542,8 +546,9 @@ List<span style='mso-spacerun:yes'>     </span></span><span lang=EN-US
 style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>v1.6.0<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
-mso-ansi-language:EN-US'>In the header of the main templates for input
-artefacts of this plugin the following artefact properties can be defined (<i
+mso-ansi-language:EN-US'>In the artefact propertiey file<b style='mso-bidi-font-weight:
+normal'>*</b> of input artefacts<b style='mso-bidi-font-weight:normal'>*</b> of
+this plugin the following artefact properties can be defined (<i
 style='mso-bidi-font-style:normal'>italic</i> properties are specific to this
 generator):<o:p></o:p></span></p>
 
@@ -556,17 +561,18 @@ address the directory where the start script startMOGLiCodeCreator is located.<o
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>2.&nbsp;<b
-style='mso-bidi-font-weight:normal'>RootName</b> –&nbsp;Name of the top folder created
-in the target directory. If not set, the artifact name is used as default.<o:p></o:p></span></p>
+style='mso-bidi-font-weight:normal'>RootName</b> –&nbsp;Name of the top folder
+created in the target directory. If not set, the artifact name is used as
+default.<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>3.&nbsp;<b
-style='mso-bidi-font-weight:normal'>CreateNew</b> –&nbsp;If ‘false’, a non-existing
-target directory produces an error, but a non-existing output artefact is
-created (when the target directory exists) and an already existing target
-directory (defined by the ‘targetDir’ property) will not be modified. If ‘true’,
-the modifications depend on the CleanTarget and PreserveFiles properties. If
-not set, default ‘false’ is used. <o:p></o:p></span></p>
+style='mso-bidi-font-weight:normal'>CreateNew</b> –&nbsp;If ‘false’, a
+non-existing target directory produces an error, but a non-existing output
+artefact is created (when the target directory exists) and an already existing
+target directory (defined by the ‘targetDir’ property) will not be modified. If
+‘true’, the modifications depend on the CleanTarget and PreserveFiles
+properties. If not set, default ‘false’ is used. <o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>4.&nbsp;<b
@@ -577,25 +583,27 @@ not set, the artifact is generated for all models. <o:p></o:p></span></p>
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>5.&nbsp;<b
 style='mso-bidi-font-weight:normal'>OutputEncodingFormat</b> –&nbsp;Encoding
-applied when replacing placeholders within text files. If not set, ‘UTF-8’ Is
-used as default. <o:p></o:p></span></p>
+applied when replacing placeholders within text files. If not set, ‘UTF-8’ <span
+class=GramE>Is</span> used as default. <o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>6.&nbsp;<b
 style='mso-bidi-font-weight:normal'>SkipGeneration</b> –&nbsp;If ‘true’, code
-supposed to be created by this template is not generated. Default is false. Can
-be used to suppress the generation of a specific artefact. The following use
-cases are applicable: a)<span style='mso-spacerun:yes'>  </span>@SkipGeneration
-$isDatabaseRelevant, b) @SkipGeneration NOT $isDatabaseRelevant, c)
-@SkipGeneration $type == DomainObject, d) @SkipGeneration $type !=
-DatabaseObject. Since 1.2.0 – c, d Since 1.6.0<o:p></o:p></span></p>
+supposed to be created by this template is not generated. Default is false. <span
+class=GramE>Can be used to suppress the generation of a specific artefact.</span>
+The following use cases are applicable: a<span class=GramE>)<span
+style='mso-spacerun:yes'>  </span>@SkipGeneration</span> $isDatabaseRelevant,
+b) @SkipGeneration NOT $isDatabaseRelevant, c) @SkipGeneration $type ==
+DomainObject, d) @SkipGeneration $type != DatabaseObject. Since 1.2.0 – c, d <span
+class=GramE>Since</span> 1.6.0<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>7.&nbsp;<b
 style='mso-bidi-font-weight:normal'><i style='mso-bidi-font-style:normal'>PreserveFiles</i></b>
 –&nbsp;If ‘true’, already existing files in the target directory (defined by
 the ‘targetDir’ property) will not be overwritten. If not set, default ‘false’
-is used. Note, that this property cannot be used in combination with CleanTarget.<o:p></o:p></span></p>
+is used. Note, that this property cannot be used in combination with
+CleanTarget.<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>8.&nbsp;<b
@@ -609,9 +617,9 @@ property cannot be used in combination with PreserveFiles.<o:p></o:p></span></p>
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>9.&nbsp;<b
 style='mso-bidi-font-weight:normal'><i style='mso-bidi-font-style:normal'>Exclude</i></b>
 –&nbsp;Comma separated list of files or directories that do not belong to the
-artifact and that are ignored when copying the file structure. The artifact.properties
-file is automatically excluded. Useful for e.g. ignoring data only needed by your
-version control system.<o:p></o:p></span></p>
+artifact and that are ignored when copying the file structure. The
+artifact.properties file is automatically excluded. <span class=GramE>Useful
+for e.g. ignoring data only needed by your version control system.</span><o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>10.&nbsp;<b
@@ -632,8 +640,25 @@ style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>12.&nbsp;<b
 style='mso-bidi-font-weight:normal'><i style='mso-bidi-font-style:normal'>RenameDir</i></b>
 –&nbsp;Defines a file renaming that causes a directory from the artifact’s
 input directory to have a different name in the artifact’s output and target
-directory. In this way parts of the file path can be replaced, e.g. ‘placeholderPath”
-by ‘com.iksgmbh.example”.<o:p></o:p></span></p>
+directory. In this way parts of the file path can be replaced, e.g.
+‘placeholderPath” by ‘com.iksgmbh.example”.<o:p></o:p></span></p>
+
+<p class=msolistparagraph0 style='margin-left:14.2pt;text-indent:-14.2pt'><span
+lang=EN-US style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=msolistparagraph0 style='margin-left:0cm'><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:14.0pt;line-height:115%;mso-ansi-language:
+EN-US'>* </span></b><span lang=EN-US style='font-size:14.0pt;line-height:115%;
+mso-ansi-language:EN-US'>An input artefact is a subdirectory in </span><span
+lang=EN-GB style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>&lt;applicationRootDir&gt;/input/VelocityModelBasedTreeBuilder
+that contains a file named artefact.properties which contains information that
+is for the other two generator types contained in the template header. All files
+and folders found in the input artefact’s subdirectory belong to the tree that
+this generator is going to build for this input artefact. A file or folder may
+be excluded from the input artefact (see <i style='mso-bidi-font-style:normal'>Exclude</i>
+property above). The artefact.properties is by default not part of the input
+artefact.</span><span lang=EN-US style='font-size:14.0pt;line-height:115%;
+mso-ansi-language:EN-US'><o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:14.2pt;text-indent:-14.2pt'><span
 lang=EN-US style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
@@ -714,13 +739,19 @@ href="https://github.com/iks-github/MOGLiCodeCreator/wiki/Hello%20World%20TreeBu
 World example</a>.</span><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-GB
-style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>To study a
-complex example using the VelocityModelBasedTreeBuilder, execute MOGLiCC with ‘modelfile=MavenProjectWithJavaDomainModel.txt”
-as content of
+style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>To study a complex
+example using the VelocityModelBasedTreeBuilder, execute MOGLiCC with
+‘modelfile=MavenProjectWithJavaDomainModel.txt” as content of
 &lt;applicationRootDir&gt;/input/StandardModelProvider/_model.properties. This
 will merge the data of the model file with the MOGLiCC_JavaBeanProject-template
 which you can find in the directory
 &lt;applicationRootDir&gt;/input/VelocityModelBasedTreeBuilder.<o:p></o:p></span></p>
+
+<p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-GB
+style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>Finally, you
+can follow the exercise of a <a
+href="https://github.com/iks-github/MOGLiCodeCreator/wiki/MOGLiCC-Tutorial">MOGLiCC
+Tutorial</a>.<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:14.2pt;text-indent:-14.2pt'><span
 lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>

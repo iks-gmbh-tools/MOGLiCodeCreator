@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 IKS Gesellschaft fuer Informations- und Kommunikationssysteme mbH
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.iksgmbh.moglicc.systemtest;
 
 import java.io.File;
@@ -51,6 +36,10 @@ public class I_VelocityModelBasedTreeBuilderAcceptanceSystemTest extends __Abstr
 	@Test
 	public void createsGeneratorResultFiles() throws IOException {
 		// prepare test
+		final File oldResultDir = new File(applicationRootDir, VelocityModelBasedTreeBuilderStarter.MOGLICC_JAVA_BEAN_PROJECT);
+		FileUtil.deleteDirWithContent(applicationInputDir);
+		FileUtil.deleteDirWithContent(oldResultDir);
+		assertFileDoesNotExist(oldResultDir);
 		FileUtil.deleteDirWithContent(applicationOutputDir);
 		assertFileDoesNotExist(applicationOutputDir);
 
@@ -116,6 +105,7 @@ public class I_VelocityModelBasedTreeBuilderAcceptanceSystemTest extends __Abstr
                 "@TargetDir <applicationRootDir>" + FileUtil.getSystemLineSeparator() +
                 "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@OutputEncodingFormat ASCII" + FileUtil.getSystemLineSeparator() +
+                "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
         		"@ReplaceIn " + UMLAUT_TEST_FILE + " " + PLACEHOLDER + " äöüßÄÖÜ");
 		final File contentFile = new File(artefactPropertiesFile.getParentFile(), "UmlautTestFile.txt");
 		MOGLiFileUtil.createNewFileWithContent(contentFile, PLACEHOLDER);
@@ -135,6 +125,7 @@ public class I_VelocityModelBasedTreeBuilderAcceptanceSystemTest extends __Abstr
 		MOGLiFileUtil.createNewFileWithContent(artefactPropertiesFile, "@RootName TreeBuilderGeneratorUmlautTest" + FileUtil.getSystemLineSeparator() +
                 "@TargetDir <applicationRootDir>" + FileUtil.getSystemLineSeparator() +
                 "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                "@NameOfValidModel MOGLiCC_JavaBeanModel" + FileUtil.getSystemLineSeparator() +
         		"@ReplaceIn " + UMLAUT_TEST_FILE + " " + PLACEHOLDER + " äöüßÄÖÜ");
 		final File contentFile = new File(artefactPropertiesFile.getParentFile(), "UmlautTestFile.txt");
 		MOGLiFileUtil.createNewFileWithContent(contentFile, PLACEHOLDER);
@@ -160,6 +151,7 @@ public class I_VelocityModelBasedTreeBuilderAcceptanceSystemTest extends __Abstr
 		final File artefactPropertiesFile = prepareArtefactDirectory("artefact.properties", GENERATOR_PLUGIN_ID, artefactName);
 		MOGLiFileUtil.createNewFileWithContent(artefactPropertiesFile, "@RootName " + targetDir + " " + FileUtil.getSystemLineSeparator() +
                 "@TargetDir <applicationRootDir>" + FileUtil.getSystemLineSeparator() +
+                "@NameOfValidModel TreeBuilderRenamingTest" + FileUtil.getSystemLineSeparator() +
                 "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                 "@RenameFile " + filenameToReplace + " " + filenameReplaced + FileUtil.getSystemLineSeparator() +
                 "@ReplaceIn " + filenameReplaced + " " + PLACEHOLDER + " " + contentToReplace + FileUtil.getSystemLineSeparator());

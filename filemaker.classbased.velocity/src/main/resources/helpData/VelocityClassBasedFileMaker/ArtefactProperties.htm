@@ -555,8 +555,10 @@ List<span style='mso-spacerun:yes'>     </span></span><span lang=EN-US
 style='font-size:12.0pt;line-height:115%;mso-ansi-language:EN-US'>v1.6.0<o:p></o:p></span></p>
 
 <p class=MsoNormal><span lang=EN-US style='font-size:14.0pt;line-height:115%;
-mso-ansi-language:EN-US'>In the header of the main templates for input
-artefacts of this plugin the following artefact properties can be defined:<o:p></o:p></span></p>
+mso-ansi-language:EN-US'>In the header of the main templates<b
+style='mso-bidi-font-weight:normal'>*</b> for input artefacts<b
+style='mso-bidi-font-weight:normal'>*</b> of this plugin the following artefact
+properties can be defined:<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>1.&nbsp;<b
@@ -577,9 +579,9 @@ style='mso-bidi-font-weight:normal'>CreateNew</b> –&nbsp;If ‘true’, both t
 target folder (if not existing) is created and the content of the existing
 target file is replaced. If ‘false’ and the target folder not existing, an
 error will be reported. If ‘false’ and the target folder <span class=GramE>does</span>
-exist, the target file will be created if not existing. If ‘false’ and the target
-file <span class=GramE>does</span> exist in the target folder, the existing
-file will remain unchanged. Default is false.<o:p></o:p></span></p>
+exist, the target file will be created if not existing. If ‘false’ and the
+target file <span class=GramE>does</span> exist in the target folder, the
+existing file will remain unchanged. Default is false.<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-US
 style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'>4.&nbsp;<b
@@ -614,6 +616,21 @@ number signs and its following chars as comment, these comments are removed
 during the Velocity merge of model and template. Thus, no number sign can get
 through this merge. As a workaround to get number sign in the final output, a
 number sign placeholder can be defined by this artefact property. Since 1.6.0<o:p></o:p></span></p>
+
+<p class=msolistparagraph0 style='margin-left:0cm'><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:14.0pt;line-height:115%;mso-ansi-language:
+EN-US'><o:p>&nbsp;</o:p></span></b></p>
+
+<p class=msolistparagraph0 style='margin-left:0cm'><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:14.0pt;line-height:115%;mso-ansi-language:
+EN-US'>* </span></b><span lang=EN-US style='font-size:14.0pt;line-height:115%;
+mso-ansi-language:EN-US'>An input artefact is a subdirectory in </span><span
+lang=EN-GB style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>&lt;applicationRootDir&gt;/input/VelocityClassBasedFileMaker
+that contains a main template. A main template’s name contains ‘Main’. A main
+template may call other templates. All templates have the file extension tpl.
+Input artefacts of the VelocityClassBasedFileMaker must have exactly one main
+template. </span><span lang=EN-US style='font-size:14.0pt;line-height:115%;
+mso-ansi-language:EN-US'><o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:14.2pt;text-indent:-14.2pt'><span
 lang=EN-US style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
@@ -695,14 +712,21 @@ href="https://github.com/iks-github/MOGLiCodeCreator/wiki/Hello%20World%20FileMa
 World example</a>.</span><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-GB
-style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>To study a
-complex example using the VelocityClassBasedFileMaker, execute MOGLiCC with
-“modelfile=</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> </span><span
-lang=EN-GB style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>MavenProjectWithJavaDomainModel.txt”
-as content of &lt;applicationRootDir&gt;/input/StandardModelProvider/_model.properties.
-This will merge the data of the model file with the MOGLiJavaBean-templates
-which you can find in the directory &lt;applicationRootDir&gt;/input/
+style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>To study a complex
+example using the VelocityClassBasedFileMaker, execute MOGLiCC with “modelfile=</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> </span><span lang=EN-GB
+style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>MavenProjectWithJavaDomainModel.txt”
+as content of
+&lt;applicationRootDir&gt;/input/StandardModelProvider/_model.properties. This
+will merge the data of the model file with the MOGLiJavaBean-templates which
+you can find in the directory &lt;applicationRootDir&gt;/input/
 VelocityClassBasedFileMaker.<o:p></o:p></span></p>
+
+<p class=msolistparagraph0 style='margin-left:0cm'><span lang=EN-GB
+style='font-size:14.0pt;line-height:115%;mso-ansi-language:EN-GB'>Finally, you
+can follow the exercise of a <a
+href="https://github.com/iks-github/MOGLiCodeCreator/wiki/MOGLiCC-Tutorial">MOGLiCC
+Tutorial</a>.<o:p></o:p></span></p>
 
 <p class=msolistparagraph0 style='margin-left:14.2pt;text-indent:-14.2pt'><span
 lang=EN-GB style='mso-ansi-language:EN-GB'><o:p>&nbsp;</o:p></span></p>
