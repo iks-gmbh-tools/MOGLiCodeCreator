@@ -37,8 +37,8 @@ import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo.HierarchyLe
 
 public class ModelEnricherUnitTest
 {
-	private static boolean ATTRIBUTE_IN_ROWS = true;
-	private static boolean ATTRIBUTE_IN_COLUMNS = false;
+	private static boolean DEFAULT_ROTATION = true;
+	private static boolean ROTATED_MATRIX = false;
 	
 	private Properties pluginProperties;
 
@@ -54,7 +54,7 @@ public class ModelEnricherUnitTest
 	{
 		// arrange
 		final BuildUpModel model = buildTestStandardModel();
-		final ExcelData excelData = buildNonOverlappingExcelTestData(ATTRIBUTE_IN_ROWS);
+		final ExcelData excelData = buildNonOverlappingExcelTestData(DEFAULT_ROTATION);
 		excelData.attributeSubset.put(1, new AttributeSubset(1, 2));
 		
 		// act
@@ -73,10 +73,10 @@ public class ModelEnricherUnitTest
 	{
 		// arrange
 		final BuildUpModel model = buildTestStandardModel();
-		final ExcelData excelData = buildNonOverlappingExcelTestData(ATTRIBUTE_IN_COLUMNS);
+		final ExcelData excelData = buildNonOverlappingExcelTestData(ROTATED_MATRIX);
 		excelData.attributeSubset.put(1, new AttributeSubset(2, 1));
 		pluginProperties.put(model.getName() + ExcelStandardModelProviderStarter.ROTATION_MODE_IDENTIFIER, 
-	                         ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_FIRST_COLUMN);
+	                         ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_FIRST_ROW);
 		
 		// act
 		ModelEnricher.doYourJob(pluginProperties, excelData, model);
@@ -108,7 +108,7 @@ public class ModelEnricherUnitTest
 	{
 		// arrange
 		final BuildUpModel model = buildTestStandardModel();
-		final ExcelData excelData = buildNonOverlappingExcelTestData(ATTRIBUTE_IN_ROWS);
+		final ExcelData excelData = buildNonOverlappingExcelTestData(DEFAULT_ROTATION);
 		excelData.matrixData[0][0][0] = "classMetaInfoValue";
 		pluginProperties.put(model.getName() + ExcelStandardModelProviderStarter.FIRST_CELL_USAGE_IDENTIFIER, "classMetaInfoName");
 		
@@ -125,7 +125,7 @@ public class ModelEnricherUnitTest
 	{
 		// arrange
 		final BuildUpModel model = buildTestStandardModel();
-		final ExcelData excelData = buildNonOverlappingExcelTestData(ATTRIBUTE_IN_ROWS);
+		final ExcelData excelData = buildNonOverlappingExcelTestData(DEFAULT_ROTATION);
 		
 		// act
 		ModelEnricher.doYourJob(pluginProperties, excelData, model);
@@ -149,9 +149,9 @@ public class ModelEnricherUnitTest
 	{
 		// arrange
 		final BuildUpModel model = buildTestStandardModel();
-		final ExcelData excelData = buildOverlappingExcelTestData(ATTRIBUTE_IN_COLUMNS);
+		final ExcelData excelData = buildOverlappingExcelTestData(ROTATED_MATRIX);
 		pluginProperties.put(model.getName() + ExcelStandardModelProviderStarter.ROTATION_MODE_IDENTIFIER, 
-				             ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_FIRST_COLUMN);
+				             ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_FIRST_ROW);
 		
 		// act
 		ModelEnricher.doYourJob(pluginProperties, excelData, model);
@@ -174,7 +174,7 @@ public class ModelEnricherUnitTest
 	public void enrichesOverlappingModelData() throws Exception
 	{
 		// arrange
-		final ExcelData excelData = buildOverlappingExcelTestData(ATTRIBUTE_IN_ROWS);
+		final ExcelData excelData = buildOverlappingExcelTestData(DEFAULT_ROTATION);
 		final BuildUpModel model = buildTestStandardModel();
 		ClassDescriptor classDescriptor = new BuildUpClassDescriptor(new ClassNameData("ClassC"));
 		model.addClassDescriptor(classDescriptor);
@@ -209,7 +209,7 @@ public class ModelEnricherUnitTest
 	{
 		// arrange
 		final BuildUpModel model = buildTestStandardModel();
-		final ExcelData excelData = buildOverlappingExcelTestData(ATTRIBUTE_IN_ROWS);
+		final ExcelData excelData = buildOverlappingExcelTestData(DEFAULT_ROTATION);
 		excelData.matrixData[1][0][1] = "AttrMetaInfoA1";
 		
 		try {
@@ -293,7 +293,7 @@ public class ModelEnricherUnitTest
 		return toReturn;
 	}
 
-	private ExcelData buildNonOverlappingExcelTestData(final boolean attributeInRows)
+	private ExcelData buildNonOverlappingExcelTestData(final boolean defaultRotation)
 	{
 		final ExcelData excelData = new ExcelData();
 		final HashMap<String, HashMap<Integer, String>> renamingSetting = new HashMap<String, HashMap<Integer, String>>();
@@ -302,20 +302,20 @@ public class ModelEnricherUnitTest
         final String[][] matrix1;
 
         excelData.classNames.add("ClassB");
-        if (attributeInRows)
+        if (defaultRotation)
         {        	
         	final String[][] tmpMatrix = { {"firstCellContent", "AttrMetaInfoB1",  "AttrMetaInfoB2"}, 
-        			                       {"AttrB1",           "metaInfoValue11", "metaInfoValue12"},
-        			                       {"AttrB2",           "metaInfoValue21", "metaInfoValue22"},
-        			                       {"AttrB3",           "metaInfoValue31", "metaInfoValue32"} };
-        	matrix1 = tmpMatrix;
+                                           {"AttrB1",           "metaInfoValue11", "metaInfoValue12"},
+                                           {"AttrB2",           "metaInfoValue21", "metaInfoValue22"},
+                                           {"AttrB3",           "metaInfoValue31", "metaInfoValue32"} };
+            matrix1 = tmpMatrix;
         }
         else
         {
         	final String[][] tmpMatrix = { {"firstCellContent", "AttrB1",          "AttrB2",          "AttrB3"}, 
                                            {"AttrMetaInfoB1",   "metaInfoValue11", "metaInfoValue21", "metaInfoValue31"},
                                            {"AttrMetaInfoB2",   "metaInfoValue12", "metaInfoValue22", "metaInfoValue32"} };
-        	matrix1 = tmpMatrix;
+            matrix1 = tmpMatrix;
         }
         
         final String[][][] matrixData = {   matrix1  };

@@ -32,7 +32,7 @@ II Perform the Release
  
 III Finishing steps
 
-1. Perform the complete quality assurance of II 3 again, to check that the new versions (set in II 6) are set correctly.
+1. Refresh your workspace and perform the complete quality assurance of II 3 again, to check that the new versions (set in II 6) are set correctly.
    When using the maven scripts, make sure you execute "mvn clean install" on the parent. Otherwise artefacts will not be found.
 2. Add new files (git add .) and then commit the current sources in the master branch with comment (git commit -a -m 'Release X.Y.Z').
 3. Create a tag for the current release (git tag vX.Y.Z).

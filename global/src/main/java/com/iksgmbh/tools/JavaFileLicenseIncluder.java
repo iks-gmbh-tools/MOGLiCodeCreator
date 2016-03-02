@@ -25,8 +25,8 @@ import com.iksgmbh.utils.FileUtil;
 
 public class JavaFileLicenseIncluder 
 {
-	final static String DEFAULT_SRC_DIR = "C:\\data\\Reik\\dev\\eclipse\\workspaces\\MOGLiCodeCreatorWithRemoteToIksGithub";
-	final static String LICENSE_FILE = ".\\src\\main\\resources\\License.txt";
+	final static String DEFAULT_SRC_DIR = "/your/local/path/to/the/eclipse/workspace";
+	final static String LICENSE_FILE = "./src/main/resources/License.txt";
 
 	private String sourceDir;
 	private String licenseJavaComment;

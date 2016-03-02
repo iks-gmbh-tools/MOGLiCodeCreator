@@ -3,7 +3,7 @@
 #                              Create your own console comic strip  !
 #
 #    Basic idea:    A comic strip consists of one or more sequences. Each sequence consists
-#                of a number of frames. Each frame consists of the following parts:
+#                   of a number of frames. Each frame consists of the following parts:
 #
 #    +---------------------------------------------------------------------------------+
 #    |                                                                                 |
