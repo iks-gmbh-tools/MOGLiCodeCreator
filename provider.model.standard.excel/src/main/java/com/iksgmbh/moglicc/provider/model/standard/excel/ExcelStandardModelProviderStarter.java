@@ -53,8 +53,8 @@ public class ExcelStandardModelProviderStarter implements ModelProvider {
 	public static final String MATRIX_IDENTIFIER = ".matrix.";
 	public static final String ROTATION_MODE_IDENTIFIER = ".ROTATION.MODE";
 	public static final String ALLOW_METAINFO_DOUBLES_IDENTIFIER = ".AllowMetaInfoDoubles";
-	public static final String ROTATION_MODE_ATTRIBUTE_IN_ROWS = "Attributes in rows";
-	public static final String ROTATION_MODE_ATTRIBUTE_IN_COLUMS = "Attributes in columns";
+	public static final String ROTATION_MODE_ATTRIBUTE_IN_FIRST_ROW = "Attribute Names In First Row";
+	public static final String ROTATION_MODE_ATTRIBUTE_IN_FIRST_COLUMN = "Attribute Names In First Column";
 	public static final String RENAME_ATTRIBUTE_METAINFO_OCCURRENCE = ".rename.AttributeMetaInfo.Occurrence.";
 	public static final String RENAME_ATTRIBUTE_NAME_OCCURRENCE = ".rename.AttributeName.Occurrence.";
 	public static final String ERROR_PREFIX = "Problem with model read from " + PLUGIN_ID + ": ";

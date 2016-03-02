@@ -377,12 +377,12 @@ public class ModelEnricher
 	private boolean isMatrixToRotate()
 	{
 		final String rotationMode = (String) pluginProperties.get(modelName + ExcelStandardModelProviderStarter.ROTATION_MODE_IDENTIFIER);
-		if (ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_COLUMS.equalsIgnoreCase(rotationMode))
+		if (ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_FIRST_ROW.equalsIgnoreCase(rotationMode.trim()))
 		{
 			return true;
 		}
 		
-		// ROTATION MODE: ATTRIBUTE IN ROWS (this is default)
+		// ROTATION MODE: ROTATION_MODE_ATTRIBUTE_IN_FIRST_ROW (this is the default rotation mode)
 		return false;
 	}
 

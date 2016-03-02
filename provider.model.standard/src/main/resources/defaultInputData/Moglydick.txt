@@ -1,77 +1,77 @@
 ﻿################################################################################################################################
 #
-#                              Create your own console comic strip  !
+#                            Create your own console comic strip  !
 #
-#     Basic idea: A comic strip consists of one or more sequences. Each sequence consists
-#                 of a number of frames. Each frame consists of the following parts:
-#      
-#	  +---------------------------------------------------------------------------------+
-#	  |                                                                                 |
-#	  |                                   Static Header                                 |
-#	  |                                                                                 |
-#	  +---------------------------------------------------------------------------------+
-#	  |                                                                                 |
-#	  |                                  Dynamic Area                                   |
-#	  |                                                                                 |
-#	  |                    +---------------------------------------+                    |
-#	  |                    |S                                      |                    |
-#	  |                    |              Image Area               |                    |
-#	  |                    |                                       |                    |
-#     |                    +---------------------------------------+                    |
-#	  |                                                                                 |
-#	  +---------------------------------------------------------------------------------+
-#	  |                                                                                 |
-#	  |                                 Static Footer                                   |
-#	  |                                                                                 |
-#	  +---------------------------------------------------------------------------------+
-#	  
-#     The whole frame is subdivided into two static areas which are constant for all sequences.
-#     The dynamic area is constant for all frames in each sequence. In case there is no image 
-#     defined or the image is completely located outside the dynamic area, the dynamic area 
-#     contains only the defined background. Otherwise the image represents the foreground  
-#     that hides the background. 
+#	Basic idea:	A comic strip consists of one or more sequences. Each sequence consists
+#				of a number of frames. Each frame consists of the following parts:
 #
-#	  The foreground may be embedded into the background in one of three ways. First, there is 
-#     no transparancy, i.e. spaces in the foreground hides the background. Second, each white space
-#     in the foreground is replaced by the corresponding background char (Full transparancy). 
-#     Third, the white space is only replaced at the margin of the image. This means: If the
-#     image is represented by a rectangle surrounded by white space, only the white space
-#     outside the rectangle would be replaced but not the whitespace within the rectangle.
+#	+---------------------------------------------------------------------------------+
+#	|                                                                                 |
+#	|                                   Static Header                                 |
+#	|                                                                                 |
+#	+---------------------------------------------------------------------------------+
+#	|                                                                                 |
+#	|                                  Dynamic Area                                   |
+#	|                                                                                 |
+#	|                    +---------------------------------------+                    |
+#	|                    |S                                      |                    |
+#	|                    |              Image Area               |                    |
+#	|                    |                                       |                    |
+#	|                    +---------------------------------------+                    |
+#	|                                                                                 |
+#	+---------------------------------------------------------------------------------+
+#	|                                                                                 |
+#	|                                 Static Footer                                   |
+#	|                                                                                 |
+#	+---------------------------------------------------------------------------------+
+#	
+#	The whole frame is subdivided into two static areas which are constant for all sequences.
+#	The dynamic area is constant for all frames in each sequence. In case there is no image 
+#	defined or the image is completely located outside the dynamic area, the dynamic area 
+#	contains only the defined background. Otherwise the image represents the foreground  
+#	that hides the background. 
 #
-#     The foreground (the image) can move within the dynamic area (but not into the static areas!). 
-#     The movement can be in any direction: horizontally, vertically or both in different speeds.
+#	The foreground may be embedded into the background in one of three ways. First, there is 
+#	no transparancy, i.e. spaces in the foreground hides the background. Second, each white space
+#	in the foreground is replaced by the corresponding background char (Full transparancy). 
+#	Third, the white space is only replaced at the margin of the image. This means: If the
+#	image is represented by a rectangle surrounded by white space, only the white space
+#	outside the rectangle would be replaced but not the whitespace within the rectangle.
 #
-#     The foreground consists of a series of single image pictures that are rotationally used
-#     when drawing the frames of a specific sequence. For each sequence you specify the image area's
-#     start point (see 'S' in the image area above) defined by
-#     - the horizontal start position (position of first char in dynamic area) and
-#     - the vertical start position (number of the first image line withing the dynamic area).
+#	The foreground (the image) can move within the dynamic area (but not into the static areas!). 
+#	The movement can be in any direction: horizontally, vertically or both in different speeds.
 #
-#     For more information about the MOGLiCC meta model (i.e. the uses of model, classes, attributes, 
-#     metainfos and variables) see MOGLiCC_JavaBeanModel.txt.
+#	The foreground consists of a series of single image pictures that are rotationally used
+#	when drawing the frames of a specific sequence. For each sequence you specify the image area's
+#	start point (see 'S' in the image area above) defined by
+#	- the horizontal start position (position of first char in dynamic area) and
+#	- the vertical start position (number of the first image line withing the dynamic area).
 #
-#	  For more information about the console comic strip model see comments below.
+#	For more information about the MOGLiCC meta model (i.e. the uses of model, classes, attributes, 
+#	metainfos and variables) see MOGLiCC_JavaBeanModel.txt.
 #
-#     Final hint: avoid using functional characters such as | or >.
+#	For more information about the console comic strip model see comments below.
+#
+#	Final hint: avoid using functional characters such as | or >.
 #
 ################################################################################################################################
 
 
-model ConsoleComicStrip                     	 	# model name is used as name of the main script
-  metainfo scriptName MoglyDick              		# script name without extension and without path
-  metainfo scriptType shell                  		# 'batch' for Windows or 'shell' for non-Windows systems
-  metainfo holdConsoleOpenAtEnd true         		# if true, console will not close automatically after execution
-  metainfo secondsToSleepWithEachFrame 0.5          # number of seconds (for Windows only whole numbers possible) - may be overwritten by a class specific setting
-  metainfo dynamicAreaWidth 80	                    # determines the widths of the dynamic area as number of chars
-  metainfo dynamicAreaHeight 30                 	# determines the height of the dynamic area as number of lines (does not include static lines!)
-  metainfo foregroundTransparancy full  			# possible values 'off' (default used when not set), 'full' and 'atMarginOnly' - may be overriden by class specific setting
+model ConsoleComicStrip								# model name is used as name of the main script
+  metainfo scriptName MoglyDick						# script name without extension and without path
+  metainfo scriptType shell							# 'batch' for Windows or 'shell' for non-Windows systems
+  metainfo holdConsoleOpenAtEnd true				# if true, console will not close automatically after execution
+  metainfo secondsToSleepWithEachFrame 0.5			# number of seconds (for Windows only whole numbers possible) - may be overwritten by a class specific setting
+  metainfo dynamicAreaWidth 80						# determines the widths of the dynamic area as number of chars
+  metainfo dynamicAreaHeight 30						# determines the height of the dynamic area as number of lines (does not include static lines!)
+  metainfo foregroundTransparancy full				# possible values 'off' (default used when not set), 'full' and 'atMarginOnly' - may be overriden by class specific setting
   
   metainfo staticHeaderLine "      : : :     : : :      : : : :       : : : :       : : :       : : : : : :  "
   metainfo staticHeaderLine "     : : : :     : :      : : : : :       : : : : :     : :         : : : :     "
   metainfo staticHeaderLine "      : :                  : : :             : :                       : :      "
   metainfo staticFooterLine "Autogenerated by MOGLiCC see https://github.com/iks-github/MOGLiCodeCreator/wiki"
   
-  metainfo backgroundFillingPatternLine11 "~"    		# can be omitted if equal to empty space - may be overriden by class specific setting
+  metainfo backgroundFillingPatternLine11 "~"		# can be omitted if equal to empty space - may be overriden by class specific setting
   metainfo backgroundFillingPatternLine12 " ."    
   metainfo backgroundFillingPatternLine13 ". "    
   metainfo backgroundFillingPatternLine14 " ."    
@@ -94,35 +94,35 @@ model ConsoleComicStrip                     	 	# model name is used as name of t
 
 
 
-class Intro1 	                    				# each class defines one sequence within the whole comic strip - class name is used for script name
-    metainfo skipSequence false                     # if true, this sequence will not be part of the generated comic strip (default is false)
-	metainfo startImagePositionX 2 				    # horizontal position where the first char of the image is placed within the dynmaic area for the first frame (default is 1)
-	metainfo startImagePositionY 9               	# vertical position where the first line of the image is placed within the dynamic area for the first frame (default is 1)
-	metainfo motionSpeedX 0   	            	    # horizontal speed as the number of chars per frame - 0 meands standstill, negativ values right to left movement i.e. < (positive values >)
-	metainfo motionSpeedY 0      		    		# vertical speed as the number of chars per frame - 0 meands standstill, negativ values upwards movement (positive values downwards)
+class Intro1										# each class defines one sequence within the whole comic strip - class name is used for script name
+    metainfo skipSequence false						# if true, this sequence will not be part of the generated comic strip (default is false)
+	metainfo startImagePositionX 2 					# horizontal position where the first char of the image is placed within the dynmaic area for the first frame (default is 1)
+	metainfo startImagePositionY 9					# vertical position where the first line of the image is placed within the dynamic area for the first frame (default is 1)
+	metainfo motionSpeedX 0							# horizontal speed as the number of chars per frame - 0 meands standstill, negativ values right to left movement i.e. < (positive values >)
+	metainfo motionSpeedY 0							# vertical speed as the number of chars per frame - 0 meands standstill, negativ values upwards movement (positive values downwards)
 	metainfo numberOfFrames 7						# length of contribution to the whole comic strip
 	metainfo secondsToSleepWithEachFrame 2
 	
-    metainfo backgroundFillingPatternLine11 " "    	# can be omitted if equal to empty space - may be overriden by class specific settings
-    metainfo backgroundFillingPatternLine12 " "    
-    metainfo backgroundFillingPatternLine13 " "    
-    metainfo backgroundFillingPatternLine14 " "    
-    metainfo backgroundFillingPatternLine15 " "    	
-    metainfo backgroundFillingPatternLine16 " "    	
-    metainfo backgroundFillingPatternLine17 " "    
-    metainfo backgroundFillingPatternLine18 " "    
-    metainfo backgroundFillingPatternLine19 " "    
-    metainfo backgroundFillingPatternLine20 " "    
-    metainfo backgroundFillingPatternLine21 " "    
-    metainfo backgroundFillingPatternLine22 " "    
-    metainfo backgroundFillingPatternLine23 " "    	
-    metainfo backgroundFillingPatternLine24 " "    	
-    metainfo backgroundFillingPatternLine25 " "    
-    metainfo backgroundFillingPatternLine26 " "    
-    metainfo backgroundFillingPatternLine27 " "    
-    metainfo backgroundFillingPatternLine28 " "    
-    metainfo backgroundFillingPatternLine29 " "    
-    metainfo backgroundFillingPatternLine30 " " 
+	metainfo backgroundFillingPatternLine11 " "		# can be omitted if equal to empty space - may be overriden by class specific settings
+	metainfo backgroundFillingPatternLine12 " "    
+	metainfo backgroundFillingPatternLine13 " "    
+	metainfo backgroundFillingPatternLine14 " "    
+	metainfo backgroundFillingPatternLine15 " "    	
+	metainfo backgroundFillingPatternLine16 " "    	
+	metainfo backgroundFillingPatternLine17 " "    
+	metainfo backgroundFillingPatternLine18 " "    
+	metainfo backgroundFillingPatternLine19 " "    
+	metainfo backgroundFillingPatternLine20 " "    
+	metainfo backgroundFillingPatternLine21 " "    
+	metainfo backgroundFillingPatternLine22 " "    
+	metainfo backgroundFillingPatternLine23 " "    	
+	metainfo backgroundFillingPatternLine24 " "    	
+	metainfo backgroundFillingPatternLine25 " "    
+	metainfo backgroundFillingPatternLine26 " "    
+	metainfo backgroundFillingPatternLine27 " "    
+	metainfo backgroundFillingPatternLine28 " "    
+	metainfo backgroundFillingPatternLine29 " "    
+	metainfo backgroundFillingPatternLine30 " " 
 	
 	attribute image1
 		metainfo line1  "                                                                             "
@@ -160,68 +160,68 @@ class Intro1 	                    				# each class defines one sequence within t
 		metainfo line3  "                                 present                                     "
 
 
-class Intro2		
-    metainfo skipSequence false     
-	metainfo startImagePositionX 2	
-	metainfo startImagePositionY 16 
-	metainfo motionSpeedX 0   	    
-	metainfo motionSpeedY 0      	
-	metainfo numberOfFrames 4		
+class Intro2
+	metainfo skipSequence false
+	metainfo startImagePositionX 2
+	metainfo startImagePositionY 16
+	metainfo motionSpeedX 0
+	metainfo motionSpeedY 0
+	metainfo numberOfFrames 4
 	metainfo secondsToSleepWithEachFrame 2
 
 	metainfo backgroundFillingPatternLine9  "                     Animated Console Comic Strip Pictures                   "	
 	metainfo backgroundFillingPatternLine10 " "	
-    metainfo backgroundFillingPatternLine11 "                                   present                                   "	
-    metainfo backgroundFillingPatternLine12 " "    
-    metainfo backgroundFillingPatternLine13 " "    
-    metainfo backgroundFillingPatternLine14 " "    
-    metainfo backgroundFillingPatternLine15 " "    	
-    metainfo backgroundFillingPatternLine16 " "    	
-    metainfo backgroundFillingPatternLine17 " "    
-    metainfo backgroundFillingPatternLine18 " "    
-    metainfo backgroundFillingPatternLine19 " "    
-    metainfo backgroundFillingPatternLine20 " "    
-    metainfo backgroundFillingPatternLine21 " "    
-    metainfo backgroundFillingPatternLine22 " "    
-    metainfo backgroundFillingPatternLine23 " "    	
-    metainfo backgroundFillingPatternLine24 " "    	
-    metainfo backgroundFillingPatternLine25 " "    
-    metainfo backgroundFillingPatternLine26 " "    
-    metainfo backgroundFillingPatternLine27 " "    
-    metainfo backgroundFillingPatternLine28 " "    
-    metainfo backgroundFillingPatternLine29 " "    
-    metainfo backgroundFillingPatternLine30 " " 
-		
+	metainfo backgroundFillingPatternLine11 "                                   present                                   "	
+	metainfo backgroundFillingPatternLine12 " "    
+	metainfo backgroundFillingPatternLine13 " "    
+	metainfo backgroundFillingPatternLine14 " "    
+	metainfo backgroundFillingPatternLine15 " "    	
+	metainfo backgroundFillingPatternLine16 " "    	
+	metainfo backgroundFillingPatternLine17 " "    
+	metainfo backgroundFillingPatternLine18 " "    
+	metainfo backgroundFillingPatternLine19 " "    
+	metainfo backgroundFillingPatternLine20 " "    
+	metainfo backgroundFillingPatternLine21 " "    
+	metainfo backgroundFillingPatternLine22 " "    
+	metainfo backgroundFillingPatternLine23 " "    	
+	metainfo backgroundFillingPatternLine24 " "    	
+	metainfo backgroundFillingPatternLine25 " "    
+	metainfo backgroundFillingPatternLine26 " "    
+	metainfo backgroundFillingPatternLine27 " "    
+	metainfo backgroundFillingPatternLine28 " "    
+	metainfo backgroundFillingPatternLine29 " "    
+	metainfo backgroundFillingPatternLine30 " " 
+	
 	attribute image1
 		metainfo line1 "    M     M       OOO                                                        "
-	    metainfo line2 "   MMM   MMM    OO   OO                                                      "
-	    metainfo line3 "  MM MM MM MM  OO     OO                                                     "
-	    metainfo line4 " MM   MMM   MM OO     OO                                                     "
+		metainfo line2 "   MMM   MMM    OO   OO                                                      "
+		metainfo line3 "  MM MM MM MM  OO     OO                                                     "
+		metainfo line4 " MM   MMM   MM OO     OO                                                     "
 		metainfo line5 "MM     M     MM OO   OO                                                      "
-	    metainfo line6 "M             M   OOO                                                        "
+		metainfo line6 "M             M   OOO                                                        "
 
 	attribute image2
 		metainfo line1 "    M     M       OOO        GGGG  LL   YY    YY                             "
-	    metainfo line2 "   MMM   MMM    OO   OO   GGG  GGG LL    YY  YY                              "
-	    metainfo line3 "  MM MM MM MM  OO     OO GG        LL     YYYY                               "
-	    metainfo line4 " MM   MMM   MM OO     OO GG   GGGG LL      YY                                "
+		metainfo line2 "   MMM   MMM    OO   OO   GGG  GGG LL    YY  YY                              "
+		metainfo line3 "  MM MM MM MM  OO     OO GG        LL     YYYY                               "
+		metainfo line4 " MM   MMM   MM OO     OO GG   GGGG LL      YY                                "
 		metainfo line5 "MM     M     MM OO   OO   GGG   GG LL      YY                                "
-	    metainfo line6 "M             M   OOO        GGGG  LLLLL   YY                                "
+		metainfo line6 "M             M   OOO        GGGG  LLLLL   YY                                "
 
 	attribute image3
-	    metainfo repetitions 3
+		metainfo repetitions 3
 		metainfo line1 "    M     M       OOO        GGGG  LL   YY    YY DDDDD    II     CCC   KK  KK"
-	    metainfo line2 "   MMM   MMM    OO   OO   GGG  GGG LL    YY  YY  DD   DD  II   CC  CC  KK KK "
-	    metainfo line3 "  MM MM MM MM  OO     OO GG        LL     YYYY   DD    DD II CC        KKK   "
-	    metainfo line4 " MM   MMM   MM OO     OO GG   GGGG LL      YY    DD    DD II CC        KKK   "
+		metainfo line2 "   MMM   MMM    OO   OO   GGG  GGG LL    YY  YY  DD   DD  II   CC  CC  KK KK "
+		metainfo line3 "  MM MM MM MM  OO     OO GG        LL     YYYY   DD    DD II CC        KKK   "
+		metainfo line4 " MM   MMM   MM OO     OO GG   GGGG LL      YY    DD    DD II CC        KKK   "
 		metainfo line5 "MM     M     MM OO   OO   GGG   GG LL      YY    DD   DD  II   CC  CC  KK KK "
-	    metainfo line6 "M             M   OOO        GGGG  LLLLL   YY    DDDDDD   II     CCC   KK  KK"
-		
+	 	metainfo line6 "M             M   OOO        GGGG  LLLLL   YY    DDDDDD   II     CCC   KK  KK"
+	
 
 
 	
 class WhaleAndBird1 	              
-    metainfo skipSequence false       
+	metainfo skipSequence false       
 	metainfo startImagePositionX 81		
 	metainfo startImagePositionY 10     
 	metainfo motionSpeedX -1   	        
@@ -229,50 +229,50 @@ class WhaleAndBird1
 	metainfo numberOfFrames 59			
 	
 	attribute image1
-	    metainfo repetitions 2                                     # can be omitted for in case of default (1)
-        metainfo spaceholder O                                     # a single char whose occurrences will be replaced by the whitespace symbol ' ' which is not transparent !
+		metainfo repetitions 2                                     # can be omitted for in case of default (1)
+		metainfo spaceholder O                                     # a single char whose occurrences will be replaced by the whitespace symbol ' ' which is not transparent !
 		metainfo line1 "<<whaleBody<Line1>><<whaleTail2<Line1>>"
-	    metainfo line2 "<<whaleBody<Line2>><<whaleTail2<Line2>>"
-	    metainfo line3 "<<whaleBody<Line3>><<whaleTail2<Line3>>"
+		metainfo line2 "<<whaleBody<Line2>><<whaleTail2<Line2>>"
+		metainfo line3 "<<whaleBody<Line3>><<whaleTail2<Line3>>"
 		metainfo line4 "<<whaleBody<Line4>><<whaleTail2<Line4>>"
-	    metainfo line5 "<<whaleBody<Line5>><<whaleTail2<Line5>>"
-	    metainfo line6 "<<whaleBody<Line6>><<whaleTail2<Line6>>"
+		metainfo line5 "<<whaleBody<Line5>><<whaleTail2<Line5>>"
+		metainfo line6 "<<whaleBody<Line6>><<whaleTail2<Line6>>"
 		metainfo line7 "<<whaleBody<Line7>><<whaleTail2<Line7>>"
-	    metainfo line8 "<<whaleBody<Line8>><<whaleTail2<Line8>>"
+		metainfo line8 "<<whaleBody<Line8>><<whaleTail2<Line8>>"
 		
 	attribute image2
-        metainfo spaceholder O                                     
+		metainfo spaceholder O                                     
 		metainfo line1 "<<whaleBody<Line1>><<whaleTail1<Line1>>"
-	    metainfo line2 "<<whaleBody<Line2>><<whaleTail1<Line2>>"
-	    metainfo line3 "<<whaleBody<Line3>><<whaleTail1<Line3>>"
+		metainfo line2 "<<whaleBody<Line2>><<whaleTail1<Line2>>"
+		metainfo line3 "<<whaleBody<Line3>><<whaleTail1<Line3>>"
 		metainfo line4 "<<whaleBody<Line4>><<whaleTail1<Line4>>"
-	    metainfo line5 "<<whaleBody<Line5>><<whaleTail1<Line5>>"
-	    metainfo line6 "<<whaleBody<Line6>><<whaleTail1<Line6>>"
+		metainfo line5 "<<whaleBody<Line5>><<whaleTail1<Line5>>"
+		metainfo line6 "<<whaleBody<Line6>><<whaleTail1<Line6>>"
 		metainfo line7 "<<whaleBody<Line7>><<whaleTail1<Line7>>"
-	    metainfo line8 "<<whaleBody<Line8>><<whaleTail1<Line8>>"
+		metainfo line8 "<<whaleBody<Line8>><<whaleTail1<Line8>>"
 		
 	attribute image3
-	    metainfo repetitions 2                                     
-        metainfo spaceholder O                                     
+		metainfo repetitions 2                                     
+		metainfo spaceholder O                                     
 		metainfo line1 "<<whaleBody<Line1>><<whaleTail2<Line1>>"
-	    metainfo line2 "<<whaleBody<Line2>><<whaleTail2<Line2>>"
-	    metainfo line3 "<<whaleBody<Line3>><<whaleTail2<Line3>>"
+		metainfo line2 "<<whaleBody<Line2>><<whaleTail2<Line2>>"
+		metainfo line3 "<<whaleBody<Line3>><<whaleTail2<Line3>>"
 		metainfo line4 "<<whaleBody<Line4>><<whaleTail2<Line4>>"
-	    metainfo line5 "<<whaleBody<Line5>><<whaleTail2<Line5>>"
-	    metainfo line6 "<<whaleBody<Line6>><<whaleTail2<Line6>>"
+		metainfo line5 "<<whaleBody<Line5>><<whaleTail2<Line5>>"
+		metainfo line6 "<<whaleBody<Line6>><<whaleTail2<Line6>>"
 		metainfo line7 "<<whaleBody<Line7>><<whaleTail2<Line7>>"
-	    metainfo line8 "<<whaleBody<Line8>><<whaleTail2<Line8>>"
+		metainfo line8 "<<whaleBody<Line8>><<whaleTail2<Line8>>"
 
 	attribute image4
-        metainfo spaceholder O                                     
+		metainfo spaceholder O                                     
 		metainfo line1 "<<whaleBody<Line1>><<whaleTail3<Line1>>"
-	    metainfo line2 "<<whaleBody<Line2>><<whaleTail3<Line2>>"
-	    metainfo line3 "<<whaleBody<Line3>><<whaleTail3<Line3>>"
+		metainfo line2 "<<whaleBody<Line2>><<whaleTail3<Line2>>"
+		metainfo line3 "<<whaleBody<Line3>><<whaleTail3<Line3>>"
 		metainfo line4 "<<whaleBody<Line4>><<whaleTail3<Line4>>"
-	    metainfo line5 "<<whaleBody<Line5>><<whaleTail3<Line5>>"
-	    metainfo line6 "<<whaleBody<Line6>><<whaleTail3<Line6>>"
+		metainfo line5 "<<whaleBody<Line5>><<whaleTail3<Line5>>"
+		metainfo line6 "<<whaleBody<Line6>><<whaleTail3<Line6>>"
 		metainfo line7 "<<whaleBody<Line7>><<whaleTail3<Line7>>"
-	    metainfo line8 "<<whaleBody<Line8>><<whaleTail3<Line8>>"
+	 	metainfo line8 "<<whaleBody<Line8>><<whaleTail3<Line8>>"
 
 
 class WhaleAndBird2

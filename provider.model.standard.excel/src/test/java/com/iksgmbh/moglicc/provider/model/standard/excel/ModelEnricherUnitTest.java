@@ -76,7 +76,7 @@ public class ModelEnricherUnitTest
 		final ExcelData excelData = buildNonOverlappingExcelTestData(ATTRIBUTE_IN_COLUMNS);
 		excelData.attributeSubset.put(1, new AttributeSubset(2, 1));
 		pluginProperties.put(model.getName() + ExcelStandardModelProviderStarter.ROTATION_MODE_IDENTIFIER, 
-	                         ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_COLUMS);
+	                         ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_FIRST_COLUMN);
 		
 		// act
 		ModelEnricher.doYourJob(pluginProperties, excelData, model);
@@ -151,7 +151,7 @@ public class ModelEnricherUnitTest
 		final BuildUpModel model = buildTestStandardModel();
 		final ExcelData excelData = buildOverlappingExcelTestData(ATTRIBUTE_IN_COLUMNS);
 		pluginProperties.put(model.getName() + ExcelStandardModelProviderStarter.ROTATION_MODE_IDENTIFIER, 
-				             ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_COLUMS);
+				             ExcelStandardModelProviderStarter.ROTATION_MODE_ATTRIBUTE_IN_FIRST_COLUMN);
 		
 		// act
 		ModelEnricher.doYourJob(pluginProperties, excelData, model);
