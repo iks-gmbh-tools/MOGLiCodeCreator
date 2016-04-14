@@ -40,7 +40,7 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	public static final String TEXT_TARGET_FILE_NOT_FOUND = "Defined target file does not exist";
 	public static final String TEXT_TARGET_FILE_IS_A_DIRECTORY = "Defined target file is no file";
 
-	enum KnownGeneratorPropertyNames { TargetDir, TargetFileName, CreateNew, NameOfValidModel, OutputEncodingFormat, SkipGeneration, ReplaceToNumberSign };
+	enum KnownGeneratorPropertyNames { TargetDir, TargetFileName, CreateNew, NameOfValidModel, OutputEncodingFormat, SkipGeneration, ReplaceToNumberSign, CheckMissingMetaInfos };
 
 	String getTargetDir();
 
@@ -57,6 +57,13 @@ public interface VelocityGeneratorResultData extends GeneratorResultData {
 	 * @return false if creation of target file is suppressed
 	 */
 	boolean isGenerationToSkip();
+
+	/**
+	 * If false, metainfo that are not defined in the model data are ignored.
+	 * If true, an error report is created in case a metainfo used in a template file could not be resolved.
+	 * @return true (default) or false (if configured)
+	 */
+	boolean areMissingMetaInfosToCheck();
 
 
 	/**

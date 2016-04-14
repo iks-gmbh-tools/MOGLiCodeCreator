@@ -58,7 +58,7 @@ public class CoreIntTest extends IntTestParent {
 		// prepare test
 		initTestRootDir();
 		
-		copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//MOGLiCC//XMLBuilder");
+		copyExternalInputDataIntoMOGLiCCWorkspace("C://data//Reik//dev//MOGLiCC//Tutorial");
 		//copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/iks-github/application/target/releaseDir/SystemTestDir");
 		
 		// call functionality under test
@@ -122,6 +122,8 @@ public class CoreIntTest extends IntTestParent {
 		fileCollectionData.pluginsSubdir = MOGLiSystemConstants.DIR_PLUGIN;
 		fileCollectionData.sourceDir = null;
 		fileCollectionData.releaseDir = new File(applicationRootDir);
+		fileCollectionData.dropinsReadmeFileContent = "test";
+		fileCollectionData.dropinsSubdir = MOGLiSystemConstants.DIR_DROPIN;
 		fileCollectionData.fileListForRootDir = null;
 		fileCollectionData.jarsOfCoreComponents = mogliReleaseBuilder.getJarFiles(mogliReleaseBuilder.getListOfCoreModules());
 		fileCollectionData.jarsOfPlugins = mogliReleaseBuilder.getJarFiles(mogliReleaseBuilder.getListOfPluginModules());
@@ -319,4 +321,30 @@ public class CoreIntTest extends IntTestParent {
 		assertFileContainsEntry(emergencyLogFile, "ERROR: Error creating workspaceDir");
 	}
 
+	
+	@Test
+	public void throwsExceptionIntentionallyFromTemplateCode() throws IOException {
+		// prepare test
+		initTestRootDir();
+		MOGLiCodeCreator.main(args);
+		
+		// prepare test
+		final String artefactName = "MOGLiJavaBean";
+		final File artefactTemplateDir = new File(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginInputDir(), artefactName);
+		final File testTemplate = new File(artefactTemplateDir, "A_MainTemplate.tpl");
+		FileUtil.appendToFile(testTemplate, "$TemplateJavaUtility.throwMOGLiCCException(\"This is my test error message!\")");
+		
+		
+
+		// call functionality under test
+		MOGLiCodeCreator.main(args);
+
+		// verify test result
+		final File resultFile = new File(applicationRootDir, MOGLiSystemConstants.FILENAME_ERROR_REPORT_FILE);
+		assertFileExists(resultFile);
+		assertFileContainsEntry(resultFile , "This is my test error message!");	
+	}
+	
+	
+	
 }

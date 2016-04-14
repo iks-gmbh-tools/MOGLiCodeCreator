@@ -59,6 +59,7 @@ public class ReleaseFileCollectorBuildTest extends ApplicationTestParent {
 			fileData = new FileCollectionData();
 			fileData.libSubdir = DIR_LIB;
 			fileData.pluginsSubdir = DIR_PLUGIN;
+			fileData.dropinsReadmeFileContent = "test";
 			fileData.sourceDir = rootDir;
 			fileData.releaseDir = releaseDir;
 			fileData.fileListForRootDir = ImmutableUtil.getImmutableListOf(MOGLiReleaseBuilder.FILENAME_STARTBAT,

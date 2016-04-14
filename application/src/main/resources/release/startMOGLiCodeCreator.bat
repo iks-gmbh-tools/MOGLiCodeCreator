@@ -3,7 +3,7 @@ REM Windows Start Script of MOGLiCC
 echo off
 
 set "workspaceDir=%~1"
-set classpath=".\lib\*;.\lib\plugins\*"
+set classpath="./lib/*;./lib/plugins/*;./lib/dropins/*"
 set SystemJavaHome=%JAVA_HOME%
 set SystemJavaHomeBin=%SystemJavaHome%\bin
 

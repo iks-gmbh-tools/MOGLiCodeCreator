@@ -15,6 +15,7 @@
  */
 package com.iksgmbh.moglicc.build;
 
+import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_DROPIN;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_LIB;
 import static com.iksgmbh.moglicc.MOGLiSystemConstants.DIR_PLUGIN;
 
@@ -159,22 +160,6 @@ public class MOGLiReleaseBuilder {
 		return toReturn;
 	}
 
-	/* needed ?
-	private void tagGitBranch() {
-		String exeCommand = "git tag -a v" + getVersion(VERSION_TYPE.Release)
-		                    + " -m \"Release " + getVersion(VERSION_TYPE.Release)
-		                    + "\"";
-		System.out.println("Calling command\n" + exeCommand
-				           + "\n in \n" + getGitRepositoryDir().getAbsolutePath());
-
-		System.out.println(CmdUtil.execWindowCommand(getGitRepositoryDir(), exeCommand, true));
-	}
-	
-	private File getGitRepositoryDir() {
-		return new File(USER_DIR).getParentFile();
-	}
-	 */
-
 	private boolean isTestRun() {
 		final String property = (String) buildProperties.get("testRun");
 		return property != null  &&  property.trim().equalsIgnoreCase("true");
@@ -206,6 +191,12 @@ public class MOGLiReleaseBuilder {
 		final FileCollectionData fileCollectionData = new FileCollectionData();
 		fileCollectionData.libSubdir = DIR_LIB;
 		fileCollectionData.pluginsSubdir = DIR_PLUGIN;
+		fileCollectionData.dropinsSubdir = DIR_DROPIN;
+		fileCollectionData.dropinsReadmeFileContent = "Drop in this folder all of your jars, "
+				                                      + "that you need on the classpath. " 
+				                                      + System.getProperty("line.separator")
+				                                      + "Static methods of classes in these jars "
+				                                      + "are accessible from template files!";
 		fileCollectionData.sourceDir = new File(sourceDirForFilesToInstallInRoot);
 		fileCollectionData.releaseDir = getReleaseDir();
 		fileCollectionData.fileListForRootDir = FILES_TO_INSTALL_IN_ROOT;

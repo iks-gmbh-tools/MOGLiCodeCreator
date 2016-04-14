@@ -24,7 +24,7 @@ import com.iksgmbh.utils.FileUtil;
 
 public class TemplateUtil {
 	
-	public static final String NO_MAIN_TEMPLATE_FOUND = "File to read artefact properties from not found: ";
+	public static final String NO_MAIN_TEMPLATE_FOUND = "Main template file containing the artefact properties not found: ";
 
 	/**
 	 * Expects a directory with exactly one main template.

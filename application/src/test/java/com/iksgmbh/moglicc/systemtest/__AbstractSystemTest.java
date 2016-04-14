@@ -127,7 +127,7 @@ public class __AbstractSystemTest extends ApplicationTestParent {
 		try {
 			ZipUtil.unzip(releaseBuilder.getReleaseZipFile(), TEST_DIR_NAME);
 		} catch (Exception e) {
-			throw new MOGLiCoreException("Error zipping " + releaseBuilder.getReleaseZipFile().getAbsolutePath());
+			throw new MOGLiCoreException("Error unzipping " + releaseBuilder.getReleaseZipFile().getAbsolutePath(), e);
 		}
 	}
 

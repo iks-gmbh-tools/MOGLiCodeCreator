@@ -11,7 +11,7 @@
 
 JavaFound="false"
 workspaceDir="$1"
-export CLASSPATH="$CLASSPATH:./lib/*:./lib/plugins/*"
+export CLASSPATH="$CLASSPATH:./lib/*:./lib/plugins/*;./lib/dropins/*"
 
 SystemJavaHome=$JAVA_HOME
 SystemJavaHomeBin="$SystemJavaHome/bin"

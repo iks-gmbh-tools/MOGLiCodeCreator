@@ -15,6 +15,8 @@
  */
 package com.iksgmbh.moglicc.intest.filemaker.classbased.velocity;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -236,13 +238,72 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 	}
 
 	@Test
+	public void throwsExceptionForMissingMetaInfo() throws MOGLiPluginException, IOException {
+		// prepare test
+		final String modelName = "SkipTestModel";
+
+		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator() +
+                                        "class de.Test1";
+
+		final String templateFileContent = "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                                           "@TargetFileName ${classDescriptor.simpleName}.java" + FileUtil.getSystemLineSeparator() +
+                                           "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
+                                           "@NameOfValidModel "  + modelName + FileUtil.getSystemLineSeparator() +
+                                           "@SkipGeneration $classDescriptor.getMetaInfoValueFor(\"nameOfNonExistingMetaInfo\")" + FileUtil.getSystemLineSeparator();
+
+		prepareTest(modelName, modelFileContent, templateFileContent);
+
+		// call functionality under test
+		try
+		{
+			standardModelProviderStarter.doYourJob();
+			velocityClassBasedFileMakerStarter.doYourJob();
+			fail("Expected exception was not thrown!");
+		} 
+		catch (Exception e)
+		{
+			assertStringContains(e.getMessage(), "MetaInfo unkown to the model: !MetaInfo FOR 'nameOfNonExistingMetaInfo' NOT FOUND!");
+		}
+	}	
+
+	@Test
+	public void doesNotThrowExceptionForMissingMetaInfo() throws MOGLiPluginException, IOException {
+		// prepare test
+		final String modelName = "SkipTestModel";
+
+		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator() +
+                                        "class de.Test1";
+
+		final String templateFileContent = "@CreateNew true" + FileUtil.getSystemLineSeparator() +
+                                           "@TargetFileName ${classDescriptor.simpleName}.java" + FileUtil.getSystemLineSeparator() +
+                                           "@TargetDir "  + MOGLiSystemConstants.APPLICATION_ROOT_IDENTIFIER + "/example" + FileUtil.getSystemLineSeparator() +
+                                           "@NameOfValidModel "  + modelName + FileUtil.getSystemLineSeparator() +
+                                           "@SkipGeneration $classDescriptor.getMetaInfoValueFor(\"nameOfNonExistingMetaInfo\")" + FileUtil.getSystemLineSeparator() +
+                                           "@CheckMissingMetaInfos false";
+
+		prepareTest(modelName, modelFileContent, templateFileContent);
+
+		// call functionality under test
+		try
+		{
+			standardModelProviderStarter.doYourJob();
+			velocityClassBasedFileMakerStarter.doYourJob();
+		} 
+		catch (Exception e)
+		{
+			fail("No exception expected!");
+		}
+	}	
+	
+	
+	@Test
 	public void skipsTargetFileCreationWhenConfiguredSoInTemplateProperties() throws MOGLiPluginException, IOException {
 		final String modelName = "SkipTestModel";
 
 		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator() +
-                "class de.Test1" + FileUtil.getSystemLineSeparator() +
-                "  metainfo nonPersistent true" + FileUtil.getSystemLineSeparator() +
-                "class de.Test2"; // this class is NOT skipped
+                                        "class de.Test1" + FileUtil.getSystemLineSeparator() +
+                                        "  metainfo nonPersistent true" + FileUtil.getSystemLineSeparator() +
+                                        "class de.Test2"; // this class is NOT skipped
 
 		final String templateFileContent = "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                                            "@TargetFileName ${classDescriptor.simpleName}.java" + FileUtil.getSystemLineSeparator() +
@@ -251,17 +312,17 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
                                            "@SkipGeneration $classDescriptor.doesHaveAnyMetaInfosWithName(\"nonPersistent\")";
 
 		executeSkipGenerationTest(modelName, modelFileContent, templateFileContent);
-	}
+	}	
 
 	@Test
 	public void skipsTargetFileCreationWhenConfiguredSoInTemplatePropertiesUsingNotConstruction() throws MOGLiPluginException, IOException {
 		final String modelName = "SkipFileTestModel";
 
 		final String modelFileContent = "model " + modelName + FileUtil.getSystemLineSeparator() +
-                "class de.Test1" + FileUtil.getSystemLineSeparator() +
-                "  metainfo databaseRelevant false" + FileUtil.getSystemLineSeparator() +
-                "class de.Test2"+ FileUtil.getSystemLineSeparator() +
-                "  metainfo databaseRelevant true"; // this class is NOT skipped
+                						"class de.Test1" + FileUtil.getSystemLineSeparator() +
+                						"  metainfo databaseRelevant false" + FileUtil.getSystemLineSeparator() +
+                						"class de.Test2"+ FileUtil.getSystemLineSeparator() +
+                						"  metainfo databaseRelevant true"; // this class is NOT skipped
 
 		final String templateFileContent = "@CreateNew true" + FileUtil.getSystemLineSeparator() +
                                            "@TargetFileName ${classDescriptor.simpleName}.java" + FileUtil.getSystemLineSeparator() +
@@ -273,9 +334,34 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 	}
 
 	private void executeSkipGenerationTest(final String modelName, final String modelFileContent,
-			                          final String templateFileContent) throws MOGLiPluginException, IOException
+			                               final String templateFileContent) throws MOGLiPluginException, IOException
 	{
 		// prepare test
+		prepareTest(modelName, modelFileContent, templateFileContent);
+
+		// call functionality under test
+		standardModelProviderStarter.doYourJob();
+		velocityClassBasedFileMakerStarter.doYourJob();
+
+		// verify test result
+		final File resultFile1 = new File(applicationRootDir, "example/Test1.java");
+		assertFileDoesNotExist(resultFile1);
+		final File resultFile2 = new File(applicationRootDir, "example/Test2.java");
+		assertFileExists(resultFile2);
+
+		assertStringContains(velocityClassBasedFileMakerStarter.getGeneratorReport(), 
+				                   "configured to skip generation:" + FileUtil.getSystemLineSeparator() + "Test1.java");
+		assertStringContains(velocityClassBasedFileMakerStarter.getGeneratorReport(), "Test2.java was created in");
+
+		final String logfileContent = FileUtil.getFileContent(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginLogFile());
+		assertStringContains(logfileContent, "Test1.java");
+		assertStringDoesNotContain(logfileContent, "Test2.java");
+	}
+
+	private void prepareTest(final String modelName,
+			                 final String modelFileContent, 
+			                 final String templateFileContent)
+	{
 		final File defaultModelFile = new File(standardModelProviderStarter.getInfrastructure().getPluginInputDir(),
                                                StandardModelProviderStarter.FILENAME_STANDARD_MODEL_FILE);
 		defaultModelFile.delete();
@@ -298,24 +384,6 @@ public class VelocityClassBasedFileMakerIntTest extends IntTestParent {
 		final File templateFile = new File(inputDir, "SkipTest.tpl");
 		MOGLiFileUtil.createNewFileWithContent(templateFile, templateFileContent);
 		assertFileExists(templateFile);
-
-		// call functionality under test
-		standardModelProviderStarter.doYourJob();
-		velocityClassBasedFileMakerStarter.doYourJob();
-
-		// verify test result
-		final File resultFile1 = new File(applicationRootDir, "example/Test1.java");
-		assertFileDoesNotExist(resultFile1);
-		final File resultFile2 = new File(applicationRootDir, "example/Test2.java");
-		assertFileExists(resultFile2);
-
-		assertStringContains(velocityClassBasedFileMakerStarter.getGeneratorReport(), 
-				                   "configured to skip generation:" + FileUtil.getSystemLineSeparator() + "Test1.java");
-		assertStringContains(velocityClassBasedFileMakerStarter.getGeneratorReport(), "Test2.java was created in");
-
-		final String logfileContent = FileUtil.getFileContent(velocityClassBasedFileMakerStarter.getInfrastructure().getPluginLogFile());
-		assertStringContains(logfileContent, "Test1.java");
-		assertStringDoesNotContain(logfileContent, "Test2.java");
 	}
 
 	@Test

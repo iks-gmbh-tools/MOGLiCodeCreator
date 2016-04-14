@@ -51,4 +51,5 @@ public interface GeneratorResultData {
 	 */
 	List<String> getAllPropertyValues(String key);
 
+
 }

@@ -65,7 +65,7 @@ public class A_TechnicalSystemTest extends __AbstractSystemTest {
 		assertEquals("File number in root", 4, testDir.listFiles().length);
 
 		final File libDir = FileUtil.getSubDir(testDir, "lib");
-		assertEquals("File number in lib subdir", getNumberOfJarFilesToExpectInLibDir() + 1, libDir.listFiles().length);
+		assertEquals("File number in lib subdir", getNumberOfJarFilesToExpectInLibDir() + 2, libDir.listFiles().length);  // +2 due to plugins and dropins dir
 
 		final File pluginsDir = FileUtil.getSubDir(libDir, "plugins");
 		assertEquals("File number in plugins subdir", getNumberOfJarFilesToExpectPluginsDir(), pluginsDir.listFiles().length);

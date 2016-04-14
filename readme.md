@@ -37,7 +37,13 @@ Licenced under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.h
 
 travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.png?branch=master)](https://travis-ci.org/iks-github/MOGLiCodeCreator)
 
-Current version: **1.6.0**
+Current version: **1.6.1**
+
+**Changes to 1.6.0**
+- Bug:         It's possible now to share subtempates between generator plugins.
+- Improvement: It's possible now to use customized static utilities via a dropin mechanism.
+- Improvement: New artefact property 'CheckMissingMetaInfos' for all generator plugins
+- Improvement: New TemplateJavaUtility method 'throwMOGLiCCException'
 
 **Changes to 1.5.5**
 - Improvement: Licensed under Apache License 2.0

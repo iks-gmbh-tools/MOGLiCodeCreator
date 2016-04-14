@@ -65,6 +65,10 @@ public class FileFinderUtil
 	public static List<File> searchFilesRecursively(final File folder, 
 			                             		    final FilenameFilter fileFilter)
 	{
+		if (! folder.exists())
+		{
+			throw new IllegalArgumentException("Folder does not exist: " + folder.getAbsolutePath());
+		}
 		final List<File> toReturn = new ArrayList<File>();
 		final File[] children = folder.listFiles(fileFilter);
 		for (File child : children) 

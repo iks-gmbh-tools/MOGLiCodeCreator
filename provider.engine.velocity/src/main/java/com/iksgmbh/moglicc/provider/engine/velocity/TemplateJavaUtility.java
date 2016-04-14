@@ -25,6 +25,7 @@ import java.util.Set;
 import org.apache.commons.lang.Validate;
 
 import com.iksgmbh.data.ClassNameData;
+import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 
@@ -251,12 +252,12 @@ public class TemplateJavaUtility {
 
 	/**
 	 * 
-	 * @param cl
+	 * @param clazz
 	 * @param interfaceToSearch 
 	 * @return returns true if cl is of type interfaceSimpleNameToSearch
 	 */
-	public static boolean hasInterface(final Class<?> cl, final String interfaceToSearch) {
-		final Class<?>[] interfaces = cl.getInterfaces();
+	public static boolean hasInterface(final Class<?> clazz, final String interfaceToSearch) {
+		final Class<?>[] interfaces = clazz.getInterfaces();
 		for (final Class<?> interf : interfaces) {			
 			if (interf.getName().equals(interfaceToSearch)) {
 				return true;
@@ -265,6 +266,15 @@ public class TemplateJavaUtility {
 			if (hasInterface) return true;
 		}
 		return false;
+	}
+
+	/**
+	 * An method called from a template file to intentionally throw an exception of a defined error message.
+	 * @param errorMessage
+	 * @throws MOGLiPluginException
+	 */
+	public static void throwMOGLiCCException(final String errorMessage) throws MOGLiPluginException {
+		throw new MOGLiPluginException(errorMessage);
 	}
 
 }

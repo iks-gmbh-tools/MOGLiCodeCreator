@@ -38,6 +38,7 @@ public class ReleaseFileCollector {
 		fileCollector.createLibDirectory();
 		fileCollector.copyCoreJarFiles();
 		fileCollector.createPluginDirectory();
+		fileCollector.createDropinDirectory();
 		fileCollector.copyPluginJarFiles();
 		fileCollector.copyThirdPartyJars();
 	}
@@ -51,6 +52,8 @@ public class ReleaseFileCollector {
 	public static class FileCollectionData {
 		public String libSubdir;
 		public String pluginsSubdir;
+		public String dropinsSubdir;
+		public String dropinsReadmeFileContent;
 		public File sourceDir;
 		public File releaseDir;
 		public List<String> fileListForRootDir;
@@ -85,16 +88,36 @@ public class ReleaseFileCollector {
 		}
 	}
 	
+	void createDropinDirectory() {
+		final File dropinDir = new File(fileData.releaseDir + "/" + fileData.libSubdir 
+				                                            + "/" + fileData.dropinsSubdir);
+		if (! dropinDir.exists()) {			
+			boolean ok = dropinDir.mkdirs();
+			if (! ok) {
+				throw new MOGLiCoreException("Directory not created: " + dropinDir.getAbsolutePath());
+			}
+		}
+		
+		final File readmeFile = new File(dropinDir, "readme.txt");
+		
+		try {
+			FileUtil.createNewFileWithContent(readmeFile, fileData.dropinsReadmeFileContent);
+		} catch (Exception e) {
+			throw new MOGLiCoreException("DropinReadme not created: " + readmeFile.getAbsolutePath(), e);
+		}
+	}
+	
 	void createPluginDirectory() {
 		pluginDir = new File(fileData.releaseDir + "/" + fileData.libSubdir 
 				                                 + "/" + fileData.pluginsSubdir);
 		if (! pluginDir.exists()) {			
 			boolean ok = pluginDir.mkdirs();
 			if (! ok) {
-				throw new MOGLiCoreException("Directory not created: " + fileData.pluginsSubdir);
+				throw new MOGLiCoreException("Directory not created: " + pluginDir.getAbsolutePath());
 			}
 		}
 	}
+	
 
 	void copyCoreJarFiles() {
 		for (int i = 0; i < fileData.jarsOfCoreComponents.length; i++) {

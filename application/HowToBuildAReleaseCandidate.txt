@@ -22,7 +22,7 @@ II Perform the Release
    c) Execute integration tests (Start 'Run as JUnit Test' on the project 'inttest').
    d) Execute 'BuildReleaseAndTestSystem.java' as JUnit test. This builds the release candidate and executes the system tests automatically on it.
    For different test results between scripted and manual test execution, assure that Java VM used is the same!
-4. Verify your workspace that in 'application/releaseBuilds' the Release Candidate can be found.
+4. Verify that in your workspace in 'application/releaseBuilds' the Release Candidate can be found.
    If not check that property 'testRun' is 'false' in file 'application/src/main/resources/build.properties'.
 5. In file 'application/src/main/resources/build.properties' set property 'testRun' back to 'true'.
    This allows test runs of the release process executed automatically by 'BuildReleaseAndTestSystem.java'.

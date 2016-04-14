@@ -80,6 +80,16 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	}
 	
 	@Override
+	public boolean areMissingMetaInfosToCheck() {
+		final String value = getProperty(KnownGeneratorPropertyNames.CheckMissingMetaInfos.name());
+		if (value == null) {
+			return true;  // default
+		}
+		return "true".equals(value.toLowerCase().trim());
+	}
+	
+	
+	@Override
 	public boolean isTargetToBeCreatedNewly() {
 		final String value = getProperty(KnownGeneratorPropertyNames.CreateNew.name());
 		return isStringRepresentBooleanTrue(value);
@@ -133,7 +143,9 @@ public class BuildUpVelocityGeneratorResultData extends BuildUpGeneratorResultDa
 	
 	@Override
 	public void validatePropertyForMissingMetaInfoValues(final String artefact) throws MOGLiPluginException {
-		checkForMissingMetaInfos();
+		if (areMissingMetaInfosToCheck()) {			
+			checkForMissingMetaInfos();
+		}
 		
 		if (validationErrors.size() > 0) {
 			throw new MOGLiPluginException(buildErrorString(artefact));

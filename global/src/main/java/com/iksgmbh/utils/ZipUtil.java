@@ -91,22 +91,37 @@ public class ZipUtil {
 		List<File> fileList = new ArrayList<File>();
 		System.out.println("---Getting references to all files in: "
 				+ directoryToZip.getCanonicalPath());
-		getAllFiles(directoryToZip, fileList);
+		addAllFilesToList(directoryToZip, fileList);
+		addEmptyDirsToList(directoryToZip, fileList);
 		System.out.println("---Creating zip file");
 		writeZipFile(directoryToZip, fileList, targetZipFileName);
 		System.out.println("---Done");
 	}
+	
+	public static void addEmptyDirsToList(File dir, List<File> fileList) {
+		File[] files = dir.listFiles();
+		if (files.length == 0)
+		{
+			fileList.add(dir);
+			return;
+		}
+		for (File file : files) {
+			if (file.isDirectory()) {
+				addEmptyDirsToList(file, fileList);
+			}
+		}
+	}	
 
-	public static void getAllFiles(File dir, List<File> fileList) {
+	public static void addAllFilesToList(File dir, List<File> fileList) {
 		try {
 			File[] files = dir.listFiles();
 			for (File file : files) {
-				fileList.add(file);
 				if (file.isDirectory()) {
 					System.out.println("directory:" + file.getCanonicalPath());
-					getAllFiles(file, fileList);
+					addAllFilesToList(file, fileList);
 				} else {
 					System.out.println("     file:" + file.getCanonicalPath());
+					fileList.add(file);
 				}
 			}
 		} catch (IOException e) {
@@ -124,8 +139,15 @@ public class ZipUtil {
 			ZipOutputStream zos = new ZipOutputStream(fos);
 
 			for (File file : fileList) {
-				if (!file.isDirectory()) { // we only zip files, not directories
-					addToZip(directoryToZip, file, zos);
+				if (file.isDirectory()) 
+				{ 
+					// The following line should add an empty directory, but does not seem to work: error while unzipping: Permission denied
+					// So better avoid empty dirs for zipping / unzipping !
+					//zos.putNextEntry(new ZipEntry(file.getName() + System.getProperty("file.separator") + "."));
+				}
+				else
+				{
+					addToZip(directoryToZip, file, zos);					
 				}
 			}
 

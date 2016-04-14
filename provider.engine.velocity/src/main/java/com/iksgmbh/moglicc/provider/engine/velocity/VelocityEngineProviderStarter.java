@@ -219,13 +219,16 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 
 	private VelocityEngine getVelocityEngine() {
 		final String templateDirAsString = velocityEngineData.getTemplateDir().getAbsolutePath();
-		final String templateParentDirAsString = velocityEngineData.getTemplateDir().getParentFile().getAbsolutePath();
+		final String pluginInputDirAsString = velocityEngineData.getTemplateDir().getParentFile().getAbsolutePath();
+		final String mogliccInputDirAsString = velocityEngineData.getTemplateDir().getParentFile().getParentFile().getAbsolutePath();
 		final Properties velocityEngineProperties = new Properties();
         velocityEngineProperties.setProperty("output.encoding", "UTF-8");
         velocityEngineProperties.setProperty("input.encoding", "UTF-8");
         velocityEngineProperties.setProperty(RuntimeConstants.RESOURCE_LOADER, "file");
         velocityEngineProperties.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH,
-        									 templateDirAsString + ", " + templateParentDirAsString);
+        									 templateDirAsString + ", " + 
+                                             pluginInputDirAsString + ", " + 
+                                             mogliccInputDirAsString);
 
         final VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.init(velocityEngineProperties);

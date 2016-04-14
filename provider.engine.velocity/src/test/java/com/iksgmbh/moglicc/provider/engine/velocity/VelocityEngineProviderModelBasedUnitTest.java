@@ -77,4 +77,5 @@ public class VelocityEngineProviderModelBasedUnitTest extends VelocityEngineProv
 		assertStringContains(buildUpVelocityResultData.getGeneratedContent(), MockDataBuilder.TEST_CLASS_NAME1);
 		assertStringContains(buildUpVelocityResultData.getGeneratedContent(), MockDataBuilder.TEST_CLASS_NAME2);
 	}
+	
 }

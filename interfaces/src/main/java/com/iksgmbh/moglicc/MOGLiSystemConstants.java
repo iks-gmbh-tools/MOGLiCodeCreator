@@ -31,7 +31,9 @@ public class MOGLiSystemConstants {
 
 	public static final String DIR_PLUGIN = "plugins";
 	public static final String DIR_LIB = "lib";
+	public static final String DIR_DROPIN = "dropins";
 	public static final String DIR_LIB_PLUGIN = "/" + DIR_LIB + "/" + DIR_PLUGIN;
+	public static final String DIR_LIB_DROPINS = "/" + DIR_LIB + "/" + DIR_DROPIN;
 	public static final String DIR_OUTPUT_FILES = "output";
 	public static final String DIR_INPUT_FILES = "input";
 	public static final String DIR_LOGS_FILES = "logs";

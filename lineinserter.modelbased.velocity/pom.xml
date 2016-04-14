@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.iksgmbh.moglicc</groupId>
 		<artifactId>parent.plugin</artifactId>
-		<version>1.6.1-SNAPSHOT</version>
+		<version>1.6.2-SNAPSHOT</version>
 		<relativePath>../parent.plugin/pom.xml</relativePath>
 	</parent>
 
