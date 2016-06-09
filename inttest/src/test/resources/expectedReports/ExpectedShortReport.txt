@@ -10,7 +10,7 @@ A total of 90 generation events for 49 output artefact(s) have been performed.
 
 ExcelStandardModelProvider: Model MOGLiCC_JavaBeanModel with 6 classes has been called 2 times.
 StandardModelProvider: Model MOGLiCC_JavaBeanModel with 6 classes has been called 3 times.
-VelocityEngineProvider: Velocity engine started for 26 calls.
+VelocityEngineProvider: Velocity engine started in full generation mode for 9 call(s).
 
 VelocityClassBasedFileMaker: From 10 input artefact(s), have been 48 used to make 48 files.
 VelocityModelBasedLineInserter: No model matching input artefact found. Nothing to do.

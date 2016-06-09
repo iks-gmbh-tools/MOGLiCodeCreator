@@ -30,12 +30,23 @@ import com.iksgmbh.utils.FileUtil;
 
 public class TemplateStringUtility {
 
+	/**
+	 * Adds a new String element to a list of strings.
+	 * @param list
+	 * @param newElement
+	 */
 	public static void addToList(final List<String> list, 
 			                     final String newElement) 
 	{
 		list.add(newElement);
 	}
 
+	/**
+	 * Checks a String to contain a substring.
+	 * @param text
+	 * @param searchString
+	 * @return true if searchString is contained at least once in text 
+	 */
 	public static boolean contains(String text, String searchString) 
 	{
 		if (searchString == null) return false;
@@ -43,6 +54,12 @@ public class TemplateStringUtility {
 		return text.contains(searchString);
 	}
 	
+	/**
+	 * Checks all Strings in a list to contain a substring.
+	 * @param text
+	 * @param searchString
+	 * @return true if searchString is contained at least once in at least one String element 
+	 */
 	public static boolean contains(List<String> texts, String searchString) 
 	{
 		if (texts == null) return false;
@@ -58,29 +75,28 @@ public class TemplateStringUtility {
 		return false;
 	}
 	
-
-	public boolean isStringValueSet(String s) {
-		return s != null;
+	/**
+	 * Checks a String to be not null.
+	 * @param string
+	 * @return true if not null
+	 */
+	public boolean isStringValueSet(String string) {
+		return string != null;
 	}
 
-	public boolean isIntegerValueSet(Integer i) {
-		return i != null;
-	}
-
+	/**
+	 * Checks a String to have the value "null" or not.
+	 * @param s
+	 * @return true if equals to "null"
+	 */
 	public boolean isNullString(String s) {
 		return s.equals("null");
 	}
 
-	public boolean isBooleanValueSet(Boolean b) {
-		return b != null;
-	}
-
-	public boolean isCreateGUI(Boolean b) {
-		return b.booleanValue();
-	}
-
 	/**
-	 * First letter to upper: "upper" -> "Upper"
+	 * Converts first letter of String to upper case.
+	 * @param string
+	 * @return e.g. "Upper" for "upper"
 	 */
 	public static String firstToUpperCase(String string) {
 		if (string == null) {
@@ -93,7 +109,9 @@ public class TemplateStringUtility {
 	}
 
 	/**
-	 * First letter to lower: "Lower" -> "lower"
+	 * Converts first letter of String to lower case.
+	 * @param string
+	 * @return e.g. "Lower" for "lower"
 	 */
 	public static String firstToLowerCase(String string) {
 		if (string == null) {
@@ -105,18 +123,41 @@ public class TemplateStringUtility {
 		return string.substring(0, 1).toLowerCase() + string.substring(1);
 	}
 
-	public static String cutSuffix(String str, String suffix) {
-		return StringUtils.removeEnd(str, suffix);
+	/**
+	 * Cuts a trailing substring from a String.
+	 * @param string
+	 * @param suffix
+	 * @return string without suffix
+	 */
+	public static String cutSuffix(String string, String suffix) {
+		return StringUtils.removeEnd(string, suffix);
 	}
 
-	public static String cutLeadingChars(String str, int num) {
-		return str.substring(num);
+	/**
+	 * Cuts a leading substring from a String.
+	 * @param string
+	 * @param num number of chars to cut
+	 * @return string cut in the beginning
+	 */
+	public static String cutLeadingChars(String string, int num) {
+		return string.substring(num);
 	}
 
+	/**
+	 * Concatenates two Strings.
+	 * @param s1
+	 * @param s2
+	 * @return s1 + s2
+	 */
 	public static String addStrings(String s1, String s2) {
 		return s1 + s2;
 	}
 
+	/**
+	 * Checks that a list of Strings has no element.
+	 * @param list
+	 * @return true if without entry
+	 */
 	public static boolean isListEmpty(final List<String> list) {
 		if (list == null || list.size() == 0) {
 			return true;
@@ -124,6 +165,11 @@ public class TemplateStringUtility {
 		return list.isEmpty();
 	}
 
+	/**
+	 * Concatenates all Strings of a list.
+	 * @param list of Strings
+	 * @return contcatenation of all string elements
+	 */
 	public static String toCommaSeparatedString(final List<String> list) {
 		if (list == null || list.size() == 0) {
 			return "";
@@ -138,6 +184,11 @@ public class TemplateStringUtility {
 		return sb.toString();
 	}
 	
+	/**
+	 * Creates an array of Strings from an single String using commas.
+	 * @param string containing commas
+	 * @return String array
+	 */
 	public static String[] commaSeparatedStringToStringArray(final String s) {
 		final String[] result = s.split(",");
 		for (int i = 0; i < result.length; i++) {
@@ -146,6 +197,11 @@ public class TemplateStringUtility {
 		return result;
 	}
 	
+	/**
+	 * Creates a list of Strings from an single String using commas.
+	 * @param string containing commas
+	 * @return list of Strings
+	 */
 	public static List<String> commaSeparatedStringToStringList(final String s) {
 		final String[] result = commaSeparatedStringToStringArray(s);
 		final List<String> toReturn = new ArrayList<String>();
@@ -155,6 +211,11 @@ public class TemplateStringUtility {
 		return toReturn;
 	}
 
+	/**
+	 * Creates a hashset of Strings from an single String using commas.
+	 * @param string containing commas
+	 * @return hashset of Strings
+	 */
 	public static HashSet<String> commaSeparatedStringToStringHashSet(final String s) {
 		final String[] result = commaSeparatedStringToStringArray(s);
 		final HashSet<String> toReturn = new HashSet<String>();
@@ -164,23 +225,40 @@ public class TemplateStringUtility {
 		return toReturn;
 	}
 	
+	/**
+	 * @return String representation of Timestamp for 'now'. 
+	 */
 	public static String getNowAsTimeStamp() {
 		return "" + new Date().getTime();
 	}
 
+	/**
+	 * Converts the current point of time as String. 
+	 * @param dateFormat
+	 * @return String representation of Timestamp for 'now' formatted by dateFormat. 
+	 */
 	public static String getNowAsFormattedString(final String dateFormat) {
 		return getDateAsFormattedString(new Date(), dateFormat);
 	}
 
 	/**
-	 * @param dateFormat as String to instanciate a SimpleDateFormat object, e.g. "yyyy.MM.dd HHmm"
-	 * @return formatted date string e.g. "2013.06.06 1202"
+	 * Converts a date into a String representation using a given dateformt
+	 * @param date to format
+	 * @param dateFormat as String to instantiate a SimpleDateFormat object, e.g. "yyyy.MM.dd HHmm"
+	 * @return formatted date string e.g. "2013.06.06 2012"
 	 */
 	public static String getDateAsFormattedString(final Date date, final String dateFormat) {
 		final DateFormat fmt = new SimpleDateFormat( dateFormat );
 		return fmt.format(date);
 	}
 
+	/**
+	 * Replaces in an containerString als occurrences of toReplace by replacement.
+	 * @param containerString
+	 * @param toReplace
+	 * @param replacement
+	 * @return replaced String
+	 */
 	public static String replaceAllIn(final String containerString, final String toReplace, final String replacement) {
 		return StringUtils.replace(containerString, toReplace, replacement);
 	}
@@ -202,6 +280,59 @@ public class TemplateStringUtility {
 		
 		final List<String> toReturn = new ArrayList<String>();
 		toReturn.add("ERROR: File " + file.getAbsolutePath() + " not found!");
+		return toReturn;
+	}
+
+	/**
+	 * Converts e.g. orderCustomerAddress into ORDER_CUSTOMER_ADDRESS.
+	 * Spaces are removed.
+	 * @param camelCaseString
+	 * @return String that represents a typical tablename in a database
+	 */
+	public static String toDBTableName(final String camelCaseString) 
+	{
+		String toReturn = "";
+		char[] charArray = camelCaseString.replace(" ", "").toCharArray();
+		
+		for (char c : charArray) {
+			if (c >= 97) {
+				toReturn += ("" + c).toUpperCase();
+			} else {
+				toReturn += "_" + c;
+			}
+		}
+		
+		return toReturn;
+	}
+
+	/**
+	 * Converts e.g. orderCustomerAddress into 'Order Customer Address'.
+	 * Spaces are removed.
+	 * @param camelCaseString
+	 * @return String that represents a typical tablename in a database
+	 */
+	public static String toDisplayName(final String camelCaseString) 
+	{
+		String toReturn = "";
+		char[] charArray = camelCaseString.replace(" ", "").toCharArray();
+		
+		boolean firstChar = true;
+		for (char c : charArray) {
+			if (firstChar) {
+				toReturn += ("" + c).toUpperCase();
+				firstChar = false;
+			} 
+			else
+			{
+				if (c >= 97) {
+					toReturn += ("" + c);
+				} else {
+					toReturn += " " + c;
+				}
+			}
+			
+		}
+		
 		return toReturn;
 	}
 	

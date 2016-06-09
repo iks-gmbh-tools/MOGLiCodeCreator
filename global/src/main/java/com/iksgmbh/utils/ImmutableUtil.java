@@ -29,7 +29,6 @@ public class ImmutableUtil {
 //		return Collections.unmodifiableList(list);
 //	}
 	
-	@SafeVarargs
 	public static <T> List<T> getImmutableListFromLists(List<T>... lists) {
 		final List<T> list = new ArrayList<T>();
 		for (int i = 0; i < lists.length; i++) {
@@ -46,7 +45,6 @@ public class ImmutableUtil {
 		return Collections.unmodifiableList(new ArrayList<T>());
 	}
 	
-	@SafeVarargs
 	public static <T> List<T> getImmutableListOf(T... elements) {
 		final List<T> list = new ArrayList<T>();
 		for (int i = 0; i < elements.length; i++) {

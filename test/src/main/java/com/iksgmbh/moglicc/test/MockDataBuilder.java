@@ -39,6 +39,8 @@ import com.iksgmbh.data.ClassNameData;
 
 public class MockDataBuilder {
 	
+	public static final String MOCK_MODEL_NAME = "MockModel";
+	
 	public static final String JAVA_TYPE = "JavaType";
 	public static final String GENERATOR_PLUGIN_ID = DummyGeneratorStarter.PLUGIN_ID;
 	public static final String ARTEFACT_TYPE = "javabean";
@@ -81,7 +83,7 @@ public class MockDataBuilder {
 
 	public static Model buildModelMock(final ClassNameData... classes) {
 		final Model mock = EasyMock.createNiceMock(Model.class);
-		expect(mock.getName()).andReturn("MockModel").anyTimes();
+		expect(mock.getName()).andReturn(MOCK_MODEL_NAME).anyTimes();
 		expect(mock.getSize()).andReturn(classes.length).anyTimes();
 		expect(mock.getClassDescriptorList()).andReturn(buildClassDescriptorList(classes)).anyTimes();
         replay(mock);

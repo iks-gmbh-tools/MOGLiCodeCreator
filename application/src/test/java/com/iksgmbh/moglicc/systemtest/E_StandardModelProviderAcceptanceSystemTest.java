@@ -61,7 +61,7 @@ public class E_StandardModelProviderAcceptanceSystemTest extends __AbstractSyste
 		
 		// verify test result
 		assertFileExists(pluginHelpDir);
-		assertChildrenNumberInDirectory(pluginHelpDir, 4);
+		assertChildrenNumberInDirectory(pluginHelpDir, 2);
 	}
 	
 	@Test

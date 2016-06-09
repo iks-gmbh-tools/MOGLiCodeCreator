@@ -36,6 +36,7 @@ import com.iksgmbh.moglicc.generator.utils.TemplateUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
+import com.iksgmbh.moglicc.test.MockDataBuilder;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.FileUtil.FileCreationStatus;
@@ -128,11 +129,13 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	@Test
 	public void savesTargetFilesInPluginOutputDir() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);
 		final String targetFileName = "targetFile.txt";
 		VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "temp", "Content", true);
 		prepareResultData(resultData);
 		final File targetFile = prepareTargetFile(applicationOutputDir, VelocityClassBasedFileMakerStarter.PLUGIN_ID
-                                                                        + "/" + VelocityClassBasedFileMakerStarter.ARTEFACT_JAVABEAN
+                                                                        + "/" + artefactName
                                                                         + "/" + targetFileName);
 
 		// call functionality under test
@@ -183,6 +186,8 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	@Test
 	public void savesTargetFilesInTargetDirReadFromTemplateFile() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, "temp", "Content", true);
 		prepareResultData(resultData);
@@ -199,6 +204,9 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	@Test
 	public void throwsExceptionIfOutputFileNameIsMissingInTemplateFile() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);		
+		
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(null, "temp", "Content", false);
 		prepareResultData(resultData);
 
@@ -216,6 +224,8 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	@Test
 	public void createsNotExistingTargetDirWithCreateNewInstructions() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);		
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, targetDir, "Content", true);
@@ -235,6 +245,8 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	@Test
 	public void createsNotExistingTargetFileDirWithoutCreateNewInstruction() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);		
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName,
@@ -257,6 +269,8 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	@Test
 	public void createsExistingTargetFileNewlyWithCreateNewInstructions() throws Exception {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);		
 		final String targetDir = applicationRootDir.getAbsolutePath() + "/example";
 		final String targetFileName = "targetFile.txt";
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, targetDir, "ContentToInsert", true);
@@ -298,6 +312,8 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	@Test
 	public void createsTargetFileWithRootDirDefinedInTemplateFile() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);
 		final String targetDir = applicationRootDir.getAbsolutePath() + "/temp";
 		final String targetFileName = "targetFile.txt";
 		final File targetFile = new File(targetDir, targetFileName);
@@ -405,16 +421,12 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 	public void doesNotOverwriteExistingFilesInTargetDirAndcreatesCorrespondingGenerationReport() throws Exception {
 		// prepare test
 		final String artefactName = "testArtefact";
-		final File artefactDir = new File(infrastructure.getPluginInputDir(), artefactName);
-		artefactDir.mkdirs();
-		assertFileExists(artefactDir);
-		final File templateFile = new File(artefactDir, "main.tpl");
-		MOGLiFileUtil.createNewFileWithContent(templateFile, "content of this file does not play a role here");
+		final File artefactDir = createTestArtefact(artefactName);
 		final String targetFileName = "targetFile.txt";
 		final File targetDir = new File(applicationRootDir, artefactName);
 		FileUtil.deleteDirWithContent(targetDir);
 		targetDir.mkdirs();
-		final File targetFile = new File(targetDir, artefactName);
+		final File targetFile = new File(targetDir, targetFileName);
 		targetFile.createNewFile();
 		final VelocityGeneratorResultData resultData = buildVelocityGeneratorResultData(targetFileName, artefactName,
 				                                                                        "TargetFileContent", false);
@@ -429,6 +441,16 @@ public class VelocityClassBasedFileMakerUnitTest extends VelocityClassBasedFileM
 		// verify test result
 		final String generationReport = velocityClassBasedGenerator.getGeneratorReport();
 		assertTrue("unexpected generation result", generationReport.contains("targetFile.txt did already exist and was NOT overwritten in testArtefact"));
+	}
+
+	private File createTestArtefact(final String artefactName) {
+		final File artefactDir = new File(infrastructure.getPluginInputDir(), artefactName);
+		artefactDir.mkdirs();
+		assertFileExists(artefactDir);
+		final File templateFile = new File(artefactDir, "main.tpl");
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@" + KnownGeneratorPropertyNames.NameOfValidModel + 
+				                                             " " + MockDataBuilder.MOCK_MODEL_NAME);
+		return artefactDir;
 	}
 
 	final HashMap<String, FileCreationStatus> result = new HashMap<String, FileCreationStatus>();

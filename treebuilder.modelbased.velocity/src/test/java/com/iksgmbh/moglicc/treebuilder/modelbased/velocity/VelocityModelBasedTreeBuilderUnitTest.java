@@ -60,7 +60,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 
 		velocityResultData.addProperty(KnownGeneratorPropertyNames.TargetDir.name(), "<applicationRootDir>");
 		velocityResultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "true");
-		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MOGLiCC_JavaBeanModel");
+		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), DUMMY_MODEL_NAME);
 
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RootName.name(), METAINFO_MODEL_TARGETDIR);
 
@@ -89,7 +89,9 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	@Test
 	public void copiesFilesToOutputDir() throws MOGLiPluginException {
 		// prepare test
-		final File targetDir = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_JavaBeanProject");
+		String artefactName = "TestArtefact";
+		createTestArtefact(artefactName);
+		final File targetDir = new File(infrastructure.getPluginOutputDir(), artefactName);
 		FileUtil.deleteDirWithContent(targetDir);
 		assertFileDoesNotExist(targetDir);
 
@@ -117,7 +119,9 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	@Test
 	public void doesReplacementsInPluginOutputDir() throws MOGLiPluginException {
 		// prepare test
-		final File targetDir = new File(infrastructure.getPluginOutputDir(), "MOGLiCC_JavaBeanProject");
+		final String artefactName = "TestArtefact"; 
+		createTestArtefact(artefactName);
+		final File targetDir = new File(infrastructure.getPluginOutputDir(), artefactName);
 		FileUtil.deleteDirWithContent(targetDir);
 		assertFileDoesNotExist(targetDir);
 
@@ -137,6 +141,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	@Test
 	public void createsTargetDirDefinedAsProperty() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final File disturbingArtefactDir = new File(infrastructure.getPluginInputDir(), "MOGLiCC_NewPluginProject");
 		FileUtil.deleteDirWithContent(disturbingArtefactDir);
 		FileUtil.deleteDirWithContent(applicationOutputDir);
@@ -155,6 +160,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	@Test
 	public void doesNotOverwriteExistingFilesInTargetDirAndCreatesCorrespondingGenerationReport() throws Exception {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		FileUtil.deleteDirWithContent(applicationOutputDir);
 		final File targetDir = new File(applicationRootDir, "ModelTargetTestDir");
 		FileUtil.deleteDirWithContent(targetDir);
@@ -186,7 +192,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 		final File inputDir = new File(infrastructure.getPluginInputDir(), artefactName);
 		inputDir.mkdirs();
 		final File propertiesFile = new File(inputDir, VelocityModelBasedTreeBuilderStarter.FILENAME_ARTEFACT_PROPERTIES);
-		propertiesFile.createNewFile();
+		FileUtil.createNewFileWithContent(propertiesFile, "@NameOfValidModel DummyModel");
 		resetVelocityResultData(KnownTreeBuilderPropertyNames.RootName.name());
 
 		// call functionality under test
@@ -237,10 +243,11 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 
 	private void prepareSingleArtefactDirWithSimplePropertiesFile() throws Exception {
 		FileUtil.deleteDirWithContent(infrastructure.getPluginInputDir());
-		final File artefactDir = new File(infrastructure.getPluginInputDir(), "MOGLiCC_JavaBeanProject");
+		final File artefactDir = new File(infrastructure.getPluginInputDir(), DUMMY_MODEL_NAME);
 		artefactDir.mkdirs();
 		final File propertiesFile = new File(artefactDir, VelocityModelBasedTreeBuilderStarter.FILENAME_ARTEFACT_PROPERTIES);
-		FileUtil.createNewFileWithContent(propertiesFile, "@RootName test");
+		FileUtil.createNewFileWithContent(propertiesFile, "@RootName test" + System.getProperty("line.separator")
+		                                                  +"@NameOfValidModel " + DUMMY_MODEL_NAME);
 	}
 
 	@Test
@@ -322,40 +329,35 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 		artefactSubfolder.mkdirs();
 		final File artefactFile = new File(artefactSubfolder, RENAMING_TEST_FILE);
 		FileUtil.createNewFileWithContent(artefactFile, "<replaceMe>");
-		final File artefactPropertiesFile = new File(artefactDir, "artefact.properties");
+		final File artefactPropertiesFile = new File(artefactDir, VelocityModelBasedTreeBuilderStarter.FILENAME_ARTEFACT_PROPERTIES);
+		FileUtil.createNewFileWithContent(artefactPropertiesFile, "@NameOfValidModel " + DUMMY_MODEL_NAME);
 		return artefactPropertiesFile;
 	}
 
 	@Test
 	public void renamesDirInPluginOutputDir() throws Exception {
 		// prepare test
-		final File artefactPropertiesFile = prepareTestArtefact();
-		final String newPath = "folder1/folder2/subfolder";
-
-		executeDirRenamingReplaceTest(artefactPropertiesFile, newPath, RENAMING_TEST_ARTEFACT, infrastructure.getPluginOutputDir());
+		prepareTestArtefact();
+		executeDirRenamingReplaceTest("folder1/folder2/subfolder", RENAMING_TEST_ARTEFACT, infrastructure.getPluginOutputDir());
 	}
 
 	@Test
 	public void renamesDirToNameWithLeadingDotMarkedAsExcluded() throws Exception {
-		// prepare test
-		final File artefactPropertiesFile = prepareTestArtefact();
+		prepareTestArtefact();
 		final String newPath = ".hg";  // this is a excluded dir name
-
-		executeDirRenamingReplaceTest(artefactPropertiesFile, newPath, RENAMING_TEST_TARGETDIR, applicationRootDir);
+		executeDirRenamingReplaceTest(newPath, RENAMING_TEST_TARGETDIR, applicationRootDir);
 	}
 
 	@Test
 	public void replacesTwoMetoInfoReferencesInOneLine() throws Exception {
-		// prepare test
-		final File artefactPropertiesFile = prepareTestArtefact();
-		final String newPath = "newSubfolder";
-
-		executeDirRenamingReplaceTest(artefactPropertiesFile, newPath, RENAMING_TEST_TARGETDIR, applicationRootDir);
+		prepareTestArtefact();
+		executeDirRenamingReplaceTest("newSubfolder", RENAMING_TEST_TARGETDIR, applicationRootDir);
 	}
 
-	private void executeDirRenamingReplaceTest(final File artefactPropertiesFile,
-			                            final String newPath, final String mainTargetDirName,
-			                            final File targetDir) throws MOGLiPluginException
+	private void executeDirRenamingReplaceTest(final String newPath, 
+			                                   final String mainTargetDirName,
+			                                   final File targetDir) 
+			                                		 throws MOGLiPluginException
 	{
 		resetVelocityResultData(KnownTreeBuilderPropertyNames.RootName.name());
 		resetVelocityResultData(KnownTreeBuilderPropertyNames.ReplaceIn.name());
@@ -386,6 +388,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	public void skipsGenerationWhenConfiguredSoInArtefactProperties() throws Exception
 	{
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final File applicationRoot = treeBuilderGenerator.getInfrastructure().getApplicationRootDir();
 		final File resultDir = new File(applicationRoot, "ModelTargetTestDir");
 		FileUtil.deleteDirWithContent(resultDir);
@@ -393,7 +396,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 
 		resetVelocityResultData(RESET_ALL_PROPERTIES);
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RootName.name(), "ModelTargetTestDir");
-		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MOGLiCC_JavaBeanModel");
+		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), DUMMY_MODEL_NAME);
 
 		// Test 1: without skip instruction
 		//call functionality under test
@@ -418,6 +421,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	public void deleteTargetDirWhenConfiguredSoInArtefactProperties() throws Exception
 	{
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final File applicationRoot = treeBuilderGenerator.getInfrastructure().getApplicationRootDir();
 		final File resultDir = new File(applicationRoot, "ModelTargetTestDir");
 		resultDir.mkdirs();
@@ -427,7 +431,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 
 		resetVelocityResultData(RESET_ALL_PROPERTIES);
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RootName.name(), "ModelTargetTestDir");
-		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MOGLiCC_JavaBeanModel");
+		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), DUMMY_MODEL_NAME);
 		velocityResultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.CleanTarget.name(), "true");
 
@@ -442,6 +446,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	public void doesNotModifyTargetDirIfCreateNewEqualsFalse() throws Exception
 	{
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final File applicationRoot = treeBuilderGenerator.getInfrastructure().getApplicationRootDir();
 		final File disturbingInputDir = new File(applicationRoot, "input/VelocityModelBasedTreeBuilder/MOGLiCC_NewPluginProject");
 		FileUtil.deleteDirWithContent(disturbingInputDir);
@@ -472,6 +477,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	public void throwsErrorForSimultanUseOfPreserveFileAndCleanTargetProperties() throws Exception
 	{
 		// prepare test
+		createTestArtefact("TestArtefact");
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.CleanTarget.name(), "true");
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.PreserveFiles.name(), "true");
 		
@@ -489,9 +495,10 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	public void throwsErrorIfTargetDirDoesNotExistAndCreateNewIsFalse() throws Exception
 	{
 		// prepare test
+		createTestArtefact("TestArtefact");
 		resetVelocityResultData(RESET_ALL_PROPERTIES);
 		velocityResultData.addProperty(KnownGeneratorPropertyNames.TargetDir.name(), "NotExistingDirectory");
-		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MOGLiCC_JavaBeanModel");
+		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), DUMMY_MODEL_NAME);
 		velocityResultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), "false");
 		
 		try {
@@ -522,6 +529,7 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	public void doesNotOverwriteFilesInTargetDirIfPreserveFilesEqualsFalse() throws Exception
 	{
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final File applicationRoot = treeBuilderGenerator.getInfrastructure().getApplicationRootDir();
 		final File disturbingInputDir = new File(applicationRoot, "input/VelocityModelBasedTreeBuilder/MOGLiCC_NewPluginProject");
 		FileUtil.deleteDirWithContent(disturbingInputDir);
@@ -552,9 +560,21 @@ public class VelocityModelBasedTreeBuilderUnitTest extends VelocityModelBasedTre
 	{
 		resetVelocityResultData(RESET_ALL_PROPERTIES);
 		velocityResultData.addProperty(KnownGeneratorPropertyNames.TargetDir.name(), "<applicationRootDir>");
-		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), "MOGLiCC_JavaBeanModel");
+		velocityResultData.addProperty(KnownGeneratorPropertyNames.NameOfValidModel.name(), DUMMY_MODEL_NAME);
 		velocityResultData.addProperty(KnownGeneratorPropertyNames.CreateNew.name(), createNewString);
 		velocityResultData.addProperty(KnownTreeBuilderPropertyNames.RootName.name(), "ModelTargetTestDir");
+	}
+
+	private File createTestArtefact(final String artefactName) {
+		final File dirMOGLiCC_JavaBeanProject = new File(infrastructure.getPluginInputDir(), "MOGLiCC_JavaBeanProject");
+		final File artefactDir = new File(infrastructure.getPluginInputDir(), artefactName);
+		dirMOGLiCC_JavaBeanProject.renameTo(artefactDir);
+		
+		assertFileExists(artefactDir);
+		final File templateFile = new File(artefactDir, VelocityModelBasedTreeBuilderStarter.FILENAME_ARTEFACT_PROPERTIES);
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@" + KnownGeneratorPropertyNames.NameOfValidModel + 
+				                                             " " + DUMMY_MODEL_NAME);
+		return artefactDir;
 	}
 	
 }

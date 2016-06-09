@@ -51,12 +51,15 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	public static final String TEMPLATE_REFERENCE_CLASS_DESCRIPTOR = "classDescriptor";
 	public static final String PLUGIN_ID = "VelocityEngineProvider";
 	public static final String DEFAULT_FILE_EXTENSION = ".txt";
-
+	
+	private final static String[] API_IMAGES = { "background.gif", "titlebar_end.gif", "titlebar.gif", "tab.gif" };
+	private final static String[] JAVA_DOCS = { "TemplateJavaUtility.html", "TemplateStringUtility.html" };
+	
 	private InfrastructureService infrastructure;
 	private VelocityEngineData velocityEngineData;
 	private Model model;
-	private int callCountsModelBased = 0;
-	private int callCountsClassBased = 0;
+	private int callCountsModelBasedFullGeneration = 0;
+	private int callCountsClassBasedFullGeneration = 0;
 	final StringBuffer modelBasedReportEntries = new StringBuffer();
 	final StringBuffer classBasedReportEntries = new StringBuffer();
 
@@ -156,22 +159,22 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 		infrastructure.getPluginLogger().logInfo("MainTemplate: " + velocityEngineData.getTemplateDir().getAbsolutePath() 
 				                                  + "/" + velocityEngineData.getMainTemplateSimpleFileName());
 		
+		model = velocityEngineData.getModel();
+		
 		if (modelBased) {
 			modelBasedReportEntries.append("from " + velocityEngineData.getGeneratorPluginId() + " on main template '" 
 					+ velocityEngineData.getArtefactType() + "' on template '" 
 					+ velocityEngineData.getMainTemplateSimpleFileName() + "'");
 			modelBasedReportEntries.append(FileUtil.getSystemLineSeparator());
-			callCountsModelBased++;
-
+			callCountsModelBasedFullGeneration++;
 		} else {
 			classBasedReportEntries.append("from " + velocityEngineData.getGeneratorPluginId() + " for artefact '"
-			                               + velocityEngineData.getArtefactType() + "' on main template '" 
-			           					   + velocityEngineData.getMainTemplateSimpleFileName() + "'");
+					+ velocityEngineData.getArtefactType() + "' on main template '" 
+					+ velocityEngineData.getMainTemplateSimpleFileName() + "'");
 			classBasedReportEntries.append(FileUtil.getSystemLineSeparator());
-			callCountsClassBased++;
+			callCountsClassBasedFullGeneration++;
 		}
 
-		model = velocityEngineData.getModel();
 		infrastructure.getPluginLogger().logInfo("Model " + model.getName() + " received from "
 				                                 + velocityEngineData.getGeneratorPluginId());
 	}
@@ -308,9 +311,10 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR, PLUGIN_ID);
-		helpData.addFile("_TemplateUtilities.htm");
-		helpData.addFile("TemplateStringUtility.htm");
-		helpData.addFile("TemplateJavaUtility.htm");
+		helpData.addFile("TemplateUtilities.htm");
+		helpData.addFile("stylesheet.css", "apidocs");
+		helpData.addFlatFolder("apidocs/resources", API_IMAGES);
+		helpData.addFlatFolder("apidocs/com/iksgmbh/moglicc/provider/engine/velocity", JAVA_DOCS);
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
 	}
@@ -325,30 +329,30 @@ public class VelocityEngineProviderStarter implements ClassBasedEngineProvider, 
 	@Override
 	public String getProviderReport()
 	{
-		if (callCountsModelBased == 0)
+		if (getNumberOfCalls() == 0)
 		{
 			return "not used for code generation";
 		}
-		return callCountsModelBased + " times called for model based generation: "
+		return callCountsModelBasedFullGeneration + " time(s) called in full generation model based mode: "
 			   + FileUtil.getSystemLineSeparator()
 			   + modelBasedReportEntries.toString().trim()
 			   + FileUtil.getSystemLineSeparator()
 			   + FileUtil.getSystemLineSeparator()
-	           + callCountsClassBased + " times called for class based generation:"
+	           + callCountsClassBasedFullGeneration + " time(s) called in full generation class based mode: "
 			   + FileUtil.getSystemLineSeparator()
-	           + classBasedReportEntries.toString().trim();
+		       + classBasedReportEntries.toString().trim();
 	}
 
 	@Override
 	public int getNumberOfCalls()
 	{
-		return callCountsClassBased + callCountsModelBased;
+		return callCountsModelBasedFullGeneration +  callCountsClassBasedFullGeneration;
 	}
 
 	@Override
 	public String getShortReport()
 	{
-		return "Velocity engine started for " + getNumberOfCalls() + " calls.";
+		return "Velocity engine started in full generation mode for " + getNumberOfCalls() + " call(s).";
 	}
 
 	@Override

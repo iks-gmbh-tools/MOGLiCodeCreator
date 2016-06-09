@@ -41,11 +41,7 @@ public class TemplateJavaUtility {
 		PRIMITIVE_TYPE.add("char");
 		PRIMITIVE_TYPE.add("byte");
 	}
-
-	public static boolean isPrimitiveType(String clazz) {
-		return PRIMITIVE_TYPE.contains(clazz);
-	}
-
+	
 	private static Set<String> PRIMITIVE_TYPE_WRAPPERS = new HashSet<String>();
 	static {
 		PRIMITIVE_TYPE_WRAPPERS.add("Boolean");
@@ -67,12 +63,6 @@ public class TemplateJavaUtility {
 		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Character");
 		PRIMITIVE_TYPE_WRAPPERS.add("java.lang.Byte");
 	}
-	
-
-	public static boolean isPrimitiveTypeWrapper(String clazz) {
-		return PRIMITIVE_TYPE_WRAPPERS.contains(clazz)
-				|| PRIMITIVE_TYPE_WRAPPERS_FULLY_QUALIFIED.contains(clazz);
-	}
 
 	// These classes are relevant for cloning purpose because they need not to be cloned.
 	private static Set<String> IMMUTTABLE_CLASSES = new HashSet<String>();
@@ -82,12 +72,48 @@ public class TemplateJavaUtility {
 		IMMUTTABLE_CLASSES.add("String");
 		IMMUTTABLE_CLASSES.add("BigDecimal");
 	}
+	
+	/**
+	 * Checks a Integer to be null or not.
+	 * @param s
+	 * @return true if not null
+	 */
+	public boolean isIntegerValueSet(Integer i) {
+		return i != null;
+	}
+
+	/**
+	 * Checks a Boolean to be null or not.
+	 * @param s
+	 * @return true if not null
+	 */
+	public boolean isBooleanValueSet(Boolean b) {
+		return b != null;
+	}
+
+	/**
+	 * Checks whether a String represents a java primitiv type.
+	 * @param type
+	 * @return true e.g. for long, but false for Long
+	 */
+	public static boolean isPrimitiveType(String type) {
+		return PRIMITIVE_TYPE.contains(type);
+	}
+	
+	/**
+	 * Checks whether a String represents a simple name of a wrapper class of a java primitiv type.
+	 * @param clazz
+	 * @return true e.g. for Long or java.lang.Long
+	 */
+	public static boolean isPrimitiveTypeWrapper(String clazz) {
+		return PRIMITIVE_TYPE_WRAPPERS.contains(clazz)
+				|| PRIMITIVE_TYPE_WRAPPERS_FULLY_QUALIFIED.contains(clazz);
+	}
 
 	public static boolean isImmutableClass(String clazz) {
 		return IMMUTTABLE_CLASSES.contains(clazz);
 	}
 	
-
 	/**
 	 * Removes package information from fully qualified class name: <code>org.joda.time.DateTime</code> -> <code>DateTime</code>
 	 * @param clazz
@@ -99,7 +125,12 @@ public class TemplateJavaUtility {
 		int indexOfLastDot = clazz.lastIndexOf('.');
 		return (indexOfLastDot < 0) ? clazz : clazz.substring(indexOfLastDot + 1);
 	}
-	
+
+	/**
+	 * Converts a list of classes into a list of class names.
+	 * @param classes
+	 * @return list of simple names of classes
+	 */
 	public static List<String> getSimpleClassName(final List<String> classes) {
 		Validate.notNull(classes, "Argument 'classes' is null.");
 		final List<String> toReturn = new ArrayList<String>();
@@ -109,6 +140,11 @@ public class TemplateJavaUtility {
 		return toReturn;
 	}
 	
+	/**
+	 * Reads all metainfo elements of a classDescriptor to gets all class names relevant for import statements.
+	 * @param classDescriptor
+	 * @return list of class names
+	 */
 	public static List<String> searchForImportClasses(final ClassDescriptor classDescriptor) {
 		final HashSet<String> importClasses = new HashSet<String>();
 		final List<MetaInfo> allMetaInfos = classDescriptor.getAllMetaInfos();
@@ -172,16 +208,26 @@ public class TemplateJavaUtility {
 
 		return importStatement + "\n";
 	}
-	
-	public static boolean isFullyQualifiedClassName(final String s) {
+
+	/**
+	 * Checks whether a string representation of a class is fully qualified.
+	 * @param classname
+	 * @return true if fully qualified
+	 */
+	public static boolean isFullyQualifiedClassName(final String classname) {
 		try {
-			new ClassNameData(s);
+			new ClassNameData(classname);
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 	
+	/**
+	 * Determines the type of the elements of an array.
+	 * @param javaType
+	 * @return string representation of a class, e.g. String for String[]
+	 */
 	public static String getArrayElementType(final String javaType) {
 		if (! isJavaMetaTypeArray(javaType)) {
 			return "Error: '" + javaType + "' is no Array type!";
@@ -192,7 +238,12 @@ public class TemplateJavaUtility {
 		}
 		return javaType;
 	}
-	
+
+	/**
+	 * Checks a String representation of a javaType to be primitive.
+	 * @param javaType
+	 * @return true if primitive
+	 */
 	public static boolean isJavaMetaTypePrimitive(final String javaType) {
 		if (PRIMITIVE_TYPE.contains(javaType)) {
 			return true;
@@ -200,6 +251,11 @@ public class TemplateJavaUtility {
 		return false;
 	}
 	
+	/**
+	 * Checks a String representation of a javaType to be generic.
+	 * @param javaType
+	 * @return true e.g. for List<String>, but false for String
+	 */
 	public static boolean isJavaMetaTypeGeneric(final String javaType) {
 		if (javaType.contains("<") && javaType.endsWith(">")) {
 			return true;
@@ -207,6 +263,11 @@ public class TemplateJavaUtility {
 		return false;
 	}
 	
+	/**
+	 * Determines the type of a collection.
+	 * @param javaType
+	 * @return true e.g. List for List<String>
+	 */
 	public static String getCollectionMetaType(final String javaType) {
 		if (! isJavaMetaTypeCollection(javaType)) {
 			return "Error: '" + javaType + "' is no Collection type!";
@@ -218,6 +279,11 @@ public class TemplateJavaUtility {
 		return javaType;
 	}
 	
+	/**
+	 * Determines the type of the elements of a collection.
+	 * @param javaType
+	 * @return true e.g. String for List<String>
+	 */
 	public static String getCollectionElementType(final String javaType) {
 		final int pos1 = javaType.indexOf("<");
 		final int pos2 = javaType.lastIndexOf(">");
@@ -227,6 +293,11 @@ public class TemplateJavaUtility {
 		return "Error in method getCollectionElementType with argument '" + javaType + "'";
 	}
 
+	/**
+	 * Checks a String representation of a javaType to be an array.
+	 * @param javaType
+	 * @return true e.g. for String[]
+	 */
 	public static boolean isJavaMetaTypeArray(final String javaType) {
 		if (javaType.contains("[") && javaType.endsWith("]")) {
 			return true;
@@ -234,6 +305,11 @@ public class TemplateJavaUtility {
 		return false;
 	}
 
+	/**
+	 * Checks a String representation of a javaType to be a collection.
+	 * @param javaType
+	 * @return true e.g. for List<String>
+	 */
 	public static boolean isJavaMetaTypeCollection(String javaType) {
 		int pos = javaType.indexOf("<");
 		if (pos > -1) {
@@ -251,10 +327,10 @@ public class TemplateJavaUtility {
 
 
 	/**
-	 * 
+	 * Checks by reflection whether a clazz has the interface interfaceToSearch. 
 	 * @param clazz
 	 * @param interfaceToSearch 
-	 * @return returns true if cl is of type interfaceSimpleNameToSearch
+	 * @return returns true if clazz is of type interfaceSimpleNameToSearch
 	 */
 	public static boolean hasInterface(final Class<?> clazz, final String interfaceToSearch) {
 		final Class<?>[] interfaces = clazz.getInterfaces();
@@ -269,7 +345,7 @@ public class TemplateJavaUtility {
 	}
 
 	/**
-	 * An method called from a template file to intentionally throw an exception of a defined error message.
+	 * A method called from a template file to intentionally throw an exception of a defined error message.
 	 * @param errorMessage
 	 * @throws MOGLiPluginException
 	 */

@@ -83,7 +83,7 @@ public class MOGLiReleaseBuilder {
             "org/apache/poi/poi-ooxml/3.10-FINAL/poi-ooxml-3.10-FINAL.jar",
             "org/apache/poi/poi-ooxml-schemas/3.10-FINAL/poi-ooxml-schemas-3.10-FINAL.jar",
             "org/apache/xmlbeans/xmlbeans/2.4.0/xmlbeans-2.4.0.jar",
-            "dom4j/dom4j/1.6.1-osgi/dom4j-1.6.1-osgi.jar",
+            "dom4j/dom4j/1.6.1-osgi/dom4j-1.6.1-osgi.jar",                                   //mandatory for release
             "commons-lang/commons-lang/2.4/commons-lang-2.4.jar",
             "commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar");  //mandatory for release
 
@@ -282,6 +282,7 @@ public class MOGLiReleaseBuilder {
 	 * Returns list of all known Maven modules in the Mogli workspace
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	List<String> getListOfAllMavenModules() {
 		return ImmutableUtil.getImmutableListFromLists(DEVELOPMENT_MODULES, PLUGIN_MODULES, CORE_MODULES);
 	}

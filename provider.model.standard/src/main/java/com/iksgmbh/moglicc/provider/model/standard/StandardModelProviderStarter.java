@@ -71,6 +71,9 @@ public class StandardModelProviderStarter implements ModelProvider {
 	public static final String FILENAME_MOGLYDICK_MODEL_FILE = "Moglydick.txt";
 	public static final String FILENAME_SHOPPINGCART_MODEL_FILE = "ShoppingCart.txt";
 	
+	private final static String[] API_IMAGES = { "background.gif", "titlebar_end.gif", "titlebar.gif", "tab.gif" };
+	private final static String[] JAVA_DOCS = { "AttributeDescriptor.html", "ClassDescriptor.html", "Model.html" };
+	
 
 	private InfrastructureService infrastructure;
 	private boolean jobStarted = false;
@@ -484,10 +487,12 @@ public class StandardModelProviderStarter implements ModelProvider {
 	public boolean unpackPluginHelpFiles() throws MOGLiPluginException {
 		infrastructure.getPluginLogger().logInfo("unpackPluginHelpFiles");
 		final PluginPackedData helpData = new PluginPackedData(this.getClass(), HELP_DATA_DIR, PLUGIN_ID);
-		helpData.addFile("AttributeDescriptor.htm");
-		helpData.addFile("ClassDescriptor.htm");
-		helpData.addFile("Model.htm");
-		helpData.addFile("_MetaModel.htm");
+		helpData.addFile("MetaModel.htm");
+		helpData.addFile("stylesheet.css", "apidocs");
+		helpData.addFlatFolder("apidocs/resources", API_IMAGES);
+		helpData.addFlatFolder("apidocs/com/iksgmbh/moglicc/provider/model/standard", JAVA_DOCS);
+		helpData.addFile("MetaInfoSupport.html", "apidocs/com/iksgmbh/moglicc/provider/model/standard/metainfo");
+		
 		PluginDataUnpacker.doYourJob(helpData, infrastructure.getPluginHelpDir(), infrastructure.getPluginLogger());
 		return true;
 	}

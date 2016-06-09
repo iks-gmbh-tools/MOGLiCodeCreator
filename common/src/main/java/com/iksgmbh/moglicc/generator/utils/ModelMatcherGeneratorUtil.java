@@ -15,28 +15,45 @@
  */
 package com.iksgmbh.moglicc.generator.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import com.iksgmbh.moglicc.core.Logger;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
-import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
+import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData.KnownGeneratorPropertyNames;
+import com.iksgmbh.utils.FileUtil;
 
 public class ModelMatcherGeneratorUtil {
 
-	public static boolean doesItMatch(final VelocityGeneratorResultData resultData,
-			                          final String modelName) throws MOGLiPluginException
+	public static boolean doesModelAndTemplateMatch(final String modelName, 
+			                                        final File templateFile,
+			                                        final Logger logger,
+			                                        final String artifactName) 
+			                                        throws MOGLiPluginException
 	{
-		final String key = VelocityGeneratorResultData.KnownGeneratorPropertyNames.NameOfValidModel.name();
-		final List<String> namesOfValidModels = resultData.getAllPropertyValues(key);
-
-		if (namesOfValidModels == null || namesOfValidModels.isEmpty()) {
-			return false; 
+		final List<String> fileContentAsList;
+		String nameOfValidModel = null;
+		
+		try {
+			fileContentAsList = FileUtil.getFileContentAsList(templateFile);
+		} catch (IOException e) {
+			throw new MOGLiPluginException("Error reading template file.", e);
 		}
-
-		for (final String nameOfValidModel : namesOfValidModels) {
-			if (nameOfValidModel.equals(modelName)) {
-				return true; // ok, template has to be applied to this model
+		
+		final String nameOfValidModelPropertyKey = "@" + KnownGeneratorPropertyNames.NameOfValidModel.name();
+		
+		for (String line : fileContentAsList) {
+			if (line.trim().startsWith( nameOfValidModelPropertyKey )) {
+				nameOfValidModel = line.substring(nameOfValidModelPropertyKey.length());
+				if (nameOfValidModel.contains( modelName )) {
+					return true;
+				}
 			}
 		}
+		
+		logger.logInfo("Artefact '" + artifactName + "' has defined '" + nameOfValidModel + "' as valid model.");
+        logger.logInfo("This artefact is not generated for current model '" + modelName + "'.");
 
 		return false;
 	}

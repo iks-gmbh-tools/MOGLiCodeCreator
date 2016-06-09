@@ -58,7 +58,8 @@ public class CoreIntTest extends IntTestParent {
 		// prepare test
 		initTestRootDir();
 		
-		copyExternalInputDataIntoMOGLiCCWorkspace("C://data//Reik//dev//MOGLiCC//Tutorial");
+		copyExternalInputDataIntoMOGLiCCWorkspace("C://dev//MOGLiCC//BottleFishGame");
+		//copyExternalInputDataIntoMOGLiCCWorkspace("C://data//Reik//dev//MOGLiCC//Tutorial");
 		//copyExternalInputDataIntoMOGLiCCWorkspace("/home/localci/development/sources/iks-github/application/target/releaseDir/SystemTestDir");
 		
 		// call functionality under test

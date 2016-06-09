@@ -27,7 +27,6 @@ import com.iksgmbh.helper.IOEncodingHelper;
 import com.iksgmbh.moglicc.core.InfrastructureService;
 import com.iksgmbh.moglicc.exceptions.MOGLiPluginException;
 import com.iksgmbh.moglicc.generator.GeneratorResultData;
-import com.iksgmbh.moglicc.generator.classbased.velocity.VelocityGeneratorResultData;
 import com.iksgmbh.moglicc.generator.utils.ArtefactListUtil;
 import com.iksgmbh.moglicc.generator.utils.EncodingUtils;
 import com.iksgmbh.moglicc.generator.utils.GeneratorReportUtil;
@@ -40,7 +39,6 @@ import com.iksgmbh.moglicc.plugin.subtypes.GeneratorPlugin;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ClassBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
-import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineData.ExecutionMode;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
@@ -137,7 +135,6 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 	final GeneratorStandardReportData standardReportData = new GeneratorStandardReportData();
 	private int generationCounter = 0;
 	private StringBuffer generationReport = new StringBuffer();
-	private List<VelocityFileMakerResultData> preparationResultList;
 
 	@Override
 	public PluginType getPluginType() {
@@ -210,15 +207,26 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 	private void applyModelToArtefactTemplates(final Model model, final String artefact) throws MOGLiPluginException 
 	{
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, model, PLUGIN_ID);
-		boolean doFullGeneration = doesModelAndTemplateMatch(model, artefact, engineData);
+		final File templateDir = new File(infrastructure.getPluginInputDir(), engineData.getArtefactType());
+		engineData.setTemplateDir(templateDir);
+		engineData.setTemplateFileName(findMainTemplate(templateDir));
 		
-		if (! doFullGeneration) {
+		final boolean doesModelMatch = ModelMatcherGeneratorUtil.doesModelAndTemplateMatch(standardReportData.model.getName(),  
+                                             new File(engineData.getTemplateDir(), engineData.getMainTemplateSimpleFileName()),
+                                             infrastructure.getPluginLogger(), artefact);
+		if (! doesModelMatch) 
+		{
+			if (! standardReportData.nonModelMatchingInputArtefacts.contains(artefact))
+				standardReportData.nonModelMatchingInputArtefacts.add(artefact);
+			
 			return;
 		}
+		
+		infrastructure.getPluginLogger().logInfo("Creating code for artefact " + artefact + "...");
 
-		validateResult(artefact, preparationResultList);
-		final List<VelocityFileMakerResultData> resultList = doFullGeneration(artefact, engineData);
+		final List<VelocityFileMakerResultData> resultList = doGenerate(artefact, engineData);
 		final List<VelocityFileMakerResultData> artefactsToCreate = removeSkippedClassesFromList(resultList, artefact);
+		validateResult(artefact, resultList);
 		handleNumberSignReplacements(artefactsToCreate);
 		generateOutput(artefact, resultList, artefactsToCreate);
 		generateReportLines(artefactsToCreate, artefact);
@@ -258,51 +266,21 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 		}
 	}
 
-	private List<VelocityFileMakerResultData> doFullGeneration(final String artefact, 
-			                                                   final BuildUpVelocityEngineData engineData)
-			                                                   throws MOGLiPluginException 
+	private List<VelocityFileMakerResultData> doGenerate(final String artefact, 
+			                                             final BuildUpVelocityEngineData engineData)
+			                                             throws MOGLiPluginException 
 	{
 		standardReportData.numberOfModelMatchingInputArtefacts++;
 
 		try
 		{
-			engineData.setExecutionMode(ExecutionMode.FULL_GENERATION);
-			return generate(engineData);
+			return callVelocityEngineProvider(engineData);
 		} 
 		catch (MOGLiPluginException e)
 		{
 			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
 			throw e;
 		}
-	}
-
-	private boolean doesModelAndTemplateMatch(final Model model,
-										      final String artefact, 
-										      final BuildUpVelocityEngineData engineData)
-										      throws MOGLiPluginException 
-	{
-		try
-		{
-			engineData.setExecutionMode(ExecutionMode.ONLY_PREPARATION);
-			preparationResultList = generate(engineData);
-		} 
-		catch (MOGLiPluginException e)
-		{
-			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
-			throw e;
-		}
-
-		final VelocityGeneratorResultData firstResultData = preparationResultList.get(0);
-		if (! ModelMatcherGeneratorUtil.doesItMatch(firstResultData, model.getName())) 
-		{
-			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '" + preparationResultList.get(0).getNameOfValidModel()
-					                                 + "' as valid model.");
-			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + model.getName() + "'.");
-			standardReportData.nonModelMatchingInputArtefacts.add(artefact);
-			return false;
-		}
-		
-		return true;
 	}
 
 	private void validateResult(final String artefact,
@@ -439,26 +417,14 @@ public class VelocityClassBasedFileMakerStarter implements GeneratorPlugin, Meta
 		}
 	}
 
-	List<VelocityFileMakerResultData> generate(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException {
-		final File templateDir = new File(infrastructure.getPluginInputDir(), engineData.getArtefactType());
-		engineData.setTemplateDir(templateDir);
-		engineData.setTemplateFileName(findMainTemplate(templateDir));
-
+	List<VelocityFileMakerResultData> callVelocityEngineProvider(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException {
 		final ClassBasedEngineProvider velocityEngineProvider =
 			       (ClassBasedEngineProvider) infrastructure.getProvider(ENGINE_PROVIDER_ID);
 
-		if (engineData.isExecutionModeOnlyPreparation()) 
-		{
-			infrastructure.getPluginLogger().logInfo("Starting velocity engine for preparation of artefact '"
-					+ engineData.getArtefactType() + " and with template '"
-					+ engineData.getMainTemplateSimpleFileName() + "'...");
-		}
-		else
-		{
-			infrastructure.getPluginLogger().logInfo("Starting velocity engine for full generation of artefact '"
-					+ engineData.getArtefactType() + " and with template '"
-					+ engineData.getMainTemplateSimpleFileName() + "'...");
-		}
+		infrastructure.getPluginLogger().logInfo("Starting velocity engine for artefact '"
+													+ engineData.getArtefactType() + " and with '"
+													+ engineData.getMainTemplateSimpleFileName() 
+													+ "'...");
 
 		velocityEngineProvider.setEngineData(engineData);
 		

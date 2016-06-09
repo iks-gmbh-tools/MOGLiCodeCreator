@@ -77,6 +77,7 @@ public class PluginExecutor {
 		return pluginExecutor.sortPluginMetaDataListByExecutionOrder(sortedPluginsToExecute);
 	}
 
+	@SuppressWarnings("unchecked")
 	List<PluginMetaData> sortPluginMetaDataListByExecutionOrder(final List<MOGLiPlugin> sortedPluginsToExecute) {
 		final List<PluginMetaData> list = new ArrayList<PluginMetaData>();
 		

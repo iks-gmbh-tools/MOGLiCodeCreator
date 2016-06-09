@@ -58,34 +58,17 @@ VelocityModelBasedLineInserter
 
 Report for VelocityEngineProvider:
 
-8 times called for model based generation: 
+1 time(s) called in full generation model based mode: 
 from VelocityModelBasedTreeBuilder on main template 'MOGLiCC_JavaBeanProject' on template 'artefact.properties'
-from VelocityModelBasedTreeBuilder on main template 'MOGLiCC_NewPluginProject' on template 'artefact.properties'
-from VelocityModelBasedLineInserter on main template 'ConsoleComicStrip' on template 'CreateMainScriptTemplate.tpl'
-from VelocityModelBasedLineInserter on main template 'ConsoleComicStrip' on template 'InsertIntoMainTemplate.tpl'
-from VelocityModelBasedLineInserter on main template 'XMLBuilder' on template 'CreateTargetFileMain.tpl'
-from VelocityModelBasedLineInserter on main template 'XMLBuilder' on template 'InsertCustomerDataMain.tpl'
-from VelocityModelBasedLineInserter on main template 'XMLBuilder' on template 'InsertItemsMain.tpl'
-from VelocityModelBasedLineInserter on main template 'XMLBuilder' on template 'ReplaceAdvertisingDataMain.tpl'
 
-18 times called for class based generation:
-from VelocityClassBasedFileMaker for artefact 'ConsoleComicStrip' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiCC_NewPluginModel' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBean' on main template 'A_MainTemplate.tpl'
+8 time(s) called in full generation class based mode: 
 from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBean' on main template 'A_MainTemplate.tpl'
 from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanBuilder' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanBuilder' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanBuilder_Test' on main template 'A_MainTemplate.tpl'
 from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanBuilder_Test' on main template 'A_MainTemplate.tpl'
 from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanFactory' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanFactory' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanFactory_Test' on main template 'A_MainTemplate.tpl'
 from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanFactory_Test' on main template 'A_MainTemplate.tpl'
 from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanValidator' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanValidator' on main template 'A_MainTemplate.tpl'
 from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanValidator_Test' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBeanValidator_Test' on main template 'A_MainTemplate.tpl'
-from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBean_Test' on main template 'A_MainTemplate.tpl'
 from VelocityClassBasedFileMaker for artefact 'MOGLiJavaBean_Test' on main template 'A_MainTemplate.tpl'
 
 **************************************  E N D  ***********************************************

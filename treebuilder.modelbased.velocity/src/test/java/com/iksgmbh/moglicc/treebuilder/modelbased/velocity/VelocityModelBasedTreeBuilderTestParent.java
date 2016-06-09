@@ -41,6 +41,7 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 	public static final String METAINFO_MODEL_TARGETDIR = "ModelTargetTestDir";
 	public static final String METAINFO_MODEL_PROJECT_DESCRIPTION = "Description of project";
 	public static final String MODEL_PROVIDER_ID = "StandardModelProvider";
+	public static final String DUMMY_MODEL_NAME = "DummyModel";
 
 	protected File generatorPluginInputDir;
 	protected VelocityModelBasedTreeBuilderStarter treeBuilderGenerator;
@@ -96,7 +97,7 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 
 	private void addPluginList(InfrastructureInitData infrastructureInitData) {
 		final List<MOGLiPlugin> list = new ArrayList<MOGLiPlugin>();
-		list.add((MOGLiPlugin) getDummyModelProvider("MOGLiCC_JavaBeanModel", getStandardModelMetaInfos()));
+		list.add((MOGLiPlugin) getDummyModelProvider(DUMMY_MODEL_NAME, getStandardModelMetaInfos()));
 		list.add(velocityEngineProviderDummy);
 		infrastructureInitData.pluginList = list;
 	}
@@ -221,6 +222,5 @@ public class VelocityModelBasedTreeBuilderTestParent extends AbstractMOGLiTest {
 		{
 			return false;
 		}
-
 	}
 }

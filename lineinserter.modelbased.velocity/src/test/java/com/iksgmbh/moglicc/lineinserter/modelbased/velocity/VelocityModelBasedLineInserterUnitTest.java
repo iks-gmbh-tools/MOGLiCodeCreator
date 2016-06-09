@@ -36,6 +36,7 @@ import com.iksgmbh.moglicc.lineinserter.modelbased.velocity.VelocityLineInserter
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validator.ConditionalMetaInfoValidator;
+import com.iksgmbh.moglicc.test.MockDataBuilder;
 import com.iksgmbh.moglicc.utils.MOGLiFileUtil;
 import com.iksgmbh.utils.FileUtil;
 import com.iksgmbh.utils.StringUtil;
@@ -126,11 +127,13 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void savesGeneratedContentInPluginOutputDir() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);		
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("Content",
 				"temp", TARGET_FILE_TXT, KnownGeneratorPropertyNames.CreateNew.name(), "true");
 		velocityEngineProvider.setVelocityGeneratorResultData(resultData);
 		final File targetFile = prepareTargetFile(applicationOutputDir, VelocityModelBasedLineInserterStarter.PLUGIN_ID
-                                                                        + "/" + ARTEFACT_XMLBUILDER
+                                                                        + "/" + artefactName
                                                                         + "/" + TARGET_FILE_TXT);
 		assertFileDoesNotExist(targetFile);
 
@@ -170,6 +173,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void savesGeneratedContentInNewFileInTemplateTargetDir() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");		
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("Content",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownGeneratorPropertyNames.CreateNew.name(), "true");
@@ -194,6 +198,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfTargetDirFromTemplateFileIsNotFound() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/FOO",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
@@ -219,6 +224,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfTargetFileFromTemplateFileIsNotFound() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-InsertAbove");
@@ -303,6 +309,8 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void replacesGeneratedContentInTemplateTargetFile() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);		
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.ReplaceStart.name(), "-ReplaceStart");
@@ -321,6 +329,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfReplaceStartIndicatorNotFound() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.ReplaceStart.name(), "-replStart");
@@ -341,6 +350,8 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfReplaceEndIndicatorNotFound() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);		
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.ReplaceStart.name(), "-ReplaceStart");
@@ -361,6 +372,8 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfInsertBelowIndicatorNotFound() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);				
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertBelow.name(), "-BI");
@@ -381,6 +394,8 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfInsertAboveIndicatorNotFound() throws MOGLiPluginException {
 		// prepare test
+		final String artefactName = "testArtefact";
+		createTestArtefact(artefactName);				
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				TARGET_FILE_TXT, KnownInserterPropertyNames.InsertAbove.name(), "-AI");
@@ -401,6 +416,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfOutputFileNameIsMissingInTemplateFile() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				PROJECT_ROOT_DIR + TEST_SUBDIR + "/temp",
 				null, null, null);
@@ -420,6 +436,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void throwsExceptionIfOutputDirIsMissingInTemplateFile() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				null, TARGET_FILE_TXT, null, null);
 		velocityEngineProvider.setVelocityGeneratorResultData(resultData);
@@ -438,6 +455,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void createsNotExistingTargetDirWithCreateNewInstructions() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				targetDir, TARGET_FILE_TXT,
@@ -458,6 +476,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void createsNotExistingTargetFileDirWithoutCreateNewInstruction() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final String targetDir = PROJECT_ROOT_DIR + TEST_SUBDIR + "/example";
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				targetDir, TARGET_FILE_TXT, null, null);
@@ -478,6 +497,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void createsExistingTargetFileNewlyWithCreateNewInstructions() throws Exception {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final String targetDir = applicationRootDir.getAbsolutePath() + "/example";
 		final String content = "ContentToInsert";
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData(content,
@@ -500,6 +520,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	@Test
 	public void createsTargetFileWithRootDirDefinedInTemplateFile() throws MOGLiPluginException {
 		// prepare test
+		createTestArtefact("TestArtefact");
 		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
 		VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("ContentToInsert",
 				targetDir, TARGET_FILE_TXT,
@@ -625,18 +646,11 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 		assertEquals("condition number", 3, ((ConditionalMetaInfoValidator)metaInfoValidatorList.get(3)).getTotalNumberOfConditions());
 	}
 
-	private void createFakeArtefactDir() throws Exception {
-		final File testArtefactDir = new File(infrastructure.getPluginInputDir(), "/TestArtefact");
-		testArtefactDir.mkdirs();
-		final File testTemplate = new File(testArtefactDir, "Main.tpl");
-		FileUtil.createNewFileWithContent(testTemplate, "dummy content");
-	}
-
 	@Test
 	public void createsReportForNewlyCreatedArtefact() throws Exception {
 		// prepare test
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);
-		createFakeArtefactDir();
+		createTestArtefact("TestArtefact");		
 		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/example";
 		final VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("Content",
 				targetDir, TARGET_FILE_TXT,
@@ -656,7 +670,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	public void createsReportForNotOverwrittenArtefact() throws Exception {
 		// prepare test
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);
-		createFakeArtefactDir();
+		createTestArtefact("TestArtefact");		
 		final String targetDir = "/example";
 		targetFile = new File(applicationRootDir.getAbsoluteFile() + targetDir, TARGET_FILE_TXT);
 		targetFile.getParentFile().mkdirs();
@@ -679,7 +693,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	public void createsReportForInsertedAboveContent() throws Exception {
 		// prepare test
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);
-		createFakeArtefactDir();
+		createTestArtefact("TestArtefact");		
 		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
 		final VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("contentToInsert",
 				targetDir, TARGET_FILE_TXT,
@@ -702,7 +716,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	public void createsReportForInsertedBelowContent() throws Exception {
 		// prepare test
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);
-		createFakeArtefactDir();
+		createTestArtefact("TestArtefact");		
 		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
 		final VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("contentToInsert",
 				targetDir, TARGET_FILE_TXT,
@@ -725,7 +739,7 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 	public void createsReportForReplacedContent() throws Exception {
 		// prepare test
 		FileUtil.deleteDirWithContent(generatorPluginInputDir);
-		createFakeArtefactDir();
+		createTestArtefact("TestArtefact");		
 		final String targetDir = VelocityGeneratorResultData.ROOT_IDENTIFIER + "/temp";
 		final VelocityLineInserterResultData resultData = buildVelocityLineInserterResultData("contentToInsert",
 				targetDir, TARGET_FILE_TXT,
@@ -813,6 +827,16 @@ public class VelocityModelBasedLineInserterUnitTest extends VelocityModelBasedLi
 
 		assertEquals("unexpected result", expected.trim(), result1.trim());
 		assertEquals("Line Inserter did insert twice", expected.trim(), result2.trim());
+	}
+
+	private File createTestArtefact(final String artefactName) {
+		final File artefactDir = new File(infrastructure.getPluginInputDir(), artefactName);
+		artefactDir.mkdirs();
+		assertFileExists(artefactDir);
+		final File templateFile = new File(artefactDir, "main.tpl");
+		MOGLiFileUtil.createNewFileWithContent(templateFile, "@" + KnownGeneratorPropertyNames.NameOfValidModel + 
+				                                             " " + MockDataBuilder.MOCK_MODEL_NAME);
+		return artefactDir;
 	}
 	
 }

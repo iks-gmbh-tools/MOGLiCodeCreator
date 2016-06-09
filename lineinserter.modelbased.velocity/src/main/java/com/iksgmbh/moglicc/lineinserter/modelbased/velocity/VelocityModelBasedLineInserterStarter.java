@@ -42,7 +42,6 @@ import com.iksgmbh.moglicc.plugin.subtypes.generators.Inserter;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelBasedEngineProvider;
 import com.iksgmbh.moglicc.plugin.subtypes.providers.ModelProvider;
 import com.iksgmbh.moglicc.provider.engine.velocity.BuildUpVelocityEngineData;
-import com.iksgmbh.moglicc.provider.engine.velocity.VelocityEngineData.ExecutionMode;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidator;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfoValidatorVendor;
 import com.iksgmbh.moglicc.provider.model.standard.metainfo.validation.MetaInfoValidationUtil;
@@ -71,7 +70,6 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 	private StringBuffer generationReport = new StringBuffer();
 	private GeneratorStandardReportData standardReportData = new GeneratorStandardReportData();
 	private HashSet<String> artefactsInReport = new HashSet<String>();
-	private VelocityLineInserterResultData preparationVelocityResult;
 
 	@Override
 	public void setInfrastructure(final InfrastructureService infrastructure) {
@@ -153,14 +151,20 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 			                                    final File templateDir,
 			                                    final String mainTemplate) throws MOGLiPluginException
 	{
-		final boolean doFullGeneration = doesModelAndTemplateMatch(artefact, templateDir, mainTemplate);
-		
-		if ( ! doFullGeneration ) {
+		final boolean doesModelMatch = ModelMatcherGeneratorUtil.doesModelAndTemplateMatch(standardReportData.model.getName(),  
+                                                            new File(templateDir, mainTemplate),
+                                                            infrastructure.getPluginLogger(), artefact);
+		if (! doesModelMatch) 
+		{
+			if (! standardReportData.nonModelMatchingInputArtefacts.contains(artefact))
+					standardReportData.nonModelMatchingInputArtefacts.add(artefact);
 			return null;
 		}
+
 		
-		validateResult(artefact, preparationVelocityResult);
-		final VelocityLineInserterResultData velocityResult = doFullGeneration(artefact, templateDir, mainTemplate);			
+		infrastructure.getPluginLogger().logInfo("Creating code for artefact " + artefact + "...");
+		
+		final VelocityLineInserterResultData velocityResult = doGenerate(artefact, templateDir, mainTemplate);			
 
 		if (velocityResult.isGenerationToSkip()) {
 			infrastructure.getPluginLogger().logInfo("Generation of file '" + velocityResult.getTargetFileName()
@@ -170,6 +174,7 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 			return null;
 		}
 
+		validateResult(artefact, velocityResult);
 		handleNumberSignReplacements(velocityResult, velocityResult.getNumberSignReplacement());
 		generateOutput(artefact, velocityResult);
 		generateReportForResult(artefact, velocityResult);
@@ -196,7 +201,7 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 		}
 	}
 
-	private VelocityLineInserterResultData doFullGeneration(final String artefact, 
+	private VelocityLineInserterResultData doGenerate(final String artefact, 
 			                                                final File templateDir,
 			                                                final String mainTemplate) throws MOGLiPluginException 
 	{
@@ -205,8 +210,7 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 		final VelocityLineInserterResultData velocityResult;
 		try
 		{
-			velocityResult = doInsertsByCallingVelocityEngineProvider(artefact, templateDir, mainTemplate, 
-					                                                  ExecutionMode.FULL_GENERATION);
+			velocityResult = callVelocityEngineProvider(artefact, templateDir, mainTemplate);
 		} catch (MOGLiPluginException e)
 		{
 			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
@@ -228,42 +232,13 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 	}
 	
 
-	private boolean doesModelAndTemplateMatch(final String artefact, 
-											  final File templateDir,
-											  final String mainTemplate) throws MOGLiPluginException 
-	{
-		try
-		{
-			preparationVelocityResult = doInsertsByCallingVelocityEngineProvider(artefact, templateDir, mainTemplate, 
-					                                                             ExecutionMode.ONLY_PREPARATION);
-		} catch (MOGLiPluginException e)
-		{
-			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
-			throw e;
-		}		
-
-		if (! ModelMatcherGeneratorUtil.doesItMatch(preparationVelocityResult, standardReportData.model.getName())) 
-		{
-			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '"
-                                                    + preparationVelocityResult.getNameOfValidModel() + "' as valid model.");
-			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + standardReportData.model.getName() + "'.");
-
-			if (! standardReportData.nonModelMatchingInputArtefacts.contains(artefact))
-				  standardReportData.nonModelMatchingInputArtefacts.add(artefact);
-			
-			return false;
-		}
-		
-		return true;
-	}
-
 	private void validateResult(final String artefact,
 							    final VelocityLineInserterResultData velocityResult)
 							    throws MOGLiPluginException 
 	{
 		try
 		{
-			preparationVelocityResult.validatePropertyKeys(artefact);
+			velocityResult.validatePropertyKeys(artefact);
 		} catch (MOGLiPluginException e)
 		{
 			standardReportData.invalidInputArtefacts.add(artefact + " has invalid property keys: " + e.getMessage());
@@ -280,19 +255,33 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 		}
 	}
 
-	private VelocityLineInserterResultData doInsertsByCallingVelocityEngineProvider(final String artefact, 
-			                                                                        final File templateDir,
-			                                                                        final String mainTemplate,
-			                                                                        final ExecutionMode mode) 
-			                                                                        throws MOGLiPluginException 
+	private VelocityLineInserterResultData callVelocityEngineProvider(final String artefact, 
+			                                                          final File templateDir,
+			                                                          final String mainTemplate) 
+			                                                          throws MOGLiPluginException 
 	{
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, standardReportData.model, PLUGIN_ID);
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(mainTemplate);
-		engineData.setExecutionMode(mode);
+		
+		infrastructure.getPluginLogger().logInfo("Starting velocity engine for artefact '"
+													+ engineData.getArtefactType() + " and with '"
+													+ engineData.getMainTemplateSimpleFileName() 
+													+ "'...");
 
-		final VelocityLineInserterResultData result = insert(engineData);
-		return result;
+		velocityEngineProvider.setEngineData(engineData);
+		
+		final GeneratorResultData generatorResultData;
+		try {
+			generatorResultData = velocityEngineProvider.startEngineWithModel(); // this does the actual insert job
+		} 
+		catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Velocity Engine Provider Error:" + e.getMessage());
+			throw e;
+		}
+				
+		return new VelocityLineInserterResultData(generatorResultData);
 	}
 
 	private void generateReportForResult(final String artefact, 
@@ -548,26 +537,6 @@ public class VelocityModelBasedLineInserterStarter implements Inserter, MetaInfo
 	List<String> getArtefactList() throws MOGLiPluginException {
 		final File generatorPropertiesFile = new File(infrastructure.getPluginInputDir(), PLUGIN_PROPERTIES_FILE);
 		return ArtefactListUtil.getArtefactListFrom(infrastructure.getPluginInputDir(), generatorPropertiesFile);
-	}
-
-	VelocityLineInserterResultData insert(final BuildUpVelocityEngineData engineData) throws MOGLiPluginException {
-		infrastructure.getPluginLogger().logInfo("Starting velocity engine for artefact '"
-				+ engineData.getArtefactType()  + " and with template '"
-				+ engineData.getMainTemplateSimpleFileName() + "'...");
-
-		velocityEngineProvider.setEngineData(engineData);
-		
-		final GeneratorResultData generatorResultData;
-		try
-		{
-			generatorResultData = velocityEngineProvider.startEngineWithModel(); // this does the actual insert job
-		} catch (MOGLiPluginException e)
-		{
-			standardReportData.invalidInputArtefacts.add("Velocity Engine Provider Error:" + e.getMessage());
-			throw e;
-		}
-				
-		return new VelocityLineInserterResultData(generatorResultData);
 	}
 
 	List<String> findMainTemplates(final File templateDir) throws MOGLiPluginException {

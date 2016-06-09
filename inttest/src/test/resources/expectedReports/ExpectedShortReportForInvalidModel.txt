@@ -11,7 +11,7 @@ A total of 0 generation events for 0 output artefact(s) have been performed.
 
 ExcelStandardModelProvider: not used for code generation
 StandardModelProvider: Error parsing model file: MavenProjectWithJavaDomainModel.txt
-VelocityEngineProvider: Velocity engine started for 0 calls.
+VelocityEngineProvider: Velocity engine started in full generation mode for 0 call(s).
 
 VelocityClassBasedFileMaker: Model Error: No model file loaded! No generation done.
 VelocityModelBasedLineInserter: Model Error: No model file loaded! No generation done.

@@ -76,8 +76,8 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 	public static final String FILENAME_ARTEFACT_PROPERTIES = "artefact.properties";
 	public static final String MAIN_TEMPLATE_IDENTIFIER = "Main";
 
-	private static final String[] childrenMOGLiCCNewPluginProject = {"pom.xml", "artefact.properties", "readme.md"};
-	private static final String[] childrenMOGLiCCJavaBeanProject = {"pom.xml", "artefact.properties"};
+	private static final String[] childrenMOGLiCCNewPluginProject = {"pom.xml", FILENAME_ARTEFACT_PROPERTIES, "readme.md"};
+	private static final String[] childrenMOGLiCCJavaBeanProject = {"pom.xml", FILENAME_ARTEFACT_PROPERTIES};
 
 	private static final String[] children_UTILS_SOURCE_DIR = {"ClassOverviewPrinter.java", 
 		                                                       "MOGLiFactoryUtils.java", 
@@ -135,7 +135,7 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 		velocityEngineProvider = (ModelBasedEngineProvider) infrastructure.getProvider(ENGINE_PROVIDER_ID);
 
 		for (final String artefact : artefactList) {
-			doYourJobFor(artefact);
+			applyModelToArtefactTemplate(artefact);
 			infrastructure.getPluginLogger().logInfo("Doing my job...");
 		}
 
@@ -143,11 +143,25 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 	}
 
 
-	private void doYourJobFor(final String artefact) throws MOGLiPluginException {
-		infrastructure.getPluginLogger().logInfo("Creating artefact " + artefact + "...");
-		final File sourceDir = new File(getInfrastructure().getPluginInputDir(), artefact);
-		final VelocityTreeBuilderResultData velocityResult = doInsertsByCallingVelocityEngineProvider(
-				                                               artefact, sourceDir, FILENAME_ARTEFACT_PROPERTIES);
+	private void applyModelToArtefactTemplate(final String artefact) throws MOGLiPluginException {
+		
+		final File templateDir = new File(getInfrastructure().getPluginInputDir(), artefact);
+		final boolean doesModelMatch = ModelMatcherGeneratorUtil.doesModelAndTemplateMatch(standardReportData.model.getName(), 
+				                                                   new File(templateDir, FILENAME_ARTEFACT_PROPERTIES),
+				                                                   infrastructure.getPluginLogger(), artefact);
+		if ( ! doesModelMatch ) 
+		{
+			if (! standardReportData.nonModelMatchingInputArtefacts.contains(artefact))
+				standardReportData.nonModelMatchingInputArtefacts.add(artefact);
+			
+			return;
+		}
+		
+		infrastructure.getPluginLogger().logInfo("Creating code for artefact " + artefact + "...");
+		
+		final VelocityTreeBuilderResultData velocityResult = callVelocityEngineProvider(
+				                                                 artefact, templateDir, 
+				                                                 FILENAME_ARTEFACT_PROPERTIES);
 		try
 		{
 			velocityResult.validatePropertyKeys(artefact);
@@ -157,68 +171,64 @@ public class VelocityModelBasedTreeBuilderStarter implements GeneratorPlugin, Me
 			throw e;
 		}
 		
-		if (ModelMatcherGeneratorUtil.doesItMatch(velocityResult, standardReportData.model.getName()))
+		standardReportData.numberOfModelMatchingInputArtefacts++;
+
+		try
 		{
-			standardReportData.numberOfModelMatchingInputArtefacts++;
-
-			try
-			{
-				velocityResult.validatePropertyForMissingMetaInfoValues(artefact);
-			} catch (MOGLiPluginException e)
-			{
-				standardReportData.invalidInputArtefacts.add(artefact + " uses invalid metainfos: " + e.getMessage());
-				throw e;
-			}
-
-			if (velocityResult.isGenerationToSkip()) {
-				standardReportData.skippedArtefacts.add(artefact);
-				infrastructure.getPluginLogger().logInfo("Generation of file '" + velocityResult.getTargetFileName()
-                        + "' was skipped as configured for artefact " + artefact + ".");
-				return;
-			}
-
-			try
-			{
-				artefactProperties = new ArtefactProperties(velocityResult, artefact);
-			} catch (MOGLiPluginException e)
-			{
-				standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
-				throw e;
-			}
-
-			final File artifactTopFolder = getArtifactTopFolder();
-			velocityResult.checkTargetDir(artifactTopFolder.getParentFile());
-			
-			final boolean overwriteOutputArtefact = velocityResult.isTargetToBeCreatedNewly() || ! artifactTopFolder.exists();
-			
-			if ( overwriteOutputArtefact && artefactProperties.isTargetToBeCleaned()) 
-			{
-				if (artifactTopFolder != null) {					
-					FileUtil.deleteDirWithContent(artifactTopFolder);
-					infrastructure.getPluginLogger().logInfo("Directory cleaned: " + artifactTopFolder.getAbsolutePath());
-				}
-			}
-			
-			doYourJobWith(sourceDir, artefact, overwriteOutputArtefact);
-			
-		} else {
-			infrastructure.getPluginLogger().logInfo("Artefact '" + artefact + "' has defined '"
-			                                         + velocityResult.getNameOfValidModel() + "' as valid model.");
-			infrastructure.getPluginLogger().logInfo("This artefact is not generated for current model '" + standardReportData.model.getName() + "'.");
-			standardReportData.nonModelMatchingInputArtefacts.add(artefact);
+			velocityResult.validatePropertyForMissingMetaInfoValues(artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add(artefact + " uses invalid metainfos: " + e.getMessage());
+			throw e;
 		}
+
+		if (velocityResult.isGenerationToSkip()) {
+			standardReportData.skippedArtefacts.add(artefact);
+			infrastructure.getPluginLogger().logInfo("Generation of file '" + velocityResult.getTargetFileName()
+                    + "' was skipped as configured for artefact " + artefact + ".");
+			return;
+		}
+
+		try
+		{
+			artefactProperties = new ArtefactProperties(velocityResult, artefact);
+		} catch (MOGLiPluginException e)
+		{
+			standardReportData.invalidInputArtefacts.add("Error parsing artefact properties for artefact '" + artefact + "': " + e.getMessage());
+			throw e;
+		}
+
+		final File artifactTopFolder = getArtifactTopFolder();
+		velocityResult.checkTargetDir(artifactTopFolder.getParentFile());
+		
+		final boolean overwriteOutputArtefact = velocityResult.isTargetToBeCreatedNewly() || ! artifactTopFolder.exists();
+		
+		if ( overwriteOutputArtefact && artefactProperties.isTargetToBeCleaned()) 
+		{
+			if (artifactTopFolder != null) {					
+				FileUtil.deleteDirWithContent(artifactTopFolder);
+				infrastructure.getPluginLogger().logInfo("Directory cleaned: " + artifactTopFolder.getAbsolutePath());
+			}
+		}
+		
+		final File sourceDir = templateDir;
+		doYourJobWith(sourceDir, artefact, overwriteOutputArtefact);
+		
 	}
 
-	private VelocityTreeBuilderResultData doInsertsByCallingVelocityEngineProvider(final String artefact, final File templateDir,
-			                                                                    final String mainTemplate) throws MOGLiPluginException
+	private VelocityTreeBuilderResultData callVelocityEngineProvider(final String artefact, 
+			                                                         final File templateDir,
+			                                                         final String mainTemplate) 
+			           										         throws MOGLiPluginException
 	{
 		final BuildUpVelocityEngineData engineData = new BuildUpVelocityEngineData(artefact, standardReportData.model, PLUGIN_ID);
 		engineData.setTemplateDir(templateDir);
 		engineData.setTemplateFileName(mainTemplate);
-
+		
 		infrastructure.getPluginLogger().logInfo("Starting velocity engine for artefact '"
 													+ engineData.getArtefactType() + " and with '"
-													+ engineData.getMainTemplateSimpleFileName() + "'...");
+													+ engineData.getMainTemplateSimpleFileName() 
+													+ "'...");
 
 		velocityEngineProvider.setEngineData(engineData);
 		

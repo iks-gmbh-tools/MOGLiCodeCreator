@@ -55,6 +55,6 @@ public class D_ProviderEngineVelocityAcceptanceSystemTest  extends __AbstractSys
 		
 		// verify test result
 		assertFileExists(pluginHelpDir);
-		assertChildrenNumberInDirectory(pluginHelpDir, 3);
+		assertChildrenNumberInDirectory(pluginHelpDir, 2);
 	}
 }

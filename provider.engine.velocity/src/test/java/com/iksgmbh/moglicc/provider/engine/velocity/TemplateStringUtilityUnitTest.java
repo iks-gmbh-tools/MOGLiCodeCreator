@@ -15,8 +15,7 @@
  */
 package com.iksgmbh.moglicc.provider.engine.velocity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Date;
@@ -29,6 +28,24 @@ import com.iksgmbh.moglicc.provider.engine.velocity.test.VelocityEngineProviderT
 
 public class TemplateStringUtilityUnitTest extends VelocityEngineProviderTestParent {
 
+	@Test
+	public void buildsDisplayNameFromCamelCase() throws Exception {
+		// call functionality under test
+		final String result = TemplateStringUtility.toDisplayName("orderCustomerAddress");
+		
+		// verify test result
+		assertEquals("display name", "Order Customer Address", result);
+	}
+
+	@Test
+	public void buildsDBTableNameFromCamelCase() throws Exception {
+		// call functionality under test
+		final String result = TemplateStringUtility.toDBTableName("orderCustomerAddress");
+		
+		// verify test result
+		assertEquals("db table name", "ORDER_CUSTOMER_ADDRESS", result);
+	}
+	
 	@Test
 	public void returnsDateAsFormattedString() 
 	{

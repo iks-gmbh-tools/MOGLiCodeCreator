@@ -39,14 +39,15 @@ public class BuildUpModel extends MetaModelObject implements Model {
 	private HashMap<String, String> variables;
 	private List<ClassDescriptor> classDescriptorList;
 	private String name;
-	
-	public BuildUpModel(final String name) {
+
+	public BuildUpModel(final String name) 
+	{
 		if (StringUtils.isEmpty(name)) {
 			throw new IllegalArgumentException("Name of Model must not be empty!");
 		}
 		this.name = name;
 		this.classDescriptorList = new ArrayList<ClassDescriptor>();
-		metaInfoList = new ArrayList<MetaInfo>();
+		this.metaInfoList = new ArrayList<MetaInfo>();
 	}
 
 	@Override

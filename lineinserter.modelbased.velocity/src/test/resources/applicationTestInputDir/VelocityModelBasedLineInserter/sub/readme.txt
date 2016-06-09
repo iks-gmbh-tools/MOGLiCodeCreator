@@ -1,1 +1,2 @@
+@NameOfValidModel MockModel
 Needed for insertsGeneratedContentAboveMarkerInTemplateTargetDir and insertsGeneratedContentBelowMarkerInTemplateTargetDir

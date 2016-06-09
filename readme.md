@@ -37,7 +37,11 @@ Licenced under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.h
 
 travis-ci: [![Build Status](https://travis-ci.org/iks-github/MOGLiCodeCreator.png?branch=master)](https://travis-ci.org/iks-github/MOGLiCodeCreator)
 
-Current version: **1.6.1**
+Current version: **1.6.2**
+
+**Changes to 1.6.1**
+- Bug:         The preparation run was troublesome mechanism to check whether model and template match, and was replaced in all three generators.
+- Improvement: Documentation of the template utilities and the meta model of the StandardModelProvider now comes as JavaDocs.
 
 **Changes to 1.6.0**
 - Bug:         It's possible now to share subtempates between generator plugins.
