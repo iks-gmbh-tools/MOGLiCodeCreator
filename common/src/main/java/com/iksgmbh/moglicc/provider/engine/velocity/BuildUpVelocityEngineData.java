@@ -16,12 +16,8 @@
 package com.iksgmbh.moglicc.provider.engine.velocity;
 
 import java.io.File;
-import java.util.List;
 
-import com.iksgmbh.moglicc.provider.model.standard.ClassDescriptor;
 import com.iksgmbh.moglicc.provider.model.standard.Model;
-import com.iksgmbh.moglicc.provider.model.standard.buildup.BuildUpModel;
-import com.iksgmbh.moglicc.provider.model.standard.metainfo.MetaInfo;
 
 public class BuildUpVelocityEngineData implements VelocityEngineData {
 
